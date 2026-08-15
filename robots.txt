@@ -1,8 +1,18 @@
 User-agent: *
+Allow: /
 Disallow: /kunden/
 Disallow: /downloads/
-Disallow: /agenturvorstellung/
-Disallow: /letter/
+
+User-agent: GPTBot
 Allow: /llms.txt
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /llms.txt
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /llms.txt
+Allow: /
 
 Sitemap: https://dk-dk.de/sitemap.xml

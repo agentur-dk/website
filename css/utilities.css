@@ -1,0 +1,155 @@
+/* =============================================================================
+   UTILITIES — sr-only, text helpers, spacing, visibility
+   All utilities use u- prefix. !important is documented here.
+   ============================================================================= */
+
+/* ---------------------------------------------------------------------------
+   Accessibility — Screen Reader Only
+   !important: Required to override any layout rules that might show the element.
+   --------------------------------------------------------------------------- */
+.u-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Becomes visible when focused (for keyboard-only users) */
+.u-sr-only-focusable:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Live regions
+   --------------------------------------------------------------------------- */
+.u-live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* ---------------------------------------------------------------------------
+   Text alignment
+   --------------------------------------------------------------------------- */
+.u-text-left   { text-align: left; }
+.u-text-center { text-align: center; }
+.u-text-right  { text-align: right; }
+
+/* ---------------------------------------------------------------------------
+   Text style
+   --------------------------------------------------------------------------- */
+.u-text-mono    { font-family: var(--font-mono); }
+.u-text-bold    { font-weight: var(--font-weight-bold); }
+.u-text-muted   { color: var(--color-text-muted); }
+.u-text-accent  { color: var(--color-accent); }
+.u-text-primary { color: var(--color-primary-light); }
+
+.u-text-xs   { font-size: var(--font-size-xs); }
+.u-text-sm   { font-size: var(--font-size-sm); }
+.u-text-base { font-size: var(--font-size-base); }
+.u-text-md   { font-size: var(--font-size-md); }
+.u-text-lg   { font-size: var(--font-size-lg); }
+
+.u-text-upper {
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.u-text-no-wrap { white-space: nowrap; }
+.u-text-balance { text-wrap: balance; }
+
+/* ---------------------------------------------------------------------------
+   Spacing helpers (margin-top only — avoids cascade issues)
+   --------------------------------------------------------------------------- */
+.u-mt-2  { margin-top: var(--space-2); }
+.u-mt-4  { margin-top: var(--space-4); }
+.u-mt-6  { margin-top: var(--space-6); }
+.u-mt-8  { margin-top: var(--space-8); }
+.u-mt-12 { margin-top: var(--space-12); }
+.u-mt-16 { margin-top: var(--space-16); }
+
+.u-mb-4  { margin-bottom: var(--space-4); }
+.u-mb-8  { margin-bottom: var(--space-8); }
+
+/* ---------------------------------------------------------------------------
+   Display
+   --------------------------------------------------------------------------- */
+.u-block         { display: block; }
+.u-inline-block  { display: inline-block; }
+.u-flex          { display: flex; }
+.u-hidden        { display: none; }
+
+/* ---------------------------------------------------------------------------
+   Flex shortcuts
+   --------------------------------------------------------------------------- */
+.u-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.u-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.u-flex-wrap { flex-wrap: wrap; }
+.u-gap-4     { gap: var(--space-4); }
+.u-gap-6     { gap: var(--space-6); }
+
+/* ---------------------------------------------------------------------------
+   Width
+   --------------------------------------------------------------------------- */
+.u-w-full { width: 100%; }
+.u-max-w-prose { max-width: 70ch; }
+
+/* ---------------------------------------------------------------------------
+   Border
+   --------------------------------------------------------------------------- */
+.u-border-top    { border-top: var(--border-width) solid var(--color-border); }
+.u-border-bottom { border-bottom: var(--border-width) solid var(--color-border); }
+
+/* ---------------------------------------------------------------------------
+   Responsive visibility
+   --------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .u-hide-mobile { display: none !important; }
+}
+
+@media (min-width: 769px) {
+  .u-hide-desktop { display: none !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   Print
+   --------------------------------------------------------------------------- */
+@media print {
+  .u-no-print { display: none !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   Focus management (programmatic focus targets)
+   --------------------------------------------------------------------------- */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+[tabindex="-1"]:focus-visible {
+  outline: var(--border-width-focus) solid var(--color-focus);
+  outline-offset: 4px;
+}

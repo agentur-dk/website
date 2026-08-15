@@ -1,0 +1,156 @@
+/* =============================================================================
+   DESIGN TOKENS — agentur dk
+   All values reference-able via var(). No magic numbers elsewhere.
+   Contrast ratios documented against --color-bg (#121212, L≈0.0106)
+   ============================================================================= */
+
+:root {
+
+  /* ---------------------------------------------------------------------------
+     COLOR — Background & Surface
+     --------------------------------------------------------------------------- */
+  --color-bg:          #121212; /* Base background (darkest) */
+  --color-surface:     #1e1e1e; /* Cards, panels */
+  --color-surface-alt: #2a2a2a; /* Hover states, alternating rows */
+  --color-border:      #333333; /* Subtle borders */
+  --color-border-strong: #555555;
+
+  /* ---------------------------------------------------------------------------
+     COLOR — Text
+     #e8e8e8 on #121212 → L≈0.31 / L≈0.0106 → contrast ≈ 15.7:1 ✓ AAA
+     #a8a8a8 on #121212 → L≈0.42 / 0.0106   → contrast ≈  7.8:1 ✓ AA
+     --------------------------------------------------------------------------- */
+  --color-text:        #e8e8e8;
+  --color-text-muted:  #a8a8a8;
+  --color-text-inverse: #121212;
+
+  /* ---------------------------------------------------------------------------
+     COLOR — Brand
+     #1C60AD (primary) on #121212 → L≈0.13 / 0.0106 → contrast ≈ 2.98:1
+     Use only as non-text UI element bg (with white text inside, 5.8:1 ✓)
+     #fbea6b (accent) on #121212  → L≈0.84 / 0.0106 → contrast ≈ 17.1:1 ✓ AAA
+     --------------------------------------------------------------------------- */
+  --color-primary:       #1C60AD;
+  --color-primary-hover: #2570C8;
+  --color-primary-light: #5090d0; /* Text on dark bg: L≈0.25 → 4.8:1 ✓ AA */
+  --color-accent:        #fbea6b;
+  --color-accent-dark:   #d4c245;
+
+  /* ---------------------------------------------------------------------------
+     COLOR — Semantic
+     #ff6b6b on #121212 → L≈0.14 / 0.0106 → contrast ≈ 3.1:1 (large text only)
+     --color-error-text (#ff9999) → L≈0.32 / 0.0106 → contrast ≈ 5.9:1 ✓ AA
+     #5dbf6a on #121212 → contrast ≈ 4.9:1 ✓ AA
+     --------------------------------------------------------------------------- */
+  --color-error:       #ff6b6b; /* UI elements only */
+  --color-error-text:  #ff9999; /* Text on dark bg */
+  --color-success:     #5dbf6a;
+  --color-focus:       #fbea6b; /* Focus ring — same as accent */
+
+  /* ---------------------------------------------------------------------------
+     COLOR — Footer Gradient (brand heritage)
+     --------------------------------------------------------------------------- */
+  --gradient-footer: linear-gradient(135deg,
+    #000000 0%, #281621 20%, #412848 40%, #474078 60%, #1c60ad 100%);
+
+  /* ---------------------------------------------------------------------------
+     TYPOGRAPHY
+     Scale: 1.25 ratio, base 16px
+     --------------------------------------------------------------------------- */
+  --font-mono:   'Roboto Mono', 'Courier New', monospace;
+  --font-system: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --font-size-xs:   0.75rem;  /* 12px */
+  --font-size-sm:   0.875rem; /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-md:   1.25rem;  /* 20px */
+  --font-size-lg:   1.5625rem;/* 25px */
+  --font-size-xl:   1.9375rem;/* 31px */
+  --font-size-2xl:  2.4375rem;/* 39px */
+  --font-size-3xl:  3.0625rem;/* 49px */
+
+  --font-weight-light:   300;
+  --font-weight-regular: 400;
+  --font-weight-bold:    700;
+
+  --line-height-body:    1.6;
+  --line-height-heading: 1.2;
+  --line-height-tight:   1.1;
+
+  --letter-spacing-mono: 0.02em;
+  --letter-spacing-wide: 0.08em;
+  --letter-spacing-wider: 0.15em;
+
+  /* ---------------------------------------------------------------------------
+     SPACING — 4-point base
+     --------------------------------------------------------------------------- */
+  --space-1:  0.25rem;  /* 4px  */
+  --space-2:  0.5rem;   /* 8px  */
+  --space-3:  0.75rem;  /* 12px */
+  --space-4:  1rem;     /* 16px */
+  --space-5:  1.25rem;  /* 20px */
+  --space-6:  1.5rem;   /* 24px */
+  --space-8:  2rem;     /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+  --space-32: 8rem;     /* 128px */
+
+  /* ---------------------------------------------------------------------------
+     LAYOUT
+     --------------------------------------------------------------------------- */
+  --container-max:   1140px;
+  --container-wide:  1280px;
+  --container-narrow: 720px;
+
+  /* ---------------------------------------------------------------------------
+     BORDERS & RADII
+     --------------------------------------------------------------------------- */
+  --radius-none: 0;
+  --radius-sm:   2px;
+  --radius-md:   4px;
+  --radius-full: 9999px;
+
+  --border-width: 1px;
+  --border-width-thick: 2px;
+  --border-width-focus: 3px;
+
+  /* ---------------------------------------------------------------------------
+     SHADOWS
+     --------------------------------------------------------------------------- */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-focus: 0 0 0 var(--border-width-focus) var(--color-focus),
+                  0 0 0 6px rgba(251, 234, 107, 0.2);
+
+  /* ---------------------------------------------------------------------------
+     TRANSITIONS
+     --------------------------------------------------------------------------- */
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* ---------------------------------------------------------------------------
+     Z-INDEX
+     --------------------------------------------------------------------------- */
+  --z-base:     0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+  --z-skip:     600;
+}
+
+/* Reduced motion: shorten all transitions */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-base: 0ms;
+    --transition-slow: 0ms;
+  }
+}
