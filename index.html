@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- SEO Meta Tags -->
+	<title>agentur dk | Online Agentur Köln für mehr Sichtbarkeit im Netz</title>
+	<meta name="description"
+		content="Ihre Online-Agentur in Köln für barrierearme WordPress Websites (BFSG), Online-Marketing und mehr Online-Sichtbarkeit. Jetzt anfragen!">
+	<meta name="author" content="Daniel Kontelis">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="index.html">
+
+	<!-- Open Graph / Social Media -->
+	<meta property="og:title" content="agentur dk - Design & Kommunikation Köln">
+	<meta property="og:description"
+		content="Digitalkompetenz aus Köln: Wir realisieren barrierearme Websites nach BFSG, Wordpress Agentur Köln und zukunftssicheres Online-Marketing.">
+	<meta property="og:image" content="https://dk-dk.de/images/og-image-website.png">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://dk-dk.de/">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="agentur dk - Design & Kommunikation Köln">
+	<meta name="twitter:description"
+		content="Digitalkompetenz aus Köln: Barrierearme Websites nach BFSG, WordPress und Online-Marketing.">
+	<meta name="twitter:image" content="https://dk-dk.de/images/og-image-website.png">
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Organization",
+		"name": "agentur dk - design & kommunikation",
+		"url": "https://dk-dk.de",
+		"logo": "https://dk-dk.de/images/og-image-website.png",
+		"contactPoint": {
+			"@type": "ContactPoint",
+			"telephone": "+49-221-986-55-229",
+			"contactType": "customer service",
+			"areaServed": "DE",
+			"availableLanguage": "German"
+		},
+		"sameAs": [
+			"https://www.linkedin.com/in/daniel-kontelis/"
+		]
+	}
+	</script>
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"name": "agentur dk - Design & Kommunikation Köln",
+		"description": "Ihre Agentur für barrierearme WordPress Websites, Wordpress Agentur Köln und modernes Online-Marketing in Köln.",
+		"mainEntity": {
+			"@type": "Service",
+			"name": "Webdesign & Webentwicklung",
+			"offers": [
+				{ "@type": "Offer", "itemOffered": { "@type": "Service", "name": "BFSG WordPress Websites" } },
+				{ "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wordpress Agentur Köln" } },
+				{ "@type": "Offer", "itemOffered": { "@type": "Service", "name": "SEO & GEO Optimierung" } }
+			]
+		}
+	}
+	</script>
+
+	<!-- Favicon (Assuming standard location if exists, otherwise placeholder) -->
+
+	<!-- Preload Critical Fonts -->
+	<link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="fonts/roboto-mono-v31-latin-300.woff2" as="font" type="font/woff2" crossorigin>
+
+	<!-- Preload CSS -->
+	<link rel="preload" href="css/bootstrap.min.css" as="style">
+	<link rel="preload" href="css/custom.css" as="style">
+
+	<!-- Critical CSS Inline -->
+	<style>
+		@font-face {
+			font-display: swap;
+			font-family: 'Roboto Mono';
+			font-style: normal;
+			font-weight: 300;
+			src: url('fonts/roboto-mono-v31-latin-300.woff2') format('woff2')
+		}
+
+		@font-face {
+			font-display: swap;
+			font-family: 'Roboto Mono';
+			font-style: normal;
+			font-weight: 400;
+			src: url('fonts/roboto-mono-v31-latin-regular.woff2') format('woff2')
+		}
+
+		@font-face {
+			font-display: swap;
+			font-family: 'Roboto Mono';
+			font-style: normal;
+			font-weight: 700;
+			src: url('fonts/roboto-mono-v31-latin-700.woff2') format('woff2')
+		}
+
+		@font-face {
+			font-family: 'FontAwesome';
+			src: url('fonts/fontawesome-webfont.eot');
+			src: url('fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('fonts/fontawesome-webfont.woff2') format('woff2'), url('fonts/fontawesome-webfont.woff') format('woff'), url('fonts/fontawesome-webfont.ttf') format('truetype'), url('fonts/fontawesome-webfont.svg') format('svg');
+			font-weight: normal;
+			font-style: normal
+		}
+
+		.fa {
+			display: inline-block;
+			font: normal normal normal 14px/1 FontAwesome;
+			font-size: inherit;
+			text-rendering: auto;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale
+		}
+
+		.fa-external-link:before {
+			content: "\f08e"
+		}
+
+		.fa-diamond:before {
+			content: "\f219"
+		}
+
+		.fa-building-o:before {
+			content: "\f0f7"
+		}
+
+		.fa-bar-chart:before {
+			content: "\f080"
+		}
+
+		.fa-paint-brush:before {
+			content: "\f1fc"
+		}
+
+		.fa-heart-o:before {
+			content: "\f08a"
+		}
+
+		.fa-thumbs-up:before {
+			content: "\f164"
+		}
+
+		.fa-code:before {
+			content: "\f121"
+		}
+
+		.fa-paper-plane-o:before {
+			content: "\f1d9"
+		}
+
+		.fa-shopping-bag:before {
+			content: "\f290"
+		}
+
+		.fa-rocket:before {
+			content: "\f135"
+		}
+
+		.fa-bullseye:before {
+			content: "\f140"
+		}
+
+		.fa-phone:before {
+			content: "\f095"
+		}
+
+		:root {
+			--primary: #1C60AD;
+			--white: #FFFFFF;
+			--black: #000000;
+			--light-gray: #EEEEEE;
+			--dark-gray: #666666;
+			--font-main: "Roboto Mono", monospace
+		}
+
+		*,
+		*::before,
+		*::after {
+			border-radius: 0 !important
+		}
+
+		html {
+			font-size: 18px;
+			scroll-behavior: smooth
+		}
+
+		body {
+			font-family: var(--font-main);
+			background-color: var(--white) !important;
+			color: var(--black) !important;
+			line-height: 1.6;
+			-webkit-font-smoothing: antialiased;
+			margin: 0
+		}
+
+		h1 {
+			color: var(--black) !important;
+			font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+			font-weight: 700;
+			line-height: 1.2
+		}
+
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			color: var(--black) !important;
+			font-weight: 700;
+			line-height: 1.2
+		}
+
+		p,
+		li {
+			max-width: 75ch;
+			-moz-hyphens: auto;
+			-o-hyphens: auto;
+			-webkit-hyphens: auto;
+			-ms-hyphens: auto;
+			hyphens: auto
+		}
+
+		.mark,
+		mark {
+			color: #333;
+			padding: 0 .3em;
+			background: linear-gradient(100deg, rgba(251, 234, 107, 0) 1%, #fbea6b 2.5%, rgba(251, 234, 107, .5) 5.7%, rgba(251, 234, 107, .25) 93%, rgba(251, 234, 107, .71) 95%, rgba(251, 234, 107, 0) 98%), linear-gradient(182deg, rgba(251, 234, 107, 0), rgba(251, 234, 107, .3) 8%, rgba(251, 234, 107, 0) 15%);
+			-webkit-box-decoration-break: clone;
+			box-decoration-break: clone
+		}
+
+		.container {
+			max-width: 1140px;
+			margin: 0 auto;
+			padding: 0 1rem
+		}
+
+		.text-start {
+			text-align: left !important
+		}
+
+		.text-center {
+			text-align: center !important
+		}
+
+		.bg-white {
+			background-color: var(--white) !important
+		}
+
+		.bg-light-gray {
+			background-color: var(--light-gray) !important
+		}
+
+		.bg-dark {
+			background-color: var(--black) !important;
+			color: var(--white) !important
+		}
+
+		.hero-section {
+			background-color: var(--black) !important;
+			color: var(--white) !important
+		}
+
+		.hero-section h1,
+		.hero-section h2,
+		.hero-section p {
+			color: var(--white) !important
+		}
+
+		.text-primary,
+		.text-primary-custom {
+			color: var(--primary) !important
+		}
+
+		.fw-bold {
+			font-weight: 700 !important
+		}
+
+		.mb-2 {
+			margin-bottom: 0.5rem !important
+		}
+
+		.mb-3 {
+			margin-bottom: 1rem !important
+		}
+
+		.mb-4 {
+			margin-bottom: 1.5rem !important
+		}
+
+		.mb-5 {
+			margin-bottom: 3rem !important
+		}
+
+		.py-4 {
+			padding-top: 1.5rem !important;
+			padding-bottom: 1.5rem !important
+		}
+
+		.py-5 {
+			padding-top: 3rem !important;
+			padding-bottom: 3rem !important
+		}
+
+		.p-0 {
+			padding: 0 !important
+		}
+
+		.p-4 {
+			padding: 1.5rem !important
+		}
+
+		.p-md-5 {
+			padding: 3rem !important
+		}
+
+		.min-vh-100 {
+			min-height: 100vh !important
+		}
+
+		.d-flex {
+			display: flex !important
+		}
+
+		.flex-wrap {
+			flex-wrap: wrap !important
+		}
+
+		.gap-3 {
+			gap: 1rem !important
+		}
+
+		.justify-content-start {
+			justify-content: flex-start !important
+		}
+
+		.align-items-center {
+			align-items: center !important
+		}
+
+		.text-decoration-none {
+			text-decoration: none !important
+		}
+
+		.text-black {
+			color: var(--black) !important
+		}
+
+		.text-white {
+			color: var(--white) !important
+		}
+
+		.text-xl {
+			font-size: 1.5rem !important
+		}
+
+		.font-light {
+			font-weight: 300 !important
+		}
+
+		.h3 {
+			font-size: 1.75rem !important
+		}
+
+		.display-2 {
+			font-size: 2.5rem !important
+		}
+
+		.lead {
+			font-size: 1.25rem !important;
+			font-weight: 300 !important
+		}
+
+		.btn {
+			display: inline-block;
+			padding: 0.375rem 0.75rem;
+			font-size: 1rem;
+			line-height: 1.5;
+			text-align: center;
+			text-decoration: none;
+			border: 1px solid transparent;
+			cursor: pointer
+		}
+
+		.btn-agency {
+			min-width: 250px;
+			padding: 1rem 1.5rem !important;
+			transition: all 0.3s ease
+		}
+
+		.btn-agency-primary {
+			background-color: var(--primary) !important;
+			color: var(--white) !important;
+			border: 3px solid var(--primary) !important;
+			font-weight: 700
+		}
+
+		.btn-agency-outline-light {
+			background-color: transparent !important;
+			border: 3px solid var(--white) !important;
+			color: var(--white) !important
+		}
+
+		.visually-hidden {
+			position: absolute !important;
+			width: 1px !important;
+			height: 1px !important;
+			padding: 0 !important;
+			margin: -1px !important;
+			overflow: hidden !important;
+			clip: rect(0, 0, 0, 0) !important;
+			white-space: nowrap !important;
+			border: 0 !important
+		}
+
+		.screen-reader {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0
+		}
+
+		.container-fluid {
+			width: 100%;
+			padding-right: 15px;
+			padding-left: 15px;
+			margin-right: auto;
+			margin-left: auto
+		}
+		/* Prevent horizontal scrolling and ensure content fits viewport */
+		html, body { max-width: 100%; overflow-x: hidden; }
+		img, svg, video, canvas, iframe { max-width: 100%; height: auto; }
+		section, header, footer, .container, .container-fluid, .row { max-width: 100vw; }
+		h1, h2, h3, h4, p, .headline { overflow-wrap: anywhere; word-break: break-word; }
+		/* Responsive readability: smaller text on small screens */
+		@media (max-width: 768px) {
+			html { font-size: 16px; }
+			.display-2 { font-size: 2rem !important; }
+			.h3 { font-size: 1.4rem !important; }
+			.lead { font-size: 1rem !important; }
+			.hero-content { max-width: 100% !important; }
+			.min-vh-100 { min-height: 80vh !important; }
+			.container { padding: 0 15px !important; }
+			.container-fluid { padding-left: 15px !important; padding-right: 15px !important; }
+			.btn-agency { min-width: auto !important; padding: 0.75rem 1rem !important; }
+		}
+		/* Scoped mobile tweak for hero (#top): smaller headline and greeting */
+		@media (max-width: 576px) {
+			#top .display-2 { font-size: 1.6rem !important; line-height: 1.3; }
+			#top .text-xl { font-size: 0.95rem !important; }
+			#top .hero-content { padding: 1rem !important; }
+		}
+		/* ux: typewriter caret for greeting text, honors reduced motion */
+		.typewriter { border-right: 2px solid var(--white); animation: typing-caret 0.5s step-end infinite; }
+		@keyframes typing-caret { 0%, 100% { border-color: transparent; } 50% { border-color: var(--white); } }
+		@media (prefers-reduced-motion: reduce) {
+			.typewriter { animation: none; border-right: none; }
+		}
+	</style>
+
+	<!-- Load full CSS asynchronously -->
+	<link rel="stylesheet" href="css/bootstrap.min.css" media="print" onload="this.media='all'">
+	<link rel="stylesheet" href="css/custom.css" media="print" onload="this.media='all'">
+	<noscript>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/custom.css">
+	</noscript>
+</head>
+
+<body>
+
+	<!-- Skip Link (Accessibility) -->
+	<a href="index.html#main-content" class="screen-reader screen-reader-focusable">Zum Hauptinhalt springen</a>
+
+	<header class="site-header header-overlay">
+		<div class="container">
+			<div class="header-logo">
+				<!-- Logo oder Titel, hier erst mal visuell versteckt wie vorher, oder sichtbar machen? -->
+				<!-- User wollte Logo/Header Verbesserung, also mache ich es sichtbar aber ggf. weiß/transparent -->
+			</div>
+		</div>
+	</header>
+
+	<main id="main-content">
+		<!-- Hero Section -->
+		<section class="hero-section container-fluid p-0" id="top">
+			<div class="d-flex align-items-center justify-content-start min-vh-100 text-start">
+				<div class="hero-content p-4 p-md-5" style="max-width: 900px;">
+					<div class="mb-3 text-xl font-light">
+						<!-- ux: live-typing greeting with caret, accessible fallback via noscript -->
+						<span id="greeting-text" class="typewriter" aria-live="polite">Willkommen bei</span>
+						<noscript>Willkommen bei</noscript>
+						<script>
+							// ux: typewriter effect (respects prefers-reduced-motion)
+							(function () {
+								var now = new Date();
+								var hour = now.getHours();
+								var greeting = "Willkommen bei agentur dk";
+								if (hour >= 3 && hour < 5) greeting = "🫖 Der frühe Vogel... Willkommen bei agentur dk";
+								else if (hour >= 5 && hour < 11) greeting = "☀️ Guten Morgen und hallo von agentur dk";
+								else if (hour >= 11 && hour < 17) greeting = "👋 Guten Tag und hallo von agentur dk";
+								else if (hour >= 17 && hour < 23) greeting = "💡 Guten Abend und hallo von agentur dk";
+								else greeting = "😴 Ein nächtliches Hallo bei agentur dk";
+
+								var el = document.getElementById("greeting-text");
+								if (!el) return;
+								var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+								if (reduce) {
+									el.textContent = greeting;
+									el.classList.remove('typewriter');
+									return;
+								}
+								el.textContent = "";
+								var i = 0, speed = 100;
+								var timer = setInterval(function () {
+									el.textContent = greeting.slice(0, i);
+									i++;
+									if (i > greeting.length) {
+										clearInterval(timer);
+										// ux: caret blink for 3s after typing, then remove completely
+										setTimeout(function () {
+											el.classList.remove('typewriter');
+											el.style.borderRight = 'none';
+										}, 2000);
+									}
+								}, speed);
+							})();
+						</script>
+					</div>
+					<h1 class="display-2 mb-4"><span class="fw-bold">Wir machen Ihr Unternehmen sichtbar. Kunden gewinnen, Bewerber:innen erreichen.</span> Online-Marketing, Social Recruiting und <a class="text-white" href="bfsg-wordpress-website-agentur.html">BFSG</a> WordPress Agentur Köln.</h1>
+
+						<h2 class="d-none h3 font-light mb-5">Digitalagentur mit eigenen Online-Brands.
+							<span class="d-none text-primary-custom d-block mt-2"><a href="bfsg-wordpress-website-agentur.html"
+									class="text-primary-custom text-decoration-underline">BFSG WordPress Agentur</a></span>
+						</h2>
+<br><br>
+					<div class="d-flex flex-wrap gap-3 justify-content-start">
+						<a href="index.html#services" class="btn btn-agency btn-agency-outline-light" aria-label="Mehr über unsere Projekte erfahren">Unsere Themen</a>
+						<button data-tf-popup="obHXHL" class="btn btn-agency btn-agency-primary" aria-label="Kontaktformular öffnen">Kontakt
+							aufnehmen</button>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Services -->
+		<section class="py-5 bg-white" id="services">
+			<div class="container py-5">
+				<div class="text-center mb-5">
+					<h2 class="display-5 text-uppercase tracking-wide mb-5">Themen Digitalagentur</h2>
+				</div>
+
+				<!-- Highlight Box -->
+				<div class="feature-box mb-5 border">
+					<div class="row">
+						<div class="col-12">
+							<h3 class="h2 mb-3">Barrierearme WordPress Websites nach <span class="fw-bold">BFSG</span>
+								für den Mittelstand ✅</h3>
+							<p class="mb-4">Sind Sie vom Barrierefreiheitsstärkungsgesetz betroffen? Wir begleiten Sie
+								von der Beratung bis zur Umsetzung und Prüfung. Senken Sie Ihr Abmahnrisiko und
+								verbessern Sie die Nutzerfreundlichkeit nachhaltig.</p>
+							<a href="bfsg-wordpress-website-agentur.html" class="btn btn-agency btn-agency-primary">
+								<i class="fa fa-external-link me-2" aria-hidden="true"></i> Jetzt prüfen
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Social Recruiting Highlight Box -->
+				<div class="feature-box mb-5 border">
+					<div class="row">
+						<div class="col-12">
+							<h3 class="h2 mb-3">Mehr qualifizierte Bewerbungen durch <span class="fw-bold">Social
+									Recruiting</span> 🤝</h3>
+							<p class="mb-4">Gewinnen Sie top-qualifizierte Fachkräfte für Ihr Team! Wir realisieren Ihre
+								Kampagne ohne Mindestlaufzeit, Provision oder Headhunter. Schluss mit offenen Stellen –
+								starten Sie jetzt Ihr Recruiting-Upgrade.</p>
+							<a href="https://social-recruiting.dk-dk.de/" target="_blank" rel="noopener"
+								class="btn btn-agency btn-agency-primary">
+								<i class="fa fa-external-link me-2" aria-hidden="true"></i> Jetzt loslegen
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Sales WordPress Highlight Box -->
+				<div class="feature-box mb-5 border">
+					<div class="row">
+						<div class="col-12">
+							<h3 class="h2 mb-3">Verkaufsstarke WordPress Websites für <span class="fw-bold">mehr
+									Anfragen und Aufträge</span> 🚀</h3>
+							<p class="mb-4">Wir entwickeln Websites, die nicht nur gut aussehen, sondern aktiv neue
+								Anfragen generieren. Mit strategischem Design und optimierter Nutzerführung verwandeln
+								wir Ihre Besucher in zahlende Kunden. Sichern Sie sich jetzt Ihr Umsatz-Wachstum.</p>
+							<button data-tf-popup="obHXHL" class="btn btn-agency btn-agency-primary">
+								<i class="fa fa-external-link me-2" aria-hidden="true"></i> Projekt anfragen
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Grid Items (Redesigned as Cards) -->
+				<div class="row g-4 py-5">
+					<!-- Media Consulting -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-diamond"></i></div>
+							<h4 class="headline">media consulting.</h4>
+							<ul>
+								<li>Zuhören & Nachfragen</li>
+								<li>Ganzheitliche Beratung</li>
+								<li>Design-Konzepte</li>
+								<li>Marketing-Strategie</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Branding -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-heart-o"></i></div>
+							<h4 class="headline">branding.</h4>
+							<ul>
+								<li>Visions-Entwicklung</li>
+								<li>Werte-Definition</li>
+								<li>Marken-Positionierung</li>
+								<li>Unverwechselbarkeit</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Corporate Design -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-building-o"></i></div>
+							<h4 class="headline">corporate design.</h4>
+							<ul>
+								<li>Logo-Entwicklung</li>
+								<li>Markenidentität</li>
+								<li>Einheitliches Layout</li>
+								<li>Brand Guidelines</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Online-Marketing -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-bar-chart"></i></div>
+							<h4 class="headline">online-marketing.</h4>
+							<ul>
+								<li>SEO Optimierung</li>
+								<li>Social Media Ads</li>
+								<li>Content-Marketing</li>
+								<li>Digitale Sichtbarkeit</li>
+							</ul>
+						</div>
+					</div>
+					<!-- WordPress Agentur Köln & Brands -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-shopping-bag"></i></div>
+							<h4 class="headline">WordPress Agentur Köln.</h4>
+							<ul>
+								<li>Shopaufbau & Produkterstellung</li>
+								<li>Print on Demand</li>
+								<li>Automatisierungen</li>
+								<li>Beteiligungsmodelle möglich</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- GEO (Generative Engine Optimization) -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="card-badge">NEU</div>
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-rocket"></i></div>
+							<h4 class="headline">GEO.</h4>
+							<ul>
+								<li>Generative Engine Optimization</li>
+								<li>Vorgeschlagen werden in KI-Antworten</li>
+								<li>Das SEO von morgen!</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Webentwicklung -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-code"></i></div>
+							<h4 class="headline">webentwicklung.</h4>
+							<ul>
+								<li>WordPress Plugins</li>
+								<li>Professionelle Umsetzung</li>
+								<li>Responsive Design</li>
+								<li>Barrierefreiheit</li>
+							</ul>
+						</div>
+					</div>
+					<!-- KI-Telefon -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="card-badge">NEU</div>
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-phone"></i></div>
+							<h4 class="headline">KI-Telefon-Agenten.</h4>
+							<ul>
+								<li>24/7 Erreichbarkeit</li>
+								<li>Individuelle Ansprache</li>
+								<li>E-Mail Nachverarbeitung</li>
+								<li>KI-Terminbuchung</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Griechenland-Marketing -->
+					<div class="col-md-4">
+						<div class="service-card">
+							<div class="service-icon-box" aria-hidden="true"><i class="fa fa-bullseye"></i></div>
+							<h4 class="headline">griechenland-marketing.</h4>
+							<ul>
+								<li>Passgenaue Zielgruppe</li>
+								<li>DU BIST GRIECHE</li>
+								<li>Maximale Sichtbarkeit</li>
+								<li>Werbekampagnen</li>
+							</ul>
+							<a href="https://du-bist-grieche.de/werbung/werbeanfrage-fuer-unternehmen" target="_blank"
+								rel="noopener" class="more-link">Anfrage stellen ›</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- About / Projekte -->
+		<section class="about-section container-fluid p-0" id="projekte" style="background-image: linear-gradient(to right bottom, #000000, #281621, #412848, #474078, #1c60ad);">
+			<div class="container py-5 min-vh-100 d-flex align-items-center">
+				<div class="hero-content text-start text-white py-5" style="max-width: 900px;">
+					<h2 class="h3 mb-4 fw-bold">About</h2>
+					<p class="mb-4">Neben den Kundenprojekten der Digitalagentur gehören eigene Plattformen und
+						Marken zu unserer Passion.</p>
+					<p class="mb-4">
+						Im Bereich Special-Interest-Marketing lieben wir unsere Infotainment Marke <strong>DU BIST
+							GRIECHE</strong>.
+						Die größte Plattform für Griechenland-Liebhaber im deutschsprachigen Raum
+						<a href="https://du-bist-grieche.de/ueber-uns" class="text-white text-decoration-underline" aria-label="Mehr Infos über Du bist Grieche">(mehr Infos)</a>.
+					</p>
+					<p class="mb-5">
+						Unsere neueste Innovation: <strong>aposocial</strong>. Der Game-Changer für die
+						Social-Media-Kommunikation von Apotheken
+						<a href="https://aposocial.de/" target="_blank" rel="noopener" class="text-white text-decoration-underline" aria-label="Mehr Infos über aposocial (öffnet in neuem Fenster)">(mehr Infos)</a>.
+					</p>
+
+					<div class="mb-5">
+						<a data-tf-popup="obHXHL" class="text-white text-decoration-underline" style="cursor:pointer;" aria-label="Kontaktformular öffnen" data-tf-loaded="true">Kontakt aufnehmen</a>
+						<script src="js/typeform-embed.js" defer=""></script>
+						oder auf
+						<a href="https://www.linkedin.com/in/daniel-kontelis/" target="_blank" rel="noopener" class="text-white text-decoration-underline" aria-label="Daniel Kontelis auf LinkedIn besuchen">LinkedIn</a>
+						vernetzen.
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Kontakt Call-to-Action -->
+		<section class="py-5 bg-dark text-white text-center" id="kontakt">
+			<div class="container py-5">
+				<h2 class="display-5 text-uppercase mb-5">Kontakt</h2>
+				<button data-tf-popup="obHXHL" class="btn btn-agency btn-agency-primary px-5 py-3"
+					aria-label="Kontaktformular öffnen um Nachricht zu senden">Jetzt unverbindlich anfragen</button>
+			</div>
+		</section>
+	</main>
+
+	<hr class="footer-gradient-divider" aria-hidden="true">
+
+	<!-- footer: professional dark variant with logo, social, contact and navs -->
+	<footer id="prefooter" class="bg-dark text-white">
+		<div class="container py-5">
+			<!-- top: logo and socials -->
+			<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+				<a href="index.html" class="text-decoration-none text-white" aria-label="agentur dk - Zur Startseite">
+					<span class="fw-bold" style="font-size: 1.25rem;">agentur dk</span>
+					<span class="d-block text-white-50" style="font-size: 0.9rem;">design & kommunikation</span>
+				</a>
+				<span class="social d-flex gap-3">
+					<a href="https://www.facebook.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Facebook (öffnet in neuem Fenster)">
+						<i class="fa fa-facebook" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.instagram.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Instagram (öffnet in neuem Fenster)">
+						<i class="fa fa-instagram" aria-hidden="true"></i>
+					</a>
+					<a href="https://twitter.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Twitter (öffnet in neuem Fenster)">
+						<i class="fa fa-twitter" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.xing.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Xing (öffnet in neuem Fenster)">
+						<i class="fa fa-xing" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.pinterest.de/" rel="me noopener" target="_blank" aria-label="agentur dk auf Pinterest (öffnet in neuem Fenster)">
+						<i class="fa fa-pinterest" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.linkedin.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf LinkedIn (öffnet in neuem Fenster)">
+						<i class="fa fa-linkedin" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.youtube.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf YouTube (öffnet in neuem Fenster)">
+						<i class="fa fa-youtube" aria-hidden="true"></i>
+					</a>
+					<a href="https://open.spotify.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Spotify (öffnet in neuem Fenster)">
+						<i class="fa fa-spotify" aria-hidden="true"></i>
+					</a>
+				</span>
+			</div>
+
+			<!-- kontakt: three columns -->
+			<div class="kontakt footer-grid-3 mb-4">
+				<div class="col links">
+					<span>Sachsenring 57</span><br>
+					<span>D-50677 Köln</span>
+				</div>
+				<div class="col mitte">
+					<span>Tel. <a href="tel:+4922198655229" class="text-white text-decoration-underline" title="+49 221 98655229 anrufen">+49 221 98655229</a></span><br>
+					<span>Mo–Fr 09–18 Uhr</span>
+				</div>
+				<div class="col rechts">
+					<a href="mailto:mail@dk-dk.de" class="text-white text-decoration-underline" title="E-Mail an mail@dk-dk.de">mail@dk-dk.de</a><br>
+					<span>www.dk-dk.de</span>
+				</div>
+			</div>
+
+			<hr style="border-color: rgba(255,255,255,0.2);">
+
+			<!-- navs: three columns of links -->
+			<div class="navs footer-grid-3 mb-4">
+				<div class="col links">
+					<nav aria-label="Gefragte Leistungen">
+						<span class="headline d-block fw-bold mb-2">Gefragte Leistungen</span>
+						<ul class="level_1" style="list-style: none; padding-left: 0;">
+							<li><a href="bfsg-wordpress-website-agentur.html" class="text-white-50 text-decoration-underline" title="BFSG WordPress Agentur">BFSG WordPress Agentur</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="WordPress Relaunch">WordPress Relaunch</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Landingpages">Landingpages</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Performance & SEO">Performance & SEO</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="col mitte">
+					<nav aria-label="Beliebte Tools">
+						<span class="headline d-block fw-bold mb-2">Beliebte Tools</span>
+						<ul class="level_1" style="list-style: none; padding-left: 0;">
+							<li><a href="bfsg-wordpress-website-agentur.html#faq" class="text-white-50 text-decoration-underline" title="FAQ">FAQ</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Prozess">Prozess</a></li>
+							<li><a href="bfsg-wordpress-website-agentur.html#bfsg-check" class="text-white-50 text-decoration-underline" title="BFSG Check">BFSG Check</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="col rechts">
+					<nav aria-label="Neu im Lexikon">
+						<span class="headline d-block fw-bold mb-2">Neu im Lexikon</span>
+						<ul class="level_1" style="list-style: none; padding-left: 0;">
+							<li><a href="llms.txt" class="text-white-50 text-decoration-underline" title="llms.txt">llms.txt</a></li>
+							<li><a href="bfsg-wordpress-website-agentur.html" class="text-white-50 text-decoration-underline" title="Barrierefreiheitsstärkungsgesetz">Barrierefreiheitsstärkungsgesetz</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="WordPress Agentur">WordPress Agentur</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+			<!-- bottom: legal links -->
+			<div class="text-center text-white-50 small">
+				&copy; <script>document.write(new Date().getFullYear())</script> agentur dk &middot;
+				<a href="sitemap.xml" class="text-white-50 text-decoration-underline">Sitemap</a> &middot;
+				<a href="impressum.html" class="text-white-50 text-decoration-underline">Impressum</a>, 
+				<a href="datenschutz.html" class="text-white-50 text-decoration-underline">Datenschutz</a> &middot;
+				<a href="barrierefreiheit.html" class="text-white-50 text-decoration-underline">Barrierefreiheit</a>
+			</div>
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script src="js/jquery.min.js" defer></script>
+	<script src="js/bootstrap.bundle.min.js" defer></script>
+	<script src="js/util.js" defer></script>
+	<script src="js/skel.min.js" defer></script>
+	<script src="js/jquery.scrollex.min.js" defer></script>
+	<script src="js/jquery.scrolly.min.js" defer></script>
+	<script src="js/main.js" defer></script>
+
+	<!-- Animation Trigger Script -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const skip = document.querySelector('a[href="#main-content"]');
+			const main = document.getElementById('main-content');
+			if (skip && main) {
+				skip.addEventListener('click', function (e) {
+					e.preventDefault();
+					main.setAttribute('tabindex', '-1');
+					main.focus();
+				});
+			}
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('is-visible');
+					}
+				});
+			}, { threshold: 0.1 });
+
+			const target = document.querySelector('#services .row.g-4');
+			if (target) observer.observe(target);
+
+			const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const kontaktHeadings = Array.from(document.querySelectorAll('h1,h2,h3')).filter(h => h.textContent.trim().toLowerCase() === 'kontakt');
+			const twObserver = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (!entry.isIntersecting) return;
+					const el = entry.target;
+					if (el.dataset.typed === '1') return;
+					el.dataset.typed = '1';
+					const text = el.textContent.trim();
+					if (reduce) {
+						twObserver.unobserve(el);
+						return;
+					}
+					el.textContent = '';
+					const caret = document.createElement('span');
+					caret.className = 'type-caret';
+					el.appendChild(caret);
+					let i = 0;
+					const timer = setInterval(() => {
+						if (i < text.length) {
+							caret.before(document.createTextNode(text.charAt(i)));
+							i++;
+						} else {
+							clearInterval(timer);
+							twObserver.unobserve(el);
+						}
+					}, 120);
+				});
+			}, { threshold: 0.6 });
+			kontaktHeadings.forEach(h => twObserver.observe(h));
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>BFSG WordPress Agentur | Barrierearme Websites</title>
+	<meta name="description"
+		content="BFSG WordPress Agentur für barrierearme Websites. Wir setzen das Barrierefreiheitsstärkungsgesetz (WCAG A/AA) für den Mittelstand um. Jetzt BFSG Check starten!">
+	<meta name="robots" content="index, follow">
+	<meta name="color-scheme" content="light dark">
+	<link rel="canonical" href="bfsg-wordpress-website-agentur.html">
+
+	<!-- Open Graph / SEO -->
+	<meta property="og:title" content="BFSG WordPress Agentur | Barrierearme Websites">
+	<meta property="og:description"
+		content="Ist Ihre Website BFSG-ready? Wir prüfen und realisieren barrierearme WordPress Websites nach EN 301 549 und WCAG Standards.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://dk-dk.de/bfsg-wordpress-website-agentur.html">
+	<meta property="og:image" content="https://dk-dk.de/images/og-image-website.png">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="BFSG WordPress Agentur | Barrierearme Websites">
+	<meta name="twitter:description"
+		content="Ist Ihre Website BFSG-ready? Prüfung und Umsetzung nach EN 301 549 und WCAG.">
+	<meta name="twitter:image" content="https://dk-dk.de/images/og-image-website.png">
+
+	<!-- Preload Critical Fonts -->
+	<link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="fonts/roboto-mono-v31-latin-300.woff2" as="font" type="font/woff2" crossorigin>
+
+	<!-- Preload CSS -->
+	<link rel="preload" href="css/bootstrap.min.css" as="style">
+	<link rel="preload" href="css/custom.css" as="style">
+
+	<!-- Critical CSS Inline -->
+	<style>
+		@font-face {
+			font-display: swap;
+			font-family: 'Roboto Mono';
+			font-style: normal;
+			font-weight: 300;
+			src: url('fonts/roboto-mono-v31-latin-300.woff2') format('woff2')
+		}
+
+		@font-face {
+			font-display: swap;
+			font-family: 'Roboto Mono';
+			font-style: normal;
+			font-weight: 400;
+			src: url('fonts/roboto-mono-v31-latin-regular.woff2') format('woff2')
+		}
+
+		@font-face {
+			font-display: swap;
+			font-family: 'Roboto Mono';
+			font-style: normal;
+			font-weight: 700;
+			src: url('fonts/roboto-mono-v31-latin-700.woff2') format('woff2')
+		}
+
+		:root {
+			--primary: #1C60AD;
+			--white: #FFFFFF;
+			--black: #000000;
+			--light-gray: #EEEEEE;
+			--dark-gray: #666666;
+			--font-main: "Roboto Mono", monospace
+		}
+
+		*,
+		*::before,
+		*::after {
+			border-radius: 0 !important
+		}
+
+		html {
+			font-size: 18px;
+			scroll-behavior: smooth
+		}
+
+		body {
+			font-family: var(--font-main);
+			background-color: var(--white) !important;
+			color: var(--black) !important;
+			line-height: 1.6;
+			-webkit-font-smoothing: antialiased;
+			margin: 0
+		}
+
+		h1 {
+			color: var(--black) !important;
+			font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+			font-weight: 700;
+			line-height: 1.2
+		}
+
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			color: var(--black) !important;
+			font-weight: 700;
+			line-height: 1.2
+		}
+
+		p,
+		li {
+			max-width: 75ch;
+			-moz-hyphens: auto;
+			-o-hyphens: auto;
+			-webkit-hyphens: auto;
+			-ms-hyphens: auto;
+			hyphens: auto
+		}
+
+		.mark,
+		mark {
+			color: #333;
+			padding: 0 .3em;
+			background: linear-gradient(100deg, rgba(251, 234, 107, 0) 1%, #fbea6b 2.5%, rgba(251, 234, 107, .5) 5.7%, rgba(251, 234, 107, .25) 93%, rgba(251, 234, 107, .71) 95%, rgba(251, 234, 107, 0) 98%), linear-gradient(182deg, rgba(251, 234, 107, 0), rgba(251, 234, 107, .3) 8%, rgba(251, 234, 107, 0) 15%);
+			-webkit-box-decoration-break: clone;
+			box-decoration-break: clone
+		}
+
+		.container {
+			max-width: 1140px;
+			margin: 0 auto;
+			padding: 0 1rem
+		}
+
+		.text-start {
+			text-align: left !important
+		}
+
+		.text-center {
+			text-align: center !important
+		}
+
+		.bg-white {
+			background-color: var(--white) !important
+		}
+
+		.bg-light-gray {
+			background-color: var(--light-gray) !important
+		}
+
+		.bg-dark {
+			background-color: var(--black) !important;
+			color: var(--white) !important
+		}
+
+		.text-primary {
+			color: var(--primary) !important
+		}
+
+		.fw-bold {
+			font-weight: 700 !important
+		}
+
+		.mb-2 {
+			margin-bottom: 0.5rem !important
+		}
+
+		.mb-4 {
+			margin-bottom: 1.5rem !important
+		}
+
+		.mb-5 {
+			margin-bottom: 3rem !important
+		}
+
+		.py-4 {
+			padding-top: 1.5rem !important;
+			padding-bottom: 1.5rem !important
+		}
+
+		.py-5 {
+			padding-top: 3rem !important;
+			padding-bottom: 3rem !important
+		}
+
+		.border-bottom {
+			border-bottom: 1px solid #dee2e6 !important
+		}
+
+		.border-top {
+			border-top: 1px solid #dee2e6 !important
+		}
+
+		.d-flex {
+			display: flex !important
+		}
+
+		.justify-content-between {
+			justify-content: space-between !important
+		}
+
+		.align-items-center {
+			align-items: center !important
+		}
+
+		.text-decoration-none {
+			text-decoration: none !important
+		}
+
+		.text-black {
+			color: var(--black) !important
+		}
+
+		.h4 {
+			font-size: 1.5rem !important
+		}
+
+		.h1 {
+			font-size: 2.5rem !important
+		}
+
+		.display-3 {
+			font-size: 2.5rem !important
+		}
+
+		.lead {
+			font-size: 1.25rem !important;
+			font-weight: 300 !important
+		}
+
+		.btn {
+			display: inline-block;
+			padding: 0.375rem 0.75rem;
+			font-size: 1rem;
+			line-height: 1.5;
+			text-align: center;
+			text-decoration: none;
+			border: 1px solid transparent;
+			cursor: pointer
+		}
+
+		.btn-agency {
+			min-width: 250px;
+			padding: 1rem 1.5rem !important;
+			transition: all 0.3s ease
+		}
+
+		.btn-agency-primary {
+			background-color: var(--primary) !important;
+			color: var(--white) !important;
+			border: 3px solid var(--primary) !important;
+			font-weight: 700
+		}
+
+		.btn-agency-outline-dark {
+			background-color: transparent !important;
+			border: 3px solid var(--black) !important;
+			color: var(--black) !important
+		}
+
+		.btn-sm {
+			min-width: auto;
+			padding: 0.5rem 1rem !important
+		}
+
+		.gap-3 {
+			gap: 1rem !important
+		}
+
+		.flex-wrap {
+			flex-wrap: wrap !important
+		}
+
+		section {
+			padding: 5rem 0
+		}
+
+		.bfsg-card {
+			background: var(--black);
+			border: 2px solid var(--white);
+			color: var(--white)
+		}
+
+		.form-check-input:checked {
+			background-color: var(--primary);
+			border-color: var(--black)
+		}
+
+		.screen-reader {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0
+		}
+
+		.header-tagline {
+			display: block;
+			font-size: 0.7rem;
+			font-weight: 300;
+			text-transform: lowercase;
+			letter-spacing: 0.05em;
+			margin-top: 0.2rem;
+			opacity: 0.8
+		}
+	</style>
+
+	<!-- Load full CSS asynchronously -->
+	<link rel="stylesheet" href="css/bootstrap.min.css" media="print" onload="this.media='all'">
+	<link rel="stylesheet" href="css/custom.css" media="print" onload="this.media='all'">
+	<noscript>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/custom.css">
+	</noscript>
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"mainEntityOfPage": {
+			"@type": "WebPage",
+			"@id": "https://dk-dk.de/bfsg-wordpress-website-agentur.html"
+		},
+		"name": "BFSG WordPress Website Agentur",
+		"description": "BFSG WordPress Website Agentur für barrierearme Websites. Umsetzung nach EN 301 549 und WCAG A und AA. BFSG Check, Maßnahmenplan, Umsetzung, Erklärung zur Barrierefreiheit.",
+		"publisher": {
+			"@type": "Organization",
+			"name": "agentur dk",
+				"logo": {
+					"@type": "ImageObject",
+					"url": "https://dk-dk.de/images/og-image-website.png"
+				}
+			}
+		}
+	</script>
+
+	<script type="application/ld+json">
+	{
+		"@context":"https://schema.org",
+		"@type":"FAQPage",
+		"mainEntity":[
+			{
+				"@type":"Question",
+				"name":"Gilt das BFSG für reine B2B Websites",
+				"acceptedAnswer":{
+					"@type":"Answer",
+					"text":"In der Regel nein, wenn klar erkennbar ist, dass sich das Angebot nicht an Verbraucher richtet. Sobald Verbraucher angesprochen werden oder ein Verbrauchervertrag angebahnt wird, wird es kritisch."
+				}
+			},
+			{
+				"@type":"Question",
+				"name":"Muss die komplette Website barrierearm sein",
+				"acceptedAnswer":{
+					"@type":"Answer",
+					"text":"Oft ja, weil Navigation, Einstieg und Wege zu betroffenen Bereichen dazugehören. Wenn Bereiche sauber abgrenzbar sind, kann eine Teillösung denkbar sein."
+				}
+			},
+			{
+				"@type":"Question",
+				"name":"Brauche ich eine Vorlesefunktion",
+				"acceptedAnswer":{
+					"@type":"Answer",
+					"text":"Eine eigene Vorlesefunktion ist nicht zwingend. Entscheidend ist, dass Inhalte über assistive Technik sinnvoll ausgelesen werden können."
+				}
+			},
+			{
+				"@type":"Question",
+				"name":"Was ist der Unterschied zwischen BITV und BFSG",
+				"acceptedAnswer":{
+					"@type":"Answer",
+					"text":"Die BITV gilt primär für öffentliche Stellen (Behörden). Das BFSG weitet diese Pflichten nun auf private Unternehmen im elektronischen Geschäftsverkehr aus."
+				}
+			},
+			{
+				"@type":"Question",
+				"name":"Wie hoch sind die Bußgelder bei BFSG-Verstößen",
+				"acceptedAnswer":{
+					"@type":"Answer",
+					"text":"Es drohen Bußgelder von bis zu 100.000 Euro. Zudem kann die Marktüberwachung den Betrieb untersagen."
+				}
+			},
+			{
+				"@type":"Question",
+				"name":"Müssen auch PDFs barrierefrei sein",
+				"acceptedAnswer":{
+					"@type":"Answer",
+					"text":"Ja, sofern sie Teil der Dienstleistung sind (z.B. AGB, Anleitungen). Diese müssen den PDF/UA-Standard erfüllen."
+				}
+			},
+			{
+				"@type":"Question",
+				"name":"Wie wird die Barrierefreiheit geprüft",
+				"acceptedAnswer":{
+					"@type":"Answer",
+					"text":"Zweistufig: Automatisierter technischer Scan plus manueller Experten-Audit mit Screenreader und Tastatur-Prüfung."
+				}
+			}
+		]
+	}
+	</script>
+
+	<style>
+		/* Font Awesome 4.6.3 Icons */
+		@font-face {
+			font-family: 'FontAwesome';
+			src: url('fonts/fontawesome-webfont.eot');
+			src: url('fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('fonts/fontawesome-webfont.woff2') format('woff2'), url('fonts/fontawesome-webfont.woff') format('woff'), url('fonts/fontawesome-webfont.ttf') format('truetype'), url('fonts/fontawesome-webfont.svg') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+
+		.fa {
+			display: inline-block;
+			font: normal normal normal 14px/1 FontAwesome;
+			font-size: inherit;
+			text-rendering: auto;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		.fa-external-link:before { content: "\f08e"; }
+		.fa-diamond:before { content: "\f219"; }
+		.fa-building-o:before { content: "\f0f7"; }
+		.fa-bar-chart:before { content: "\f080"; }
+		.fa-paint-brush:before { content: "\f1fc"; }
+		.fa-heart-o:before { content: "\f08a"; }
+		.fa-thumbs-up:before { content: "\f164"; }
+		.fa-code:before { content: "\f121"; }
+		.fa-paper-plane-o:before { content: "\f1d9"; }
+		.fa-shopping-bag:before { content: "\f290"; }
+		.fa-rocket:before { content: "\f135"; }
+		.fa-bullseye:before { content: "\f140"; }
+		.fa-phone:before { content: "\f095"; }
+		.fa-check:before { content: "\f00c"; }
+		.fa-arrow-right:before { content: "\f061"; }
+		.fa-calculator:before { content: "\f1ec"; }
+		.fa-list-alt:before { content: "\f022"; }
+		.fa-user:before { content: "\f007"; }
+		.fa-euro:before { content: "\f153"; }
+		.fa-shopping-cart:before { content: "\f07a"; }
+		.fa-refresh:before { content: "\f021"; }
+		.fa-info-circle:before { content: "\f05a"; }
+		.fa-question-circle:before { content: "\f059"; }
+		.fa-exclamation-circle:before { content: "\f06a"; }
+	</style>
+	<style>
+		/* BFSG Check Redesign - Screenshot Inspired Layout */
+		#bfsg-check {
+			--btn-ja: #639155;
+			--btn-nein: #944B47;
+			--transition: all 0.2s ease-in-out;
+			font-family: 'Roboto Mono', monospace;
+			color: var(--black);
+		}
+
+		#bfsg-check .bfsg-card {
+			background: transparent !important;
+			border: none !important;
+			box-shadow: none !important;
+			padding: 0 !important;
+			max-width: 1000px;
+			margin: 0 auto;
+			text-align: center;
+			color: var(--black) !important;
+		}
+
+		#bfsg-check .question-text {
+			font-size: 1.25rem; /* Matches site h3/h4 sizing */
+			font-weight: 700;
+			color: var(--black);
+			margin-bottom: 1.5rem;
+			display: block;
+		}
+
+		#bfsg-check .bfsg-footer-text {
+			font-size: 1rem;
+			color: var(--black);
+			line-height: 1.6;
+			text-align: left;
+			max-width: 900px;
+			margin: 4rem auto 0;
+			padding: 0 1rem;
+		}
+
+		#bfsg-check .bfsg-footer-text p {
+			margin-bottom: 1rem;
+		}
+
+		/* Hide original step elements except the active one */
+		.step:not([hidden]) {
+			display: block;
+		}
+
+		.step-content {
+			padding: 3rem;
+			background: white;
+			border: 1px solid #ddd;
+			text-align: center;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+			margin-bottom: 2rem;
+		}
+
+		.step-content legend {
+			display: none; /* Hide step legend */
+		}
+
+		/* Large Choice Buttons */
+		.choice-buttons {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1.5rem;
+			max-width: 800px;
+			margin: 0 auto;
+		}
+
+		.choice-label {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 120px;
+			padding: 2rem;
+			cursor: pointer;
+			color: white;
+			font-size: 1.75rem;
+			font-weight: 700;
+			border: 3px solid transparent;
+			transition: all 0.2s ease-in-out;
+			text-align: center;
+			user-select: none;
+		}
+
+		.choice-label.ja {
+			background-color: var(--btn-ja);
+		}
+
+		.choice-label.nein {
+			background-color: var(--btn-nein);
+		}
+
+		.choice-label:hover {
+			filter: brightness(1.1);
+			transform: translateY(-3px);
+			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+		}
+
+		.choice-label:active {
+			transform: translateY(0);
+		}
+
+		/* Focus state for keyboard navigation */
+		.choice-label:focus-within {
+			outline: none;
+			border-color: var(--black);
+			box-shadow: 0 0 0 4px rgba(0,0,0,0.1);
+		}
+
+		/* Checked state using :has selector */
+		.choice-label:has(.choice-input:checked) {
+			border-color: var(--black);
+			transform: scale(1.02);
+			box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+		}
+
+		/* Hide the actual radio inputs */
+		#result-wrap {
+			padding: 3rem;
+			background: white;
+			border: 1px solid #ddd;
+			text-align: left;
+			margin-top: 2rem;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+		}
+
+		#result-title {
+			color: var(--black);
+			font-size: 1.5rem;
+			font-weight: 700;
+			margin-bottom: 1.5rem;
+		}
+
+		#result-text {
+			color: var(--black);
+			font-size: 1.1rem;
+			margin-bottom: 2rem;
+			line-height: 1.6;
+		}
+
+		.choice-input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+			height: 0;
+			width: 0;
+		}
+
+		/* Hide things we don't need from previous layout */
+		.step-indicator, 
+		.section-header, 
+		.calculation-placeholder, 
+		.progress-info,
+		.back-btn {
+			display: none !important;
+		}
+
+		/* Footer Text */
+		#bfsg-check .bfsg-footer-text {
+			font-size: 1rem;
+			color: var(--black);
+			line-height: 1.6;
+			text-align: left;
+			max-width: 900px;
+			margin: 4rem auto 0;
+			padding: 0 1rem;
+		}
+
+		#bfsg-check .bfsg-footer-text p {
+			margin-bottom: 1rem;
+		}
+
+		/* Reset any flex/grid styles for the accordion footnotes */
+		#footnoteAccordion ol, 
+		#footnoteAccordion li {
+			display: list-item !important;
+			width: 100% !important;
+		}
+
+		#footnoteAccordion li strong {
+			display: inline !important;
+		}
+
+		/* Responsive */
+		@media (max-width: 768px) {
+			#bfsg-check .question-text {
+				font-size: 1.5rem;
+			}
+			.step-content {
+				padding: 1.5rem;
+			}
+			.choice-buttons {
+				grid-template-columns: 1fr 1fr;
+				gap: 0.75rem;
+			}
+			.choice-label {
+				min-height: 80px;
+				padding: 1rem 0.5rem;
+				font-size: 1.25rem;
+			}
+			#result-wrap {
+				padding: 1.5rem;
+			}
+			#result-wrap .d-flex {
+				flex-direction: column;
+			}
+			#result-wrap .btn {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Skip Link (Accessibility) -->
+	<a href="bfsg-wordpress-website-agentur.html#main-content" class="screen-reader screen-reader-focusable">Zum Hauptinhalt springen</a>
+
+	<header class="site-header bg-white border-bottom">
+		<div class="container">
+			<div class="header-logo">
+				<a href="index.html">
+					<span class="h4 mb-0 text-black d-block">agentur dk</span>
+					<span class="header-tagline text-black">design & kommunikation</span>
+				</a>
+			</div>
+			<div class="header-actions">
+				<a href="bfsg-wordpress-website-agentur.html#bfsg-check" class="btn btn-agency btn-agency-primary btn-sm">BFSG Check starten</a>
+			</div>
+		</div>
+	</header>
+
+	<main id="main-content">
+		<!-- 1. Hero Header (White) -->
+		<section class="bg-white">
+			<div class="container text-start">
+				<h1 class="display-3 mb-4 fw-bold">BFSG WordPress Agentur: Barrierearme Websites für den Mittelstand
+				</h1>
+				<p class="lead mb-5">Seit dem 28. Juni 2025 gilt das Barrierefreiheitsstärkungsgesetz (BFSG) in Deutschland.
+					Wer online Verträge anbahnt oder abschließt, zum Beispiel über Shop, Termin, Buchung, Gutschein oder
+					Anfrageformular, kann betroffen sein.</p>
+				<div class="d-flex flex-wrap gap-3">
+					<a href="bfsg-wordpress-website-agentur.html#bfsg-check" class="btn btn-agency btn-agency-primary">BFSG Check starten</a>
+					<a href="https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach"
+						class="btn btn-agency btn-agency-outline-dark">Erstgespräch buchen</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- 2. Problem & Urgency: Risiken (Light Gray) -->
+		<section class="bg-light-gray border-top">
+			<div class="container text-start">
+				<p class="text-primary fw-bold mb-2">Warum Handeln jetzt wichtig ist</p>
+				<h2 class="h1 mb-4">Fristen & Risiken bei Verstößen</h2>
+				<p class="mb-4">Barrierearmut ist seit Ende Juni 2025 sicherzustellen. Doch was passiert, wenn man das
+					Gesetz ignoriert? Die Risiken sind real und können teuer werden:</p>
+				<ul class="row g-3 list-unstyled mb-5">
+					<li class="col-md-6">Bußgelder bis zu 100.000 €</li>
+					<li class="col-md-6">Abmahnrisiko durch Mitbewerber</li>
+					<li class="col-md-6">Untersagung des Online-Angebots</li>
+					<li class="col-md-6">Reputationsverlust bei Kunden</li>
+				</ul>
+				<div class="p-4 bg-white border">
+					<p class="mb-0"><strong>Frist:</strong> Barrierearmut ist seit Ende Juni 2025 für alle Leistungen sicherzustellen, die nach dem Stichtag erbracht werden.</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- 3. Gilt das BFSG (White) -->
+		<section class="bg-white border-top">
+			<div class="container text-start">
+				<p class="text-primary fw-bold mb-2">Die gute Nachricht</p>
+				<h2 class="h1 mb-4">Gilt das BFSG für Ihre Website?</h2>
+				<p class="mb-4">Nicht jedes Unternehmen ist betroffen. Finden Sie heraus, ob Ihre Website oder Ihr
+					Online-Shop unter die neuen Regelungen fällt:</p>
+				<ul class="mb-5">
+					<li>Websites im elektronischen Geschäftsverkehr (B2C)</li>
+					<li>Online-Shops und Bestellstrecken</li>
+					<li>Buchungs- und Terminstrecken</li>
+					<li>Digitale Services für Verbraucher</li>
+				</ul>
+				<div class="p-4 bg-light-gray border mb-5">
+					<p class="mb-3"><strong>Wichtig:</strong> Rein geschäftliche Angebote im B2B Bereich unterliegen in
+						der Regel nicht dem BFSG.</p>
+					<p class="mb-0"><strong>Ausnahme Kleinstunternehmen:</strong> Erleichterungen gibt es für Firmen mit
+						weniger als 10 Beschäftigten und max. 2 Mio. Euro Umsatz.</p>
+				</div>
+				<a href="bfsg-wordpress-website-agentur.html#bfsg-check" class="btn btn-agency btn-agency-primary">Jetzt interaktiven Check starten</a>
+			</div>
+		</section>
+
+		<section class="bg-light-gray py-5" id="bfsg-check">
+			<div class="container text-center">
+				<h2 class="display-5 text-uppercase mb-4">BFSG Check</h2>
+				<div class="bfsg-card mx-auto">
+					<form id="bfsgForm">
+						<div class="step step-content" id="step0">
+							<span class="question-text">Erbringen Sie Dienstleistungen? <sup>1</sup></span>
+							<div class="choice-buttons">
+								<label class="choice-label ja" for="q1y">
+									<input class="choice-input" type="radio" name="q1" id="q1y" value="yes">
+									Ja
+								</label>
+								<label class="choice-label nein" for="q1n">
+									<input class="choice-input" type="radio" name="q1" id="q1n" value="no">
+									Nein
+								</label>
+							</div>
+						</div>
+
+						<div class="step step-content" id="step1" hidden>
+							<span class="question-text">Haben Sie 10 oder mehr Mitarbeiter?</span>
+							<div class="choice-buttons">
+								<label class="choice-label ja" for="q2y">
+									<input class="choice-input" type="radio" name="q2" id="q2y" value="yes">
+									Ja
+								</label>
+								<label class="choice-label nein" for="q2n">
+									<input class="choice-input" type="radio" name="q2" id="q2n" value="no">
+									Nein
+								</label>
+							</div>
+						</div>
+
+						<div class="step step-content" id="step2" hidden>
+							<span class="question-text">Über 2 Mio. Euro Jahresumsatz oder Bilanzsumme?</span>
+							<div class="choice-buttons">
+								<label class="choice-label ja" for="q3y">
+									<input class="choice-input" type="radio" name="q3" id="q3y" value="yes">
+									Ja
+								</label>
+								<label class="choice-label nein" for="q3n">
+									<input class="choice-input" type="radio" name="q3" id="q3n" value="no">
+									Nein
+								</label>
+							</div>
+						</div>
+
+						<div class="step step-content" id="step3" hidden>
+							<span class="question-text">Bieten Sie Produkte wie Webshops, E-Books oder Terminals an?</span>
+							<div class="choice-buttons">
+								<label class="choice-label ja" for="q4y">
+									<input class="choice-input" type="radio" name="q4" id="q4y" value="yes">
+									Ja
+								</label>
+								<label class="choice-label nein" for="q4n">
+									<input class="choice-input" type="radio" name="q4" id="q4n" value="no">
+									Nein
+								</label>
+							</div>
+						</div>
+
+						<div id="result-wrap" hidden>
+							<h3 id="result-title">Ergebnis</h3>
+							<p id="result-text"></p>
+							<div class="d-flex gap-3">
+								<a href="https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach"
+									class="btn btn-agency btn-agency-primary">Erstberatung buchen</a>
+								<button type="button" class="btn btn-agency btn-agency-outline-dark"
+									id="reset-btn">Check neustarten</button>
+							</div>
+						</div>
+					</form>
+
+					<div class="bfsg-footer-text mt-5">
+						<p>Der BFSG Check ist ein Test, welcher die wesentlichen Kriterien des Anwendungsbereiches in vereinfachter Form überprüft. Erklärungsbedürftige und unbestimmte Rechtsbegriffe werden für eine bessere Verständlichkeit vereinfacht und reduziert.
+						Rechtlich verbindlich kann das Ergebnis des Selbsttests daher nicht sein.</p>
+					</div>
+
+					<div class="accordion mt-4" id="footnoteAccordion">
+						<div class="accordion-item border-0 bg-transparent">
+							<h3 class="accordion-header">
+								<button class="accordion-button collapsed bg-light-gray text-black border shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFootnotes" aria-expanded="false" aria-controls="collapseFootnotes">
+									Fußnoten &amp; rechtliche Erläuterungen anzeigen
+								</button>
+							</h3>
+							<div id="collapseFootnotes" class="accordion-collapse collapse" data-bs-parent="#footnoteAccordion">
+								<div class="accordion-body bg-white border border-top-0 text-start small p-4">
+									<ol class="mb-3">
+										<li class="mb-3"><strong>Dienstleistungssektor:</strong><br>Die gesetzlichen Vorgaben für Dienstleistungen sind in § 1 Abs. 3 BFSG verankert.</li>
+										<li class="mb-3"><strong>B2C vs. B2B Fokus:</strong><br>Laut § 1 Abs. 3 BFSG sind im Dienstleistungsbereich (inklusive E-Commerce) primär Angebote für Verbraucher (§ 13 BGB) betroffen. Um nicht unter das Gesetz zu fallen, muss eine klare Ausrichtung auf Geschäftskunden (§ 14 BGB) und der Ausschluss von Privatpersonen zweifelsfrei erkennbar sein.</li>
+										<li class="mb-3"><strong>E-Commerce Definition:</strong><br>Dienstleistungen im elektronischen Geschäftsverkehr gemäß § 1 Abs. 3 Nr. 5 BFSG umfassen laut § 2 Nr. 26 BFSG alle Plattformen, Apps und Webshops, über die Verträge wie Käufe oder Buchungen unmittelbar online abgeschlossen werden können.</li>
+										<li class="mb-3"><strong>Individuelle Anfragen &amp; Buchungen:</strong><br>Die Definition erstreckt sich nach § 2 Nr. 26 BFSG auch auf digitale Services zur Vorbereitung von Verträgen, wie etwa Online-Terminreservierungen. Während rein informative Seiten meist ausgenommen sind, fallen geschäftliche B2C-Webseiten mit interaktiven Buchungstools in der Regel unter diese Kriterien.</li>
+										<li class="mb-3"><strong>Ausnahme für Kleinstunternehmen:</strong><br>Unternehmen mit weniger als 10 Mitarbeitern und einem Jahresumsatz bzw. einer Bilanzsumme von maximal 2 Mio. Euro sind im Dienstleistungsbereich (z. B. Onlineshop-Betrieb) gemäß § 3 Abs. 3 BFSG von den Verpflichtungen befreit. Die Personalstärke wird dabei in Jahresarbeitseinheiten berechnet.</li>
+										<li class="mb-3"><strong>Sonderregelungen &amp; Fristen:</strong><br>Es existieren Ausnahmen für statische Archive oder Kartendienste (§ 1 Abs. 4 BFSG). In Einzelfällen kann eine "unverhältnismäßige Belastung" (§ 17 BFSG) geltend gemacht werden. Für bestimmte Produkte gelten zudem Übergangsfristen nach § 38 BFSG.</li>
+										<li class="mb-3"><strong>Hardware &amp; Produkte:</strong><br>§ 1 Abs. 2 BFSG listet betroffene Produktkategorien auf, vorrangig Geräte mit interaktiven Benutzeroberflächen.</li>
+										<li class="mb-3"><strong>E-Books:</strong><br>Elektronische Bücher und die zugehörige Lese-Software fallen unter § 1 Abs. 3 Nr. 4 BFSG.</li>
+										<li class="mb-3"><strong>Finanzdienstleistungen:</strong><br>Bankservices für Privatkunden sind in § 1 Abs. 3 Nr. 3 BFSG geregelt.</li>
+										<li class="mb-3"><strong>Telekommunikation:</strong><br>Regelungen hierzu finden sich in § 1 Abs. 3 Nr. 1 BFSG.</li>
+										<li class="mb-3"><strong>Personenbeförderung:</strong><br>Elektronische Tickets, Apps und Terminals im Verkehrswesen unterliegen § 1 Abs. 3 Nr. 2 BFSG, wobei für kommunale Anbieter teilweise Ausnahmen gelten.</li>
+										<li class="mb-3"><strong>Interaktive Endgeräte:</strong><br>Spezifische Anforderungen für Verbraucherendgeräte sind in § 1 Abs. 2 Nr. 5 BFSG definiert.</li>
+										<li class="mb-3"><strong>Computersysteme:</strong><br>Hardwaresysteme für Universalrechner und deren Betriebssysteme fallen unter § 1 Abs. 2 Nr. 1 BFSG.</li>
+										<li class="mb-3"><strong>Selbstbedienungsterminals:</strong><br>Geldautomaten, Zahlungs- und Fahrausweisautomaten werden in § 1 Abs. 2 Nr. 2 BFSG präzisiert.</li>
+										<li class="mb-3"><strong>Medien- &amp; Kommunikationsgeräte:</strong><br>Endgeräte für Telekommunikation oder audiovisuelle Medien sind durch § 1 Abs. 2 Nr. 3 und 4 BFSG abgedeckt.</li>
+									</ol>
+									<p class="text-muted mb-0"><small>Aktualisierung: 19.02.2025</small></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 5. Solution Deep Dive (White) -->
+		<section class="bg-white">
+			<div class="container text-start">
+				<p class="text-primary fw-bold mb-2">Was wir konkret für Sie tun</p>
+				<h2 class="h1 mb-4">Barrierearmut nach Standard</h2>
+				<p class="mb-4">Barrierefreiheit ist mehr als nur ein Häkchen. Es geht um echte Nutzbarkeit. Wir
+					arbeiten nach den zentralen Standards <strong>EN 301 549</strong> und <strong>WCAG 2.2</strong>.</p>
+				<h3 class="h4 mb-3">Typische Anforderungen, die wir umsetzen:</h3>
+				<ul class="row g-3 list-unstyled mb-5">
+					<li class="col-md-6">Aussagekräftige Linktexte und Seitentitel</li>
+					<li class="col-md-6">Vollständige Tastatur-Bedienbarkeit</li>
+					<li class="col-md-6">Verständliche Formulare & Fehlermeldungen</li>
+					<li class="col-md-6">Saubere Technik für Screenreader</li>
+					<li class="col-md-6">Barrierearme Downloads (PDF/UA)</li>
+					<li class="col-md-6">Ausreichende Farbkontraste & Zoom</li>
+				</ul>
+
+				<div class="p-4 bg-light-gray border">
+					<h3 class="h4 mb-3">Achtung: Plugins & Overlays sind keine Lösung!</h3>
+					<p class="mb-4">Viele Tools versprechen Barrierefreiheit per Plugin. Das ist in der Regel nicht
+						rechtssicher, da Probleme im Code und Theme bestehen bleiben. Wir setzen auf echte Lösungen im
+						Kern Ihrer Website.</p>
+					<p class="mb-0 fw-bold underline">Rechtssicherheit braucht echten Code, kein Overlay.</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- 6. Process: So gehen wir vor (Light Gray) -->
+		<section class="bg-light-gray border-top">
+			<div class="container text-start">
+				<p class="text-primary fw-bold mb-2">Der Plan zum Ziel</p>
+				<h2 class="h1 mb-4">In 5 Schritten zur BFSG-Konformität</h2>
+				<p class="mb-5">Wie sieht der Weg zur rechtskonformen Website aus? Wir haben einen klaren, effizienten
+					Ablauf für den Mittelstand:</p>
+				<div class="row g-4 reveal-grid" id="process-grid">
+					<div class="col-md-4 reveal-item">
+						<div class="p-4 bg-white border h-100">
+							<div class="h3 mb-3 text-primary">01</div>
+							<h4 class="h5">BFSG Check</h4>
+							<p class="small mb-0 text-muted">Wir prüfen Technik und Inhalte auf bestehende Barrieren.
+							</p>
+						</div>
+					</div>
+					<div class="col-md-4 reveal-item">
+						<div class="p-4 bg-white border h-100">
+							<div class="h3 mb-3 text-primary">02</div>
+							<h4 class="h5">Maßnahmenplan</h4>
+							<p class="small mb-0 text-muted">Priorisierte Liste aller nötigen technischen & inhaltlichen
+								Anpassungen.</p>
+						</div>
+					</div>
+					<div class="col-md-4 reveal-item">
+						<div class="p-4 bg-white border h-100">
+							<div class="h3 mb-3 text-primary">03</div>
+							<h4 class="h5">Umsetzung</h4>
+							<p class="small mb-0 text-muted">Fachgerechte Implementierung nach EN 301 549 (WCAG A/AA).
+							</p>
+						</div>
+					</div>
+					<div class="col-md-4 reveal-item">
+						<div class="p-4 bg-white border h-100">
+							<div class="h3 mb-3 text-primary">04</div>
+							<h4 class="h5">Erklärung</h4>
+							<p class="small mb-0 text-muted">Erstellung der rechtlich notwendigen Erklärung zur
+								Barrierefreiheit.</p>
+						</div>
+					</div>
+					<div class="col-md-4 reveal-item">
+						<div class="p-4 bg-white border h-100">
+							<div class="h3 mb-3 text-primary">05</div>
+							<h4 class="h5">Wartung</h4>
+							<p class="small mb-0 text-muted">Laufende Betreuung und Updates zur Sicherung der
+								BFSG-Konformität.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 7. Offer: Leasing (White) -->
+		<section class="bg-white border-top">
+			<div class="container text-start">
+				<p class="text-primary fw-bold mb-2">Die sorgenfreie Lösung</p>
+				<h2 class="h1 mb-4"><mark>Website Leasing für den Mittelstand</mark></h2>
+				<p class="mb-4">Senken Sie Ihre Einmalkosten, indem Sie Konzeption, Design und Erstellung über eine feste Monatsrate abbilden. Sichern Sie die Website langfristig ab, mit Wartung, Updates und Weiterentwicklung in einer dauerhaften Zusammenarbeit.</p>
+				<div class="row g-4 mb-5">
+					<div class="col-md-6">
+						<h3 class="h5 mb-3">Full-Service inklusive:</h3>
+						<ul class="list-unstyled">
+							<li class="mb-2">✓ Konzeption und barrierearme Erstellung</li>
+							<li class="mb-2">✓ Sicheres Hosting & Wartung</li>
+							<li class="mb-2">✓ Laufende Updates & BFSG-Pflege</li>
+							<li class="mb-2">✓ Inhaltliche Aktualisierungen inklusive</li>
+						</ul>
+					</div>
+					<div class="col-md-6">
+						<div class="p-4 bg-light-gray border">
+							<p class="h4 mb-3 text-primary">Monatliche Pauschale</p>
+							<p class="mb-0">Planbare Kosten ohne hohe Einmalinvestition. Ihre Website bleibt immer optimal betreut.</p>
+						</div>
+					</div>
+				</div>
+				<a href="https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach"
+					class="btn btn-agency btn-agency-primary px-5">Jetzt Beratungstermin buchen</a>
+			</div>
+		</section>
+
+		<!-- 8. FAQ (Light Gray) -->
+		<section class="bg-light-gray border-top" id="faq">
+			<div class="container text-start">
+				<p class="text-primary fw-bold mb-2">Noch offene Fragen?</p>
+				<h2 class="h1 mb-5">Häufige Fragen zum BFSG</h2>
+				<div class="accordion accordion-flush" id="faqAccordion">
+					<div class="accordion-item bg-transparent border-bottom">
+						<h3 class="accordion-header">
+							<button class="accordion-button bg-transparent collapsed px-0 h4" type="button"
+								data-bs-toggle="collapse" data-bs-target="#c1">
+								Gilt das BFSG für reine B2B Websites?
+							</button>
+						</h3>
+						<div id="c1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+							<div class="accordion-body px-0 text-muted">
+								In der Regel nein, wenn klar erkennbar ist, dass sich das Angebot nicht an Verbraucher
+								richtet. Sobald Verbraucher angesprochen werden oder ein Verbrauchervertrag angebahnt
+								wird, wird es kritisch.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item bg-transparent border-bottom">
+						<h3 class="accordion-header">
+							<button class="accordion-button bg-transparent collapsed px-0 h4" type="button"
+								data-bs-toggle="collapse" data-bs-target="#c2">
+								Muss die komplette Website barrierearm sein?
+							</button>
+						</h3>
+						<div id="c2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+							<div class="accordion-body px-0 text-muted">
+								Oft ja, weil Navigation, Einstieg und Wege zu betroffenen Bereichen dazugehören. Wenn
+								Bereiche sauber abgrenzbar sind, kann eine Teillösung denkbar sein.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item bg-transparent border-bottom">
+						<h3 class="accordion-header">
+							<button class="accordion-button bg-transparent collapsed px-0 h4" type="button"
+								data-bs-toggle="collapse" data-bs-target="#c5">
+								Wie hoch sind die Bußgelder bei BFSG-Verstößen?
+							</button>
+						</h3>
+						<div id="c5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+							<div class="accordion-body px-0 text-muted">
+								Bei Verstößen gegen das BFSG drohen Bußgelder von bis zu 100.000 Euro. Zudem kann die
+								Marktüberwachungsbehörde den Betrieb der Website oder des Onlineshops untersagen.
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item bg-transparent">
+						<h3 class="accordion-header">
+							<button class="accordion-button bg-transparent collapsed px-0 h4" type="button"
+								data-bs-toggle="collapse" data-bs-target="#c7">
+								Wie wird die Barrierefreiheit geprüft?
+							</button>
+						</h3>
+						<div id="c7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+							<div class="accordion-body px-0 text-muted">
+								Die Prüfung erfolgt zweistufig: Ein automatisierter technischer Scan identifiziert grobe
+								Fehler im Code. Danach folgt ein manueller Experten-Audit mit Screenreader und
+								Keyboard-Prüfung.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 9. Kostenlose Ersteinschätzung (Primary Blue) -->
+		<section class="py-5 text-center bg-primary-custom" style="background:var(--primary); color:white;">
+			<div class="container py-5">
+				<h2 class="display-4 text-white mb-3">Kostenlose Ersteinschätzung</h2>
+				<p class="lead mb-5 text-white">Buchen Sie ein unverbindliches Erstgespräch für Ihre Website.</p>
+				<div class="d-flex flex-wrap justify-content-center gap-3">
+					<a href="https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach"
+						class="btn btn-agency btn-light text-primary" aria-label="Kostenlosen Beratungstermin über Calendly buchen">Termin buchen</a>
+					<a href="mailto:mail@dk-dk.de" class="btn btn-agency btn-agency-outline-light text-white" aria-label="Anfrage per E-Mail an mail@dk-dk.de senden">Anfrage per Mail</a>
+				</div>
+				<div class="mt-5 pt-3 border-top border-white border-opacity-25">
+					<p class="mb-1">eMail: <a href="mailto:mail@dk-dk.de" class="text-white">mail@dk-dk.de</a></p>
+					<p class="mb-0">Tel: <a href="tel:+4922198655229" class="text-white">+49 221 986 55 229</a></p>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<hr class="footer-gradient-divider" aria-hidden="true">
+	<footer id="prefooter" class="bg-dark text-white">
+		<div class="container py-5">
+			<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+				<a href="index.html" class="text-decoration-none text-white" aria-label="agentur dk - Zur Startseite">
+					<span class="fw-bold" style="font-size: 1.25rem;">agentur dk</span>
+					<span class="d-block text-white-50" style="font-size: 0.9rem;">design & kommunikation</span>
+				</a>
+				<span class="social d-flex gap-3">
+					<a href="https://www.facebook.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Facebook (öffnet in neuem Fenster)">
+						<i class="fa fa-facebook" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.instagram.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Instagram (öffnet in neuem Fenster)">
+						<i class="fa fa-instagram" aria-hidden="true"></i>
+					</a>
+					<a href="https://twitter.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Twitter (öffnet in neuem Fenster)">
+						<i class="fa fa-twitter" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.xing.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Xing (öffnet in neuem Fenster)">
+						<i class="fa fa-xing" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.pinterest.de/" rel="me noopener" target="_blank" aria-label="agentur dk auf Pinterest (öffnet in neuem Fenster)">
+						<i class="fa fa-pinterest" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.linkedin.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf LinkedIn (öffnet in neuem Fenster)">
+						<i class="fa fa-linkedin" aria-hidden="true"></i>
+					</a>
+					<a href="https://www.youtube.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf YouTube (öffnet in neuem Fenster)">
+						<i class="fa fa-youtube" aria-hidden="true"></i>
+					</a>
+					<a href="https://open.spotify.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Spotify (öffnet in neuem Fenster)">
+						<i class="fa fa-spotify" aria-hidden="true"></i>
+					</a>
+				</span>
+			</div>
+			<div class="kontakt footer-grid-3 mb-4">
+				<div class="col links">
+					<span>Sachsenring 57</span><br>
+					<span>D-50677 Köln</span>
+				</div>
+				<div class="col mitte">
+					<span>Tel. <a href="tel:+4922198655229" class="text-white text-decoration-underline" title="+49 221 98655229 anrufen">+49 221 98655229</a></span><br>
+					<span>Mo–Fr 09–18 Uhr</span>
+				</div>
+				<div class="col rechts">
+					<a href="mailto:mail@dk-dk.de" class="text-white text-decoration-underline" title="E-Mail an mail@dk-dk.de">mail@dk-dk.de</a><br>
+					<span>www.dk-dk.de</span>
+				</div>
+			</div>
+			<hr style="border-color: rgba(255,255,255,0.2);">
+			<div class="navs footer-grid-3 mb-4">
+				<div class="col links">
+					<nav aria-label="Gefragte Leistungen">
+						<span class="headline d-block fw-bold mb-2">Gefragte Leistungen</span>
+						<ul class="level_1" style="list-style: none; padding-left: 0;">
+							<li><a href="bfsg-wordpress-website-agentur.html" class="text-white-50 text-decoration-underline" title="BFSG WordPress Agentur">BFSG WordPress Agentur</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="WordPress Relaunch">WordPress Relaunch</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Landingpages">Landingpages</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Performance & SEO">Performance & SEO</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="col mitte">
+					<nav aria-label="Beliebte Tools">
+						<span class="headline d-block fw-bold mb-2">Beliebte Tools</span>
+						<ul class="level_1" style="list-style: none; padding-left: 0;">
+							<li><a href="bfsg-wordpress-website-agentur.html#faq" class="text-white-50 text-decoration-underline" title="FAQ">FAQ</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Prozess">Prozess</a></li>
+							<li><a href="bfsg-wordpress-website-agentur.html#bfsg-check" class="text-white-50 text-decoration-underline" title="BFSG Check">BFSG Check</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="col rechts">
+					<nav aria-label="Neu im Lexikon">
+						<span class="headline d-block fw-bold mb-2">Neu im Lexikon</span>
+						<ul class="level_1" style="list-style: none; padding-left: 0;">
+							<li><a href="llms.txt" class="text-white-50 text-decoration-underline" title="llms.txt">llms.txt</a></li>
+							<li><a href="bfsg-wordpress-website-agentur.html" class="text-white-50 text-decoration-underline" title="Barrierefreiheitsstärkungsgesetz">Barrierefreiheitsstärkungsgesetz</a></li>
+							<li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="WordPress Agentur">WordPress Agentur</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+			<div class="text-center text-white-50 small">
+				&copy; <script>document.write(new Date().getFullYear())</script> agentur dk &middot;
+				<a href="sitemap.xml" class="text-white-50 text-decoration-underline">Sitemap</a> &middot;
+				<a href="impressum.html" class="text-white-50 text-decoration-underline">Impressum</a>, 
+				<a href="datenschutz.html" class="text-white-50 text-decoration-underline">Datenschutz</a> &middot;
+				<a href="barrierefreiheit.html" class="text-white-50 text-decoration-underline">Barrierefreiheit</a>
+			</div>
+		</div>
+	</footer>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const kontaktHeadings = Array.from(document.querySelectorAll('h1,h2,h3')).filter(h => h.textContent.trim().toLowerCase() === 'kontakt');
+			const twObserver = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (!entry.isIntersecting) return;
+					const el = entry.target;
+					if (el.dataset.typed === '1') return;
+					el.dataset.typed = '1';
+					const text = el.textContent.trim();
+					if (reduce) {
+						twObserver.unobserve(el);
+						return;
+					}
+					el.textContent = '';
+					const caret = document.createElement('span');
+					caret.className = 'type-caret';
+					el.appendChild(caret);
+					let i = 0;
+					const timer = setInterval(() => {
+						if (i < text.length) {
+							caret.before(document.createTextNode(text.charAt(i)));
+							i++;
+						} else {
+							clearInterval(timer);
+							twObserver.unobserve(el);
+						}
+					}, 120);
+				});
+			}, { threshold: 0.6 });
+			kontaktHeadings.forEach(h => twObserver.observe(h));
+		});
+	</script>
+
+	<!-- Scripts -->
+	<script src="js/jquery.min.js" defer></script>
+	<script src="js/bootstrap.bundle.min.js" defer></script>
+	<script src="js/util.js" defer></script>
+	<script src="js/skel.min.js" defer></script>
+	<script src="js/jquery.scrollex.min.js" defer></script>
+	<script src="js/jquery.scrolly.min.js" defer></script>
+	<script src="js/main.js" defer></script>
+	<script>
+		(function () {
+			var currentStep = 0;
+			var steps = document.querySelectorAll('.step');
+			var resultWrap = document.getElementById('result-wrap');
+			var resultTitle = document.getElementById('result-title');
+			var resultText = document.getElementById('result-text');
+			var form = document.getElementById('bfsgForm');
+
+			function showStep(idx) {
+				steps.forEach((s, i) => s.hidden = (i !== idx));
+				currentStep = idx;
+			}
+
+			function getVal(name) {
+				var el = form.querySelector('input[name="' + name + '"]:checked');
+				return el ? el.value : null;
+			}
+
+			function calcResult() {
+				var q1 = getVal('q1');
+				var q2 = getVal('q2');
+				var q3 = getVal('q3');
+				var q4 = getVal('q4');
+
+				resultWrap.hidden = false;
+
+				if (q1 === 'no') {
+					resultTitle.textContent = "Voraussichtlich nicht betroffen";
+					resultText.textContent = "Da Sie keine Dienstleistungen für Verbraucher erbringen, greift das BFSG für Ihren Bereich wahrscheinlich nicht. Buchen Sie eine Ersteinschätzung zur Sicherheit.";
+					return;
+				}
+				if (q2 === 'no' && q3 === 'no') {
+					resultTitle.textContent = "Kleinstunternehmen-Regelung";
+					resultText.textContent = "Sie gelten als Kleinstunternehmen (<10 MA und <2 Mio. Umsatz). Diese sind von den meisten Dienstleistungspflichten befreit.";
+					return;
+				}
+				resultTitle.textContent = "Wahrscheinlich betroffen";
+				resultText.textContent = "Nach Ihren Angaben ist Ihr Unternehmen voraussichtlich vom BFSG betroffen. Ihre Website muss schon seit dem 28. Juni 2025 barrierefrei sein.";
+			}
+
+			form.addEventListener('change', function (e) {
+				if (e.target.name === 'q1') showStep(1);
+				else if (e.target.name === 'q2') showStep(2);
+				else if (e.target.name === 'q3') showStep(3);
+				else if (e.target.name === 'q4') {
+					calcResult();
+					steps[3].hidden = true;
+				}
+			});
+
+			document.getElementById('reset-btn').addEventListener('click', () => {
+				form.reset();
+				resultWrap.hidden = true;
+				showStep(0);
+			});
+
+			/* Animation Trigger for Process Grid */
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('is-visible');
+					}
+				});
+			}, { threshold: 0.1 });
+
+			const target = document.querySelector('#process-grid');
+			if (target) observer.observe(target);
+		})();
+	</script>
+</body>
+
+</html>

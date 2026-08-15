@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /kunden/
+Disallow: /downloads/
+Disallow: /agenturvorstellung/
+Disallow: /letter/
+Allow: /llms.txt
+
+Sitemap: https://dk-dk.de/sitemap.xml
