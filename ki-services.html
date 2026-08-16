@@ -90,8 +90,8 @@
 	<link rel="icon" href="favicon.svg" type="image/svg+xml">
 
 	<!-- Preload Critical Fonts (local, no CDN) -->
-	<link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="fonts/space-grotesk-v3-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="fonts/manrope-v20-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 
 	<!-- Stylesheet Bundle (local, no CDN) -->
 	<link rel="stylesheet" href="css/site.min.css">
@@ -407,78 +407,125 @@
 						</p>
 					</div>
 					<div class="contact-form-wrap">
-						<form id="contact-form" class="contact-form" action="https://formspree.io/f/PLACEHOLDER" method="POST" novalidate>
-							<!-- Honeypot field -->
-							<div class="u-sr-only" aria-hidden="true">
-								<label for="website-url">Website (bitte leer lassen)</label>
-								<input type="text" id="website-url" name="_gotcha" tabindex="-1" autocomplete="off">
-							</div>
+						          <form
+            id="contact-form"
+            class="contact-form lead-form"
+            action="https://formspree.io/f/PLACEHOLDER"
+            method="POST"
+            novalidate
+          >
+            <!-- Seiten-Tracking: auf welcher Seite wurde das Formular ausgefüllt? -->
+            <input type="hidden" name="page" value="KI-Services">
+            <!-- Spam-Schutz: Zeitstempel wird per JS gesetzt (Bot-Erkennung) -->
+            <input type="hidden" name="form_started" id="form-started" value="">
+            <!-- Honeypot: unsichtbares Feld, nur Bots füllen es aus -->
+            <input type="text" name="_gotcha" class="u-sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-							<ol class="form-steps" aria-label="Formular-Fortschritt">
-								<li class="form-steps__item is-active" data-step-indicator="1"><span class="form-steps__number" aria-hidden="true">1</span> Kontakt</li>
-								<li class="form-steps__item" data-step-indicator="2"><span class="form-steps__number" aria-hidden="true">2</span> Anliegen</li>
-								<li class="form-steps__item" data-step-indicator="3"><span class="form-steps__number" aria-hidden="true">3</span> Absenden</li>
-							</ol>
+            <!-- Fortschrittsanzeige -->
+            <ol class="form-steps" aria-label="Formular-Fortschritt">
+              <li class="form-steps__item is-active" data-step-indicator="1">
+                <span class="form-steps__number" aria-hidden="true">1</span> Anliegen
+              </li>
+              <li class="form-steps__item" data-step-indicator="2">
+                <span class="form-steps__number" aria-hidden="true">2</span> Kontakt
+              </li>
+            </ol>
 
-							<div class="form-step" data-step="1">
-								<h3 class="form-step__title">Ihre Kontaktdaten</h3>
-								<div class="form-row">
-									<div class="form-group">
-										<label for="contact-name" class="form-label">Name <span aria-hidden="true">*</span><span class="u-sr-only">(Pflichtfeld)</span></label>
-										<input type="text" id="contact-name" name="name" class="form-control" autocomplete="name" required aria-required="true" aria-describedby="contact-name-error">
-										<span id="contact-name-error" class="form-error" role="alert" hidden>Bitte geben Sie Ihren Namen ein.</span>
-									</div>
-									<div class="form-group">
-										<label for="contact-email" class="form-label">E-Mail <span aria-hidden="true">*</span><span class="u-sr-only">(Pflichtfeld)</span></label>
-										<input type="email" id="contact-email" name="email" class="form-control" autocomplete="email" required aria-required="true" aria-describedby="contact-email-error">
-										<span id="contact-email-error" class="form-error" role="alert" hidden>Bitte geben Sie eine gültige E-Mail-Adresse ein.</span>
-									</div>
-								</div>
-								<div class="form-step__nav">
-									<span aria-hidden="true"></span>
-									<button type="button" class="btn btn--primary" data-step-next>Weiter</button>
-								</div>
-							</div>
+            <!-- Schritt 1: Anliegen -->
+            <div class="form-step" data-step="1">
+              <h3 class="form-step__title">Worum geht es?</h3>
+              <fieldset class="fieldset lead-topics">
+                <legend class="form-label">Ihr Anliegen <span class="form-optional">(Mehrfachauswahl möglich)</span></legend>
+                <div class="lead-topics__grid">
+                <label class="lead-topic">
+                  <input type="checkbox" name="interesse[]" value="KI-Telefon-Agent">
+                  <span class="lead-topic__box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg></span>
+                  <span class="lead-topic__label">KI-Telefon-Agent</span>
+                </label>
+                <label class="lead-topic">
+                  <input type="checkbox" name="interesse[]" value="Automatische Terminbuchung">
+                  <span class="lead-topic__box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg></span>
+                  <span class="lead-topic__label">Automatische Terminbuchung</span>
+                </label>
+                <label class="lead-topic">
+                  <input type="checkbox" name="interesse[]" value="KI-Textoptimierung">
+                  <span class="lead-topic__box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg></span>
+                  <span class="lead-topic__label">KI-Textoptimierung</span>
+                </label>
+                <label class="lead-topic">
+                  <input type="checkbox" name="interesse[]" value="KI-Recruiting">
+                  <span class="lead-topic__box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg></span>
+                  <span class="lead-topic__label">KI-Recruiting</span>
+                </label>
+                <label class="lead-topic">
+                  <input type="checkbox" name="interesse[]" value="KI-Readiness & GEO">
+                  <span class="lead-topic__box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg></span>
+                  <span class="lead-topic__label">KI-Readiness & GEO</span>
+                </label>
+                <label class="lead-topic">
+                  <input type="checkbox" name="interesse[]" value="Sonstiges" data-other-trigger>
+                  <span class="lead-topic__box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg></span>
+                  <span class="lead-topic__label">Sonstiges</span>
+                </label>
+                </div>
+              </fieldset>
 
-							<div class="form-step" data-step="2" hidden>
-								<h3 class="form-step__title">Ihr Anliegen</h3>
-								<div class="form-group">
-									<label for="contact-subject" class="form-label">Betreff</label>
-									<select id="contact-subject" name="subject" class="form-control form-select">
-										<option value="">Bitte wählen …</option>
-										<option value="WordPress-Entwicklung">WordPress-Entwicklung</option>
-										<option value="SEO & GEO">SEO &amp; GEO</option>
-										<option value="Online-Marketing">Online-Marketing</option>
-										<option value="Corporate Design">Corporate Design</option>
-										<option value="KI-Services">KI-Services</option>
-										<option value="BFSG-Prüfung">BFSG-Prüfung</option>
-										<option value="Sonstiges">Sonstiges</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<label for="contact-message" class="form-label">Nachricht <span aria-hidden="true">*</span><span class="u-sr-only">(Pflichtfeld)</span></label>
-									<textarea id="contact-message" name="message" class="form-control form-textarea" rows="5" required aria-required="true" aria-describedby="contact-message-error"></textarea>
-									<span id="contact-message-error" class="form-error" role="alert" hidden>Bitte geben Sie Ihre Nachricht ein.</span>
-								</div>
-								<div class="form-step__nav">
-									<button type="button" class="btn btn--ghost" data-step-prev>Zurück</button>
-									<button type="button" class="btn btn--primary" data-step-next>Weiter</button>
-								</div>
-							</div>
+              <div class="form-group lead-other" data-other-field hidden>
+                <label for="contact-other" class="form-label">Ihr Anliegen in eigenen Worten</label>
+                <input type="text" id="contact-other" name="anliegen_text" class="form-control" placeholder="z. B. individuelle Anfrage …">
+              </div>
 
-							<div class="form-step" data-step="3" hidden>
-								<h3 class="form-step__title">Absenden</h3>
-								<p class="form-privacy">
-									Bitte beachte unsere <a href="datenschutz.html">Datenschutzerklärung</a>.
-								</p>
-								<div class="form-step__nav">
-									<button type="button" class="btn btn--ghost" data-step-prev>Zurück</button>
-									<button type="submit" class="btn btn--primary">Anfrage senden</button>
-								</div>
-							</div>
+              <div class="form-group">
+                <label for="contact-message" class="form-label">Nachricht <span aria-hidden="true">*</span><span class="u-sr-only">(Pflichtfeld)</span></label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  class="form-control form-textarea"
+                  rows="5"
+                  required
+                  minlength="10"
+                  aria-required="true"
+                  aria-describedby="contact-message-error"></textarea>
+                <span id="contact-message-error" class="form-error" role="alert" hidden>Bitte geben Sie Ihre Nachricht ein (mind. 10 Zeichen).</span>
+              </div>
 
-							<div id="form-status" aria-live="polite" aria-atomic="true" class="form-status" hidden></div>
-						</form>
+              <div class="form-step__nav">
+                <span aria-hidden="true"></span>
+                <button type="button" class="btn btn--primary" data-step-next>Weiter</button>
+              </div>
+            </div>
+
+            <!-- Schritt 2: Kontakt -->
+            <div class="form-step" data-step="2" hidden>
+              <h3 class="form-step__title">Ihre Kontaktdaten</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contact-name" class="form-label">Name <span aria-hidden="true">*</span><span class="u-sr-only">(Pflichtfeld)</span></label>
+                  <input type="text" id="contact-name" name="name" class="form-control" autocomplete="name" required aria-required="true" aria-describedby="contact-name-error">
+                  <span id="contact-name-error" class="form-error" role="alert" hidden>Bitte geben Sie Ihren Namen ein.</span>
+                </div>
+                <div class="form-group">
+                  <label for="contact-email" class="form-label">E-Mail <span aria-hidden="true">*</span><span class="u-sr-only">(Pflichtfeld)</span></label>
+                  <input type="email" id="contact-email" name="email" class="form-control" autocomplete="email" required aria-required="true" aria-describedby="contact-email-error">
+                  <span id="contact-email-error" class="form-error" role="alert" hidden>Bitte geben Sie eine gültige E-Mail-Adresse ein.</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contact-website" class="form-label">Ihre Website <span class="form-optional">(optional)</span></label>
+                <input type="url" id="contact-website" name="website_url" class="form-control" placeholder="https://ihre-domain.de" autocomplete="url">
+              </div>
+              <p class="form-privacy">
+                Bitte beachte unsere <a href="datenschutz.html">Datenschutzerklärung</a>.
+              </p>
+              <div class="form-step__nav">
+                <button type="button" class="btn btn--ghost" data-step-prev>Zurück</button>
+                <button type="submit" class="btn btn--primary">Anfrage senden</button>
+              </div>
+            </div>
+
+            <!-- Status -->
+            <div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
+          </form>
 					</div>
 				</div>
 			</div>

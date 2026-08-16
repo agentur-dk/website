@@ -357,6 +357,25 @@
   const isMultiStep = steps.length > 0;
   let currentStep = 0;
 
+  // DSGVO-konformer Spam-Schutz (kein Google/ReCaptcha, keine IP-Nutzung):
+  // 1) Honeypot-Feld (_gotcha) – nur Bots füllen es aus
+  // 2) Zeitstempel: Formular in <2,5s ausgefüllt = Bot → still verwerfen
+  const startedField = document.getElementById('form-started');
+  if (startedField) startedField.value = String(Date.now());
+
+  // „Sonstiges“-Checkbox blendet Freitextfeld ein
+  const otherTrigger = form.querySelector('[data-other-trigger]');
+  const otherField = form.querySelector('[data-other-field]');
+  if (otherTrigger && otherField) {
+    otherTrigger.addEventListener('change', function () {
+      otherField.hidden = !otherTrigger.checked;
+      if (otherTrigger.checked) {
+        const input = otherField.querySelector('input, textarea');
+        if (input) input.focus();
+      }
+    });
+  }
+
   function setError(input, errorEl, message) {
     input.setAttribute('aria-invalid', 'true');
     if (errorEl) {
@@ -384,6 +403,10 @@
     }
     if (input.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       setError(input, errorEl, 'Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+      return false;
+    }
+    if (input.type === 'url' && value && !/^https?:\/\//i.test(value)) {
+      setError(input, errorEl, 'Bitte geben Sie eine vollständige URL an (https://…).');
       return false;
     }
     if (input.minLength > 0 && value.length < input.minLength) {
@@ -463,8 +486,32 @@
     showStep(0);
   }
 
+  function isLikelyBot() {
+    // Honeypot gefüllt?
+    const honeypot = form.querySelector('[name="_gotcha"]');
+    if (honeypot && honeypot.value) return true;
+    // Zu schnell ausgefüllt (< 2,5 s seit Seitenaufbau)?
+    if (startedField && startedField.value) {
+      const elapsed = Date.now() - parseInt(startedField.value, 10);
+      if (elapsed < 2500) return true;
+    }
+    return false;
+  }
+
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
+
+    // Spam-Schutz: Bots still verwerfen (keine Fehlermeldung, die Bots trainiert)
+    if (isLikelyBot()) {
+      if (statusEl) {
+        statusEl.className = 'form-status form-status--success';
+        statusEl.textContent = 'Vielen Dank! Ihre Nachricht wurde gesendet.';
+        statusEl.hidden = false;
+      }
+      form.reset();
+      if (isMultiStep) showStep(0);
+      return;
+    }
 
     const fields = Array.from(form.querySelectorAll('input[required], textarea[required], select[required]'));
     const valid = fields.map(validateField).every(Boolean);
@@ -477,9 +524,6 @@
       }
       return;
     }
-
-    const honeypot = form.querySelector('[name="website"], [name="_gotcha"]');
-    if (honeypot && honeypot.value) return;
 
     if (submitBtn) {
       submitBtn.disabled = true;

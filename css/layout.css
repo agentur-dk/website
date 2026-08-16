@@ -49,7 +49,7 @@
 
 .section__label {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wider);
@@ -122,7 +122,7 @@
   padding: var(--space-3) var(--space-6);
   background: var(--color-accent);
   color: var(--color-text-inverse);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
   text-decoration: none;
@@ -167,7 +167,7 @@
   gap: var(--space-3);
   text-decoration: none;
   color: var(--color-text);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-md);
   letter-spacing: var(--letter-spacing-mono);
@@ -219,7 +219,7 @@
 .nav-primary__link {
   display: inline-block;
   padding: var(--space-2) var(--space-4);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   letter-spacing: var(--letter-spacing-mono);
@@ -365,7 +365,7 @@
 }
 
 .footer-col__title {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wider);
@@ -444,7 +444,7 @@
 }
 
 .site-footer__copy {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   letter-spacing: var(--letter-spacing-mono);
@@ -459,7 +459,7 @@
 }
 
 .site-footer__legal a {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   text-decoration: none;
@@ -523,7 +523,7 @@
 
 .hero__label {
   display: inline-block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wider);
@@ -577,7 +577,7 @@
    --------------------------------------------------------------------------- */
 .breadcrumb {
   padding: var(--space-4) 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
 }
@@ -645,7 +645,7 @@
    --------------------------------------------------------------------------- */
 .section-label {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wider);
@@ -739,7 +739,7 @@
 .nav-dropdown__link {
   display: block;
   padding: var(--space-2) var(--space-3);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   text-decoration: none;
@@ -885,7 +885,7 @@
   gap: 1px;
   text-decoration: none;
   color: var(--color-text);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   line-height: 1.15;
   flex-shrink: 0;
   min-width: 0;
@@ -943,7 +943,7 @@
 }
 
 .error-page__code {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: clamp(4rem, 12vw, 7rem);
   font-weight: var(--font-weight-bold);
   color: var(--color-accent);

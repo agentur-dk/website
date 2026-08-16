@@ -14,7 +14,7 @@
   padding: var(--space-3) var(--space-6);
   min-height: 44px;
   min-width: 44px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wide);
@@ -137,7 +137,7 @@
 }
 
 .card__title {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-3);
@@ -154,7 +154,7 @@
   align-items: center;
   gap: var(--space-2);
   margin-top: var(--space-5);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-mono);
@@ -215,7 +215,7 @@
 }
 
 .service-card__number {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   color: rgba(28, 96, 173, 0.15);
@@ -234,7 +234,7 @@
   display: inline-flex;
   align-items: center;
   padding: var(--space-1) var(--space-3);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wide);
@@ -286,7 +286,7 @@
 .process__item::before {
   content: counter(step, decimal-leading-zero);
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: rgba(28, 96, 173, 0.2);
@@ -295,7 +295,7 @@
 }
 
 .process__title {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-3);
@@ -328,7 +328,7 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--space-4);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -397,7 +397,7 @@
 }
 
 .legend {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wide);
@@ -425,7 +425,7 @@
 }
 
 .form-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -445,7 +445,7 @@
   background: var(--color-surface);
   border: var(--border-width-thick) solid var(--color-border);
   color: var(--color-text);
-  font-family: var(--font-system);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
   min-height: 44px;
@@ -575,7 +575,7 @@
   border: var(--border-width-thick) solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text);
-  font-family: var(--font-system);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
   min-height: 48px;
@@ -634,7 +634,7 @@
    Labels & Hinweise
    --------------------------------------------------------------------------- */
 .form-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -711,7 +711,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wide);
@@ -762,7 +762,7 @@
 }
 
 .form-step__title {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -787,6 +787,91 @@
     min-width: 0;
     flex: 1;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Lead-Formular: Themen-Checkboxen als auffällige Karten
+   --------------------------------------------------------------------------- */
+.lead-topics {
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--space-2);
+}
+
+.lead-topics__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-3);
+}
+
+.lead-topic {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width-thick) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  cursor: pointer;
+  min-height: 52px;
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.lead-topic:hover {
+  border-color: var(--color-primary-light);
+}
+
+.lead-topic input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.lead-topic__box {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border: var(--border-width-thick) solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.lead-topic input:checked + .lead-topic__box {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.lead-topic input:focus-visible + .lead-topic__box {
+  outline: var(--border-width-focus) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.lead-topic:has(input:checked) {
+  border-color: var(--color-primary);
+  background: rgba(28, 96, 173, 0.08);
+  box-shadow: var(--shadow-sm);
+}
+
+.lead-topic__label {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.lead-other {
+  margin-top: var(--space-4);
 }
 
 /* Datenschutz-Hinweis (Link, keine Checkbox) */
@@ -899,7 +984,7 @@
 }
 
 .consent-banner__heading {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -985,7 +1070,7 @@
 }
 
 .consent-modal__title {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-4);
@@ -1011,7 +1096,7 @@
 }
 
 .consent-option__name {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-sm);
   color: var(--color-text);
@@ -1100,7 +1185,7 @@
 }
 
 .stats-strip__number {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-accent);
@@ -1110,7 +1195,7 @@
 }
 
 .stats-strip__label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
@@ -1239,7 +1324,7 @@
 }
 
 .client-strip__label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   letter-spacing: var(--letter-spacing-wider);
   text-transform: uppercase;
@@ -1256,7 +1341,7 @@
 }
 
 .client-strip__item {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wide);
@@ -1301,7 +1386,7 @@
   align-items: center;
   padding: var(--space-2) var(--space-4);
   min-height: 36px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-wide);
@@ -1336,7 +1421,7 @@
 }
 
 .filter-status {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   letter-spacing: var(--letter-spacing-mono);
@@ -1396,7 +1481,7 @@
 .case-card__visual--purple { background: linear-gradient(135deg, #2d1b69 0%, #5b21b6 100%); }
 
 .case-card__initials {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: rgba(255, 255, 255, 0.85);
@@ -1418,7 +1503,7 @@
 }
 
 .case-card__title {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -1427,7 +1512,7 @@
 }
 
 .case-card__meta {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   letter-spacing: var(--letter-spacing-mono);
@@ -1442,7 +1527,7 @@
 }
 
 .case-card__kpi {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-accent);
@@ -1467,7 +1552,7 @@
 }
 
 .check-result__headline {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-3);
@@ -1519,7 +1604,7 @@
   background: var(--color-surface);
   border: var(--border-width-thick) solid var(--color-border);
   color: var(--color-text);
-  font-family: var(--font-system);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
   min-height: 44px;
@@ -1621,7 +1706,7 @@
    Stats-Strip (index.html: stats-strip__value)
    --------------------------------------------------------------------------- */
 .stats-strip__value {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-accent);
@@ -1635,7 +1720,7 @@
    --------------------------------------------------------------------------- */
 .process__step-number {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: rgba(28, 96, 173, 0.5);
@@ -1648,7 +1733,7 @@
 }
 
 .process__step-title {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-3);
@@ -1727,14 +1812,14 @@
 }
 
 .consent-modal__group-title {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
 }
 
 .consent-modal__badge {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-xs);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
@@ -1796,7 +1881,7 @@
    __inner, __option, __label, __actions)
    --------------------------------------------------------------------------- */
 .consent-banner__heading {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -1822,7 +1907,7 @@
 }
 
 .consent-modal__heading {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-4);
@@ -1887,7 +1972,7 @@
 }
 
 .card__heading {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -1939,7 +2024,7 @@
 }
 
 .bfsg-step__legend {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
@@ -1990,7 +2075,7 @@
 
 .process-list__number {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: rgba(28, 96, 173, 0.5);
@@ -2003,7 +2088,7 @@
 }
 
 .process-list__heading {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
