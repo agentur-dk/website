@@ -105,6 +105,7 @@ Typische Projekte: 4–8 Wochen. BFSG-Audits: 1–3 Werktage.
 ## Sitemap
 
 - Startseite: https://dk-dk.de/
+- Leistungsübersicht: https://dk-dk.de/leistungen.html
 - BFSG WordPress Agentur: https://dk-dk.de/bfsg-wordpress-website-agentur.html
 - Barrierefreiheitserklärung: https://dk-dk.de/barrierefreiheit.html
 - Impressum: https://dk-dk.de/impressum.html
