@@ -1,18 +1,15 @@
+# TEMPORÄR bis Launch: komplette Seite für Crawler blockiert (noindex, nofollow)
 User-agent: *
-Allow: /
-Disallow: /kunden/
-Disallow: /downloads/
+Disallow: /
 
 User-agent: GPTBot
-Allow: /llms.txt
-Allow: /
+Disallow: /
 
 User-agent: ClaudeBot
-Allow: /llms.txt
-Allow: /
+Disallow: /
 
 User-agent: anthropic-ai
-Allow: /llms.txt
-Allow: /
+Disallow: /
 
-Sitemap: https://dk-dk.de/sitemap.xml
+# Sitemap bleibt für später vorbereitet (wird nach Launch wieder aktiviert)
+# Sitemap: https://dk-dk.de/sitemap.xml
