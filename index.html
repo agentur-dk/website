@@ -33,11 +33,7 @@
   <link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/utilities.css">
+	<link rel="stylesheet" href="css/site.min.css">
 
   <!-- Data-reveal transitions (inline per spec) -->
   <style>
@@ -159,9 +155,10 @@
   <a class="skip-link" href="#main-content">Zum Hauptinhalt springen</a>
 
   <!-- Consent Banner -->
-  <div id="consent-banner" class="consent-banner" role="region" aria-label="Cookie-Einstellungen" hidden>
+  <div id="consent-banner" class="consent-banner" role="dialog" aria-modal="true" aria-labelledby="consent-banner-heading" aria-describedby="consent-banner-desc" hidden>
     <div class="consent-banner__inner">
-      <p class="consent-banner__text">
+      <p id="consent-banner-heading" class="consent-banner__heading">Datenschutz-Einstellungen</p>
+      <p id="consent-banner-desc" class="consent-banner__desc">
         Wir verwenden ausschließlich <strong>localStorage</strong> für technisch notwendige Funktionen (z.&nbsp;B. Ihre Cookie-Einstellungen). Ohne Ihre Zustimmung findet kein Tracking statt.
       </p>
       <div class="consent-banner__actions">
@@ -232,25 +229,34 @@
         </svg>
       </button>
 
-      <nav id="nav-menu" class="nav-primary" aria-label="Hauptnavigation">
-        <ul class="nav-primary__list" role="list">
-          <li class="nav-primary__item">
-            <a href="index.html" class="nav-primary__link" aria-current="page">Start</a>
-          </li>
-          <li class="nav-primary__item">
-            <a href="bfsg-wordpress-website-agentur.html" class="nav-primary__link">Leistungen</a>
-          </li>
-          <li class="nav-primary__item">
-            <a href="projekte.html" class="nav-primary__link">Referenzen</a>
-          </li>
-          <li class="nav-primary__item">
-            <a href="barrierefreiheit.html" class="nav-primary__link">Barrierefreiheit</a>
-          </li>
-          <li class="nav-primary__item nav-primary__item--cta">
-            <a href="#contact" class="btn btn--primary btn--sm">Projekt anfragen</a>
-          </li>
-        </ul>
-      </nav>
+                  <nav id="nav-menu" class="nav-primary" aria-label="Hauptnavigation">
+              <ul class="nav-primary__list" role="list">
+                <li class="nav-primary__item">
+                  <a href="index.html" class="nav-primary__link" aria-current="page">Start</a>
+                </li>
+                <li class="nav-primary__item nav-primary__item--has-dropdown">
+                  <a href="bfsg-wordpress-website-agentur.html" class="nav-primary__link" aria-haspopup="true" aria-expanded="false">Leistungen</a>
+                  <ul class="nav-dropdown" role="menu" aria-label="Leistungen">
+                    <li><a href="bfsg-wordpress-website-agentur.html" class="nav-dropdown__link">BFSG &amp; Barrierefreiheit</a></li>
+                    <li><a href="wordpress-entwicklung.html" class="nav-dropdown__link">WordPress-Entwicklung</a></li>
+                    <li><a href="seo-geo.html" class="nav-dropdown__link">SEO &amp; GEO</a></li>
+                    <li><a href="online-marketing.html" class="nav-dropdown__link">Online-Marketing</a></li>
+                    <li><a href="social-recruiting.html" class="nav-dropdown__link">Social Recruiting</a></li>
+                    <li><a href="corporate-design.html" class="nav-dropdown__link">Corporate Design</a></li>
+                    <li><a href="ki-services.html" class="nav-dropdown__link">KI-Services</a></li>
+                  </ul>
+                </li>
+                <li class="nav-primary__item">
+                  <a href="projekte.html" class="nav-primary__link">Referenzen</a>
+                </li>
+                <li class="nav-primary__item">
+                  <a href="barrierefreiheit.html" class="nav-primary__link">Barrierefreiheit</a>
+                </li>
+                <li class="nav-primary__item nav-primary__item--cta">
+                  <a href="#contact" class="btn btn--primary btn--sm">Projekt anfragen</a>
+                </li>
+              </ul>
+            </nav>
     </div>
   </header>
 
@@ -295,12 +301,27 @@
             <span class="stats-strip__value" aria-hidden="true">24h</span>
             <span class="stats-strip__label">Reaktionszeit</span>
           </li>
+          <!-- Card 7: Social Recruiting -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">07</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24">
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Social Recruiting</h3>
+            <p class="card__body">
+              Fachkräfte aktiv über LinkedIn, Meta &amp; Co. ansprechen – mit KI-gestützter Zielgruppenanalyse und Kampagnen, die Bewerbungen bringen. Statt Warten: gezielt finden.
+            </p>
+            <a href="social-recruiting.html" class="card__link">Mehr erfahren<span class="u-sr-only"> über Social Recruiting</span></a>
+          </li>
+
         </ul>
       </div>
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="services section">
+    <section id="services" class="services section section--light">
       <div class="container">
         <p class="section-label" aria-hidden="true">Leistungen</p>
         <h2 class="section-title">Was wir für Sie tun</h2>
@@ -318,7 +339,7 @@
             <p class="card__body">
               Wir entwickeln digitale Angebote, die BFSG- und WCAG-konform sind. Von der Prüfung bis zur Konformitätserklärung – alles aus einer Hand. Keine rechtlichen Risiken, sondern echte Zugänglichkeit.
             </p>
-            <a href="barrierefreiheit.html" class="card__link">Mehr erfahren<span class="u-sr-only"> über Barrierefreie Websites</span></a>
+            <a href="bfsg-wordpress-website-agentur.html" class="card__link">Mehr erfahren<span class="u-sr-only"> über Barrierefreie Websites (BFSG)</span></a>
           </li>
 
           <!-- Card 2: WordPress-Entwicklung -->
@@ -401,7 +422,7 @@
     </section>
 
     <!-- Why agentur dk -->
-    <section class="why-us section" aria-label="Warum agentur dk">
+    <section class="why-us section section--light" aria-label="Warum agentur dk">
       <div class="container">
         <p class="section-label" aria-hidden="true">Warum wir</p>
         <h2 class="section-title">Direkt, persönlich, effizient</h2>
@@ -444,7 +465,7 @@
     </section>
 
     <!-- Process Section -->
-    <section class="process section" aria-label="Unser Vorgehen">
+    <section class="process section section--light" aria-label="Unser Vorgehen">
       <div class="container">
         <p class="section-label" aria-hidden="true">Unser Vorgehen</p>
         <h2 class="section-title">So arbeiten wir zusammen</h2>
@@ -494,7 +515,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faq" class="faq section">
+    <section id="faq" class="faq section section--light">
       <div class="container">
         <p class="section-label" aria-hidden="true">FAQ</p>
         <h2 class="section-title">Häufige Fragen</h2>

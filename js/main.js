@@ -206,6 +206,10 @@
   const modal = document.getElementById('consent-modal');
   if (!banner) return;
 
+  // Ausnahme: Datenschutz & Impressum sind ohne Zwangs-Banner nutzbar
+  const exemptPath = /(datenschutz|impressum)\.html/.test(window.location.pathname);
+  let lastFocused = null;
+
   function getConsent() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -223,6 +227,27 @@
     document.dispatchEvent(new CustomEvent('dk:consent', { detail: settings }));
   }
 
+  function lockScroll() { document.body.style.overflow = 'hidden'; }
+  function unlockScroll() { document.body.style.overflow = ''; }
+
+  function getFocusables() {
+    return Array.from(banner.querySelectorAll('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'));
+  }
+
+  function openBanner() {
+    banner.hidden = false;
+    lockScroll();
+    lastFocused = document.activeElement;
+    const first = getFocusables()[0];
+    if (first) first.focus();
+  }
+
+  function closeBanner() {
+    banner.hidden = true;
+    unlockScroll();
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
   function hideBanner() { banner.hidden = true; }
   function hideModal() { if (modal) modal.hidden = true; }
 
@@ -230,15 +255,39 @@
   if (existing) {
     hideBanner();
     applyConsent(existing);
-  } else {
+  } else if (!exemptPath) {
+    // Zwingendes Modal: Seite erst nach Entscheidung nutzbar (Scroll-Lock + Fokus)
     banner.hidden = false;
+    lockScroll();
+    requestAnimationFrame(function () {
+      const first = getFocusables()[0];
+      if (first) first.focus();
+    });
+  } else {
+    hideBanner();
   }
+
+  // Fokus-Trap solange das Modal offen ist
+  banner.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    const focusables = getFocusables();
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
 
   const acceptAllBtn = document.getElementById('consent-accept-all');
   if (acceptAllBtn) {
     acceptAllBtn.addEventListener('click', function () {
       const s = { necessary: true, statistics: true };
-      saveConsent(s); applyConsent(s); hideBanner(); hideModal();
+      saveConsent(s); applyConsent(s); closeBanner(); hideModal();
     });
   }
 
@@ -246,7 +295,7 @@
   if (acceptNecessaryBtn) {
     acceptNecessaryBtn.addEventListener('click', function () {
       const s = { necessary: true, statistics: false };
-      saveConsent(s); applyConsent(s); hideBanner(); hideModal();
+      saveConsent(s); applyConsent(s); closeBanner(); hideModal();
     });
   }
 
@@ -264,7 +313,7 @@
     saveSettingsBtn.addEventListener('click', function () {
       const statsToggle = document.getElementById('consent-toggle-statistics');
       const s = { necessary: true, statistics: statsToggle ? statsToggle.checked : false };
-      saveConsent(s); applyConsent(s); hideBanner(); hideModal();
+      saveConsent(s); applyConsent(s); closeBanner(); hideModal();
     });
   }
 
@@ -288,9 +337,7 @@
   window.dkConsent = {
     revoke: function () {
       localStorage.removeItem(STORAGE_KEY);
-      banner.hidden = false;
-      const first = banner.querySelector('button');
-      if (first) first.focus();
+      openBanner();
     },
     getConsent: getConsent,
   };

@@ -28,12 +28,7 @@
 
   <link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
-
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/utilities.css">
+	<link rel="stylesheet" href="css/site.min.css">
 
   <style>
     [data-reveal]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
@@ -89,9 +84,10 @@
   <a class="skip-link" href="#main-content">Zum Hauptinhalt springen</a>
 
   <!-- Consent Banner -->
-  <div id="consent-banner" class="consent-banner" role="region" aria-label="Cookie-Einstellungen" hidden>
-    <div class="consent-banner__inner">
-      <p class="consent-banner__text">
+  <div id="consent-banner" class="consent-banner" role="dialog" aria-modal="true" aria-labelledby="consent-banner-heading" aria-describedby="consent-banner-desc" hidden>
+		<div class="consent-banner__inner">
+			<p id="consent-banner-heading" class="consent-banner__heading">Datenschutz-Einstellungen</p>
+			<p id="consent-banner-desc" class="consent-banner__desc">
         Wir verwenden ausschließlich <strong>localStorage</strong> für technisch notwendige Funktionen (z.&nbsp;B. Ihre Cookie-Einstellungen). Ohne Ihre Zustimmung findet kein Tracking statt.
       </p>
       <div class="consent-banner__actions">
@@ -149,25 +145,34 @@
         </svg>
       </button>
 
-      <nav id="nav-menu" class="nav-primary" aria-label="Hauptnavigation">
-        <ul class="nav-primary__list" role="list">
-          <li class="nav-primary__item">
-            <a href="index.html" class="nav-primary__link">Start</a>
-          </li>
-          <li class="nav-primary__item">
-            <a href="bfsg-wordpress-website-agentur.html" class="nav-primary__link">Leistungen</a>
-          </li>
-          <li class="nav-primary__item">
-            <a href="projekte.html" class="nav-primary__link" aria-current="page">Referenzen</a>
-          </li>
-          <li class="nav-primary__item">
-            <a href="barrierefreiheit.html" class="nav-primary__link">Barrierefreiheit</a>
-          </li>
-          <li class="nav-primary__item nav-primary__item--cta">
-            <a href="index.html#contact" class="btn btn--primary btn--sm">Projekt anfragen</a>
-          </li>
-        </ul>
-      </nav>
+                  <nav id="nav-menu" class="nav-primary" aria-label="Hauptnavigation">
+              <ul class="nav-primary__list" role="list">
+                <li class="nav-primary__item">
+                  <a href="index.html" class="nav-primary__link">Start</a>
+                </li>
+                <li class="nav-primary__item nav-primary__item--has-dropdown">
+                  <a href="bfsg-wordpress-website-agentur.html" class="nav-primary__link" aria-haspopup="true" aria-expanded="false">Leistungen</a>
+                  <ul class="nav-dropdown" role="menu" aria-label="Leistungen">
+                    <li><a href="bfsg-wordpress-website-agentur.html" class="nav-dropdown__link">BFSG &amp; Barrierefreiheit</a></li>
+                    <li><a href="wordpress-entwicklung.html" class="nav-dropdown__link">WordPress-Entwicklung</a></li>
+                    <li><a href="seo-geo.html" class="nav-dropdown__link">SEO &amp; GEO</a></li>
+                    <li><a href="online-marketing.html" class="nav-dropdown__link">Online-Marketing</a></li>
+                    <li><a href="social-recruiting.html" class="nav-dropdown__link">Social Recruiting</a></li>
+                    <li><a href="corporate-design.html" class="nav-dropdown__link">Corporate Design</a></li>
+                    <li><a href="ki-services.html" class="nav-dropdown__link">KI-Services</a></li>
+                  </ul>
+                </li>
+                <li class="nav-primary__item">
+                  <a href="projekte.html" class="nav-primary__link" aria-current="page">Referenzen</a>
+                </li>
+                <li class="nav-primary__item">
+                  <a href="barrierefreiheit.html" class="nav-primary__link">Barrierefreiheit</a>
+                </li>
+                <li class="nav-primary__item nav-primary__item--cta">
+                  <a href="#contact" class="btn btn--primary btn--sm">Projekt anfragen</a>
+                </li>
+              </ul>
+            </nav>
     </div>
   </header>
 

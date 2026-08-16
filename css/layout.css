@@ -336,6 +336,27 @@
   padding-bottom: var(--space-8);
 }
 
+/* Kontrast auf dem hellen Blau-Ende des Verlaufs: Footer-Texte aufhellen */
+.site-footer {
+  --color-text-muted: #d4d4d4;
+  --color-text-faint: #bdbdbd;
+  --color-accent: #8ab8e8;
+}
+
+.site-footer a:hover {
+  color: #ffffff;
+}
+
+.site-footer .footer-col__title,
+.site-footer .footer-col__link,
+.site-footer .footer-col__address,
+.site-footer .footer-col__desc,
+.site-footer .footer-col__text,
+.site-footer .site-footer__copy,
+.site-footer .site-footer__legal a {
+  color: var(--color-text-muted);
+}
+
 .site-footer__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -647,6 +668,14 @@
 
 .hero__headline {
   margin-bottom: var(--space-6);
+  /* CLS-Fix: Höhe für Typewriter-Zeilen reservieren, damit keine Layout-Shifts entstehen */
+  min-height: 2.4em;
+}
+
+@media (max-width: 640px) {
+  .hero__headline {
+    min-height: 3.6em;
+  }
 }
 
 .hero__subline {
@@ -672,10 +701,95 @@
   margin-left: var(--space-4);
 }
 
+/* Leistungen-Dropdown (Desktop: hover/focus, Mobile: sichtbar) */
+.nav-primary__item--has-dropdown {
+  position: relative;
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 240px;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  list-style: none;
+  padding: var(--space-2);
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  z-index: var(--z-dropdown);
+}
+
+.nav-primary__item--has-dropdown:hover .nav-dropdown,
+.nav-primary__item--has-dropdown:focus-within .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown li {
+  margin: 0;
+}
+
+.nav-dropdown__link {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-dropdown__link:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
+
+.nav-dropdown__link:focus-visible {
+  outline: var(--border-width-focus) solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+.nav-dropdown__link[aria-current="page"] {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
+}
+
 @media (max-width: 768px) {
   .nav-primary__item--cta {
     margin-left: 0;
     margin-top: var(--space-4);
+  }
+
+  .nav-primary__item--has-dropdown {
+    position: static;
+  }
+
+  .nav-dropdown {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    border-left: 2px solid var(--color-border-strong);
+    border-radius: 0;
+    margin-left: var(--space-4);
+    padding: 0 0 var(--space-2) 0;
+    min-width: 0;
+  }
+
+  .nav-dropdown__link {
+    white-space: normal;
+    padding: var(--space-2) var(--space-3);
   }
 }
 
@@ -703,7 +817,23 @@
 }
 
 .section--light {
-  background: var(--color-surface);
+  /* Helle Sektion mit dunklem Text (wie dk-dk.de) — Palette bleibt schwarz/grau/blau */
+  background: var(--color-bg-light);
+  color: var(--color-text-on-light);
+  /* Variablen-Override: alle Komponenten passen sich automatisch an */
+  --color-text: var(--color-text-on-light);
+  --color-text-muted: var(--color-text-muted-on-light);
+  --color-text-faint: var(--color-text-faint-on-light);
+  --color-text-inverse: #ffffff;
+  --color-primary-light: var(--color-primary-on-light);
+  --color-accent: var(--color-primary-on-light);
+  --color-accent-dark: var(--color-primary-on-light);
+  --color-focus: var(--color-focus-on-light);
+  --color-success: var(--color-success-on-light);
+  --color-surface: var(--color-surface-light);
+  --color-surface-alt: var(--color-surface-alt-light);
+  --color-border: var(--color-border-light);
+  --color-border-strong: var(--color-border-strong-light);
 }
 
 .section--check {

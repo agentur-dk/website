@@ -26,16 +26,16 @@
   --color-text-inverse: #121212;
 
   /* ---------------------------------------------------------------------------
-     COLOR — Brand
-     #1C60AD (primary) on #121212 → L≈0.13 / 0.0106 → contrast ≈ 2.98:1
+     COLOR — Brand (Palette: schwarz, grau, weiß, blau #1C60AD)
+     #1C60AD (primary) on #121212 → L≈0.116 / 0.0106 → contrast ≈ 2.98:1
      Use only as non-text UI element bg (with white text inside, 5.8:1 ✓)
-     #fbea6b (accent) on #121212  → L≈0.84 / 0.0106 → contrast ≈ 17.1:1 ✓ AAA
+     #5090d0 (accent) on #121212  → L≈0.25 / 0.0106 → contrast ≈ 4.8:1 ✓ AA
      --------------------------------------------------------------------------- */
   --color-primary:       #1C60AD;
   --color-primary-hover: #2570C8;
   --color-primary-light: #5090d0; /* Text on dark bg: L≈0.25 → 4.8:1 ✓ AA */
-  --color-accent:        #fbea6b;
-  --color-accent-dark:   #d4c245;
+  --color-accent:        #5090d0; /* Akzent-Text auf dunkel (AA) */
+  --color-accent-dark:   #1C60AD; /* Kräftiges Marken-Blau (Flächen, Hover) */
 
   /* ---------------------------------------------------------------------------
      COLOR — Semantic
@@ -46,16 +46,28 @@
   --color-error:       #ff6b6b; /* UI elements only */
   --color-error-text:  #ff9999; /* Text on dark bg */
   --color-success:     #5dbf6a;
-  --color-focus:       #fbea6b; /* Focus ring — same as accent */
+  --color-focus:       #6db3f2; /* Heller Blau-Fokusring auf dunkel ≈7.5:1 ✓ */
 
   /* ---------------------------------------------------------------------------
-     COLOR — Footer Gradient (brand heritage)
+     COLOR — Helle Sektionen (section--light, wie dk-dk.de)
      --------------------------------------------------------------------------- */
-  /* Darkened stops so --color-text-muted (#a8a8a8) keeps ≥4.5:1 on every stop.
-     #1c60ad (L≈0.116) and #474078 (L≈0.064) were too bright → replaced
-     by #0e3a6d (L≈0.042) and #3a3560 (L≈0.043). */
-  --gradient-footer: linear-gradient(135deg,
-    #000000 0%, #281621 20%, #412848 40%, #3a3560 60%, #0e3a6d 100%);
+  --color-bg-light:        #f5f6f8;
+  --color-surface-light:   #ffffff;
+  --color-surface-alt-light: #e9ebef;
+  --color-border-light:    #d5d9de;
+  --color-border-strong-light: #9aa1a9;
+  --color-text-on-light:   #14171c;
+  --color-text-muted-on-light: #4a515a;
+  --color-text-faint-on-light: #6b7280;
+  --color-primary-on-light: #1C60AD; /* Links/Akzent auf hell: 5.9:1 ✓ */
+  --color-focus-on-light:  #1C60AD;  /* Fokusring auf hell: 6.3:1 ✓ */
+  --color-success-on-light: #2e7d32; /* Check-Icons auf hell: ≥4.5:1 ✓ */
+
+  /* ---------------------------------------------------------------------------
+     COLOR — Footer/CTA Gradient (Kundenwunsch, exakte Stops)
+     --------------------------------------------------------------------------- */
+  --gradient-footer: linear-gradient(to right bottom,
+    #000000 0%, #281621 20%, #412848 40%, #474078 60%, #1c60ad 100%);
 
   /* ---------------------------------------------------------------------------
      TYPOGRAPHY
