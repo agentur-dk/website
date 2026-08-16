@@ -398,6 +398,72 @@
 })();
 
 /* ---------------------------------------------------------------------------
+   Project Filter (projekte.html)
+   Filter chips toggle aria-pressed; AND logic across selected tags.
+   Progressive enhancement: grid is visible without JS.
+   --------------------------------------------------------------------------- */
+(function initProjectFilter() {
+  const filterGroup = document.getElementById('filter-group');
+  if (!filterGroup) return;
+
+  const chips = Array.from(filterGroup.querySelectorAll('[data-filter]'));
+  const cards = Array.from(document.querySelectorAll('.case-card[data-tags]'));
+  const statusEl = document.getElementById('filter-status');
+  const allChip = filterGroup.querySelector('[data-filter="all"]');
+
+  let activeFilters = new Set();
+
+  function updateStatus(count) {
+    if (!statusEl) return;
+    const total = cards.length;
+    statusEl.textContent = count === total
+      ? total + ' Projekte angezeigt'
+      : count + ' von ' + total + ' Projekten angezeigt';
+  }
+
+  function applyFilters() {
+    let visible = 0;
+    cards.forEach(function (card) {
+      const tags = card.dataset.tags ? card.dataset.tags.split(' ') : [];
+      const show = activeFilters.size === 0 ||
+        Array.from(activeFilters).every(function (f) { return tags.includes(f); });
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    updateStatus(visible);
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      const filter = chip.dataset.filter;
+
+      if (filter === 'all') {
+        activeFilters.clear();
+        chips.forEach(function (c) {
+          c.setAttribute('aria-pressed', String(c.dataset.filter === 'all'));
+        });
+      } else {
+        const isPressed = chip.getAttribute('aria-pressed') === 'true';
+        if (isPressed) {
+          activeFilters.delete(filter);
+          chip.setAttribute('aria-pressed', 'false');
+        } else {
+          activeFilters.add(filter);
+          chip.setAttribute('aria-pressed', 'true');
+        }
+        if (allChip) {
+          allChip.setAttribute('aria-pressed', String(activeFilters.size === 0));
+        }
+      }
+
+      applyFilters();
+    });
+  });
+
+  updateStatus(cards.length);
+})();
+
+/* ---------------------------------------------------------------------------
    BFSG Self-Check (bfsg-wordpress-website-agentur.html only)
    --------------------------------------------------------------------------- */
 (function initBFSGCheck() {

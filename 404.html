@@ -1,27 +1,19 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Impressum – agentur dk</title>
-  <meta name="description" content="Impressum von agentur dk – design &amp; kommunikation, Sachsenring 57, 50677 Köln. Alle Pflichtangaben nach §5 DDG.">
-  <meta name="author" content="Daniel Kontelis">
+  <title>Seite nicht gefunden (404) | agentur dk</title>
+  <meta name="description" content="Die gesuchte Seite konnte leider nicht gefunden werden. Besuchen Sie unsere Startseite oder entdecken Sie unsere Leistungen.">
   <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://dk-dk.de/impressum.html">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Impressum – agentur dk">
-  <meta property="og:description" content="Impressum von agentur dk – design &amp; kommunikation, Sachsenring 57, 50677 Köln. Alle Pflichtangaben nach §5 DDG.">
-  <meta property="og:url" content="https://dk-dk.de/impressum.html">
-  <meta property="og:image" content="https://dk-dk.de/images/og-image-website.png">
-  <meta property="og:locale" content="de_DE">
-  <meta property="og:site_name" content="agentur dk">
+  <meta name="theme-color" content="#121212">
 
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
   <link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -29,42 +21,123 @@
   <link rel="stylesheet" href="css/utilities.css">
 
   <style>
-    [data-reveal]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
-    [data-reveal].is-visible{opacity:1;transform:none}
-    @media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none}}
+    .error-page {
+      min-height: calc(100vh - 128px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-block: var(--space-20);
+    }
+    .error-page__inner {
+      max-width: 560px;
+    }
+    .error-page__code {
+      font-family: var(--font-mono);
+      font-size: clamp(4rem, 15vw, 8rem);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-light);
+      letter-spacing: var(--letter-spacing-mono);
+      line-height: 1;
+      margin-bottom: var(--space-6);
+    }
+    .error-page__title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text);
+      margin-bottom: var(--space-4);
+    }
+    .error-page__desc {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-md);
+      margin-bottom: var(--space-10);
+    }
+    .error-page__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      justify-content: center;
+    }
+    .error-page__divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin-block: var(--space-12);
+    }
+    .error-page__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-6);
+      justify-content: center;
+      list-style: none;
+      padding: 0;
+    }
+    .error-page__links a {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      letter-spacing: var(--letter-spacing-mono);
+      transition: color var(--transition-fast);
+    }
+    .error-page__links a:hover {
+      color: var(--color-accent);
+    }
+    .error-page__links a:focus-visible {
+      outline: var(--border-width-focus) solid var(--color-focus);
+      outline-offset: 3px;
+      border-radius: var(--radius-sm);
+    }
   </style>
+
+  <script src="js/main.js" defer></script>
 </head>
 <body>
 
   <a class="skip-link" href="#main-content">Zum Hauptinhalt springen</a>
 
   <!-- Consent Banner -->
-  <div id="consent-banner" hidden role="region" aria-label="Cookie-Einstellungen">
-    <p>Wir verwenden Cookies und lokale Speicherung, um Ihre Einstellungen zu speichern. Notwendige Speicherung ist immer aktiv.</p>
-    <div class="consent-banner__actions">
-      <button type="button" id="consent-accept-all">Alle akzeptieren</button>
-      <button type="button" id="consent-necessary-only">Nur notwendige</button>
-      <button type="button" id="consent-open-settings">Einstellungen</button>
+  <div id="consent-banner" class="consent-banner" role="region" aria-label="Cookie-Einstellungen" hidden>
+    <div class="consent-banner__inner">
+      <p class="consent-banner__text">
+        Wir verwenden ausschließlich <strong>localStorage</strong> für technisch notwendige Funktionen. Kein Tracking ohne Ihre Zustimmung.
+      </p>
+      <div class="consent-banner__actions">
+        <button type="button" id="consent-accept-all" class="btn btn--primary btn--sm">Alle akzeptieren</button>
+        <button type="button" id="consent-necessary-only" class="btn btn--outline btn--sm">Nur notwendige</button>
+        <button type="button" id="consent-open-settings" class="btn btn--ghost btn--sm">Einstellungen</button>
+      </div>
     </div>
   </div>
 
   <!-- Consent Modal -->
-  <div id="consent-modal" hidden role="dialog" aria-modal="true" aria-labelledby="consent-modal-title">
-    <div class="consent-modal__inner">
-      <h2 id="consent-modal-title">Cookie-Einstellungen</h2>
-      <ul class="consent-modal__options">
-        <li class="consent-modal__option">
-          <span class="consent-modal__label">Notwendig</span>
-          <button type="button" disabled aria-pressed="true" aria-label="Notwendige Cookies – immer aktiv">Immer aktiv</button>
-        </li>
-        <li class="consent-modal__option">
-          <label for="consent-toggle-statistics" class="consent-modal__label">Statistiken</label>
-          <input type="checkbox" id="consent-toggle-statistics" role="switch">
-        </li>
-      </ul>
-      <div class="consent-modal__actions">
-        <button type="button" id="consent-save-settings">Einstellungen speichern</button>
-        <button type="button" id="consent-modal-close">Schließen</button>
+  <div id="consent-modal" class="consent-modal" role="dialog" aria-modal="true" aria-labelledby="consent-modal-title" hidden>
+    <div class="consent-modal__dialog">
+      <div class="consent-modal__header">
+        <h2 id="consent-modal-title" class="consent-modal__title">Cookie-Einstellungen</h2>
+        <button type="button" id="consent-modal-close" class="consent-modal__close" aria-label="Einstellungen schließen">
+          <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+      <div class="consent-modal__body">
+        <div class="consent-modal__group">
+          <div class="consent-modal__group-header">
+            <span class="consent-modal__group-title">Notwendig</span>
+            <span class="consent-modal__badge">Immer aktiv</span>
+          </div>
+          <p class="consent-modal__group-desc">Technisch erforderliche Funktionen wie das Speichern Ihrer Cookie-Präferenzen.</p>
+        </div>
+        <div class="consent-modal__group">
+          <div class="consent-modal__group-header">
+            <label class="consent-modal__group-title" for="consent-toggle-statistics">Statistiken</label>
+            <input type="checkbox" id="consent-toggle-statistics" class="consent-toggle" role="switch">
+          </div>
+          <p class="consent-modal__group-desc">Anonyme Nutzungsstatistiken zur Verbesserung unseres Angebots.</p>
+        </div>
+      </div>
+      <div class="consent-modal__footer">
+        <button type="button" id="consent-save-settings" class="btn btn--primary btn--sm">Einstellungen speichern</button>
       </div>
     </div>
   </div>
@@ -107,64 +180,27 @@
 
   <!-- Main Content -->
   <main id="main-content">
-    <div class="page-header container">
-      <h1 class="page-header__title">Impressum</h1>
-      <p class="page-header__lead">Pflichtangaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)</p>
-    </div>
-
-    <div class="section container--narrow">
-
-      <section aria-labelledby="impressum-angaben" data-reveal>
-        <h2 id="impressum-angaben">Angaben gemäß § 5 DDG</h2>
-        <p>
-          agentur dk – design &amp; kommunikation<br>
-          Inhaber: Daniel Kontelis<br>
-          Sachsenring 57<br>
-          D-50677 Köln
+    <div class="error-page">
+      <div class="error-page__inner">
+        <p class="error-page__code" aria-label="Fehler 404">404</p>
+        <h1 class="error-page__title">Seite nicht gefunden</h1>
+        <p class="error-page__desc">
+          Die gesuchte Seite existiert leider nicht oder wurde verschoben.
+          Kein Problem – wir helfen Ihnen weiter.
         </p>
-        <p>
-          Telefon: <a href="tel:+4922198655229">+49 221 986 55 229</a><br>
-          E-Mail: <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a><br>
-          Website: <a href="https://www.dk-dk.de" rel="noopener">www.dk-dk.de</a>
-        </p>
-      </section>
-
-      <section aria-labelledby="impressum-verantwortlich" data-reveal>
-        <h2 id="impressum-verantwortlich">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-        <p>
-          Daniel Kontelis<br>
-          Sachsenring 57<br>
-          D-50677 Köln
-        </p>
-      </section>
-
-      <section aria-labelledby="impressum-odr" data-reveal>
-        <h2 id="impressum-odr">EU-Streitschlichtung</h2>
-        <p>
-          Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) der Europäischen Kommission informieren. Diese ist unter folgendem Link erreichbar:
-          <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a>
-        </p>
-        <p>Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-      </section>
-
-      <section aria-labelledby="impressum-vsbg" data-reveal>
-        <h2 id="impressum-vsbg">Verbraucherstreitbeilegung / Universalschlichtungsstelle (§ 36 VSBG)</h2>
-        <p>Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-      </section>
-
-      <section aria-labelledby="impressum-haftung" data-reveal>
-        <h2 id="impressum-haftung">Haftungsausschluss</h2>
-
-        <h3>Haftung für Inhalte</h3>
-        <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar.</p>
-
-        <h3>Haftung für Links</h3>
-        <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
-
-        <h3>Urheberrecht</h3>
-        <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
-      </section>
-
+        <div class="error-page__actions">
+          <a href="index.html" class="btn btn--accent btn--lg">Zur Startseite</a>
+          <a href="bfsg-wordpress-website-agentur.html" class="btn btn--outline btn--lg">Unsere Leistungen</a>
+        </div>
+        <hr class="error-page__divider" aria-hidden="true">
+        <ul class="error-page__links" role="list">
+          <li><a href="projekte.html">Referenzen &amp; Projekte</a></li>
+          <li><a href="barrierefreiheit.html">Barrierefreiheit</a></li>
+          <li><a href="index.html#contact">Kontakt</a></li>
+          <li><a href="impressum.html">Impressum</a></li>
+          <li><a href="datenschutz.html">Datenschutz</a></li>
+        </ul>
+      </div>
     </div>
   </main>
 
@@ -238,6 +274,5 @@
     </div>
   </footer>
 
-  <script src="js/main.js" defer></script>
 </body>
 </html>

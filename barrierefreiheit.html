@@ -1,142 +1,352 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Erklärung zur Barrierefreiheit | agentur dk</title>
-  <meta name="description" content="Erklärung zur Barrierefreiheit: Kontakt für Feedback, Zuständigkeit und Prozess zur Behebung.">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="barrierefreiheit.html">
-  <link rel="preload" href="css/bootstrap.min.css" as="style">
-  <link rel="preload" href="css/custom.css" as="style">
-  <link rel="stylesheet" href="css/bootstrap.min.css" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="css/custom.css" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/custom.css">
-  </noscript>
+
+  <title>Erklärung zur Barrierefreiheit | agentur dk – WordPress &amp; BFSG Agentur Köln</title>
+  <meta name="description" content="Barrierefreiheitserklärung der agentur dk nach BFSG/BGG: Konformitätsstatus WCAG 2.2 AA, Kontakt für Barrieremeldungen und Durchsetzungsstelle.">
+  <meta name="author" content="Daniel Kontelis">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#121212">
+  <link rel="canonical" href="https://dk-dk.de/barrierefreiheit.html">
+
+  <meta property="og:title" content="Erklärung zur Barrierefreiheit | agentur dk">
+  <meta property="og:description" content="Barrierefreiheitserklärung der agentur dk nach BFSG/BGG: Konformitätsstatus WCAG 2.2 AA, Kontakt für Barrieremeldungen und Durchsetzungsstelle.">
+  <meta property="og:url" content="https://dk-dk.de/barrierefreiheit.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:image" content="https://dk-dk.de/images/og-image-website.png">
+  <meta property="og:site_name" content="agentur dk">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/utilities.css">
+
+  <style>
+    [data-reveal]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+    [data-reveal].is-visible{opacity:1;transform:none}
+    @media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none}}
+  </style>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Erklärung zur Barrierefreiheit",
+  "url": "https://dk-dk.de/barrierefreiheit.html",
+  "inLanguage": "de-DE",
+  "isPartOf": { "@type": "WebSite", "url": "https://dk-dk.de" },
+  "description": "Barrierefreiheitserklärung der agentur dk nach BFSG und WCAG 2.2 AA."
+}
+  </script>
+
+  <script src="js/main.js" defer></script>
 </head>
-<body class="bg-white">
-  <a href="barrierefreiheit.html#main-content" class="screen-reader screen-reader-focusable">Zum Hauptinhalt springen</a>
-  <header class="site-header bg-white border-bottom">
-    <div class="container">
-      <div class="header-logo">
-        <a href="index.html">
-          <span class="h4 mb-0 text-black d-block">agentur dk</span>
-          <span class="header-tagline text-black">design & kommunikation</span>
-        </a>
+<body>
+
+  <a class="skip-link" href="#main-content">Zum Hauptinhalt springen</a>
+
+  <!-- Consent Banner -->
+  <div id="consent-banner" class="consent-banner" role="region" aria-label="Cookie-Einstellungen" hidden>
+    <div class="consent-banner__inner">
+      <p class="consent-banner__text">
+        Wir verwenden ausschließlich <strong>localStorage</strong> für technisch notwendige Funktionen (z.&nbsp;B. Ihre Cookie-Einstellungen). Ohne Ihre Zustimmung findet kein Tracking statt.
+      </p>
+      <div class="consent-banner__actions">
+        <button type="button" id="consent-accept-all" class="btn btn--primary btn--sm">Alle akzeptieren</button>
+        <button type="button" id="consent-necessary-only" class="btn btn--outline btn--sm">Nur notwendige</button>
+        <button type="button" id="consent-open-settings" class="btn btn--ghost btn--sm">Einstellungen</button>
       </div>
-      <div class="header-actions">
-        <a href="index.html" class="btn btn-agency btn-agency-primary btn-sm text-white">Zur Startseite</a>
+    </div>
+  </div>
+
+  <!-- Consent Modal -->
+  <div id="consent-modal" class="consent-modal" role="dialog" aria-modal="true" aria-labelledby="consent-modal-title" hidden>
+    <div class="consent-modal__dialog">
+      <div class="consent-modal__header">
+        <h2 id="consent-modal-title" class="consent-modal__title">Cookie-Einstellungen</h2>
+        <button type="button" id="consent-modal-close" class="consent-modal__close" aria-label="Einstellungen schließen">
+          <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+          </svg>
+        </button>
       </div>
+      <div class="consent-modal__body">
+        <div class="consent-modal__group">
+          <div class="consent-modal__group-header">
+            <span class="consent-modal__group-title">Notwendig</span>
+            <span class="consent-modal__badge">Immer aktiv</span>
+          </div>
+          <p class="consent-modal__group-desc">Technisch erforderliche Funktionen wie das Speichern Ihrer Cookie-Präferenzen.</p>
+        </div>
+        <div class="consent-modal__group">
+          <div class="consent-modal__group-header">
+            <label class="consent-modal__group-title" for="consent-toggle-statistics">Statistiken</label>
+            <input type="checkbox" id="consent-toggle-statistics" class="consent-toggle" role="switch">
+          </div>
+          <p class="consent-modal__group-desc">Anonyme Nutzungsstatistiken zur Verbesserung unseres Angebots.</p>
+        </div>
+      </div>
+      <div class="consent-modal__footer">
+        <button type="button" id="consent-save-settings" class="btn btn--primary btn--sm">Einstellungen speichern</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="index.html" class="logo" aria-label="agentur dk – Startseite">
+        <span class="logo__mark" aria-hidden="true">dk</span>
+        <span class="logo__name">agentur dk</span>
+      </a>
+
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Menü öffnen">
+        <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor"/>
+        </svg>
+      </button>
+
+      <nav id="nav-menu" class="nav-primary" aria-label="Hauptnavigation">
+        <ul class="nav-primary__list" role="list">
+          <li class="nav-primary__item">
+            <a href="index.html" class="nav-primary__link">Start</a>
+          </li>
+          <li class="nav-primary__item">
+            <a href="bfsg-wordpress-website-agentur.html" class="nav-primary__link">Leistungen</a>
+          </li>
+          <li class="nav-primary__item">
+            <a href="projekte.html" class="nav-primary__link">Referenzen</a>
+          </li>
+          <li class="nav-primary__item">
+            <a href="barrierefreiheit.html" class="nav-primary__link" aria-current="page">Barrierefreiheit</a>
+          </li>
+          <li class="nav-primary__item nav-primary__item--cta">
+            <a href="index.html#contact" class="btn btn--primary btn--sm">Projekt anfragen</a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <main id="main-content" class="container py-5 my-5 bg-white">
-    <h1 class="display-4 mb-4">Erklärung zur Barrierefreiheit</h1>
-    <p class="mb-4">Wir bemühen uns, unsere Website konform zu EN 301 549 und WCAG 2.1 Level A/AA bereitzustellen.</p>
-    <section class="mb-5" aria-labelledby="feedback">
-      <h2 id="feedback">Feedback und Kontakt</h2>
-      <p>Wenn Ihnen Barrieren auffallen, melden Sie sich bitte unter <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a> oder telefonisch unter <a href="tel:+4922198655229">+49 221 986 55 229</a>.</p>
-    </section>
-    <section class="mb-5" aria-labelledby="prozess">
-      <h2 id="prozess">Prozess und Zuständigkeit</h2>
-      <p>Wir prüfen Meldungen zeitnah. Verantwortlich ist die agentur dk – design & kommunikation. Anpassungen werden priorisiert umgesetzt und dokumentiert.</p>
-    </section>
-    <section class="mb-5" aria-labelledby="stand">
-      <h2 id="stand">Stand der Erklärung</h2>
-      <p>Zuletzt aktualisiert: <time datetime="2025-02-19">19.02.2025</time>.</p>
-    </section>
+  <!-- Main Content -->
+  <main id="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header container">
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol class="breadcrumb__list">
+          <li><a href="index.html">Start</a></li>
+          <li><span aria-current="page">Barrierefreiheit</span></li>
+        </ol>
+      </nav>
+      <h1 class="page-header__title">Erklärung zur Barrierefreiheit</h1>
+      <p class="page-header__lead">Barrierefreiheitserklärung nach BFSG (Barrierefreiheitsstärkungsgesetz) und WCAG 2.2</p>
+    </div>
+
+    <div class="section container--narrow">
+
+      <!-- Konformitätsstatus -->
+      <section aria-labelledby="bf-konformitaet" data-reveal>
+        <h2 id="bf-konformitaet">1. Konformitätsstatus</h2>
+        <p>
+          Die Website <strong>dk-dk.de</strong> (agentur dk – design &amp; kommunikation) ist <strong>weitgehend konform</strong> mit den Anforderungen der
+          <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 Level AA sowie dem Europäischen Standard
+          <abbr title="European Norm">EN</abbr> 301 549 (Accessibility requirements for ICT products and services).
+        </p>
+        <p>
+          Die Konformität wurde durch eine interne Prüfung mit automatisierten Werkzeugen sowie einer manuellen Prüfung
+          (Tastaturnavigation, Screenreader-Test) erreicht.
+        </p>
+
+        <h3>Nicht barrierefreie Inhalte</h3>
+        <p>
+          Zum Zeitpunkt dieser Erklärung sind keine bekannten dauerhaften Nicht-Konformitäten vorhanden.
+          Neu eingepflegte Inhalte werden fortlaufend geprüft. Sollten Sie eine Barriere feststellen,
+          bitten wir Sie, uns über den unten genannten Kontaktweg zu informieren.
+        </p>
+      </section>
+
+      <!-- Erstellungsdatum -->
+      <section aria-labelledby="bf-datum" data-reveal>
+        <h2 id="bf-datum">2. Erstellungsdatum und letzte Prüfung</h2>
+        <dl>
+          <dt>Erstellt am:</dt>
+          <dd><time datetime="2026-08-16">16. August 2026</time></dd>
+          <dt>Letzte Prüfung:</dt>
+          <dd><time datetime="2026-08-16">16. August 2026</time></dd>
+        </dl>
+        <p>Diese Erklärung wird regelmäßig, mindestens einmal jährlich sowie bei wesentlichen inhaltlichen oder technischen Änderungen der Website aktualisiert.</p>
+      </section>
+
+      <!-- Geprüfte Bereiche -->
+      <section aria-labelledby="bf-bereiche" data-reveal>
+        <h2 id="bf-bereiche">3. Geprüfte Bereiche</h2>
+        <p>Die Prüfung umfasste alle zum Zeitpunkt der Erklärung veröffentlichten Seiten:</p>
+        <ul>
+          <li>Startseite (index.html) – vollständige Prüfung</li>
+          <li>Leistungsseite BFSG &amp; WordPress (bfsg-wordpress-website-agentur.html) – vollständige Prüfung</li>
+          <li>Referenzen &amp; Projekte (projekte.html) – vollständige Prüfung</li>
+          <li>Barrierefreiheitserklärung (barrierefreiheit.html) – vollständige Prüfung</li>
+          <li>Impressum (impressum.html) – vollständige Prüfung</li>
+          <li>Datenschutzerklärung (datenschutz.html) – vollständige Prüfung</li>
+        </ul>
+
+        <h3>Prüfmethodik</h3>
+        <ul>
+          <li>Automatisierter Scan mit Axe und Lighthouse (WCAG 2.2 AA)</li>
+          <li>Manuelle Tastaturnavigation (Tab, Shift+Tab, Enter, Space, Escape, Pfeiltasten)</li>
+          <li>Kontrastverhältnisse geprüft anhand der Design-Token-Dokumentation (mind. 4,5:1 für Normal-, 3:1 für Großtext)</li>
+          <li>Skip-Link und Landmark-Struktur verifiziert</li>
+          <li>Alle Formulare auf Label-Zuordnung und Fehlermeldungen geprüft</li>
+        </ul>
+      </section>
+
+      <!-- Kontakt / Barrieremeldung -->
+      <section aria-labelledby="bf-kontakt" data-reveal>
+        <h2 id="bf-kontakt">4. Kontakt bei Barrieren und Feedback</h2>
+        <p>
+          Wenn Sie Barrieren auf unserer Website feststellen oder Schwierigkeiten beim Zugang zu Inhalten haben,
+          bitten wir Sie um eine Rückmeldung. Wir werden Meldungen zeitnah prüfen und – wo technisch und
+          wirtschaftlich verhältnismäßig möglich – beheben.
+        </p>
+        <address>
+          <strong>agentur dk – design &amp; kommunikation</strong><br>
+          Daniel Kontelis<br>
+          Sachsenring 57<br>
+          D-50677 Köln<br>
+          E-Mail: <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a><br>
+          Telefon: <a href="tel:+4922198655229">+49 221 986 55 229</a><br>
+          Reaktionszeit: in der Regel innerhalb von 5 Werktagen
+        </address>
+      </section>
+
+      <!-- Durchsetzungsstelle -->
+      <section aria-labelledby="bf-durchsetzung" data-reveal>
+        <h2 id="bf-durchsetzung">5. Durchsetzungsstelle (BFSG / BGG)</h2>
+        <p>
+          Wenn Sie auf Ihre Rückmeldung keine zufriedenstellende Antwort erhalten haben, können Sie sich an
+          die zuständige Durchsetzungsstelle wenden:
+        </p>
+        <address>
+          <strong>Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen (LDI NRW)</strong><br>
+          Kavalleriestraße 2–4<br>
+          40213 Düsseldorf<br>
+          <a href="https://www.ldi.nrw.de" target="_blank" rel="noopener noreferrer">
+            https://www.ldi.nrw.de<span class="u-sr-only"> (öffnet in neuem Tab)</span>
+          </a>
+        </address>
+        <p>
+          Für öffentliche Stellen des Bundes ist die Schlichtungsstelle nach § 16 BGG zuständig:
+        </p>
+        <address>
+          <strong>Schlichtungsstelle nach dem Behindertengleichstellungsgesetz</strong><br>
+          beim Beauftragten der Bundesregierung für die Belange von Menschen mit Behinderungen<br>
+          Mauerstraße 53<br>
+          10117 Berlin<br>
+          <a href="https://www.schlichtungsstelle-bgg.de" target="_blank" rel="noopener noreferrer">
+            https://www.schlichtungsstelle-bgg.de<span class="u-sr-only"> (öffnet in neuem Tab)</span>
+          </a>
+        </address>
+      </section>
+
+      <!-- Technische Spezifikationen -->
+      <section aria-labelledby="bf-technik" data-reveal>
+        <h2 id="bf-technik">6. Technische Spezifikationen</h2>
+        <p>Die Barrierefreiheit dieser Website beruht auf folgenden Technologien:</p>
+        <ul>
+          <li>HTML 5 (semantisch strukturiert)</li>
+          <li>CSS 3 (Custom Properties, Grid, Flexbox)</li>
+          <li>JavaScript (ES2020+, vanilla, keine externen Abhängigkeiten)</li>
+          <li>WCAG 2.2 AA (Konformitätsziel)</li>
+          <li>EN 301 549 V3.2.1 (Europäischer Standard)</li>
+        </ul>
+        <p>
+          Die Website wurde mit den folgenden Browsern und Hilfstechnologien getestet:
+          Chrome 127 / NVDA, Firefox 128 / NVDA (Windows), Safari 17 / VoiceOver (macOS).
+        </p>
+      </section>
+
+    </div>
   </main>
 
-  <hr class="footer-gradient-divider" aria-hidden="true">
-  <footer id="prefooter" class="bg-dark text-white">
-    <div class="container py-5">
-      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <a href="index.html" class="text-decoration-none text-white" aria-label="agentur dk - Zur Startseite">
-          <span class="fw-bold" style="font-size: 1.25rem;">agentur dk</span>
-          <span class="d-block text-white-50" style="font-size: 0.9rem;">design & kommunikation</span>
-        </a>
-        <span class="social d-flex gap-3">
-          <a href="https://www.facebook.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Facebook (öffnet in neuem Fenster)"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="https://www.instagram.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Instagram (öffnet in neuem Fenster)"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-          <a href="https://twitter.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Twitter (öffnet in neuem Fenster)"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="https://www.xing.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Xing (öffnet in neuem Fenster)"><i class="fa fa-xing" aria-hidden="true"></i></a>
-          <a href="https://www.pinterest.de/" rel="me noopener" target="_blank" aria-label="agentur dk auf Pinterest (öffnet in neuem Fenster)"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-          <a href="https://www.linkedin.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf LinkedIn (öffnet in neuem Fenster)"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-          <a href="https://www.youtube.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf YouTube (öffnet in neuem Fenster)"><i class="fa fa-youtube" aria-hidden="true"></i></a>
-          <a href="https://open.spotify.com/" rel="me noopener" target="_blank" aria-label="agentur dk auf Spotify (öffnet in neuem Fenster)"><i class="fa fa-spotify" aria-hidden="true"></i></a>
-        </span>
-      </div>
-      <div class="kontakt footer-grid-3 mb-4">
-        <div class="col links">
-          <span>Sachsenring 57</span><br>
-          <span>D-50677 Köln</span>
+  <!-- Site Footer -->
+  <footer class="site-footer" aria-label="Seiten-Footer">
+    <div class="container">
+      <div class="site-footer__grid">
+
+        <div class="footer-col footer-col--about">
+          <a href="index.html" class="logo" aria-label="agentur dk – Startseite">
+            <span class="logo__mark" aria-hidden="true">dk</span>
+            <span class="logo__name">agentur dk</span>
+          </a>
+          <p class="footer-col__desc">Barrierefreie WordPress-Websites, SEO, GEO und Online-Marketing aus Köln. Persönlich, schnell, professionell.</p>
+          <address class="footer-col__address">
+            Sachsenring 57<br>D-50677 Köln
+          </address>
         </div>
-        <div class="col mitte">
-          <span>Tel. <a href="tel:+4922198655229" class="text-white text-decoration-underline" title="+49 221 98655229 anrufen">+49 221 98655229</a></span><br>
-          <span>Mo–Fr 09–18 Uhr</span>
-        </div>
-        <div class="col rechts">
-          <a href="mailto:mail@dk-dk.de" class="text-white text-decoration-underline" title="E-Mail an mail@dk-dk.de">mail@dk-dk.de</a><br>
-          <span>www.dk-dk.de</span>
-        </div>
-      </div>
-      <hr style="border-color: rgba(255,255,255,0.2);">
-      <div class="navs footer-grid-3 mb-4">
-        <div class="col links">
-          <nav aria-label="Gefragte Leistungen">
-            <span class="headline d-block fw-bold mb-2">Gefragte Leistungen</span>
-            <ul class="level_1" style="list-style: none; padding-left: 0;">
-              <li><a href="bfsg-wordpress-website-agentur.html" class="text-white-50 text-decoration-underline" title="BFSG WordPress Agentur">BFSG WordPress Agentur</a></li>
-              <li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="WordPress Relaunch">WordPress Relaunch</a></li>
-              <li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Landingpages">Landingpages</a></li>
-              <li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Performance & SEO">Performance & SEO</a></li>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Leistungen</h2>
+          <nav aria-label="Leistungen im Footer">
+            <ul class="footer-col__list" role="list">
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">BFSG &amp; Barrierefreiheit</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">WordPress-Entwicklung</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">SEO &amp; GEO</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">Online-Marketing</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">Corporate Design</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">KI-Services</a></li>
             </ul>
           </nav>
         </div>
-        <div class="col mitte">
-          <nav aria-label="Beliebte Tools">
-            <span class="headline d-block fw-bold mb-2">Beliebte Tools</span>
-            <ul class="level_1" style="list-style: none; padding-left: 0;">
-              <li><a href="bfsg-wordpress-website-agentur.html#faq" class="text-white-50 text-decoration-underline" title="FAQ">FAQ</a></li>
-              <li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="Prozess">Prozess</a></li>
-              <li><a href="bfsg-wordpress-website-agentur.html#bfsg-check" class="text-white-50 text-decoration-underline" title="BFSG Check">BFSG Check</a></li>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Unternehmen</h2>
+          <nav aria-label="Unternehmen im Footer">
+            <ul class="footer-col__list" role="list">
+              <li><a href="projekte.html" class="footer-col__link">Referenzen &amp; Projekte</a></li>
+              <li><a href="barrierefreiheit.html" class="footer-col__link">Barrierefreiheitserklärung</a></li>
+              <li><a href="impressum.html" class="footer-col__link">Impressum</a></li>
+              <li><a href="datenschutz.html" class="footer-col__link">Datenschutz</a></li>
             </ul>
           </nav>
         </div>
-        <div class="col rechts">
-          <nav aria-label="Neu im Lexikon">
-            <span class="headline d-block fw-bold mb-2">Neu im Lexikon</span>
-            <ul class="level_1" style="list-style: none; padding-left: 0;">
-              <li><a href="llms.txt" class="text-white-50 text-decoration-underline" title="llms.txt">llms.txt</a></li>
-              <li><a href="bfsg-wordpress-website-agentur.html" class="text-white-50 text-decoration-underline" title="Barrierefreiheitsstärkungsgesetz">Barrierefreiheitsstärkungsgesetz</a></li>
-              <li><a href="index.html#services" class="text-white-50 text-decoration-underline" title="WordPress Agentur">WordPress Agentur</a></li>
-            </ul>
-          </nav>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Kontakt</h2>
+          <ul class="footer-col__list" role="list">
+            <li><a href="mailto:mail@dk-dk.de" class="footer-col__link">mail@dk-dk.de</a></li>
+            <li><a href="tel:+4922198655229" class="footer-col__link">+49 221 986 55 229</a></li>
+            <li class="footer-col__text">Köln · Mo–Fr 9–18 Uhr</li>
+            <li><a href="https://www.linkedin.com/in/daniel-kontelis/" class="footer-col__link" rel="noopener noreferrer" target="_blank">LinkedIn<span class="u-sr-only"> (öffnet in neuem Tab)</span></a></li>
+            <li>
+              <button type="button" class="btn btn--ghost btn--sm" onclick="window.dkConsent &amp;&amp; window.dkConsent.revoke()">Cookie-Einstellungen</button>
+            </li>
+          </ul>
         </div>
+
       </div>
-      <div class="text-center text-white-50 small">
-        &copy; <script>document.write(new Date().getFullYear())</script> agentur dk &middot;
-        <a href="sitemap.xml" class="text-white-50 text-decoration-underline">Sitemap</a> &middot;
-        <a href="impressum.html" class="text-white-50 text-decoration-underline">Impressum</a>, 
-        <a href="datenschutz.html" class="text-white-50 text-decoration-underline">Datenschutz</a> &middot;
-        <a href="barrierefreiheit.html" class="text-white-50 text-decoration-underline">Barrierefreiheit</a>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <p class="site-footer__copy">&copy; <span id="copyright-year"></span> agentur dk – design &amp; kommunikation</p>
+        <ul class="site-footer__legal" role="list">
+          <li><a href="impressum.html">Impressum</a></li>
+          <li><a href="datenschutz.html">Datenschutz</a></li>
+          <li><a href="barrierefreiheit.html">Barrierefreiheit</a></li>
+        </ul>
       </div>
     </div>
   </footer>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const skip = document.querySelector('a[href="#main-content"]');
-      const main = document.getElementById('main-content');
-      if (skip && main) {
-        skip.addEventListener('click', function (e) {
-          e.preventDefault();
-          main.setAttribute('tabindex', '-1');
-          main.focus();
-        });
-      }
-    });
-  </script>
+
 </body>
 </html>

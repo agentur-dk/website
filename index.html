@@ -26,6 +26,8 @@
   <meta name="twitter:description" content="Ihre Agentur in Köln für barrierefreie WordPress-Websites (BFSG), SEO, GEO und Online-Marketing. Persönlich, schnell, professionell.">
   <meta name="twitter:image" content="https://dk-dk.de/images/og-image-website.png">
 
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
   <!-- Font Preloads -->
   <link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
@@ -239,10 +241,10 @@
             <a href="bfsg-wordpress-website-agentur.html" class="nav-primary__link">Leistungen</a>
           </li>
           <li class="nav-primary__item">
-            <a href="barrierefreiheit.html" class="nav-primary__link">Barrierefreiheit</a>
+            <a href="projekte.html" class="nav-primary__link">Referenzen</a>
           </li>
           <li class="nav-primary__item">
-            <a href="impressum.html" class="nav-primary__link">Impressum</a>
+            <a href="barrierefreiheit.html" class="nav-primary__link">Barrierefreiheit</a>
           </li>
           <li class="nav-primary__item nav-primary__item--cta">
             <a href="#contact" class="btn btn--primary btn--sm">Projekt anfragen</a>
@@ -843,80 +845,74 @@
 
   <!-- Site Footer -->
   <footer class="site-footer" aria-label="Seiten-Footer">
-    <div class="container site-footer__inner">
+    <div class="container">
+      <div class="site-footer__grid">
 
-      <!-- Col 1: Agentur -->
-      <div class="footer-col footer-col--about">
-        <a href="index.html" class="logo footer-logo" aria-label="agentur dk – Startseite">
-          <span class="logo__mark" aria-hidden="true">dk</span>
-          <span class="logo__name">agentur dk</span>
-        </a>
-        <p class="footer-col__desc">
-          Barrierefreie WordPress-Websites, SEO, GEO und Online-Marketing aus Köln. Persönlich, schnell, professionell.
-        </p>
-        <address class="footer-col__address">
-          Sachsenring 57<br>
-          D-50677 Köln
-        </address>
+        <!-- Col 1: Agentur -->
+        <div class="footer-col footer-col--about">
+          <a href="index.html" class="logo" aria-label="agentur dk – Startseite">
+            <span class="logo__mark" aria-hidden="true">dk</span>
+            <span class="logo__name">agentur dk</span>
+          </a>
+          <p class="footer-col__desc">Barrierefreie WordPress-Websites, SEO, GEO und Online-Marketing aus Köln. Persönlich, schnell, professionell.</p>
+          <address class="footer-col__address">
+            Sachsenring 57<br>D-50677 Köln
+          </address>
+        </div>
+
+        <!-- Col 2: Leistungen -->
+        <div class="footer-col">
+          <h2 class="footer-col__title">Leistungen</h2>
+          <nav aria-label="Leistungen im Footer">
+            <ul class="footer-col__list" role="list">
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">BFSG &amp; Barrierefreiheit</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">WordPress-Entwicklung</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">SEO &amp; GEO</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">Online-Marketing</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">Corporate Design</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">KI-Services</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Col 3: Unternehmen -->
+        <div class="footer-col">
+          <h2 class="footer-col__title">Unternehmen</h2>
+          <nav aria-label="Unternehmen im Footer">
+            <ul class="footer-col__list" role="list">
+              <li><a href="projekte.html" class="footer-col__link">Referenzen &amp; Projekte</a></li>
+              <li><a href="barrierefreiheit.html" class="footer-col__link">Barrierefreiheitserklärung</a></li>
+              <li><a href="impressum.html" class="footer-col__link">Impressum</a></li>
+              <li><a href="datenschutz.html" class="footer-col__link">Datenschutz</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Col 4: Kontakt -->
+        <div class="footer-col">
+          <h2 class="footer-col__title">Kontakt</h2>
+          <ul class="footer-col__list" role="list">
+            <li><a href="mailto:mail@dk-dk.de" class="footer-col__link">mail@dk-dk.de</a></li>
+            <li><a href="tel:+4922198655229" class="footer-col__link">+49 221 986 55 229</a></li>
+            <li class="footer-col__text">Köln · Mo–Fr 9–18 Uhr</li>
+            <li><a href="https://www.linkedin.com/in/daniel-kontelis/" class="footer-col__link" rel="noopener noreferrer" target="_blank">LinkedIn<span class="u-sr-only"> (öffnet in neuem Tab)</span></a></li>
+            <li>
+              <button type="button" class="btn btn--ghost btn--sm" onclick="window.dkConsent &amp;&amp; window.dkConsent.revoke()">Cookie-Einstellungen</button>
+            </li>
+          </ul>
+        </div>
+
       </div>
-
-      <!-- Col 2: Leistungen -->
-      <div class="footer-col">
-        <h2 class="footer-col__title">Leistungen</h2>
-        <ul class="footer-col__list" role="list">
-          <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">BFSG &amp; WordPress</a></li>
-          <li><a href="#services" class="footer-col__link">Alle Leistungen</a></li>
-          <li><a href="barrierefreiheit.html" class="footer-col__link">Barrierefreiheit</a></li>
-        </ul>
-      </div>
-
-      <!-- Col 3: Rechtliches -->
-      <div class="footer-col">
-        <h2 class="footer-col__title">Rechtliches</h2>
-        <ul class="footer-col__list" role="list">
-          <li><a href="impressum.html" class="footer-col__link">Impressum</a></li>
-          <li><a href="datenschutz.html" class="footer-col__link">Datenschutz</a></li>
-          <li><a href="barrierefreiheit.html" class="footer-col__link">Barrierefreiheitserklärung</a></li>
-        </ul>
-      </div>
-
-      <!-- Col 4: Kontakt -->
-      <div class="footer-col">
-        <h2 class="footer-col__title">Kontakt</h2>
-        <ul class="footer-col__list" role="list">
-          <li>
-            <a href="tel:+4922198655229" class="footer-col__link">+49 221 986 55 229</a>
-          </li>
-          <li>
-            <a href="mailto:mail@dk-dk.de" class="footer-col__link">mail@dk-dk.de</a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/in/daniel-kontelis/" class="footer-col__link" rel="noopener noreferrer" target="_blank">LinkedIn<span class="u-sr-only"> (öffnet in neuem Tab)</span></a>
-          </li>
-          <li>
-            <button
-              type="button"
-              class="btn btn--ghost btn--sm footer-col__revoke"
-              onclick="window.dkConsent &amp;&amp; window.dkConsent.revoke()"
-            >
-              Datenschutz widerrufen
-            </button>
-          </li>
-        </ul>
-      </div>
-
     </div>
 
     <!-- Footer Bottom -->
     <div class="site-footer__bottom">
       <div class="container site-footer__bottom-inner">
-        <p class="site-footer__copyright">
-          &copy; <span id="copyright-year"></span> agentur dk
-        </p>
+        <p class="site-footer__copy">&copy; <span id="copyright-year"></span> agentur dk – design &amp; kommunikation</p>
         <ul class="site-footer__legal" role="list">
-          <li><a href="impressum.html" class="footer-col__link">Impressum</a></li>
-          <li><a href="datenschutz.html" class="footer-col__link">Datenschutz</a></li>
-          <li><a href="barrierefreiheit.html" class="footer-col__link">Barrierefreiheit</a></li>
+          <li><a href="impressum.html">Impressum</a></li>
+          <li><a href="datenschutz.html">Datenschutz</a></li>
+          <li><a href="barrierefreiheit.html">Barrierefreiheit</a></li>
         </ul>
       </div>
     </div>

@@ -18,6 +18,8 @@
   <meta property="og:locale" content="de_DE">
   <meta property="og:site_name" content="agentur dk">
 
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
   <link rel="preload" href="fonts/roboto-mono-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/roboto-mono-v31-latin-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
@@ -70,21 +72,34 @@
   <!-- Site Header -->
   <header class="site-header">
     <div class="container site-header__inner">
-      <a class="site-header__logo" href="index.html" aria-label="agentur dk – Zur Startseite">
-        <span class="site-header__logo-name">agentur dk</span>
-        <span class="site-header__logo-tagline">design &amp; kommunikation</span>
+      <a href="index.html" class="logo" aria-label="agentur dk – Startseite">
+        <span class="logo__mark" aria-hidden="true">dk</span>
+        <span class="logo__name">agentur dk</span>
       </a>
-      <button class="site-header__nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Navigation öffnen">
+
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Menü öffnen">
         <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24">
           <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor"/>
         </svg>
       </button>
-      <nav id="primary-nav" class="site-header__nav" aria-label="Hauptnavigation">
-        <ul class="site-header__nav-list" role="list">
-          <li><a href="index.html">Start</a></li>
-          <li><a href="bfsg-wordpress-website-agentur.html">Leistungen</a></li>
-          <li><a href="barrierefreiheit.html">Barrierefreiheit</a></li>
-          <li><a href="impressum.html">Impressum</a></li>
+
+      <nav id="nav-menu" class="nav-primary" aria-label="Hauptnavigation">
+        <ul class="nav-primary__list" role="list">
+          <li class="nav-primary__item">
+            <a href="index.html" class="nav-primary__link">Start</a>
+          </li>
+          <li class="nav-primary__item">
+            <a href="bfsg-wordpress-website-agentur.html" class="nav-primary__link">Leistungen</a>
+          </li>
+          <li class="nav-primary__item">
+            <a href="projekte.html" class="nav-primary__link">Referenzen</a>
+          </li>
+          <li class="nav-primary__item">
+            <a href="barrierefreiheit.html" class="nav-primary__link">Barrierefreiheit</a>
+          </li>
+          <li class="nav-primary__item nav-primary__item--cta">
+            <a href="index.html#contact" class="btn btn--primary btn--sm">Projekt anfragen</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -175,61 +190,73 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container site-footer__grid">
+  <!-- Site Footer -->
+  <footer class="site-footer" aria-label="Seiten-Footer">
+    <div class="container">
+      <div class="site-footer__grid">
 
-      <div class="site-footer__col">
-        <h2 class="site-footer__heading">agentur dk</h2>
-        <address class="site-footer__address">
-          Sachsenring 57<br>
-          D-50677 Köln
-        </address>
-        <p class="site-footer__desc">Design &amp; Kommunikation aus Köln – barrierefrei, professionell, nachhaltig.</p>
+        <div class="footer-col footer-col--about">
+          <a href="index.html" class="logo" aria-label="agentur dk – Startseite">
+            <span class="logo__mark" aria-hidden="true">dk</span>
+            <span class="logo__name">agentur dk</span>
+          </a>
+          <p class="footer-col__desc">Barrierefreie WordPress-Websites, SEO, GEO und Online-Marketing aus Köln. Persönlich, schnell, professionell.</p>
+          <address class="footer-col__address">
+            Sachsenring 57<br>D-50677 Köln
+          </address>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Leistungen</h2>
+          <nav aria-label="Leistungen im Footer">
+            <ul class="footer-col__list" role="list">
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">BFSG &amp; Barrierefreiheit</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">WordPress-Entwicklung</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">SEO &amp; GEO</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">Online-Marketing</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">Corporate Design</a></li>
+              <li><a href="bfsg-wordpress-website-agentur.html" class="footer-col__link">KI-Services</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Unternehmen</h2>
+          <nav aria-label="Unternehmen im Footer">
+            <ul class="footer-col__list" role="list">
+              <li><a href="projekte.html" class="footer-col__link">Referenzen &amp; Projekte</a></li>
+              <li><a href="barrierefreiheit.html" class="footer-col__link">Barrierefreiheitserklärung</a></li>
+              <li><a href="impressum.html" class="footer-col__link">Impressum</a></li>
+              <li><a href="datenschutz.html" class="footer-col__link">Datenschutz</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="footer-col__title">Kontakt</h2>
+          <ul class="footer-col__list" role="list">
+            <li><a href="mailto:mail@dk-dk.de" class="footer-col__link">mail@dk-dk.de</a></li>
+            <li><a href="tel:+4922198655229" class="footer-col__link">+49 221 986 55 229</a></li>
+            <li class="footer-col__text">Köln · Mo–Fr 9–18 Uhr</li>
+            <li><a href="https://www.linkedin.com/in/daniel-kontelis/" class="footer-col__link" rel="noopener noreferrer" target="_blank">LinkedIn<span class="u-sr-only"> (öffnet in neuem Tab)</span></a></li>
+            <li>
+              <button type="button" class="btn btn--ghost btn--sm" onclick="window.dkConsent &amp;&amp; window.dkConsent.revoke()">Cookie-Einstellungen</button>
+            </li>
+          </ul>
+        </div>
+
       </div>
+    </div>
 
-      <div class="site-footer__col">
-        <h2 class="site-footer__heading">Leistungen</h2>
-        <ul class="site-footer__links" role="list">
-          <li><a href="bfsg-wordpress-website-agentur.html">BFSG WordPress Agentur</a></li>
-          <li><a href="index.html#services">Alle Leistungen</a></li>
-        </ul>
-      </div>
-
-      <div class="site-footer__col">
-        <h2 class="site-footer__heading">Rechtliches</h2>
-        <ul class="site-footer__links" role="list">
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <p class="site-footer__copy">&copy; <span id="copyright-year"></span> agentur dk – design &amp; kommunikation</p>
+        <ul class="site-footer__legal" role="list">
           <li><a href="impressum.html">Impressum</a></li>
           <li><a href="datenschutz.html">Datenschutz</a></li>
           <li><a href="barrierefreiheit.html">Barrierefreiheit</a></li>
         </ul>
       </div>
-
-      <div class="site-footer__col">
-        <h2 class="site-footer__heading">Kontakt</h2>
-        <ul class="site-footer__links" role="list">
-          <li><a href="tel:+4922198655229">+49 221 986 55 229</a></li>
-          <li><a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a></li>
-          <li><a href="https://www.linkedin.com/in/daniel-kontelis/" target="_blank" rel="noopener noreferrer me">LinkedIn</a></li>
-          <li>
-            <button type="button" onclick="window.dkConsent&&window.dkConsent.revoke()" class="site-footer__consent-revoke">
-              Datenschutz widerrufen
-            </button>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-
-    <div class="site-footer__bottom container">
-      <p class="site-footer__copyright">
-        &copy; <span id="copyright-year"></span> agentur dk
-      </p>
-      <nav aria-label="Rechtliche Links" class="site-footer__legal-nav">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="barrierefreiheit.html">Barrierefreiheit</a>
-      </nav>
     </div>
   </footer>
 
