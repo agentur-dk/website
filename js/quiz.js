@@ -1,7 +1,8 @@
 /* =============================================================================
-   quiz.js — Bedarfs-Check-Quiz (Startseite Hero)
+   quiz.js — Bedarfs-Check-Quiz als KI-Chat (Startseite Hero)
    Vanilla ES2020, IIFE, no dependencies, no page reload.
-   Ablauf: Frage 1 (Thema, 5 Optionen) → Frage 2 (Dringlichkeit, 2 Optionen) → Ergebnis
+   Ablauf: KI-Frage 1 (Thema) → User-Bubble → Tipp-Indikator →
+           KI-Frage 2 (Dringlichkeit) → User-Bubble → Tipp-Indikator → Ergebnis
    ============================================================================= */
 
 (function initQuiz() {
@@ -41,7 +42,6 @@
     },
   };
 
-  // Reihenfolge & Labels der Frage-1-Optionen
   const TOPICS = [
     { key: 'mehr_umsatz',  label: 'Mehr Umsatz & Anfragen' },
     { key: 'mitarbeiter',  label: 'Neue Mitarbeiter gewinnen' },
@@ -51,162 +51,192 @@
   ];
 
   // ---------------------------------------------------------------------------
-  // Interne State
+  // State & DOM-Refs
   // ---------------------------------------------------------------------------
   let selectedTopic = null;
 
-  const body       = widget.querySelector('.quiz-widget__body');
-  const liveRegion = widget.querySelector('.quiz-widget__live');
+  const chatLog      = widget.querySelector('.quiz-chat__log');
+  const liveRegion   = widget.querySelector('.quiz-widget__live');
+  const restartBtn   = widget.querySelector('.quiz-chat__restart-btn');
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const TYPING_DELAY   = 700; // ms
 
   // ---------------------------------------------------------------------------
   // Hilfsfunktionen
   // ---------------------------------------------------------------------------
   function announce(msg) {
-    if (liveRegion) {
-      // Kurzer Reset damit aria-live auch bei gleicher Nachricht triggert
-      liveRegion.textContent = '';
-      requestAnimationFrame(function () { liveRegion.textContent = msg; });
-    }
-  }
-
-  function focusHeading(container) {
-    const h = container.querySelector('[tabindex="-1"]');
-    if (h) h.focus({ preventScroll: true });
+    if (!liveRegion) return;
+    liveRegion.textContent = '';
+    requestAnimationFrame(function () { liveRegion.textContent = msg; });
   }
 
   function track(obj) {
     if (window.dataLayer) window.dataLayer.push(obj);
   }
 
+  function scrollLog() {
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Bubble-Renderer
+  // ---------------------------------------------------------------------------
+  function appendAIBubble(text) {
+    const el = document.createElement('div');
+    el.className = 'chat-msg chat-msg--ai';
+    el.textContent = text;
+    chatLog.appendChild(el);
+    scrollLog();
+    return el;
+  }
+
+  function appendUserBubble(text) {
+    const el = document.createElement('div');
+    el.className = 'chat-msg chat-msg--user';
+    el.textContent = text;
+    chatLog.appendChild(el);
+    scrollLog();
+    return el;
+  }
+
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'chat-msg chat-msg--ai chat-typing';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<span></span><span></span><span></span>';
+    chatLog.appendChild(el);
+    scrollLog();
+    return function removeTyping() {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    };
+  }
+
+  // Hängt Quick-Reply-Chips an; gibt den ersten Button zurück (für Fokus-Management).
+  function appendQuickReplies(groupLabel, options) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'chat-replies';
+
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'chat-replies__fieldset';
+
+    const legend = document.createElement('legend');
+    legend.className = 'u-sr-only';
+    legend.textContent = groupLabel;
+    fieldset.appendChild(legend);
+
+    options.forEach(function (opt) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quiz-option';
+      btn.setAttribute('aria-pressed', 'false');
+      btn.textContent = opt.label;
+
+      btn.addEventListener('click', function () {
+        // Alle Chips deaktivieren und gewählten markieren
+        fieldset.querySelectorAll('.quiz-option').forEach(function (b) {
+          b.setAttribute('aria-pressed', 'false');
+          b.disabled = true;
+        });
+        btn.setAttribute('aria-pressed', 'true');
+        opt.onSelect();
+      });
+
+      fieldset.appendChild(btn);
+    });
+
+    wrapper.appendChild(fieldset);
+    chatLog.appendChild(wrapper);
+    scrollLog();
+
+    return fieldset.querySelector('.quiz-option');
+  }
+
   // ---------------------------------------------------------------------------
   // Schritt 1: Thema wählen
   // ---------------------------------------------------------------------------
   function renderStep1(initial) {
-    body.innerHTML = '';
+    chatLog.innerHTML = '';
+    selectedTopic = null;
+    delete widget.dataset.quizTopic;
+    delete widget.dataset.quizUrgency;
 
-    const section = document.createElement('section');
-    section.setAttribute('aria-label', 'Frage 1 von 2');
+    appendAIBubble('Was brauchst du am dringendsten?');
 
-    // Überschrift (Fokus-Ziel nach Neu-Starten)
-    const heading = document.createElement('h2');
-    heading.className = 'quiz-widget__question';
-    heading.setAttribute('tabindex', '-1');
-    heading.textContent = 'Was brauchst du am dringendsten?';
-    section.appendChild(heading);
+    const options = TOPICS.map(function (topic) {
+      return {
+        label: topic.label,
+        onSelect: function () {
+          selectedTopic = topic.key;
+          widget.dataset.quizTopic = topic.key;
+          track({ event: 'quiz_answer', question: 'need', answer: topic.key });
 
-    // Fieldset gruppiert die Optionen semantisch
-    const fieldset = document.createElement('fieldset');
-    fieldset.style.border = 'none';
-    fieldset.style.padding = '0';
-    fieldset.style.margin  = '0';
+          appendUserBubble(topic.label);
 
-    const legend = document.createElement('legend');
-    legend.className = 'u-sr-only';
-    legend.textContent = 'Was brauchst du am dringendsten?';
-    fieldset.appendChild(legend);
-
-    const grid = document.createElement('div');
-    grid.className = 'quiz-options';
-
-    TOPICS.forEach(function (topic) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'quiz-option';
-      btn.dataset.quizTopic = topic.key;
-      btn.setAttribute('aria-pressed', 'false');
-      btn.textContent = topic.label;
-
-      btn.addEventListener('click', function () {
-        selectedTopic = topic.key;
-        widget.dataset.quizTopic = topic.key;
-
-        // Visuelles Feedback: pressed-State kurz sichtbar lassen
-        grid.querySelectorAll('.quiz-option').forEach(function (b) {
-          b.setAttribute('aria-pressed', 'false');
-          b.classList.remove('is-selected');
-        });
-        btn.setAttribute('aria-pressed', 'true');
-        btn.classList.add('is-selected');
-
-        track({ event: 'quiz_answer', question: 'need', answer: topic.key });
-
-        setTimeout(renderStep2, 180);
-      });
-
-      grid.appendChild(btn);
+          if (prefersReduced) {
+            renderStep2();
+          } else {
+            const removeTyping = showTyping();
+            setTimeout(function () {
+              removeTyping();
+              renderStep2();
+            }, TYPING_DELAY);
+          }
+        },
+      };
     });
 
-    fieldset.appendChild(grid);
-    section.appendChild(fieldset);
-    body.appendChild(section);
+    const firstBtn = appendQuickReplies('Was brauchst du am dringendsten?', options);
 
     // Fokus nur bei Nutzeraktion (Neu starten), nicht beim initialen Laden
-    if (!initial) { focusHeading(section); }
+    if (!initial) {
+      firstBtn.focus({ preventScroll: true });
+    }
   }
 
   // ---------------------------------------------------------------------------
   // Schritt 2: Dringlichkeit wählen
   // ---------------------------------------------------------------------------
   function renderStep2() {
-    body.innerHTML = '';
     announce('Frage 2 von 2');
 
-    const section = document.createElement('section');
-    section.setAttribute('aria-label', 'Frage 2 von 2');
-
-    const heading = document.createElement('h2');
-    heading.className = 'quiz-widget__question';
-    heading.setAttribute('tabindex', '-1');
-    heading.textContent = 'Wie schnell willst du loslegen?';
-    section.appendChild(heading);
-
-    const fieldset = document.createElement('fieldset');
-    fieldset.style.border = 'none';
-    fieldset.style.padding = '0';
-    fieldset.style.margin  = '0';
-
-    const legend = document.createElement('legend');
-    legend.className = 'u-sr-only';
-    legend.textContent = 'Wie schnell willst du loslegen?';
-    fieldset.appendChild(legend);
-
-    const grid = document.createElement('div');
-    grid.className = 'quiz-options quiz-options--2col';
+    appendAIBubble('Wie schnell willst du loslegen?');
 
     const urgencies = [
       { key: 'sofort',      label: 'Sofort loslegen' },
       { key: 'informieren', label: 'Erstmal informieren' },
     ];
 
-    urgencies.forEach(function (u) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'quiz-option';
-      btn.dataset.quizUrgency = u.key;
-      btn.setAttribute('aria-pressed', 'false');
-      btn.textContent = u.label;
+    const options = urgencies.map(function (u) {
+      return {
+        label: u.label,
+        onSelect: function () {
+          widget.dataset.quizUrgency = u.key;
 
-      btn.addEventListener('click', function () {
-        widget.dataset.quizUrgency = u.key;
+          const target = u.key === 'sofort'
+            ? '#contact'
+            : QUIZ_MAP[selectedTopic].href;
 
-        const target = u.key === 'sofort'
-          ? '#contact'
-          : QUIZ_MAP[selectedTopic].href;
+          track({ event: 'quiz_answer',   question: 'urgency', answer: u.key });
+          track({ event: 'quiz_complete', topic: selectedTopic, target: target });
 
-        track({ event: 'quiz_answer',   question: 'urgency', answer: u.key });
-        track({ event: 'quiz_complete', topic: selectedTopic, target: target });
+          appendUserBubble(u.label);
 
-        renderResult(u.key);
-      });
-
-      grid.appendChild(btn);
+          if (prefersReduced) {
+            renderResult(u.key);
+          } else {
+            const removeTyping = showTyping();
+            setTimeout(function () {
+              removeTyping();
+              renderResult(u.key);
+            }, TYPING_DELAY);
+          }
+        },
+      };
     });
 
-    fieldset.appendChild(grid);
-    section.appendChild(fieldset);
-    body.appendChild(section);
-
-    focusHeading(section);
+    const firstBtn = appendQuickReplies('Wie schnell willst du loslegen?', options);
+    firstBtn.focus({ preventScroll: true });
   }
 
   // ---------------------------------------------------------------------------
@@ -214,27 +244,29 @@
   // ---------------------------------------------------------------------------
   function renderResult(urgency) {
     const service = QUIZ_MAP[selectedTopic];
-    body.innerHTML = '';
     announce('Ergebnis: ' + service.title);
 
-    const result = document.createElement('div');
-    result.className = 'quiz-result';
+    // Ergebnis-Bubble (KI-Seite)
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-msg chat-msg--ai chat-msg--result';
 
-    const heading = document.createElement('h2');
-    heading.className = 'quiz-result__title';
-    heading.setAttribute('tabindex', '-1');
-    heading.textContent = 'Das passt zu dir: ' + service.title;
-    result.appendChild(heading);
+    const titleEl = document.createElement('p');
+    titleEl.className = 'chat-result__title';
+    titleEl.setAttribute('tabindex', '-1');
+    titleEl.textContent = 'Das passt zu dir: ' + service.title;
 
-    const blurb = document.createElement('p');
-    blurb.className = 'quiz-result__blurb';
-    blurb.textContent = service.blurb;
-    result.appendChild(blurb);
+    const blurbEl = document.createElement('p');
+    blurbEl.className = 'chat-result__blurb';
+    blurbEl.textContent = service.blurb;
 
+    bubble.appendChild(titleEl);
+    bubble.appendChild(blurbEl);
+    chatLog.appendChild(bubble);
+
+    // Aktions-Buttons unter der Bubble
     const actions = document.createElement('div');
-    actions.className = 'quiz-result__actions';
+    actions.className = 'chat-result__actions';
 
-    // Primär-Button: abhängig von Dringlichkeit
     const primaryBtn = document.createElement('a');
     primaryBtn.className = 'btn btn--primary';
     if (urgency === 'sofort') {
@@ -245,7 +277,6 @@
       primaryBtn.textContent = 'Mehr erfahren';
     }
 
-    // Sekundär-Button: die jeweils andere Option
     const secondaryBtn = document.createElement('a');
     secondaryBtn.className = 'btn btn--outline';
     if (urgency === 'sofort') {
@@ -256,29 +287,23 @@
       secondaryBtn.textContent = 'Projekt anfragen';
     }
 
-    // Neu-Starten-Button
-    const restartBtn = document.createElement('button');
-    restartBtn.type = 'button';
-    restartBtn.className = 'btn btn--ghost';
-    restartBtn.textContent = 'Neu starten';
-    restartBtn.addEventListener('click', function () {
-      selectedTopic = null;
-      delete widget.dataset.quizTopic;
-      delete widget.dataset.quizUrgency;
-      renderStep1();
-    });
-
     actions.appendChild(primaryBtn);
     actions.appendChild(secondaryBtn);
-    actions.appendChild(restartBtn);
-    result.appendChild(actions);
-    body.appendChild(result);
+    chatLog.appendChild(actions);
 
-    focusHeading(result);
+    scrollLog();
+    titleEl.focus({ preventScroll: true });
   }
 
   // ---------------------------------------------------------------------------
-  // Start
+  // Neu starten (Header-Button)
+  // ---------------------------------------------------------------------------
+  restartBtn.addEventListener('click', function () {
+    renderStep1(false);
+  });
+
+  // ---------------------------------------------------------------------------
+  // Start — kein initialer Fokus, kein Auto-Scroll
   // ---------------------------------------------------------------------------
   renderStep1(true);
 })();

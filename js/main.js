@@ -464,13 +464,15 @@
     });
   }
 
-  function showStep(index) {
+  function showStep(index, focusFirstField) {
     if (index < 0 || index >= steps.length) return;
     currentStep = index;
     steps.forEach(function (step, i) { step.hidden = i !== index; });
     updateIndicators();
-    const firstField = steps[index].querySelector('input, textarea, select');
-    if (firstField) firstField.focus({ preventScroll: true });
+    if (focusFirstField !== false) {
+      const firstField = steps[index].querySelector('input, textarea, select');
+      if (firstField) firstField.focus({ preventScroll: true });
+    }
   }
 
   // Validierung bei blur/input (nur Felder des aktiven Schritts)
@@ -514,7 +516,7 @@
       });
     });
 
-    showStep(0);
+    showStep(0, false);
   }
 
   function isLikelyBot() {
@@ -540,7 +542,7 @@
         statusEl.hidden = false;
       }
       form.reset();
-      if (isMultiStep) showStep(0);
+      if (isMultiStep) showStep(0, false);
       return;
     }
 
@@ -577,7 +579,7 @@
           statusEl.focus();
         }
         form.reset();
-        if (isMultiStep) showStep(0);
+        if (isMultiStep) showStep(0, false);
       } else {
         throw new Error('Server error');
       }
