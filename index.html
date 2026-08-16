@@ -215,9 +215,9 @@
   <!-- Site Header -->
   <header class="site-header">
     <div class="container site-header__inner">
-      <a href="index.html" class="logo" aria-label="agentur dk – Startseite">
-        <span class="logo__mark" aria-hidden="true">dk</span>
-        <span class="logo__name">agentur dk</span>
+      <a href="index.html" class="site-header__logo" aria-label="agentur dk – Zur Startseite">
+        <span class="site-header__logo-name">agentur dk</span>
+        <span class="site-header__logo-tagline">design &amp; kommunikation</span>
       </a>
 
       <button
@@ -714,115 +714,125 @@
             <!-- Honeypot -->
             <input type="text" name="website" class="u-sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-            <!-- Name + Firma -->
-            <div class="form-row">
+            <!-- Fortschrittsanzeige -->
+            <ol class="form-steps" aria-label="Formular-Fortschritt">
+              <li class="form-steps__item is-active" data-step-indicator="1">
+                <span class="form-steps__number" aria-hidden="true">1</span> Kontakt
+              </li>
+              <li class="form-steps__item" data-step-indicator="2">
+                <span class="form-steps__number" aria-hidden="true">2</span> Anliegen
+              </li>
+              <li class="form-steps__item" data-step-indicator="3">
+                <span class="form-steps__number" aria-hidden="true">3</span> Absenden
+              </li>
+            </ol>
+
+            <!-- Schritt 1: Kontaktdaten -->
+            <div class="form-step" data-step="1">
+              <h3 class="form-step__title">Ihre Kontaktdaten</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name" class="form-label">Name <span class="form-required" aria-hidden="true">*</span></label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-control"
+                    required
+                    minlength="2"
+                    autocomplete="name"
+                    aria-required="true"
+                    aria-describedby="name-error"
+                  >
+                  <span id="name-error" class="form-error" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="company" class="form-label">Firma <span class="form-optional">(optional)</span></label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    class="form-control"
+                    autocomplete="organization"
+                  >
+                  <span id="company-error" class="form-error" aria-live="polite"></span>
+                </div>
+              </div>
               <div class="form-group">
-                <label for="name" class="form-label">Name <span class="form-required" aria-hidden="true">*</span></label>
+                <label for="email" class="form-label">E-Mail <span class="form-required" aria-hidden="true">*</span></label>
                 <input
-                  type="text"
-                  id="name"
-                  name="name"
+                  type="email"
+                  id="email"
+                  name="email"
                   class="form-control"
                   required
-                  minlength="2"
-                  autocomplete="name"
+                  autocomplete="email"
                   aria-required="true"
-                  aria-describedby="name-error"
+                  aria-describedby="email-error"
                 >
-                <span id="name-error" class="form-error" aria-live="polite"></span>
+                <span id="email-error" class="form-error" aria-live="polite"></span>
+              </div>
+              <div class="form-step__nav">
+                <span aria-hidden="true"></span>
+                <button type="button" class="btn btn--primary" data-step-next>Weiter</button>
+              </div>
+            </div>
+
+            <!-- Schritt 2: Anliegen -->
+            <div class="form-step" data-step="2" hidden>
+              <h3 class="form-step__title">Ihr Anliegen</h3>
+              <div class="form-group">
+                <label for="subject" class="form-label">Betreff <span class="form-required" aria-hidden="true">*</span></label>
+                <select
+                  id="subject"
+                  name="subject"
+                  class="form-control form-select"
+                  required
+                  aria-required="true"
+                  aria-describedby="subject-error"
+                >
+                  <option value="" disabled selected>Bitte wählen…</option>
+                  <option value="Barrierefreie Website">Barrierefreie Website</option>
+                  <option value="WordPress-Relaunch">WordPress-Relaunch</option>
+                  <option value="SEO/GEO">SEO/GEO</option>
+                  <option value="Sonstiges">Sonstiges</option>
+                </select>
+                <span id="subject-error" class="form-error" aria-live="polite"></span>
               </div>
               <div class="form-group">
-                <label for="company" class="form-label">Firma <span class="form-optional">(optional)</span></label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  class="form-control"
-                  autocomplete="organization"
-                >
-                <span id="company-error" class="form-error" aria-live="polite"></span>
+                <label for="message" class="form-label">Nachricht <span class="form-required" aria-hidden="true">*</span></label>
+                <textarea
+                  id="message"
+                  name="message"
+                  class="form-control form-textarea"
+                  required
+                  minlength="20"
+                  rows="6"
+                  aria-required="true"
+                  aria-describedby="message-error"
+                ></textarea>
+                <span id="message-error" class="form-error" aria-live="polite"></span>
+              </div>
+              <div class="form-step__nav">
+                <button type="button" class="btn btn--ghost" data-step-prev>Zurück</button>
+                <button type="button" class="btn btn--primary" data-step-next>Weiter</button>
               </div>
             </div>
 
-            <!-- Email -->
-            <div class="form-group">
-              <label for="email" class="form-label">E-Mail <span class="form-required" aria-hidden="true">*</span></label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                class="form-control"
-                required
-                autocomplete="email"
-                aria-required="true"
-                aria-describedby="email-error"
-              >
-              <span id="email-error" class="form-error" aria-live="polite"></span>
+            <!-- Schritt 3: Absenden -->
+            <div class="form-step" data-step="3" hidden>
+              <h3 class="form-step__title">Absenden</h3>
+              <p class="form-privacy">
+                Bitte beachte unsere <a href="datenschutz.html">Datenschutzerklärung</a>.
+              </p>
+              <div class="form-step__nav">
+                <button type="button" class="btn btn--ghost" data-step-prev>Zurück</button>
+                <button type="submit" class="btn btn--primary">Anfrage senden</button>
+              </div>
             </div>
-
-            <!-- Betreff -->
-            <div class="form-group">
-              <label for="subject" class="form-label">Betreff <span class="form-required" aria-hidden="true">*</span></label>
-              <select
-                id="subject"
-                name="subject"
-                class="form-control form-select"
-                required
-                aria-required="true"
-                aria-describedby="subject-error"
-              >
-                <option value="" disabled selected>Bitte wählen…</option>
-                <option value="Barrierefreie Website">Barrierefreie Website</option>
-                <option value="WordPress-Relaunch">WordPress-Relaunch</option>
-                <option value="SEO/GEO">SEO/GEO</option>
-                <option value="Sonstiges">Sonstiges</option>
-              </select>
-              <span id="subject-error" class="form-error" aria-live="polite"></span>
-            </div>
-
-            <!-- Nachricht -->
-            <div class="form-group">
-              <label for="message" class="form-label">Nachricht <span class="form-required" aria-hidden="true">*</span></label>
-              <textarea
-                id="message"
-                name="message"
-                class="form-control form-textarea"
-                required
-                minlength="20"
-                rows="6"
-                aria-required="true"
-                aria-describedby="message-error"
-              ></textarea>
-              <span id="message-error" class="form-error" aria-live="polite"></span>
-            </div>
-
-            <!-- DSGVO Checkbox -->
-            <div class="form-group form-group--checkbox">
-              <input
-                type="checkbox"
-                id="privacy"
-                name="privacy"
-                class="form-checkbox"
-                required
-                aria-required="true"
-                aria-describedby="privacy-error"
-              >
-              <label for="privacy" class="form-label form-label--checkbox">
-                Ich habe die <a href="datenschutz.html">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Bearbeitung meiner Anfrage zu. <span class="form-required" aria-hidden="true">*</span>
-              </label>
-              <span id="privacy-error" class="form-error" aria-live="polite"></span>
-            </div>
-
-            <!-- Privacy Notice -->
-            <p class="form-privacy">
-              <small>Pflichtfelder sind mit <span aria-hidden="true">*</span><span class="u-sr-only">einem Sternchen</span> markiert. Ihre Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage genutzt und nicht an Dritte weitergegeben.</small>
-            </p>
 
             <!-- Status -->
             <div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
-
-            <!-- Submit -->
-            <button type="submit" class="btn btn--primary btn--full">Anfrage senden</button>
           </form>
         </div>
 
@@ -850,10 +860,10 @@
 
         <!-- Col 1: Agentur -->
         <div class="footer-col footer-col--about">
-          <a href="index.html" class="logo" aria-label="agentur dk – Startseite">
-            <span class="logo__mark" aria-hidden="true">dk</span>
-            <span class="logo__name">agentur dk</span>
-          </a>
+          <a href="index.html" class="site-header__logo" aria-label="agentur dk – Zur Startseite">
+  <span class="site-header__logo-name">agentur dk</span>
+  <span class="site-header__logo-tagline">design &amp; kommunikation</span>
+</a>
           <p class="footer-col__desc">Barrierefreie WordPress-Websites, SEO, GEO und Online-Marketing aus Köln. Persönlich, schnell, professionell.</p>
           <address class="footer-col__address">
             Sachsenring 57<br>D-50677 Köln

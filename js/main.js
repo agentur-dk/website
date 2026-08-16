@@ -297,7 +297,7 @@
 })();
 
 /* ---------------------------------------------------------------------------
-   Contact Form — Client-side validation & fetch submission
+   Contact Form — Client-side validation, multi-step navigation & fetch
    --------------------------------------------------------------------------- */
 (function initContactForm() {
   const form = document.getElementById('contact-form');
@@ -305,18 +305,26 @@
 
   const statusEl = document.getElementById('form-status');
   const submitBtn = form.querySelector('[type="submit"]');
+  const steps = Array.from(form.querySelectorAll('.form-step'));
+  const indicators = Array.from(form.querySelectorAll('[data-step-indicator]'));
+  const isMultiStep = steps.length > 0;
+  let currentStep = 0;
 
   function setError(input, errorEl, message) {
     input.setAttribute('aria-invalid', 'true');
     if (errorEl) {
       errorEl.textContent = message;
+      errorEl.hidden = false;
       input.setAttribute('aria-describedby', (input.getAttribute('aria-describedby') || '') + ' ' + errorEl.id);
     }
   }
 
   function clearError(input, errorEl) {
     input.removeAttribute('aria-invalid');
-    if (errorEl) errorEl.textContent = '';
+    if (errorEl) {
+      errorEl.textContent = '';
+      errorEl.hidden = true;
+    }
   }
 
   function validateField(input) {
@@ -339,12 +347,74 @@
     return true;
   }
 
+  function validateStep(stepIndex) {
+    const step = steps[stepIndex];
+    if (!step) return true;
+    const fields = Array.from(step.querySelectorAll('input, textarea, select'));
+    return fields.map(validateField).every(Boolean);
+  }
+
+  function updateIndicators() {
+    indicators.forEach(function (ind, i) {
+      ind.classList.toggle('is-active', i === currentStep);
+      ind.classList.toggle('is-done', i < currentStep);
+      if (i === currentStep) ind.setAttribute('aria-current', 'step');
+      else ind.removeAttribute('aria-current');
+    });
+  }
+
+  function showStep(index) {
+    if (index < 0 || index >= steps.length) return;
+    currentStep = index;
+    steps.forEach(function (step, i) { step.hidden = i !== index; });
+    updateIndicators();
+    const firstField = steps[index].querySelector('input, textarea, select');
+    if (firstField) firstField.focus({ preventScroll: true });
+  }
+
+  // Validierung bei blur/input (nur Felder des aktiven Schritts)
   form.querySelectorAll('input, textarea, select').forEach(function (field) {
-    field.addEventListener('blur', function () { validateField(field); });
+    field.addEventListener('blur', function () {
+      const step = field.closest('.form-step');
+      if (!isMultiStep || (step && steps.indexOf(step) === currentStep)) validateField(field);
+    });
     field.addEventListener('input', function () {
       if (field.getAttribute('aria-invalid') === 'true') validateField(field);
     });
   });
+
+  // Multi-Step-Navigation
+  if (isMultiStep) {
+    form.querySelectorAll('[data-step-next]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!validateStep(currentStep)) {
+          const firstInvalid = steps[currentStep].querySelector('[aria-invalid="true"]');
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+        if (currentStep < steps.length - 1) showStep(currentStep + 1);
+      });
+    });
+
+    form.querySelectorAll('[data-step-prev]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (currentStep > 0) showStep(currentStep - 1);
+      });
+    });
+
+    // Enter in Inputs löst „Weiter“ aus statt direktem Submit
+    form.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), select').forEach(function (field) {
+      field.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const next = steps[currentStep] && steps[currentStep].querySelector('[data-step-next]');
+          if (next) next.click();
+        }
+      });
+    });
+
+    showStep(0);
+  }
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -352,16 +422,22 @@
     const fields = Array.from(form.querySelectorAll('input[required], textarea[required], select[required]'));
     const valid = fields.map(validateField).every(Boolean);
     if (!valid) {
-      const first = form.querySelector('[aria-invalid="true"]');
-      if (first) first.focus();
+      const firstInvalid = form.querySelector('[aria-invalid="true"]');
+      if (firstInvalid) {
+        const step = firstInvalid.closest('.form-step');
+        if (isMultiStep && step) showStep(steps.indexOf(step));
+        firstInvalid.focus();
+      }
       return;
     }
 
-    const honeypot = form.querySelector('[name="website"]');
+    const honeypot = form.querySelector('[name="website"], [name="_gotcha"]');
     if (honeypot && honeypot.value) return;
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Wird gesendet\u2026';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Wird gesendet\u2026';
+    }
 
     try {
       const res = await fetch(form.action, {
@@ -379,6 +455,7 @@
           statusEl.focus();
         }
         form.reset();
+        if (isMultiStep) showStep(0);
       } else {
         throw new Error('Server error');
       }
@@ -391,8 +468,10 @@
         statusEl.focus();
       }
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Nachricht senden';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Anfrage senden';
+      }
     }
   });
 })();

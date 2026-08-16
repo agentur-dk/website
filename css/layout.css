@@ -730,12 +730,14 @@
 .site-header__logo {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  justify-content: center;
+  gap: 1px;
   text-decoration: none;
   color: var(--color-text);
   font-family: var(--font-mono);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.2;
+  line-height: 1.15;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .site-header__logo:hover {
@@ -744,7 +746,9 @@
 
 .site-header__logo-name {
   font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-mono);
+  white-space: nowrap;
 }
 
 .site-header__logo-tagline {
@@ -753,6 +757,13 @@
   color: var(--color-text-muted);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .site-header__logo-tagline {
+    letter-spacing: var(--letter-spacing-mono);
+  }
 }
 
 .nav-toggle__bar {
