@@ -534,6 +534,28 @@
   outline-offset: 2px;
 }
 
+/* ---------------------------------------------------------------------------
+   Grid-Minmax-Overrides (müssen NACH layout.css kommen → hier am Ende)
+   min(100%, X) verhindert Viewport-Overflow auf kleinen Displays
+   --------------------------------------------------------------------------- */
+.projects-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+
+.process__list,
+.process-list {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+.stats-strip {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+}
+
+/* Consent-Modal-Dialog: Position für den absoluten Close-Button */
+.consent-modal__dialog {
+  position: relative;
+}
+
 /* Privacy notice */
 .form-privacy {
   padding: var(--space-4);
@@ -1134,4 +1156,549 @@
 .check-result__body {
   color: var(--color-text-muted);
   margin-bottom: var(--space-6);
+}
+
+/* =============================================================================
+   HTML/CSS-KOMPATIBILITÄT + A11Y-FIXES (16.08.2026)
+   Klassen, die im HTML verwendet, aber bisher nicht gestylt waren.
+   WICHTIG: Dieser Block steht absichtlich am Ende (gewinnt die Kaskade).
+   ============================================================================= */
+
+/* ---------------------------------------------------------------------------
+   Client-Strip: Kontrast-Fix (gemeldet: TARGOBANK, Öffentliche Auftraggeber,
+   Mittelständische Unternehmen). opacity 0.6 drückte #a8a8a8 auf ~4:1 →
+   jetzt --color-text-faint (#909090, ≈5.5:1 ✓ AA), Hover → volle Textfarbe.
+   --------------------------------------------------------------------------- */
+.client-strip__item {
+  opacity: 1;
+  color: var(--color-text-faint);
+}
+
+.client-strip__item:hover {
+  color: var(--color-text);
+}
+
+.client-strip__list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-8) var(--space-12);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Formulare (index.html/BFSG: form-control, contact-form, form-checkbox,
+   form-group--checkbox, form-label--checkbox, form-required, form-optional)
+   --------------------------------------------------------------------------- */
+.form-control {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width-thick) solid var(--color-border);
+  color: var(--color-text);
+  font-family: var(--font-system);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  min-height: 44px;
+  transition: border-color var(--transition-fast);
+  appearance: none;
+}
+
+.form-control:hover {
+  border-color: var(--color-border-strong);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 1px var(--color-focus);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Checkbox: 24px+ (Target-Size WCAG 2.2, gemeldet: #privacy) */
+.form-checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.form-checkbox:focus-visible {
+  outline: var(--border-width-focus) solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.form-group--checkbox {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+
+.form-label--checkbox {
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-body);
+  padding-top: 2px;
+}
+
+.form-required {
+  color: var(--color-error-text);
+}
+
+.form-optional {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Radio/Checkbox in BFSG-Check: 24px Target-Size */
+.form-check__input {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.radio-option input[type="radio"] {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+/* ---------------------------------------------------------------------------
+   Accordion (index.html: accordion__heading)
+   --------------------------------------------------------------------------- */
+.accordion__heading {
+  margin: 0;
+  font-size: inherit;
+}
+
+.accordion__trigger-wrap {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   CTA-Block (index.html: cta-block__inner)
+   --------------------------------------------------------------------------- */
+.cta-block__inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Stats-Strip (index.html: stats-strip__value)
+   --------------------------------------------------------------------------- */
+.stats-strip__value {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  line-height: 1;
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+/* ---------------------------------------------------------------------------
+   Process-Steps (index.html: process__step-number / -content / -title / -body)
+   --------------------------------------------------------------------------- */
+.process__step-number {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: rgba(28, 96, 173, 0.5);
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+
+.process__step-content {
+  min-width: 0;
+}
+
+.process__step-title {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+}
+
+.process__step-body {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* ---------------------------------------------------------------------------
+   Footer (index.html: footer-col--about, footer-col__link, footer-col__address)
+   --------------------------------------------------------------------------- */
+.footer-col--about {
+  min-width: 0;
+}
+
+.footer-col__link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+}
+
+.footer-col__link:hover {
+  color: var(--color-accent);
+}
+
+.footer-col__link:focus-visible {
+  outline: var(--border-width-focus) solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.footer-col__address {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+/* ---------------------------------------------------------------------------
+   Consent-Modal (index.html: consent-modal__header/body/footer/group/...)
+   --------------------------------------------------------------------------- */
+.consent-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.consent-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.consent-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-6);
+}
+
+.consent-modal__group {
+  padding: var(--space-5) 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.consent-modal__group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 44px;
+}
+
+.consent-modal__group-title {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.consent-modal__badge {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border: var(--border-width) solid var(--color-border-strong);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.consent-modal__group-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}
+
+/* Switch (index.html: consent-toggle, role="switch") */
+.consent-toggle {
+  appearance: none;
+  width: 44px;
+  height: 24px;
+  min-width: 44px;
+  min-height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-border-strong);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+
+.consent-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+}
+
+.consent-toggle:checked {
+  background: var(--color-primary);
+}
+
+.consent-toggle:checked::after {
+  transform: translateX(20px);
+}
+
+.consent-toggle:focus-visible {
+  outline: var(--border-width-focus) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   BFSG-Seite: Consent-Banner/Modal (anderes Markup: __heading, __desc,
+   __inner, __option, __label, __actions)
+   --------------------------------------------------------------------------- */
+.consent-banner__heading {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.consent-banner__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.consent-modal__inner {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.consent-modal__heading {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+}
+
+.consent-modal__option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+  min-height: 44px;
+}
+
+.consent-modal__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.consent-modal__label input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.consent-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------------------------
+   BFSG-Seite: Card-Grid + Checkliste + BFSG-Selbstcheck (bfsg-step)
+   --------------------------------------------------------------------------- */
+.card-grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.card-grid--3col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 900px) {
+  .card-grid--3col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .card-grid--3col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card__heading {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.checklist__item {
+  position: relative;
+  padding-left: var(--space-8);
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+}
+
+.checklist__item::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
+}
+
+.bfsg-step {
+  padding: var(--space-8);
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-surface);
+  margin-bottom: var(--space-6);
+}
+
+.bfsg-step[hidden] {
+  display: none;
+}
+
+.bfsg-step__heading {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-4);
+}
+
+.bfsg-step__fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--space-6);
+}
+
+.bfsg-step__legend {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+  line-height: var(--line-height-body);
+}
+
+.bfsg-step__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.step-error {
+  color: var(--color-error-text);
+  font-size: var(--font-size-sm);
+}
+
+/* Button-Variante BFSG (btn--secondary) */
+.btn--secondary {
+  background: transparent;
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+}
+
+.btn--secondary:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/* ---------------------------------------------------------------------------
+   BFSG-Seite: process-list (eigenes Schema neben process__list)
+   --------------------------------------------------------------------------- */
+.process-list {
+  display: grid;
+  gap: var(--space-8);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.process-list__item {
+  padding: var(--space-8);
+  border-top: 3px solid var(--color-primary);
+  background: var(--color-surface);
+}
+
+.process-list__number {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: rgba(28, 96, 173, 0.5);
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+
+.process-list__content {
+  min-width: 0;
+}
+
+.process-list__heading {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.process-list__body {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* ---------------------------------------------------------------------------
+   BFSG-Seite: radio-group Focus-Styles (Keyboard-Bedienung)
+   --------------------------------------------------------------------------- */
+.radio-option input[type="radio"]:focus-visible {
+  outline: var(--border-width-focus) solid var(--color-focus);
+  outline-offset: 2px;
 }
