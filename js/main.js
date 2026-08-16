@@ -765,3 +765,36 @@
     a.href = 'index.html#contact';
   });
 })();
+
+/* ---------------------------------------------------------------------------
+   Back to Top
+   Button is static in HTML (hidden attribute). JS adds show/hide behaviour
+   and smooth scroll. Throttled via requestAnimationFrame.
+   --------------------------------------------------------------------------- */
+(function initBackToTop() {
+  const btn = document.querySelector('.back-to-top');
+  if (!btn) return;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let rafPending = false;
+
+  function update() {
+    if (window.scrollY > window.innerHeight) {
+      btn.hidden = false;
+    } else {
+      btn.hidden = true;
+    }
+    rafPending = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(update);
+    }
+  }, { passive: true });
+
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+  });
+})();

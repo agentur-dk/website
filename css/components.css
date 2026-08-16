@@ -2156,3 +2156,183 @@
   line-height: var(--line-height-body);
   margin: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Quiz Widget (index.html Hero)
+   --------------------------------------------------------------------------- */
+.quiz-widget {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  max-width: 760px;
+  margin-top: var(--space-8);
+}
+
+.quiz-widget__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.quiz-widget__hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.quiz-widget__question {
+  font-family: var(--font-display);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.quiz-widget__question:focus {
+  outline: none;
+}
+
+/* Options grid — 1 col mobile, 2–3 col ab sm/md */
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 480px) {
+  .quiz-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 720px) {
+  .quiz-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 2-col variant for urgency step */
+.quiz-options--2col {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+@media (max-width: 400px) {
+  .quiz-options--2col {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  min-height: 44px;
+  background: var(--color-surface-alt);
+  border: var(--border-width-thick) solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  cursor: pointer;
+  /* Nur Farbwechsel, keine Bewegungs-Animation (prefers-reduced-motion-konform) */
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.quiz-option:hover {
+  border-color: var(--color-primary-light);
+  background: var(--color-surface);
+}
+
+.quiz-option:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.quiz-option[aria-pressed="true"],
+.quiz-option.is-selected {
+  border-color: var(--color-primary);
+  background: rgba(28, 96, 173, 0.1);
+  color: var(--color-text);
+}
+
+/* Result */
+.quiz-result__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.quiz-result__title:focus {
+  outline: none;
+}
+
+.quiz-result__blurb {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-5);
+}
+
+.quiz-result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz-option {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Back to Top
+   Position fixed, z-index unter Modal (400) und Toast (500).
+   --------------------------------------------------------------------------- */
+.back-to-top {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: var(--z-overlay); /* 300 — unter Consent-Modal (400) und Toast (500) */
+  transition: background-color var(--transition-fast);
+}
+
+.back-to-top:hover {
+  background: var(--color-primary-hover);
+}
+
+.back-to-top:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* hidden-Attribut sicherstellen (nicht fokussierbar wenn versteckt) */
+.back-to-top[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: none;
+  }
+}
