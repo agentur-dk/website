@@ -62,7 +62,8 @@
      Scale: 1.25 ratio, base 16px
      --------------------------------------------------------------------------- */
   --font-mono:   'Roboto Mono', 'Courier New', monospace;
-  --font-system: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Einheitliche Haus-Font: Roboto Mono wird für ALLES genutzt (Body, UI, Formulare). */
+  --font-system: 'Roboto Mono', 'Courier New', monospace;
 
   --font-size-xs:   0.75rem;  /* 12px */
   --font-size-sm:   0.875rem; /* 14px */

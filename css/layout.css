@@ -668,6 +668,17 @@
   margin: 0; /* base li margin stört im flex-Nav */
 }
 
+.nav-primary__item--cta {
+  margin-left: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .nav-primary__item--cta {
+    margin-left: 0;
+    margin-top: var(--space-4);
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Grid: minmax-Fixes gegen Viewport-Overflow auf kleinen Displays
    min(100%, X) verhindert, dass die Mindestbreite das Display sprengt
@@ -703,6 +714,16 @@
 .section__headline {
   font-size: clamp(var(--font-size-xl), 4vw, var(--font-size-3xl));
   margin-bottom: var(--space-6);
+}
+
+.section__heading {
+  font-size: clamp(var(--font-size-lg), 3vw, var(--font-size-2xl));
+  margin-bottom: var(--space-4);
+}
+
+.section__subheading {
+  font-size: clamp(var(--font-size-md), 2.5vw, var(--font-size-xl));
+  margin-bottom: var(--space-4);
 }
 
 .section__grid {
@@ -756,8 +777,7 @@
   font-weight: var(--font-weight-regular);
   color: var(--color-text-muted);
   letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-  white-space: nowrap;
+  /* Bewusst KEIN text-transform: Tagline bleibt klein geschrieben */
 }
 
 @media (max-width: 480px) {
@@ -899,6 +919,10 @@
   grid-template-columns: 1fr 1.2fr;
   gap: var(--space-12);
   align-items: start;
+}
+
+.contact-info {
+  min-width: 0;
 }
 
 .contact-info__address {

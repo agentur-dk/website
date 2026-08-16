@@ -109,3 +109,9 @@ Typische Projekte: 4–8 Wochen. BFSG-Audits: 1–3 Werktage.
 - Barrierefreiheitserklärung: https://dk-dk.de/barrierefreiheit.html
 - Impressum: https://dk-dk.de/impressum.html
 - Datenschutz: https://dk-dk.de/datenschutz.html
+- WordPress-Entwicklung: https://dk-dk.de/wordpress-entwicklung.html
+- SEO & GEO: https://dk-dk.de/seo-geo.html
+- Online-Marketing: https://dk-dk.de/online-marketing.html
+- Social Recruiting: https://dk-dk.de/social-recruiting.html
+- Corporate Design: https://dk-dk.de/corporate-design.html
+- KI-Services: https://dk-dk.de/ki-services.html
