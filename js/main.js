@@ -1,7 +1,7 @@
 /* =============================================================================
    main.js — agentur dk
    Vanilla ES2020+, no dependencies, modular IIFE pattern.
-   Modules: Year, SkipLink, Navigation, Accordion, Consent, ContactForm, BFSGCheck
+   Modules: Year, SkipLink, Navigation, Accordion, Consent, ContactForm, BFSGCheck, LeadCta
    ============================================================================= */
 
 'use strict';
@@ -238,7 +238,7 @@
   if (!banner) return;
 
   // Ausnahme: Datenschutz & Impressum sind ohne Zwangs-Banner nutzbar
-  const exemptPath = /(datenschutz|impressum)\.html/.test(window.location.pathname);
+  const exemptPath = /(datenschutz|impressum|barrierefreiheit)\.html/.test(window.location.pathname);
   let lastFocused = null;
 
   function getConsent() {
@@ -681,7 +681,7 @@
     steps.forEach(function (step, i) { step.hidden = i !== index; });
     if (progressEl) progressEl.textContent = 'Schritt ' + (index + 1) + ' von ' + steps.length;
     const heading = steps[index] && steps[index].querySelector('[tabindex="-1"]');
-    if (heading) heading.focus();
+    if (heading) heading.focus({ preventScroll: true });
   }
 
   function validateCurrentStep() {
@@ -753,4 +753,15 @@
   });
 
   showStep(0);
+})();
+
+/* ---------------------------------------------------------------------------
+   Lead CTA — rewrite #contact hrefs to index.html#contact on pages without
+   a contact form (no element with id="contact" present).
+   --------------------------------------------------------------------------- */
+(function initLeadCta() {
+  if (document.getElementById('contact')) return;
+  document.querySelectorAll('a[href="#contact"]').forEach(function (a) {
+    a.href = 'index.html#contact';
+  });
 })();
