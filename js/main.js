@@ -196,6 +196,37 @@
 })();
 
 /* ---------------------------------------------------------------------------
+   Google Analytics (DSGVO-konform)
+   Wird NICHT direkt ins HTML eingebaut, sondern erst NACH Einwilligung
+   (Kategorie „statistics“) dynamisch geladen. Ohne Consent: kein Tracking.
+   Zusätzlich IP-Anonymisierung (anonymize_ip) aktiviert.
+   --------------------------------------------------------------------------- */
+(function initAnalytics() {
+  const GA_ID = 'G-KJ0TV1QCMB';
+  let tagLoaded = false;
+
+  function loadGoogleTag() {
+    if (tagLoaded) return;
+    tagLoaded = true;
+
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA_ID, { anonymize_ip: true });
+  }
+
+  // Wird bei jeder Consent-Änderung gefeuert (auch beim Laden, wenn Consent existiert)
+  document.addEventListener('dk:consent', function (e) {
+    if (e.detail && e.detail.statistics) loadGoogleTag();
+  });
+})();
+
+/* ---------------------------------------------------------------------------
    Consent Management (DSGVO / GDPR)
    Uses localStorage only. No external scripts. No cookies.
    Categories: necessary (always on), statistics (opt-in)
