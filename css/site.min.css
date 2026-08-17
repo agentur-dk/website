@@ -2580,6 +2580,11 @@ font-size: var(--font-size-sm);
 .footer-col--about {
 min-width: 0;
 }
+.footer-col ul {
+list-style: none;
+margin: 0;
+padding: 0;
+}
 .footer-col__link {
 color: var(--color-text-muted);
 text-decoration: none;
