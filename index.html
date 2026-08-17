@@ -44,6 +44,13 @@
 .service-card--featured{border-color:var(--color-primary,#1C60AD);background:linear-gradient(135deg,var(--color-surface,#1e1e1e) 0%,rgba(28,96,173,.12) 100%)}
 .service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .service-card--featured .card__link{color:var(--color-primary-light,#5090d0)}
+.logo-strip{overflow:hidden;padding-block:2rem}
+.logo-strip__label{text-align:center;font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted,#a8a8a8);margin-bottom:1.5rem}
+.logo-strip__track-wrap{overflow:hidden}
+.logo-strip__track{display:flex;gap:3rem;width:max-content;animation:logo-scroll 30s linear infinite;list-style:none;margin:0;padding:0}
+@keyframes logo-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.logo-strip__track{animation:none}}
+.logo-strip__placeholder{display:inline-block;padding:.5rem 1.5rem;background:var(--color-surface,#1e1e1e);border:1px solid var(--color-border,#333);border-radius:4px;color:var(--color-text-muted,#999);font-size:.875rem;white-space:nowrap}
   </style>
 
   <!-- JSON-LD: Organization + LocalBusiness -->
@@ -289,29 +296,26 @@
       </div>
     </section>
 
-    <!-- Stats Strip -->
-    <section class="stats-strip section" aria-label="Auf einen Blick">
+    <!-- Kundenlogo-Leiste -->
+    <section class="section logo-strip" aria-label="Unsere Kunden">
       <div class="container">
-        <ul class="stats-strip__list" role="list">
-          <li class="stats-strip__item">
-            <span class="stats-strip__value" aria-hidden="true">01</span>
-            <span class="stats-strip__label">Persönliche Beratung</span>
-          </li>
-          <li class="stats-strip__item">
-            <span class="stats-strip__value" aria-hidden="true">BFSG</span>
-            <span class="stats-strip__label">Experte seit Tag 1</span>
-          </li>
-          <li class="stats-strip__item">
-            <span class="stats-strip__value" aria-hidden="true">Köln</span>
-            <span class="stats-strip__label">lokal &amp; vernetzt</span>
-          </li>
-          <li class="stats-strip__item">
-            <span class="stats-strip__value" aria-hidden="true">24h</span>
-            <span class="stats-strip__label">Reaktionszeit</span>
-          </li>
-
-
-        </ul>
+        <p class="logo-strip__label">Vertrauen von</p>
+        <div class="logo-strip__track-wrap" aria-hidden="true">
+          <ul class="logo-strip__track" role="list">
+            <!-- Platzhalter-Logos (werden durch echte Logos ersetzt) -->
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 1</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 2</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 3</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">TARGOBANK</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 5</span></li>
+            <!-- Duplikate für nahtlose CSS-Animation -->
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 1</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 2</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 3</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">TARGOBANK</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 5</span></li>
+          </ul>
+        </div>
       </div>
     </section>
 
