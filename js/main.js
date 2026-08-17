@@ -76,6 +76,31 @@
   mq.addEventListener('change', function (e) {
     if (e.matches) closeNav();
   });
+
+  // Desktop dropdown: sync aria-expanded with CSS :focus-within state.
+  // Visibility is CSS-driven; JS only updates aria state and handles keyboard.
+  nav.querySelectorAll('.nav-primary__item--has-dropdown').forEach(function (item) {
+    const trigger = item.querySelector('.nav-primary__link[aria-haspopup]');
+    if (!trigger) return;
+
+    item.addEventListener('focusin', function () {
+      trigger.setAttribute('aria-expanded', 'true');
+    });
+
+    item.addEventListener('focusout', function (e) {
+      if (!item.contains(e.relatedTarget)) {
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Escape while inside dropdown → close and return focus to trigger
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+      }
+    });
+  });
 })();
 
 /* ---------------------------------------------------------------------------
@@ -276,7 +301,14 @@
   function closeBanner() {
     banner.hidden = true;
     unlockScroll();
-    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
+    } else {
+      // First-visit path: lastFocused was never set; send focus to skip-link
+      // so keyboard users start navigation from the top of the page.
+      const skipLink = document.querySelector('.skip-link');
+      if (skipLink) skipLink.focus();
+    }
   }
 
   function hideBanner() { banner.hidden = true; }
