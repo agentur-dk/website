@@ -41,6 +41,9 @@
 [data-reveal]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
 [data-reveal].is-visible{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none}}
+.service-card--featured{border-color:var(--color-primary,#1C60AD);background:linear-gradient(135deg,var(--color-surface,#1e1e1e) 0%,rgba(28,96,173,.12) 100%)}
+.service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.service-card--featured .card__link{color:var(--color-primary-light,#5090d0)}
   </style>
 
   <!-- JSON-LD: Organization + LocalBusiness -->
@@ -318,6 +321,21 @@
         <p class="section-label" aria-hidden="true">Leistungen</p>
         <h2 class="section-title">Was wir für Sie tun</h2>
         <ul class="services__grid" role="list">
+
+          <!-- Card 0: Website-Leasing (hervorgehoben) -->
+          <li class="service-card service-card--featured" data-reveal>
+            <span class="service-card__number" aria-hidden="true">Neu</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24">
+                <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zm-2-7H6v-2h12v2zm-4 4H6v-2h8v2z" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Website-Leasing</h3>
+            <p class="card__body">
+              Professionelle Website ohne hohe Einmalkosten – monatliche Flatrate, Wartung und Hosting auf Wunsch inklusive.
+            </p>
+            <a href="website-leasing.html" class="card__link">Mehr erfahren<span class="u-sr-only"> über Website-Leasing</span></a>
+          </li>
 
           <!-- Card 1: Barrierefreie Websites -->
           <li class="service-card" data-reveal>
