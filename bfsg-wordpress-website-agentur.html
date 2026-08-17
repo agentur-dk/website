@@ -136,7 +136,7 @@
 	<div id="consent-modal" role="dialog" aria-modal="true" aria-labelledby="consent-modal-heading" hidden>
 		<div class="consent-modal__inner">
 			<button type="button" id="consent-modal-close" class="consent-modal__close" aria-label="Einstellungen schließen">&times;</button>
-			<h2 id="consent-modal-heading" class="consent-modal__heading">Cookie-Einstellungen</h2>
+			<div id="consent-modal-heading" class="consent-modal__heading">Cookie-Einstellungen</div>
 			<div class="consent-modal__option">
 				<label class="consent-modal__label">
 					<input type="checkbox" checked disabled aria-disabled="true">
@@ -158,7 +158,7 @@
 	<!-- Site Header with Navigation -->
 	<header class="site-header" role="banner">
 		<div class="container site-header__inner">
-			<a href="index.html" class="site-header__logo" aria-label="agentur dk – Zur Startseite">
+			<a href="index.html" class="site-header__logo" aria-label="agentur dk – design &amp; kommunikation – Zur Startseite">
 				<span class="site-header__logo-name">agentur dk</span>
 				<span class="site-header__logo-tagline">design &amp; kommunikation</span>
 			</a>
@@ -708,17 +708,12 @@
                   <span class="lead-topic__label">WCAG 2.2 AA</span>
                 </label>
                 <label class="lead-topic">
-                  <input type="checkbox" name="interesse[]" value="Sonstiges" data-other-trigger>
+                  <input type="checkbox" name="interesse[]" value="Sonstiges">
                   <span class="lead-topic__box" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg></span>
                   <span class="lead-topic__label">Sonstiges</span>
                 </label>
                 </div>
               </fieldset>
-
-              <div class="form-group lead-other" data-other-field hidden>
-                <label for="contact-other" class="form-label">dein Anliegen in eigenen Worten</label>
-                <input type="text" id="contact-other" name="anliegen_text" class="form-control" placeholder="z. B. individuelle Anfrage …">
-              </div>
 
               <div class="form-step__nav">
                 <span aria-hidden="true"></span>
@@ -786,7 +781,7 @@
 			<div class="site-footer__grid">
 
 				<div class="footer-col footer-col--about">
-					<a href="index.html" class="site-header__logo" aria-label="agentur dk – Zur Startseite">
+					<a href="index.html" class="site-header__logo" aria-label="agentur dk – design &amp; kommunikation – Zur Startseite">
   <span class="site-header__logo-name">agentur dk</span>
   <span class="site-header__logo-tagline">design &amp; kommunikation</span>
 </a>

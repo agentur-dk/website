@@ -58,7 +58,7 @@
   --color-border-strong-light: #9aa1a9;
   --color-text-on-light:   #14171c;
   --color-text-muted-on-light: #4a515a;
-  --color-text-faint-on-light: #6b7280;
+  --color-text-faint-on-light: #5e6470; /* #5e6470 on #f5f6f8 → 5.07:1 ✓ AA (was #6b7280 = 4.47:1 ✗) */
   --color-primary-on-light: #1C60AD; /* Links/Akzent auf hell: 5.9:1 ✓ */
   --color-focus-on-light:  #1C60AD;  /* Fokusring auf hell: 6.3:1 ✓ */
   --color-success-on-light: #2e7d32; /* Check-Icons auf hell: ≥4.5:1 ✓ */

@@ -336,11 +336,26 @@
   padding-bottom: var(--space-8);
 }
 
-/* Kontrast auf dem hellen Blau-Ende des Verlaufs: Footer-Texte aufhellen */
+/* Kontrast auf dem hellen Blau-Ende des Verlaufs: Footer-Texte aufhellen
+   #d4d4d4 auf #1c60ad → 4.26:1 ✗ (zu wenig)
+   #e8e8e8 auf #1c60ad → 5.15:1 ✓ AA
+   #bdbdbd → #d4d4d4 (war zu dunkel, jetzt #d4d4d4 auf #1c60ad = 4.26 ✗ → auf #e0e0e0 = 4.78 ✓)
+*/
 .site-footer {
-  --color-text-muted: #d4d4d4;
-  --color-text-faint: #bdbdbd;
+  --color-text-muted: #e8e8e8; /* 5.15:1 auf #1c60ad ✓ AA (war #d4d4d4 = 4.26:1 ✗) */
+  --color-text-faint: #e0e0e0; /* 4.78:1 auf #1c60ad ✓ AA (war #bdbdbd = FAIL) */
   --color-accent: #8ab8e8;
+}
+
+/* btn--ghost im Footer: Rahmenfarbe und Text aufhellen (--color-border-strong #555 = 1.18:1 auf #1c60ad ✗) */
+.site-footer .btn--ghost {
+  border-color: #e0e0e0; /* 4.78:1 auf #1c60ad ✓ UI ≥3:1 */
+  color: #e8e8e8;        /* 5.15:1 auf #1c60ad ✓ AA */
+}
+
+.site-footer .btn--ghost:hover {
+  border-color: #ffffff;
+  color: #ffffff;
 }
 
 .site-footer a:hover {

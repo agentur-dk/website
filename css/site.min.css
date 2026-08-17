@@ -25,7 +25,7 @@
 --color-border-strong-light: #9aa1a9;
 --color-text-on-light:   #14171c;
 --color-text-muted-on-light: #4a515a;
---color-text-faint-on-light: #6b7280;
+--color-text-faint-on-light: #5e6470;
 --color-primary-on-light: #1C60AD;
 --color-focus-on-light:  #1C60AD;
 --color-success-on-light: #2e7d32;
@@ -610,9 +610,17 @@ padding-top: var(--space-16);
 padding-bottom: var(--space-8);
 }
 .site-footer {
---color-text-muted: #d4d4d4;
---color-text-faint: #bdbdbd;
+--color-text-muted: #e8e8e8;
+--color-text-faint: #e0e0e0;
 --color-accent: #8ab8e8;
+}
+.site-footer .btn--ghost {
+border-color: #e0e0e0;
+color: #e8e8e8;
+}
+.site-footer .btn--ghost:hover {
+border-color: #ffffff;
+color: #ffffff;
 }
 .site-footer a:hover {
 color: #ffffff;
@@ -1892,9 +1900,6 @@ font-family: var(--font-body);
 font-size: var(--font-size-sm);
 font-weight: 600;
 color: var(--color-text);
-}
-.lead-other {
-margin-top: var(--space-4);
 }
 .form-privacy {
 padding: var(--space-4);

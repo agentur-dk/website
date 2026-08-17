@@ -862,10 +862,6 @@
   color: var(--color-text);
 }
 
-.lead-other {
-  margin-top: var(--space-4);
-}
-
 /* Datenschutz-Hinweis (Link, keine Checkbox) */
 .form-privacy {
   padding: var(--space-4);

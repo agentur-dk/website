@@ -394,19 +394,6 @@
   const startedField = document.getElementById('form-started');
   if (startedField) startedField.value = String(Date.now());
 
-  // „Sonstiges“-Checkbox blendet Freitextfeld ein
-  const otherTrigger = form.querySelector('[data-other-trigger]');
-  const otherField = form.querySelector('[data-other-field]');
-  if (otherTrigger && otherField) {
-    otherTrigger.addEventListener('change', function () {
-      otherField.hidden = !otherTrigger.checked;
-      if (otherTrigger.checked) {
-        const input = otherField.querySelector('input, textarea');
-        if (input) input.focus();
-      }
-    });
-  }
-
   function setError(input, errorEl, message) {
     input.setAttribute('aria-invalid', 'true');
     if (errorEl) {
