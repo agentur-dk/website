@@ -44,9 +44,9 @@
 .service-card--featured{border-color:var(--color-primary,#1C60AD);background:linear-gradient(135deg,var(--color-surface,#1e1e1e) 0%,rgba(28,96,173,.12) 100%)}
 .service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .service-card--featured .card__link{color:var(--color-primary-light,#5090d0)}
-.logo-strip{overflow:hidden;padding-block:2rem}
+.logo-strip{padding-block:2rem;width:100vw;margin-inline:calc(50% - 50vw);overflow:hidden}
 .logo-strip__label{text-align:center;font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted,#a8a8a8);margin-bottom:1.5rem}
-.logo-strip__track-wrap{overflow:hidden}
+.logo-strip__track-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%)}
 .logo-strip__track{display:flex;gap:3rem;width:max-content;animation:logo-scroll 30s linear infinite;list-style:none;margin:0;padding:0}
 @keyframes logo-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.logo-strip__track{animation:none}}
