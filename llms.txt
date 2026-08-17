@@ -30,6 +30,12 @@ Das Barrierefreiheitsstärkungsgesetz (BFSG) verpflichtet seit dem 28. Juni 2025
 - Performance-Optimierung (Core Web Vitals)
 - Wartung und Support
 
+### Website-Leasing
+- Professionelle Website ohne hohe Einmalkosten
+- Monatliche Flatrate inkl. Wartung und Hosting
+- Barrierefreie Umsetzung nach BFSG
+- Individuell konfigurierbar
+
 ### SEO & GEO (Generative Engine Optimization)
 - Technisches und inhaltliches SEO
 - GEO: Optimierung für KI-Systeme und Large Language Models
@@ -111,6 +117,7 @@ Typische Projekte: 4–8 Wochen. BFSG-Audits: 1–3 Werktage.
 - Impressum: https://dk-dk.de/impressum.html
 - Datenschutz: https://dk-dk.de/datenschutz.html
 - WordPress-Entwicklung: https://dk-dk.de/wordpress-entwicklung.html
+- Website-Leasing: https://dk-dk.de/website-leasing.html
 - SEO & GEO: https://dk-dk.de/seo-geo.html
 - Online-Marketing: https://dk-dk.de/online-marketing.html
 - Social Recruiting: https://dk-dk.de/social-recruiting.html
