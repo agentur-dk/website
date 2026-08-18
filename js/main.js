@@ -685,95 +685,109 @@
   updateStatus(cards.length);
 })();
 
-/* ---------------------------------------------------------------------------
-   BFSG Self-Check (bfsg-wordpress-website-agentur.html only)
-   --------------------------------------------------------------------------- */
-(function initBFSGCheck() {
-  const form = document.getElementById('bfsg-check-form');
-  if (!form) return;
+/* =====================================================================
+   BFSG Selbstcheck (Anwendungsbereichs-Prüfung)
+   ===================================================================== */
+(function () {
+  const quiz = document.getElementById('bfsg-quiz');
+  if (!quiz) return;
 
-  const resultContainer = document.getElementById('bfsg-check-result');
-  const liveRegion = document.getElementById('bfsg-live-region');
-  const steps = Array.from(form.querySelectorAll('.bfsg-step'));
-  const progressEl = document.getElementById('bfsg-progress');
-  let currentStep = 0;
+  const steps = quiz.querySelectorAll('.bfsg-step');
+  const resultEl = document.getElementById('bfsg-result');
+  const resultTitle = document.getElementById('bfsg-result-title');
+  const resultText = document.getElementById('bfsg-result-text');
+  const submitBtn = document.getElementById('bfsg-submit-btn');
+  const restartBtn = document.getElementById('bfsg-restart-btn');
+  const answers = {};
 
-  function showStep(index) {
-    steps.forEach(function (step, i) { step.hidden = i !== index; });
-    if (progressEl) progressEl.textContent = 'Schritt ' + (index + 1) + ' von ' + steps.length;
-    const heading = steps[index] && steps[index].querySelector('[tabindex="-1"]');
-    if (heading) heading.focus({ preventScroll: true });
-  }
-
-  function validateCurrentStep() {
-    const step = steps[currentStep];
-    const radios = step.querySelectorAll('input[type="radio"]');
-    if (!radios.length) return true;
-    const name = radios[0].name;
-    if (!form.querySelector('input[name="' + name + '"]:checked')) {
-      const errorEl = step.querySelector('.step-error');
-      if (errorEl) { errorEl.textContent = 'Bitte wählen Sie eine Antwort aus.'; errorEl.hidden = false; }
-      radios[0].focus();
-      return false;
+  function showStep(n) {
+    steps.forEach(s => s.classList.add('bfsg-step--hidden'));
+    const target = document.getElementById('bfsg-step-' + n);
+    if (target) {
+      target.classList.remove('bfsg-step--hidden');
+      const firstInput = target.querySelector('input, button');
+      if (firstInput) firstInput.focus();
     }
-    const errorEl = step.querySelector('.step-error');
-    if (errorEl) { errorEl.textContent = ''; errorEl.hidden = true; }
-    return true;
   }
 
-  form.querySelectorAll('[data-next]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (!validateCurrentStep()) return;
-      if (currentStep < steps.length - 1) { currentStep++; showStep(currentStep); }
-    });
-  });
+  function getVal(name) {
+    const checked = quiz.querySelector('input[name="' + name + '"]:checked');
+    return checked ? checked.value : null;
+  }
 
-  form.querySelectorAll('[data-prev]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (currentStep > 0) { currentStep--; showStep(currentStep); }
-    });
-  });
+  function showResult() {
+    answers.q1 = getVal('q1');
+    answers.q2 = getVal('q2');
+    answers.q3 = getVal('q3');
+    answers.q4 = getVal('q4');
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (!validateCurrentStep()) return;
-
-    const checked = Array.from(form.querySelectorAll('input[type="radio"]:checked'));
-    const riskCount = checked.filter(function (r) { return r.value === 'ja'; }).length;
-    const total = steps.length;
-
-    let cls, headline, body;
-
-    if (riskCount >= Math.ceil(total * 0.6)) {
-      cls = 'check-result--action';
-      headline = 'Handlungsbedarf: BFSG-Konformität gefährdet';
-      body = riskCount + ' von ' + total + ' Punkten zeigen kritischen Bedarf. Das BFSG verpflichtet ab dem 28. Juni 2025 zur Barrierefreiheit. Wir empfehlen eine professionelle Prüfung.';
-    } else if (riskCount >= Math.ceil(total * 0.3)) {
-      cls = 'check-result--review';
-      headline = 'Teilweiser Handlungsbedarf erkannt';
-      body = riskCount + ' von ' + total + ' Punkten zeigen Verbesserungspotenzial. Gezielte Optimierungen sichern Ihre BFSG-Konformität. Wir analysieren kostenlos.';
+    let title, text;
+    if (answers.q1 === 'nein') {
+      title = 'Voraussichtlich nicht betroffen';
+      text = 'Da Sie keine Dienstleistungen für Verbraucher erbringen, greift das BFSG für Ihren Bereich wahrscheinlich nicht. Buchen Sie eine Ersteinschätzung zur Sicherheit.';
+    } else if (answers.q2 === 'nein' && answers.q3 === 'nein') {
+      title = 'Kleinstunternehmen-Regelung';
+      text = 'Sie gelten als Kleinstunternehmen (<10 MA und <2 Mio. Umsatz). Diese sind von den meisten Dienstleistungspflichten befreit.';
     } else {
-      cls = 'check-result--good';
-      headline = 'Gut aufgestellt — Details prüfen lassen';
-      body = 'Nur ' + riskCount + ' von ' + total + ' Punkten weisen auf mögliche Lücken hin. Eine professionelle Einzelprüfung schafft rechtliche Sicherheit.';
+      title = 'Wahrscheinlich betroffen';
+      text = 'Nach Ihren Angaben ist Ihr Unternehmen voraussichtlich vom BFSG betroffen. Ihre Website muss schon seit dem 28. Juni 2025 barrierefrei sein.';
     }
 
-    if (resultContainer) {
-      resultContainer.className = 'check-result ' + cls;
-      const h = resultContainer.querySelector('.check-result__headline');
-      const b = resultContainer.querySelector('.check-result__body');
-      if (h) h.textContent = headline;
-      if (b) b.textContent = body;
-      resultContainer.hidden = false;
-      resultContainer.setAttribute('tabindex', '-1');
-      resultContainer.focus();
+    steps.forEach(s => s.classList.add('bfsg-step--hidden'));
+    resultTitle.textContent = title;
+    resultText.textContent = text;
+    resultEl.classList.remove('bfsg-result--hidden');
+    resultEl.focus();
+  }
+
+  function restart() {
+    quiz.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    resultEl.classList.add('bfsg-result--hidden');
+    showStep(1);
+  }
+
+  quiz.addEventListener('click', function (e) {
+    const nextBtn = e.target.closest('.bfsg-next-btn');
+    const backBtn = e.target.closest('.bfsg-back-btn');
+
+    if (nextBtn) {
+      const next = parseInt(nextBtn.dataset.next, 10);
+      const currentStep = nextBtn.closest('.bfsg-step');
+      const stepNum = parseInt(currentStep.dataset.step, 10);
+      const answered = quiz.querySelector('input[name="q' + stepNum + '"]:checked');
+      if (!answered) {
+        const firstOpt = currentStep.querySelector('.bfsg-option__radio');
+        if (firstOpt) firstOpt.focus();
+        return;
+      }
+      if (stepNum === 1 && getVal('q1') === 'nein') {
+        showResult();
+        return;
+      }
+      showStep(next);
     }
 
-    if (liveRegion) liveRegion.textContent = 'Auswertung abgeschlossen: ' + headline;
-    steps.forEach(function (s) { s.hidden = true; });
+    if (backBtn) {
+      const prev = parseInt(backBtn.dataset.prev, 10);
+      showStep(prev);
+    }
   });
 
-  showStep(0);
+  if (submitBtn) {
+    submitBtn.addEventListener('click', function () {
+      const answered = quiz.querySelector('input[name="q4"]:checked');
+      if (!answered) {
+        const firstOpt = document.querySelector('#bfsg-step-4 .bfsg-option__radio');
+        if (firstOpt) firstOpt.focus();
+        return;
+      }
+      showResult();
+    });
+  }
+
+  if (restartBtn) {
+    restartBtn.addEventListener('click', restart);
+  }
 })();
 
 /* ---------------------------------------------------------------------------

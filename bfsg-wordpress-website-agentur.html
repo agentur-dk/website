@@ -283,180 +283,137 @@
 			</div>
 		</section>
 
-		<!-- SECTION: BFSG-Selbstcheck -->
-		<section class="section section--check" id="bfsg-check" aria-labelledby="check-heading">
-			<div class="container">
-				<p class="section__label">Selbstcheck</p>
-				<h2 id="check-heading" class="section__heading">BFSG-Selbstcheck: Wie barrierefrei ist Ihre Website?</h2>
-				<p class="section__lead">Beantworte 6 Fragen — wir werten sofort aus.</p>
+		<!-- BFSG Selbstcheck -->
+		<section id="bfsg-check" class="bfsg-check-section section" aria-labelledby="bfsg-check-heading">
+		  <div class="container container--narrow">
+		    <p class="schwerpunkte-section__eyebrow">Selbstcheck</p>
+		    <h2 class="schwerpunkte-section__heading" id="bfsg-check-heading">BFSG-Selbstcheck: Fällt Ihr Unternehmen unter das Gesetz?</h2>
+		    <p class="schwerpunkte-section__lead">Beantworten Sie vier Fragen – wir zeigen Ihnen, ob das Barrierefreiheitsstärkungsgesetz für Ihr Unternehmen gilt.</p>
 
-				<!-- Live Region for screen reader announcements -->
-				<div id="bfsg-live-region" aria-live="assertive" aria-atomic="true" class="u-sr-only"></div>
+		    <div class="bfsg-quiz" id="bfsg-quiz" aria-live="polite">
 
-				<!-- Progress indicator -->
-				<p id="bfsg-progress" aria-live="polite" class="u-text-mono u-text-sm u-text-muted"></p>
+		      <!-- Schritt 1 -->
+		      <fieldset class="bfsg-step" id="bfsg-step-1" data-step="1">
+		        <legend class="bfsg-step__legend">Frage 1 von 4</legend>
+		        <p class="bfsg-step__question">Erbringen Sie Dienstleistungen?<sup>1</sup></p>
+		        <div class="bfsg-step__options" role="radiogroup" aria-labelledby="bfsg-q1-label">
+		          <span id="bfsg-q1-label" class="sr-only">Erbringen Sie Dienstleistungen?</span>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q1" value="ja" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Ja</span>
+		          </label>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q1" value="nein" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Nein</span>
+		          </label>
+		        </div>
+		        <div class="bfsg-step__nav">
+		          <button type="button" class="btn btn--primary bfsg-next-btn" data-next="2">Weiter →</button>
+		        </div>
+		      </fieldset>
 
-				<form id="bfsg-check-form" novalidate>
+		      <!-- Schritt 2 -->
+		      <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-2" data-step="2">
+		        <legend class="bfsg-step__legend">Frage 2 von 4</legend>
+		        <p class="bfsg-step__question">Haben Sie 10 oder mehr Mitarbeiter?</p>
+		        <div class="bfsg-step__options" role="radiogroup" aria-labelledby="bfsg-q2-label">
+		          <span id="bfsg-q2-label" class="sr-only">Haben Sie 10 oder mehr Mitarbeiter?</span>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q2" value="ja" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Ja</span>
+		          </label>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q2" value="nein" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Nein</span>
+		          </label>
+		        </div>
+		        <div class="bfsg-step__nav">
+		          <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="1">← Zurück</button>
+		          <button type="button" class="btn btn--primary bfsg-next-btn" data-next="3">Weiter →</button>
+		        </div>
+		      </fieldset>
 
-					<!-- Step 1 -->
-					<div class="bfsg-step" id="bfsg-step-1" aria-labelledby="step-1-heading">
-						<h3 id="step-1-heading" tabindex="-1" class="bfsg-step__heading">Keyboard-Navigation</h3>
-						<fieldset class="bfsg-step__fieldset">
-							<legend class="bfsg-step__legend">Können alle Funktionen Ihrer Website ohne Maus bedient werden?</legend>
-							<div class="radio-group">
-								<div class="radio-option">
-									<input type="radio" id="q1-nein" name="q1" value="nein">
-									<label for="q1-nein">Ja, vollständig</label>
-								</div>
-								<div class="radio-option">
-									<input type="radio" id="q1-ja" name="q1" value="ja">
-									<label for="q1-ja">Nein oder teilweise</label>
-								</div>
-							</div>
-						</fieldset>
-						<div class="step-error" hidden aria-live="polite" id="step-1-error" role="alert">
-							Bitte wähle eine Antwort aus, um fortzufahren.
-						</div>
-						<div class="bfsg-step__nav">
-							<button type="button" class="btn btn--primary" data-next="1">Weiter →</button>
-						</div>
-					</div>
+		      <!-- Schritt 3 -->
+		      <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-3" data-step="3">
+		        <legend class="bfsg-step__legend">Frage 3 von 4</legend>
+		        <p class="bfsg-step__question">Über 2 Mio. Euro Jahresumsatz oder Bilanzsumme?</p>
+		        <div class="bfsg-step__options" role="radiogroup" aria-labelledby="bfsg-q3-label">
+		          <span id="bfsg-q3-label" class="sr-only">Über 2 Mio. Euro Jahresumsatz oder Bilanzsumme?</span>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q3" value="ja" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Ja</span>
+		          </label>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q3" value="nein" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Nein</span>
+		          </label>
+		        </div>
+		        <div class="bfsg-step__nav">
+		          <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="2">← Zurück</button>
+		          <button type="button" class="btn btn--primary bfsg-next-btn" data-next="4">Weiter →</button>
+		        </div>
+		      </fieldset>
 
-					<!-- Step 2 -->
-					<div class="bfsg-step" id="bfsg-step-2" hidden aria-labelledby="step-2-heading">
-						<h3 id="step-2-heading" tabindex="-1" class="bfsg-step__heading">Kontraste</h3>
-						<fieldset class="bfsg-step__fieldset">
-							<legend class="bfsg-step__legend">Erfüllen alle Text-Hintergrund-Kombinationen das WCAG-Kontrastverhältnis von 4,5:1?</legend>
-							<div class="radio-group">
-								<div class="radio-option">
-									<input type="radio" id="q2-nein" name="q2" value="nein">
-									<label for="q2-nein">Ja, vollständig</label>
-								</div>
-								<div class="radio-option">
-									<input type="radio" id="q2-ja" name="q2" value="ja">
-									<label for="q2-ja">Nein oder teilweise</label>
-								</div>
-							</div>
-						</fieldset>
-						<div class="step-error" hidden aria-live="polite" id="step-2-error" role="alert">
-							Bitte wähle eine Antwort aus, um fortzufahren.
-						</div>
-						<div class="bfsg-step__nav">
-							<button type="button" class="btn btn--ghost" data-prev="2">← Zurück</button>
-							<button type="button" class="btn btn--primary" data-next="2">Weiter →</button>
-						</div>
-					</div>
+		      <!-- Schritt 4 -->
+		      <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-4" data-step="4">
+		        <legend class="bfsg-step__legend">Frage 4 von 4</legend>
+		        <p class="bfsg-step__question">Bieten Sie Produkte wie Webshops, E-Books oder Terminals an?</p>
+		        <div class="bfsg-step__options" role="radiogroup" aria-labelledby="bfsg-q4-label">
+		          <span id="bfsg-q4-label" class="sr-only">Bieten Sie Produkte wie Webshops, E-Books oder Terminals an?</span>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q4" value="ja" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Ja</span>
+		          </label>
+		          <label class="bfsg-option">
+		            <input type="radio" name="q4" value="nein" class="bfsg-option__radio">
+		            <span class="bfsg-option__label">Nein</span>
+		          </label>
+		        </div>
+		        <div class="bfsg-step__nav">
+		          <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="3">← Zurück</button>
+		          <button type="button" class="btn btn--primary" id="bfsg-submit-btn">Ergebnis anzeigen →</button>
+		        </div>
+		      </fieldset>
 
-					<!-- Step 3 -->
-					<div class="bfsg-step" id="bfsg-step-3" hidden aria-labelledby="step-3-heading">
-						<h3 id="step-3-heading" tabindex="-1" class="bfsg-step__heading">Alt-Texte</h3>
-						<fieldset class="bfsg-step__fieldset">
-							<legend class="bfsg-step__legend">Haben alle inhaltlichen Bilder beschreibende Alt-Texte?</legend>
-							<div class="radio-group">
-								<div class="radio-option">
-									<input type="radio" id="q3-nein" name="q3" value="nein">
-									<label for="q3-nein">Ja, vollständig</label>
-								</div>
-								<div class="radio-option">
-									<input type="radio" id="q3-ja" name="q3" value="ja">
-									<label for="q3-ja">Nein oder teilweise</label>
-								</div>
-							</div>
-						</fieldset>
-						<div class="step-error" hidden aria-live="polite" id="step-3-error" role="alert">
-							Bitte wähle eine Antwort aus, um fortzufahren.
-						</div>
-						<div class="bfsg-step__nav">
-							<button type="button" class="btn btn--ghost" data-prev="3">← Zurück</button>
-							<button type="button" class="btn btn--primary" data-next="3">Weiter →</button>
-						</div>
-					</div>
+		      <!-- Ergebnis -->
+		      <div class="bfsg-result bfsg-result--hidden" id="bfsg-result" role="region" aria-labelledby="bfsg-result-title" aria-live="assertive">
+		        <h3 class="bfsg-result__title" id="bfsg-result-title"></h3>
+		        <p class="bfsg-result__text" id="bfsg-result-text"></p>
+		        <div class="bfsg-result__actions">
+		          <a href="https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach" class="btn btn--primary" target="_blank" rel="noopener noreferrer">Erstberatung buchen</a>
+		          <button type="button" class="btn btn--outline" id="bfsg-restart-btn">Check neustarten</button>
+		        </div>
+		      </div>
 
-					<!-- Step 4 -->
-					<div class="bfsg-step" id="bfsg-step-4" hidden aria-labelledby="step-4-heading">
-						<h3 id="step-4-heading" tabindex="-1" class="bfsg-step__heading">Formulare</h3>
-						<fieldset class="bfsg-step__fieldset">
-							<legend class="bfsg-step__legend">Sind alle Formularfelder korrekt beschriftet (label, fieldset, legend)?</legend>
-							<div class="radio-group">
-								<div class="radio-option">
-									<input type="radio" id="q4-nein" name="q4" value="nein">
-									<label for="q4-nein">Ja, vollständig</label>
-								</div>
-								<div class="radio-option">
-									<input type="radio" id="q4-ja" name="q4" value="ja">
-									<label for="q4-ja">Nein oder teilweise</label>
-								</div>
-							</div>
-						</fieldset>
-						<div class="step-error" hidden aria-live="polite" id="step-4-error" role="alert">
-							Bitte wähle eine Antwort aus, um fortzufahren.
-						</div>
-						<div class="bfsg-step__nav">
-							<button type="button" class="btn btn--ghost" data-prev="4">← Zurück</button>
-							<button type="button" class="btn btn--primary" data-next="4">Weiter →</button>
-						</div>
-					</div>
+		    </div><!-- /.bfsg-quiz -->
 
-					<!-- Step 5 -->
-					<div class="bfsg-step" id="bfsg-step-5" hidden aria-labelledby="step-5-heading">
-						<h3 id="step-5-heading" tabindex="-1" class="bfsg-step__heading">Fokus-Indikatoren</h3>
-						<fieldset class="bfsg-step__fieldset">
-							<legend class="bfsg-step__legend">Ist ein sichtbarer Fokus-Ring für alle interaktiven Elemente vorhanden?</legend>
-							<div class="radio-group">
-								<div class="radio-option">
-									<input type="radio" id="q5-nein" name="q5" value="nein">
-									<label for="q5-nein">Ja, vollständig</label>
-								</div>
-								<div class="radio-option">
-									<input type="radio" id="q5-ja" name="q5" value="ja">
-									<label for="q5-ja">Nein oder teilweise</label>
-								</div>
-							</div>
-						</fieldset>
-						<div class="step-error" hidden aria-live="polite" id="step-5-error" role="alert">
-							Bitte wähle eine Antwort aus, um fortzufahren.
-						</div>
-						<div class="bfsg-step__nav">
-							<button type="button" class="btn btn--ghost" data-prev="5">← Zurück</button>
-							<button type="button" class="btn btn--primary" data-next="5">Weiter →</button>
-						</div>
-					</div>
+		    <p class="bfsg-disclaimer">Der BFSG Check ist ein Test, welcher die wesentlichen Kriterien des Anwendungsbereiches in vereinfachter Form überprüft. Erklärungsbedürftige und unbestimmte Rechtsbegriffe werden für eine bessere Verständlichkeit vereinfacht und reduziert. Rechtlich verbindlich kann das Ergebnis des Selbsttests daher nicht sein.</p>
 
-					<!-- Step 6 -->
-					<div class="bfsg-step" id="bfsg-step-6" hidden aria-labelledby="step-6-heading">
-						<h3 id="step-6-heading" tabindex="-1" class="bfsg-step__heading">Barrierefreiheits-Erklärung</h3>
-						<fieldset class="bfsg-step__fieldset">
-							<legend class="bfsg-step__legend">Verfügt Ihre Website über eine aktuelle Barrierefreiheits-Erklärung nach §12 BFSG?</legend>
-							<div class="radio-group">
-								<div class="radio-option">
-									<input type="radio" id="q6-nein" name="q6" value="nein">
-									<label for="q6-nein">Ja, vorhanden</label>
-								</div>
-								<div class="radio-option">
-									<input type="radio" id="q6-ja" name="q6" value="ja">
-									<label for="q6-ja">Nein oder veraltet</label>
-								</div>
-							</div>
-						</fieldset>
-						<div class="step-error" hidden aria-live="polite" id="step-6-error" role="alert">
-							Bitte wähle eine Antwort aus, um fortzufahren.
-						</div>
-						<div class="bfsg-step__nav">
-							<button type="button" class="btn btn--ghost" data-prev="6">← Zurück</button>
-							<button type="submit" class="btn btn--primary">Auswerten</button>
-						</div>
-					</div>
+		    <details class="accordion">
+		      <summary class="accordion__trigger">Fußnoten &amp; rechtliche Erläuterungen anzeigen</summary>
+		      <div class="accordion__body">
+		        <ol class="bfsg-footnotes">
+		          <li>Dienstleistungssektor: Die gesetzlichen Vorgaben für Dienstleistungen sind in § 1 Abs. 3 BFSG verankert.</li>
+		          <li>B2C vs. B2B Fokus: Laut § 1 Abs. 3 BFSG sind im Dienstleistungsbereich (inklusive E-Commerce) primär Angebote für Verbraucher (§ 13 BGB) betroffen. Um nicht unter das Gesetz zu fallen, muss eine klare Ausrichtung auf Geschäftskunden (§ 14 BGB) und der Ausschluss von Privatpersonen zweifelsfrei erkennbar sein.</li>
+		          <li>E-Commerce Definition: Dienstleistungen im elektronischen Geschäftsverkehr gemäß § 1 Abs. 3 Nr. 5 BFSG umfassen laut § 2 Nr. 26 BFSG alle Plattformen, Apps und Webshops, über die Verträge wie Käufe oder Buchungen unmittelbar online abgeschlossen werden können.</li>
+		          <li>Individuelle Anfragen &amp; Buchungen: Die Definition erstreckt sich nach § 2 Nr. 26 BFSG auch auf digitale Services zur Vorbereitung von Verträgen, wie etwa Online-Terminreservierungen. Während rein informative Seiten meist ausgenommen sind, fallen geschäftliche B2C-Webseiten mit interaktiven Buchungstools in der Regel unter diese Kriterien.</li>
+		          <li>Ausnahme für Kleinstunternehmen: Unternehmen mit weniger als 10 Mitarbeitern und einem Jahresumsatz bzw. einer Bilanzsumme von maximal 2 Mio. Euro sind im Dienstleistungsbereich (z. B. Onlineshop-Betrieb) gemäß § 3 Abs. 3 BFSG von den Verpflichtungen befreit. Die Personalstärke wird dabei in Jahresarbeitseinheiten berechnet.</li>
+		          <li>Sonderregelungen &amp; Fristen: Es existieren Ausnahmen für statische Archive oder Kartendienste (§ 1 Abs. 4 BFSG). In Einzelfällen kann eine „unverhältnismäßige Belastung" (§ 17 BFSG) geltend gemacht werden. Für bestimmte Produkte gelten zudem Übergangsfristen nach § 38 BFSG.</li>
+		          <li>Hardware &amp; Produkte: § 1 Abs. 2 BFSG listet betroffene Produktkategorien auf, vorrangig Geräte mit interaktiven Benutzeroberflächen.</li>
+		          <li>E-Books: Elektronische Bücher und die zugehörige Lese-Software fallen unter § 1 Abs. 3 Nr. 4 BFSG.</li>
+		          <li>Finanzdienstleistungen: Bankservices für Privatkunden sind in § 1 Abs. 3 Nr. 3 BFSG geregelt.</li>
+		          <li>Telekommunikation: Regelungen hierzu finden sich in § 1 Abs. 3 Nr. 1 BFSG.</li>
+		          <li>Personenbeförderung: Elektronische Tickets, Apps und Terminals im Verkehrswesen unterliegen § 1 Abs. 3 Nr. 2 BFSG, wobei für kommunale Anbieter teilweise Ausnahmen gelten.</li>
+		          <li>Interaktive Endgeräte: Spezifische Anforderungen für Verbraucherendgeräte sind in § 1 Abs. 2 Nr. 5 BFSG definiert.</li>
+		          <li>Computersysteme: Hardwaresysteme für Universalrechner und deren Betriebssysteme fallen unter § 1 Abs. 2 Nr. 1 BFSG.</li>
+		          <li>Selbstbedienungsterminals: Geldautomaten, Zahlungs- und Fahrausweisautomaten werden in § 1 Abs. 2 Nr. 2 BFSG präzisiert.</li>
+		          <li>Medien- &amp; Kommunikationsgeräte: Endgeräte für Telekommunikation oder audiovisuelle Medien sind durch § 1 Abs. 2 Nr. 3 und 4 BFSG abgedeckt.</li>
+		        </ol>
+		        <p class="bfsg-footnotes__update">Aktualisierung: 18.08.2026</p>
+		      </div>
+		    </details>
 
-				</form>
-
-				<!-- Result -->
-				<div id="bfsg-check-result" class="check-result" hidden tabindex="-1">
-					<div class="check-result__headline"></div>
-					<p class="check-result__body"></p>
-					<a href="#contact" class="btn btn--primary u-mt-6">Jetzt kostenlos prüfen lassen</a>
-				</div>
-
-			</div>
+		  </div>
 		</section>
 
 		<!-- SECTION: Ablauf -->

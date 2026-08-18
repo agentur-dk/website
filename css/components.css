@@ -2677,6 +2677,139 @@
 }
 
 /* ---------------------------------------------------------------------------
+   BFSG Quiz / Selbstcheck
+   --------------------------------------------------------------------------- */
+.bfsg-check-section {
+  background: var(--color-bg);
+}
+
+.bfsg-quiz {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10) var(--space-12);
+  margin-block: var(--space-10);
+}
+
+.bfsg-step--hidden {
+  display: none;
+}
+
+.bfsg-step__question {
+  font-family: var(--font-display);
+  font-size: clamp(var(--font-size-lg), 2.5vw, var(--font-size-xl));
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-6);
+  line-height: var(--line-height-tight);
+}
+
+.bfsg-step__options {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-8);
+}
+
+.bfsg-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  padding: var(--space-4) var(--space-6);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  min-width: 120px;
+  justify-content: center;
+}
+
+.bfsg-option:hover {
+  border-color: var(--color-primary);
+  background: rgba(28, 96, 173, 0.07);
+}
+
+.bfsg-option:has(.bfsg-option__radio:checked) {
+  border-color: var(--color-primary);
+  background: rgba(28, 96, 173, 0.12);
+}
+
+.bfsg-option__radio {
+  accent-color: var(--color-primary);
+  width: 18px;
+  height: 18px;
+}
+
+.bfsg-option__label {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+}
+
+.bfsg-result {
+  padding: var(--space-8);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-alt);
+}
+
+.bfsg-result--hidden {
+  display: none;
+}
+
+.bfsg-result__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+}
+
+.bfsg-result__text {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+  max-width: 60ch;
+}
+
+.bfsg-result__actions {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.bfsg-disclaimer {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+  margin-top: var(--space-6);
+  max-width: 72ch;
+  line-height: var(--line-height-body);
+}
+
+.bfsg-footnotes {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+  padding-left: var(--space-6);
+}
+
+.bfsg-footnotes li {
+  margin-bottom: var(--space-3);
+}
+
+.bfsg-footnotes__update {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-faint);
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .bfsg-quiz {
+    padding: var(--space-6);
+  }
+
+  .bfsg-step__options {
+    flex-direction: column;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Case Grid (Referenzen-Sektion auf index.html)
    --------------------------------------------------------------------------- */
 .case-grid {
