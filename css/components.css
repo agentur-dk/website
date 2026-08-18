@@ -2586,3 +2586,82 @@
 .section--light .content-cta__label {
   color: var(--color-primary-on-light);
 }
+
+/* ---------------------------------------------------------------------------
+   Zwei-Säulen-Intro-Cards (Schwerpunkte)
+   --------------------------------------------------------------------------- */
+.schwerpunkte-section__eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--space-3);
+}
+
+.schwerpunkte-section__heading {
+  font-family: var(--font-display);
+  font-size: clamp(var(--font-size-xl), 3vw, var(--font-size-2xl));
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+  line-height: var(--line-height-tight);
+}
+
+.schwerpunkte-section__lead {
+  font-size: var(--font-size-md);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+  margin-bottom: var(--space-12);
+}
+
+.schwerpunkte-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8);
+}
+
+@media (max-width: 640px) {
+  .schwerpunkte-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.schwerpunkt-card {
+  background: var(--color-surface, #ffffff);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: border-color var(--transition-base);
+}
+
+.schwerpunkt-card:hover {
+  border-color: var(--color-primary);
+}
+
+.schwerpunkt-card__icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.schwerpunkt-card__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.schwerpunkt-card__text {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+  flex: 1;
+}
+
+.schwerpunkt-card__link {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+}
