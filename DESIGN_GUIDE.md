@@ -106,4 +106,57 @@ Kein Google ReCaptcha (IP!), keine Third-Party-Cookies. Stattdessen:
 Bei jeder Weiterentwicklung oder Wegfall von Bereichen: **Nav, Footer, Startseiten-Karten, Cross-Links, sitemap.xml und llms.txt mit anpassen** (Daniel-Vorgabe, in MEMORY.md verankert).
 
 ---
+
+## 11. Astro-Umsetzung (ab 21.08.2026)
+
+Seit Phase 8 ist der Astro-Stack der einzige produktive Stack. Alle Legacy-Dateien (root-HTML, css/, js/, build-css.py) sind entfernt.
+
+### Seitenstruktur
+
+Neue und bestehende Seiten sind `.astro`-Dateien in `src/pages/`. Die Dateinamen entsprechen exakt den Legacy-URLs (SEO-stabil). Jede Seite verwendet zwingend `BaseLayout.astro` als Layout.
+
+```astro
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Seitentitel – agentur dk" description="Meta-Description">
+  <!-- Seiteninhalt -->
+</BaseLayout>
+```
+
+`BaseLayout` übernimmt: `<head>` mit Meta-Tags, Canonical-Link, Font-Preload, JSON-LD-Slot, Skip-Link und `ConsentBanner`.
+
+### Komponenten-Inventar
+
+| Komponente | Datei | Funktion |
+|---|---|---|
+| Header | `Header.astro` | Nav + Dropdown (7 Leistungen) + CTA |
+| Footer | `Footer.astro` | 4 Spalten, Gradient-Verlauf |
+| CtaSection | `CtaSection.astro` | Abschluss-CTA mit Gradient |
+| ServiceCard | `ServiceCard.astro` | Leistungskarte (Nummer + Icon + Text) |
+| ReferenceCard | `ReferenceCard.astro` | Referenz-Karte (BMFSFJ, TARGOBANK, BFW) |
+| LogoStrip | `LogoStrip.astro` | scrollende Kundenlogo-Leiste |
+| StatsStrip | `StatsStrip.astro` | Kennzahlen-Strip (große Zahlen, Akzentblau) |
+| FaqAccordion | `FaqAccordion.astro` | Akkordeon mit `details`/`summary` |
+| TabNav | `TabNav.astro` | Tab-Navigation (TS-gesteuert) |
+| LeadForm | `LeadForm.astro` | 2-Schritt-Kontaktformular (Honeypot + Zeitstempel + Seiten-Tracking) |
+| BfsgCheck | `BfsgCheck.astro` | Interaktiver BFSG-Selbstcheck (Astro Island) |
+| ConsentBanner | `ConsentBanner.astro` | Cookie-Einwilligungsbanner (Modal, Fokus-Trap) |
+
+### Design-Tokens
+
+Die Tokens aus `css/tokens.css` (Legacy) leben jetzt als Tailwind-`@theme`-Variablen in `src/styles/global.css`. Die Farb- und Typo-Tabellen in Abschnitt 1 und 2 dieses Guides bleiben verbindlich. `tokens.css` existiert nicht mehr — `global.css` ist die alleinige Quelle.
+
+### Interaktive Logik
+
+Alle JavaScript-Logik wurde in `src/lib/` als pure TypeScript-Module extrahiert und ist via vitest vollständig getestet:
+
+| Modul | Inhalt |
+|---|---|
+| `bfsg-logic.ts` | 4 Fragen, 3 Ergebnis-Pfade, 15 Fußnoten |
+| `quiz.ts` | Sie-Form-Selbstcheck |
+| `consent.ts` | Consent-Verwaltung (localStorage, Pfad-Ausnahmen) |
+| `form-validation.ts` | 2-Schritt-Formular-Validierung, Honeypot, Zeitstempel |
+
+---
 *Designguide gepflegt von OpenClaw – bei Unklarheiten in MEMORY.md oder dieser Datei nachsehen.*

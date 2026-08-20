@@ -7,6 +7,30 @@
 
 ---
 
+## Astro-Migrationsstatus (Stand 21.08.2026)
+
+**Alle Phasen der Astro-Migration abgeschlossen.** Der Legacy-Stack (plain HTML + build-css.py + css/ + js/) wurde vollständig entfernt.
+
+| Phase | Commit | Inhalt | Status |
+|---|---|---|---|
+| 0/1 | afbfaca | Astro + Tailwind v4 Setup, BaseLayout, Header/Footer, Design-Tokens | ✅ |
+| 2 | 308b9ba | Komponenten-Bibliothek (CtaSection, ServiceCard, ReferenceCard, LogoStrip, StatsStrip, FaqAccordion, TabNav, LeadForm) | ✅ |
+| 3 | 95406c3 | 15 Seiten portiert (Content 1:1, gleiche URLs), Consent/Scroll-Reveal/BFSG/Quiz in Astro | ✅ |
+| 4 | 573b8f3 | Logik in src/lib extrahiert + vitest-Tests + GitHub Actions Deploy-Pipeline | ✅ |
+| 5 | 14565e6 | SEO-Dateien final (sitemap/robots/llms), Canonical-Links, Meta-1:1-Verifikation | ✅ |
+| 8 | — | Legacy-Dateien entfernt, check-meta auf Snapshot, Doku aktualisiert | ✅ |
+
+**Verifikationsergebnisse (Phase 8):**
+- `npm run build` → 15 Seiten (komponenten-vorschau entfernt)
+- `npm run check:links` → alle OK
+- `npm run check:meta` → 0 Mismatches (14 Seiten gegen `tools/legacy-meta.json`)
+- `npm test` → 74 Tests grün
+- Kein Formspree, kein CDN in dist/
+
+**Deploy:** Bereit – wartet auf `git push origin main` (GitHub Actions triggert automatisch).
+
+---
+
 ## Executive Summary — Top 10 kritischste Findings
 
 | # | Finding | Schweregrad | Kategorie |

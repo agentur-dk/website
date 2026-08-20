@@ -1,0 +1,58 @@
+{
+  "index.html": {
+    "title": "agentur dk – Websites, Website-Leasing & Digital-Agentur Köln",
+    "description": "Ihre Agentur in Köln für professionelle WordPress-Websites, Website-Leasing, barrierefreies Webdesign (BFSG), SEO/GEO und Online-Marketing. Persönlich, schnell, professionell."
+  },
+  "leistungen.html": {
+    "title": "Leistungen | agentur dk – Website-Leasing, WordPress & Digital-Agentur Köln",
+    "description": "Alle Leistungen der agentur dk: Website-Leasing, WordPress-Websites (barrierefrei nach BFSG), SEO/GEO, Online-Marketing, Social Recruiting, Corporate Design und KI-Services."
+  },
+  "projekte.html": {
+    "title": "Referenzen & Projekte | agentur dk – Websites, WordPress & SEO Köln",
+    "description": "Referenzen der agentur dk: WordPress-Websites, Website-Leasing, BFSG/Barrierefreiheit, SEO/GEO, Online-Marketing und Corporate Design für TARGOBANK, Bundesministerium, Apotheken und KMU."
+  },
+  "barrierefreiheit.html": {
+    "title": "Erklärung zur Barrierefreiheit | agentur dk – Websites & Digital-Agentur Köln",
+    "description": "Barrierefreiheitserklärung der agentur dk nach BFSG/BGG: Konformitätsstatus WCAG 2.2 AA, Kontakt für Barrieremeldungen und Durchsetzungsstelle."
+  },
+  "bfsg-wordpress-website-agentur.html": {
+    "title": "Barrierefreie WordPress-Website (BFSG) – agentur dk",
+    "description": "BFSG-konforme WordPress-Websites aus Köln: EN 301 549, WCAG 2.2 AA, Selbstcheck und professionelle Umsetzung. Jetzt kostenlos prüfen lassen."
+  },
+  "wordpress-entwicklung.html": {
+    "title": "WordPress-Entwicklung & Relaunch aus Köln – agentur dk",
+    "description": "Professionelle WordPress-Entwicklung, Relaunch und WooCommerce-Shops aus Köln. Barrierefrei, performant, Core Web Vitals optimiert. Jetzt kostenlos beraten lassen."
+  },
+  "seo-geo.html": {
+    "title": "SEO & GEO Agentur Köln – Sichtbarkeit bei Google & KI – agentur dk",
+    "description": "SEO und GEO aus Köln: Technisches SEO, Content-Optimierung und Generative Engine Optimization (GEO) für ChatGPT, Claude & Co. Jetzt Platzierungen sichern."
+  },
+  "online-marketing.html": {
+    "title": "Online-Marketing Agentur Köln – Ads, Content & Social Media – agentur dk",
+    "description": "Online-Marketing aus Köln: Google Ads, Meta & LinkedIn Kampagnen, Content-Marketing und E-Mail-Marketing mit messbarem ROAS. Jetzt Kampagne starten."
+  },
+  "social-recruiting.html": {
+    "title": "Social Recruiting mit KI – Mitarbeiter finden – agentur dk",
+    "description": "Social Recruiting aus Köln: Fachkräfte über LinkedIn, Meta & Co. gewinnen – mit KI-gestützter Zielgruppenansprache und messbarem Recruiting-Erfolg."
+  },
+  "corporate-design.html": {
+    "title": "Corporate Design Agentur Köln – Logo, Brand Identity & Manuals – agentur dk",
+    "description": "Corporate Design aus Köln: Logo-Entwicklung, Brand Identity und Design Manuals für Print & Digital. Wiedererkennbar, konsistent, professionell."
+  },
+  "ki-services.html": {
+    "title": "KI-Services für Unternehmen – KI-Telefon-Agenten & mehr – agentur dk",
+    "description": "KI-Services aus Köln: KI-Telefon-Agenten mit 24/7-Verfügbarkeit, automatisierte Terminbuchung und KI-gestützte Textoptimierung. Jetzt Potenzial freischalten."
+  },
+  "website-leasing.html": {
+    "title": "Website-Leasing – Professionelle Website ohne Einmalkosten | agentur dk",
+    "description": "Professionelle Website zum monatlichen Festpreis – ohne hohe Einmalkosten. Mit Wartung, Hosting und technischem Support auf Wunsch inklusive. Jetzt individuelles Angebot anfragen."
+  },
+  "datenschutz.html": {
+    "title": "Datenschutzerklärung – agentur dk",
+    "description": "Datenschutzerklärung von agentur dk Köln: Hosting, Kontaktformular, Consent-Management. Keine Tracking-Tools ohne Einwilligung."
+  },
+  "impressum.html": {
+    "title": "Impressum – agentur dk",
+    "description": "Impressum von agentur dk – design & kommunikation, Sachsenring 57, 50677 Köln. Alle Pflichtangaben nach §5 DDG."
+  }
+}

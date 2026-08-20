@@ -1,22 +1,25 @@
 #!/usr/bin/env node
 /**
  * tools/check-meta.mjs
- * Verifies that <title> and <meta name="description"> in dist/website/*.html
- * match the corresponding legacy *.html files at the repo root.
+ * Verifies that <title> and <meta name="description"> in dist/*.html
+ * match the frozen snapshot in tools/legacy-meta.json.
  * Exits with code 1 if mismatches are found.
  */
 import { readFileSync, existsSync, readdirSync } from 'fs';
-import { resolve, dirname, basename } from 'path';
+import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, '..');
 const distDir = resolve(rootDir, 'dist');
+const snapshotPath = resolve(__dirname, 'legacy-meta.json');
 
 if (!existsSync(distDir)) {
   console.error('dist/ not found — run npm run build first');
   process.exit(1);
 }
+
+const snapshot = JSON.parse(readFileSync(snapshotPath, 'utf8'));
 
 function extractTitle(html) {
   const m = html.match(/<title>([^<]*)<\/title>/i);
@@ -29,7 +32,7 @@ function extractDescription(html) {
   return m ? m[1].replace(/&amp;/g, '&').trim() : null;
 }
 
-const SKIP = new Set(['komponenten-vorschau.html']);
+const SKIP = new Set(['404.html']);
 
 const distFiles = readdirSync(distDir)
   .filter(f => f.endsWith('.html') && !SKIP.has(f));
@@ -38,30 +41,26 @@ let mismatches = 0;
 const errors = [];
 
 for (const file of distFiles.sort()) {
-  const legacyPath = resolve(rootDir, file);
-  if (!existsSync(legacyPath)) {
-    console.warn(`  SKIP: no legacy file for ${file}`);
+  const expected = snapshot[file];
+  if (!expected) {
+    console.warn(`  SKIP: no snapshot entry for ${file}`);
     continue;
   }
 
   const distHtml = readFileSync(resolve(distDir, file), 'utf8');
-  const legacyHtml = readFileSync(legacyPath, 'utf8');
-
   const distTitle = extractTitle(distHtml);
-  const legacyTitle = extractTitle(legacyHtml);
   const distDesc = extractDescription(distHtml);
-  const legacyDesc = extractDescription(legacyHtml);
 
-  if (distTitle !== legacyTitle) {
+  if (distTitle !== expected.title) {
     errors.push(`  TITLE MISMATCH in ${file}:`);
-    errors.push(`    legacy: ${legacyTitle}`);
-    errors.push(`    dist:   ${distTitle}`);
+    errors.push(`    expected: ${expected.title}`);
+    errors.push(`    dist:     ${distTitle}`);
     mismatches++;
   }
-  if (distDesc !== legacyDesc) {
+  if (distDesc !== expected.description) {
     errors.push(`  DESC MISMATCH in ${file}:`);
-    errors.push(`    legacy: ${legacyDesc}`);
-    errors.push(`    dist:   ${distDesc}`);
+    errors.push(`    expected: ${expected.description}`);
+    errors.push(`    dist:     ${distDesc}`);
     mismatches++;
   }
 }
@@ -71,6 +70,6 @@ if (mismatches > 0) {
   for (const e of errors) console.error(e);
   process.exit(1);
 } else {
-  console.log(`✅ All meta tags match legacy (${distFiles.length} pages checked)`);
+  console.log(`✅ All meta tags match snapshot (${distFiles.length} pages checked, 404.html excluded)`);
   process.exit(0);
 }
