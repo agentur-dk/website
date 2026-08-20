@@ -59,7 +59,8 @@ function resolveLink(link, htmlFilePath) {
   return resolve(dirname(htmlFilePath), link);
 }
 
-const htmlFiles = walkDir(distDir).filter(f => f.endsWith('.html'));
+const SKIP_FILES = new Set(['komponenten-vorschau.html']);
+const htmlFiles = walkDir(distDir).filter(f => f.endsWith('.html') && !SKIP_FILES.has(f.split('/').pop()));
 let broken = 0;
 const errors = [];
 

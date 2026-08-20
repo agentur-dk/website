@@ -4,6 +4,7 @@
  * Kein Formspree! Eigener PHP-Mailer (PHPMailer/SMTP).
  */
 const FORM_ENDPOINT = 'https://dk-dk.de/formular/send.php';
+const base = import.meta.env.BASE_URL;
 
 interface Props {
   page?: string;
@@ -201,7 +202,7 @@ const topics = [
 
         <p class="lf-privacy">
           Bitte beachten Sie unsere
-          <a href="/website/datenschutz" class="lf-privacy__link">Datenschutzerklärung</a>.
+          <a href={`${base}datenschutz.html`} class="lf-privacy__link">Datenschutzerklärung</a>.
         </p>
 
         <div class="lf-step__nav">

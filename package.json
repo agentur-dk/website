@@ -12,7 +12,8 @@
     "astro": "astro",
     "test": "vitest run",
     "check:links": "node tools/check-links.mjs",
-    "validate": "npm run build && npm run check:links"
+    "check:meta": "node tools/check-meta.mjs",
+    "validate": "npm run build && npm run check:links && npm run check:meta"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

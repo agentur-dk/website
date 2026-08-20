@@ -7,6 +7,9 @@ export default defineConfig({
   site: 'https://agentur-dk.github.io',
   base: '/website/',
   output: 'static',
+  build: {
+    format: 'file',
+  },
   vite: {
     plugins: [tailwindcss()],
   },

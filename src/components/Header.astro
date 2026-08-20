@@ -55,7 +55,7 @@ const currentPath = Astro.url.pathname;
         <!-- Leistungen dropdown -->
         <li class="nav-item--dropdown">
           <a
-            href={`${base}leistungen`}
+            href={`${base}leistungen.html`}
             id="leistungen-btn"
             aria-haspopup="true"
             aria-expanded="false"
@@ -76,7 +76,7 @@ const currentPath = Astro.url.pathname;
           >
             {leistungen.map((l) => (
               <li>
-                <a href={`${base}${l.href}`} class="nav-dropdown__link">{l.label}</a>
+                <a href={`${base}${l.href}.html`} class="nav-dropdown__link">{l.label}</a>
               </li>
             ))}
           </ul>
@@ -84,7 +84,7 @@ const currentPath = Astro.url.pathname;
 
         <li>
           <a
-            href={`${base}projekte`}
+            href={`${base}projekte.html`}
             aria-current={currentPath.includes('projekte') ? 'page' : undefined}
             class="nav-link"
           >Referenzen</a>
@@ -92,7 +92,7 @@ const currentPath = Astro.url.pathname;
 
         <li>
           <a
-            href={`${base}barrierefreiheit`}
+            href={`${base}barrierefreiheit.html`}
             aria-current={currentPath.includes('barrierefreiheit') ? 'page' : undefined}
             class="nav-link"
           >Barrierefreiheit</a>

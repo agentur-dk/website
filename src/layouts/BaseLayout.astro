@@ -20,6 +20,11 @@ const {
 
 const base = import.meta.env.BASE_URL;
 const resolvedOgImage = ogImage ?? `${base}images/og-image-website.png`;
+
+const { pathname } = Astro.url;
+const canonical = pathname.endsWith('/')
+  ? `https://agentur-dk.github.io${pathname}index.html`
+  : `https://agentur-dk.github.io${pathname}`;
 ---
 
 <!doctype html>
@@ -32,6 +37,8 @@ const resolvedOgImage = ogImage ?? `${base}images/og-image-website.png`;
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="canonical" href={canonical} />
 
     <meta name="theme-color" content="#121212" />
 

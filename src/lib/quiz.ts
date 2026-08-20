@@ -23,31 +23,31 @@ export interface QuizStep2Config {
 export const SERVICES: Record<string, QuizService> = {
   mehr_umsatz: {
     title: 'Online-Marketing',
-    href: 'online-marketing',
+    href: 'online-marketing.html',
     blurb: 'Kampagnen, Ads & Conversion-Optimierung – für mehr Anfragen und messbaren Umsatz.',
     formValue: 'Online-Marketing',
   },
   mitarbeiter: {
     title: 'Social Recruiting',
-    href: 'social-recruiting',
+    href: 'social-recruiting.html',
     blurb: 'Zielgruppengenau neue Mitarbeiter finden – auf den Plattformen, wo sie wirklich sind.',
     formValue: 'Social Recruiting',
   },
   bfsg: {
     title: 'BFSG & Barrierefreiheit',
-    href: 'bfsg-wordpress-website-agentur',
+    href: 'bfsg-wordpress-website-agentur.html',
     blurb: 'Rechtssichere digitale Barrierefreiheit nach WCAG 2.2 & EN 301 549 – bis zur BFSG-Deadline.',
     formValue: 'Barrierefreie Website (BFSG)',
   },
   sichtbarkeit: {
     title: 'SEO & GEO',
-    href: 'seo-geo',
+    href: 'seo-geo.html',
     blurb: 'Besser gefunden werden – in Suchmaschinen und KI-Antworten.',
     formValue: 'SEO & GEO',
   },
   marke: {
     title: 'Corporate Design',
-    href: 'corporate-design',
+    href: 'corporate-design.html',
     blurb: 'Markenauftritt, der bleibt und überzeugt – von Logo bis Styleguide.',
     formValue: 'Corporate Design',
   },
