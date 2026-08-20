@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="SEO & GEO Agentur Köln – Suchmaschinen & KI-Sichtbarkeit | agentur dk"
+  description="SEO und GEO aus Köln: Technisches SEO, Content-Optimierung und Generative Engine Optimization (GEO) für ChatGPT, Claude & Co. Jetzt Platzierungen sichern."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "SEO & GEO Optimierung",
+      "provider": {
+        "@type": "Organization",
+        "name": "agentur dk – design & kommunikation",
+        "url": "https://dk-dk.de"
+      },
+      "description": "Technisches und inhaltliches SEO sowie Generative Engine Optimization (GEO) für KI-Systeme – strukturierte Daten, llms.txt und lokales SEO für Köln, NRW und Deutschland.",
+      "areaServed": { "@type": "Country", "name": "DE" },
+      "serviceType": "Digital Agency",
+      "url": "https://dk-dk.de/seo-geo"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was ist GEO – Generative Engine Optimization?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "GEO optimiert Inhalte so, dass sie von KI-Systemen wie ChatGPT, Claude, Gemini oder Perplexity in Antworten zitiert werden. Dazu gehören klare Struktur, Zitate, Fakten und maschinenlesbare Auszeichnung."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Brauche ich SEO und GEO oder reicht eines davon?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Beides ergänzt sich: SEO sichert klassische Google-Sichtbarkeit, GEO die Präsenz in KI-Antworten. Wer in beiden Kanälen erscheint, besetzt die relevante Aufmerksamkeit – heute und in Zukunft."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie lange dauert es, bis SEO wirkt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Erste Verbesserungen sind oft nach 4–6 Wochen messbar, spürbare Rankings nach 3–6 Monaten. Entscheidend sind saubere Technik, relevante Inhalte und kontinuierliche Optimierung."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bieten Sie auch lokales SEO für Köln an?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Wir optimieren Google Business Profile, lokale Strukturdaten und regionale Inhalte, damit Sie bei Suchanfragen wie 'Agentur Köln' oder 'WordPress Köln' gefunden werden."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was ist llms.txt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "llms.txt ist eine maschinenlesbare Datei, die KI-Systemen die wichtigsten Informationen über Ihre Website bereitstellt – vergleichbar mit robots.txt, aber für Large Language Models. Wir implementieren und pflegen sie."
+          }
+        }
+      ]
+    }
+    </script>
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content" tabindex="-1">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><a href={`${base}leistungen`}>Leistungen</a></li>
+          <li aria-current="page">SEO &amp; GEO</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- SECTION: Hero -->
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <p class="section__label">SEO &amp; GEO</p>
+        <h1 id="hero-heading" class="section__headline">Gefunden werden – bei Google und in der KI</h1>
+        <p class="section__lead">Technisches SEO, relevanter Content und GEO für ChatGPT, Claude &amp; Co.: Wir machen Ihre Website sichtbar, wo Ihre Kunden suchen – heute und morgen.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">Jetzt Sichtbarkeit sichern</a>
+          <a href={`${base}wordpress-entwicklung`} class="btn btn--outline btn--lg">Website-Check anfordern</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Problem / Benefits -->
+    <section class="section section--dark" aria-labelledby="seo-problem">
+      <div class="container">
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <h2 id="seo-problem" class="section__heading">Ihre Kunden suchen – finden sie Sie?</h2>
+            <p>Klassische Suchergebnisse verändern sich, KI-Antworten kommen dazu. Wer heute nur auf das eine setzt, verliert morgen Sichtbarkeit.</p>
+            <p>Wir kombinieren bewährtes SEO mit GEO – damit Ihre Marke überall auftaucht, wo Entscheidungen getroffen werden.</p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Was wir für Sie optimieren</h3>
+            <ul class="checklist">
+              <li class="checklist__item">Technisches SEO: Crawling, Indexierung, Core Web Vitals</li>
+              <li class="checklist__item">Inhaltliche Relevanz: Suchintention, Struktur, E-E-A-T</li>
+              <li class="checklist__item">GEO: Zitate in KI-Antworten von ChatGPT, Claude &amp; Gemini</li>
+              <li class="checklist__item">Strukturierte Daten (Schema.org JSON-LD)</li>
+              <li class="checklist__item">Lokales SEO für Köln, NRW und Deutschland</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Leistungen -->
+    <section class="section section--light" aria-labelledby="seo-leistungen">
+      <div class="container">
+        <p class="section__label">Leistungen</p>
+        <div class="card-grid card-grid--3col">
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Technisches SEO</h3>
+            <p class="card__body">Technische Basis: Crawling, Indexierung, Geschwindigkeit, saubere interne Verlinkung.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Content-Optimierung</h3>
+            <p class="card__body">Texte und Strukturen, die Suchintention treffen – und Menschen wie Maschinen überzeugen.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">GEO – Generative Engine Optimization</h3>
+            <p class="card__body">Inhalte so aufbereiten, dass KI-Systeme sie zitieren: klare Antworten, Fakten, Zitate.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Strukturierte Daten</h3>
+            <p class="card__body">Schema.org JSON-LD für Organisation, Services, FAQ und mehr – maschinenlesbar und rich-snippet-fähig.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">llms.txt &amp; KI-Readiness</h3>
+            <p class="card__body">Implementierung von llms.txt und KI-freundlicher Auszeichnung für LLM-Sichtbarkeit.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Lokales SEO</h3>
+            <p class="card__body">Google Business Profile, lokale Daten und regionale Inhalte für Köln, NRW und Umgebung.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Prozess -->
+    <section class="section section--light" aria-labelledby="seo-prozess">
+      <div class="container">
+        <p class="section__label">So arbeiten wir</p>
+        <h2 id="seo-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <ol class="process-list" role="list">
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">01</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Audit &amp; Analyse</h3>
+              <p class="process-list__body">Technischer Check, Keyword-Recherche und GEO-Potenzialanalyse Ihrer Website.</p>
+            </div>
+          </li>
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">02</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Maßnahmenplan</h3>
+              <p class="process-list__body">Priorisierte Roadmap: Was bringt am meisten – technisch, inhaltlich, strategisch.</p>
+            </div>
+          </li>
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">03</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Umsetzung</h3>
+              <p class="process-list__body">Technische Fixes, Content-Optimierung und strukturierte Daten – sauber dokumentiert.</p>
+            </div>
+          </li>
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">04</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Messung &amp; Skalierung</h3>
+              <p class="process-list__body">Rankings, Traffic und KI-Zitate im Blick – und die nächsten Schritte fest im Plan.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SECTION: Weitere Leistungen -->
+    <section class="section section--sm" aria-label="Passende Leistungen">
+      <div class="container">
+        <h2 class="section__subheading">Passende Leistungen</h2>
+        <ul class="footer-col__list" role="list">
+          <li><a href={`${base}wordpress-entwicklung`} class="footer-col__link">WordPress-Entwicklung</a></li>
+          <li><a href={`${base}online-marketing`} class="footer-col__link">Online-Marketing</a></li>
+          <li><a href={`${base}ki-services`} class="footer-col__link">KI-Services</a></li>
+          <li><a href={`${base}bfsg-wordpress-website-agentur`} class="footer-col__link">BFSG &amp; Barrierefreiheit</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION: FAQ -->
+    <FaqAccordion
+      heading="Häufige Fragen"
+      items={[
+        {
+          question: "Was ist GEO – Generative Engine Optimization?",
+          answer: "GEO optimiert Inhalte so, dass sie von KI-Systemen wie ChatGPT, Claude, Gemini oder Perplexity in Antworten zitiert werden. Dazu gehören klare Struktur, Zitate, Fakten und maschinenlesbare Auszeichnung.",
+        },
+        {
+          question: "Brauche ich SEO und GEO oder reicht eines davon?",
+          answer: "Beides ergänzt sich: SEO sichert klassische Google-Sichtbarkeit, GEO die Präsenz in KI-Antworten. Wer in beiden Kanälen erscheint, besetzt die relevante Aufmerksamkeit – heute und in Zukunft.",
+        },
+        {
+          question: "Wie lange dauert es, bis SEO wirkt?",
+          answer: "Erste Verbesserungen sind oft nach 4–6 Wochen messbar, spürbare Rankings nach 3–6 Monaten. Entscheidend sind saubere Technik, relevante Inhalte und kontinuierliche Optimierung.",
+        },
+        {
+          question: "Bieten Sie auch lokales SEO für Köln an?",
+          answer: "Ja. Wir optimieren Google Business Profile, lokale Strukturdaten und regionale Inhalte, damit Sie bei Suchanfragen wie 'Agentur Köln' oder 'WordPress Köln' gefunden werden.",
+        },
+        {
+          question: "Was ist llms.txt?",
+          answer: "llms.txt ist eine maschinenlesbare Datei, die KI-Systemen die wichtigsten Informationen über Ihre Website bereitstellt – vergleichbar mit robots.txt, aber für Large Language Models. Wir implementieren und pflegen sie.",
+        },
+      ]}
+    />
+
+    <!-- SECTION: Kontakt -->
+    <LeadForm page="SEO & GEO" heading="Jetzt unverbindlich anfragen" />
+
+  </main>
+
+  <Footer />
+</BaseLayout>

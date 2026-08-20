@@ -1,0 +1,215 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const title = 'Social Recruiting Agentur Köln – LinkedIn, Meta & KI-Targeting | agentur dk';
+const description = 'Social Recruiting aus Köln: Fachkräfte über LinkedIn, Meta & Co. gewinnen – mit KI-gestützter Zielgruppenansprache und messbarem Recruiting-Erfolg.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Social Recruiting mit KI",
+      "provider": {
+        "@type": "Organization",
+        "name": "agentur dk – design & kommunikation",
+        "url": "https://dk-dk.de"
+      },
+      "description": "Mitarbeitergewinnung über zielgenaue Social-Media-Kampagnen mit KI-gestützter Zielgruppenansprache – für Fachkräfte in Köln, NRW und deutschlandweit.",
+      "areaServed": { "@type": "Country", "name": "DE" },
+      "serviceType": "Digital Agency",
+      "url": "https://dk-dk.de/social-recruiting"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was ist Social Recruiting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Social Recruiting nutzt Social-Media-Plattformen wie LinkedIn, Instagram und Facebook, um passende Kandidatinnen und Kandidaten aktiv anzusprechen – statt nur auf Bewerbungen zu warten."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie hilft KI beim Recruiting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "KI unterstützt bei der Zielgruppenanalyse, der Personalisierung von Ansprachen und der Optimierung von Kampagnen – so erreichst Sie genau die Menschen, die zu Ihrer Stelle passen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Für welche Positionen funktioniert Social Recruiting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Von Fachkräften und Spezialisten bis zu Führungspositionen – wir entwickeln Kampagnen für alle Zielgruppen, vom Gesundheitswesen bis zur IT und dem Handwerk."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie misst Sie den Recruiting-Erfolg?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Wir tracken Reichweite, Klicks, Bewerbungen und Cost per Application. Sie wissen jederzeit, was Ihre Recruiting-Maßnahmen kosten und was sie bringen."
+          }
+        }
+      ]
+    }
+    </script>
+  </Fragment>
+
+  <Header />
+  <main id="main-content" tabindex="-1">
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><a href={`${base}leistungen`}>Leistungen</a></li>
+          <li aria-current="page">Social Recruiting</li>
+        </ol>
+      </div>
+    </nav>
+
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <p class="section__label">Social Recruiting</p>
+        <h1 id="hero-heading" class="section__headline">Die richtigen Leute finden – nicht auf sie warten</h1>
+        <p class="section__lead">Fachkräfte aktiv über LinkedIn, Meta &amp; Co. ansprechen – mit KI-gestützter Zielgruppenanalyse und Kampagnen, die Bewerbungen bringen.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">Recruiting-Strategie anfragen</a>
+          <a href={`${base}online-marketing`} class="btn btn--outline btn--lg">Online-Marketing ansehen</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" aria-labelledby="sr-problem">
+      <div class="container">
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <h2 id="sr-problem" class="section__heading">Fachkräftemangel? Nicht bei denen, die aktiv suchen</h2>
+            <p>Ausschreibungen allein reichen nicht mehr. Die besten Kandidatinnen und Kandidaten werden aktiv angesprochen – dort, wo sie täglich unterwegs sind.</p>
+            <p>Wir entwickeln Recruiting-Kampagnen, die genau die Menschen erreichen, die zu Ihrem Unternehmen und Ihrer Stelle passen.</p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Was wir für Sie tust</h3>
+            <ul class="checklist">
+              <li class="checklist__item">Zielgruppenanalyse: Wer passt zu Ihrer Stelle?</li>
+              <li class="checklist__item">Personalisierte Ansprache statt Massen-Posting</li>
+              <li class="checklist__item">KI-gestützte Optimierung von Kampagnen und Texten</li>
+              <li class="checklist__item">Messbare KPIs: Bewerbungen, Cost per Application</li>
+              <li class="checklist__item">Kombinierbar mit Employer-Branding und Karriereseite</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="sr-leistungen">
+      <div class="container">
+        <p class="section__label">Leistungen</p>
+        <div class="card-grid card-grid--3col">
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Kampagnen auf LinkedIn</h3>
+            <p class="card__body">Zielgenaue Ansprache von Fach- und Führungskräften im B2B-Kontext.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Meta &amp; Instagram Recruiting</h3>
+            <p class="card__body">Reichweitenstarke Kampagnen für breitere Zielgruppen – vom Handwerk bis zur Pflege.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">KI-gestützte Zielgruppen</h3>
+            <p class="card__body">Datenbasierte Personas und Lookalike-Zielgruppen für maximale Trefferquote.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Employer Branding</h3>
+            <p class="card__body">Arbeitgebermarke sichtbar machen – damit Bewerbungen auch organisch kommen.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Kreative &amp; Texte</h3>
+            <p class="card__body">Anzeigen, die Interesse wecken: Job-Insights, Team-Storys, echte Einblicke.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Reporting &amp; Optimierung</h3>
+            <p class="card__body">Klarer Überblick über Kosten pro Bewerbung und laufende Verbesserung.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="sr-prozess">
+      <div class="container">
+        <p class="section__label">So arbeiten wir</p>
+        <h2 id="sr-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <ol class="process-list" role="list">
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">01</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Analyse der Zielgruppe</h3>
+              <p class="process-list__body">Wir definieren, wen Sie erreichen willst – und wo diese Menschen sind.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">02</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Kampagnen-Konzept</h3>
+              <p class="process-list__body">Botschaft, Kreative und Kanalwahl passend zu Position und Zielgruppe.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">03</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Launch &amp; Steuerung</h3>
+              <p class="process-list__body">Kampagnen live, Tracking aktiv, laufende Optimierung der Ansprache.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">04</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Bewerbungen &amp; Skalierung</h3>
+              <p class="process-list__body">Was funktioniert, wird ausgebaut – messbar in Bewerbungen und Kosten.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section--sm" aria-label="Passende Leistungen">
+      <div class="container">
+        <h2 class="section__subheading">Passende Leistungen</h2>
+        <ul class="footer-col__list" role="list">
+          <li><a href={`${base}online-marketing`} class="footer-col__link">Online-Marketing</a></li>
+          <li><a href={`${base}ki-services`} class="footer-col__link">KI-Services</a></li>
+          <li><a href={`${base}corporate-design`} class="footer-col__link">Corporate Design</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <FaqAccordion
+      heading="Häufige Fragen"
+      items={[
+        { question: 'Was ist Social Recruiting?', answer: 'Social Recruiting nutzt Social-Media-Plattformen wie LinkedIn, Instagram und Facebook, um passende Kandidatinnen und Kandidaten aktiv anzusprechen – statt nur auf Bewerbungen zu warten.' },
+        { question: 'Wie hilft KI beim Recruiting?', answer: 'KI unterstützt bei der Zielgruppenanalyse, der Personalisierung von Ansprachen und der Optimierung von Kampagnen – so erreichst Sie genau die Menschen, die zu Ihrer Stelle passen.' },
+        { question: 'Für welche Positionen funktioniert Social Recruiting?', answer: 'Von Fachkräften und Spezialisten bis zu Führungspositionen – wir entwickeln Kampagnen für alle Zielgruppen, vom Gesundheitswesen bis zur IT und dem Handwerk.' },
+        { question: 'Wie misst Sie den Recruiting-Erfolg?', answer: 'Wir tracken Reichweite, Klicks, Bewerbungen und Cost per Application. Sie wissen jederzeit, was Ihre Recruiting-Maßnahmen kosten und was sie bringen.' },
+      ]}
+    />
+
+    <LeadForm page="Social Recruiting" heading="Jetzt unverbindlich anfragen" />
+
+  </main>
+  <Footer />
+</BaseLayout>

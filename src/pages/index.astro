@@ -1,11 +1,9 @@
 ---
-/**
- * PROVISORISCHE STARTSEITE — Phase 1 Smoke-Test
- * Wird in Phase 3 durch die vollständige Portierung von index.html ersetzt.
- */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import LeadForm from '../components/LeadForm.astro';
+import StatsStrip from '../components/StatsStrip.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -14,67 +12,1024 @@ const base = import.meta.env.BASE_URL;
   title="agentur dk – Websites, Website-Leasing & Digital-Agentur Köln"
   description="Ihre Agentur in Köln für professionelle WordPress-Websites, Website-Leasing, barrierefreies Webdesign (BFSG), SEO/GEO und Online-Marketing. Persönlich, schnell, professionell."
 >
+  <Fragment slot="head">
+    <!-- JSON-LD: Organization + LocalBusiness -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["Organization", "ProfessionalService"],
+  "@id": "https://dk-dk.de/#organization",
+  "name": "agentur dk \u2013 design & kommunikation",
+  "url": "https://dk-dk.de",
+  "logo": "https://dk-dk.de/images/og-image-website.png",
+  "image": "https://dk-dk.de/images/og-image-website.png",
+  "description": "Agentur f\u00fcr barrierefreie WordPress-Websites (BFSG), SEO, GEO und Online-Marketing in K\u00f6ln.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Sachsenring 57",
+    "addressLocality": "K\u00f6ln",
+    "postalCode": "50677",
+    "addressCountry": "DE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 50.9286,
+    "longitude": 6.9604
+  },
+  "telephone": "+49-221-986-55-229",
+  "email": "mail@dk-dk.de",
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    "opens": "09:00",
+    "closes": "18:00"
+  },
+  "sameAs": ["https://www.linkedin.com/in/daniel-kontelis/"],
+  "founder": { "@type": "Person", "name": "Daniel Kontelis" }
+}
+    </script>
+
+    <!-- JSON-LD: FAQPage -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Was ist Website-Leasing und f\u00fcr wen lohnt es sich?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Beim Website-Leasing erhalten Sie eine professionell entwickelte WordPress-Website gegen eine feste monatliche Rate \u2014 ohne hohe Einmalinvestition. Das Modell eignet sich besonders f\u00fcr Unternehmen, die schnell einen hochwertigen Webauftritt ben\u00f6tigen, aber keine gro\u00dfe Anfangsinvestition t\u00e4tigen m\u00f6chten. Wartung und Hosting sind auf Wunsch inklusive."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was kostet eine professionelle WordPress-Website?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Je nach Umfang und bestehendem System beginnen WordPress-Projekte bei ca. 2.500 \u20ac. Alternativ bieten wir Website-Leasing ab einer monatlichen Rate an \u2014 ohne Einmalkosten. F\u00fcr gr\u00f6\u00dfere Relaunches kalkulieren wir individuell und erstellen ein transparentes Festpreisangebot."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange dauert ein WordPress-Relaunch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Typische Projekte dauern 4\u20138 Wochen \u2013 abh\u00e4ngig von Seitenanzahl, Funktionsumfang und der Verf\u00fcgbarkeit von Inhalten. Dank flacher Hierarchien und direkter Kommunikation halten wir Zeitpl\u00e4ne zuverl\u00e4ssig ein."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Bieten Sie auch laufende Betreuung an?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, wir bieten flexible Wartungs- und Support-Pakete an: von monatlichen Updates und Sicherheits-Patches bis hin zu laufendem SEO und Content-Pflege. So bleibt Ihre Website dauerhaft performant, sicher und BFSG-konform."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was ist GEO (Generative Engine Optimization)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GEO bezeichnet die Optimierung von Inhalten f\u00fcr KI-Systeme wie ChatGPT, Google Gemini oder Perplexity, damit Ihr Unternehmen in KI-generierten Antworten sichtbar wird. Dies erg\u00e4nzt klassisches SEO und sichert Ihnen Reichweite im Zeitalter der generativen Suche."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was ist das BFSG und gilt es f\u00fcr uns?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Das BFSG (Barrierefreiheitsst\u00e4rkungsgesetz) verpflichtet ab dem 28. Juni 2025 Anbieter privater Websites und digitaler Produkte zur Barrierefreiheit gem\u00e4\u00df EN 301 549. Es gilt f\u00fcr Unternehmen mit mehr als 10 Mitarbeitenden oder einem Jahresumsatz \u00fcber 2 Mio. \u20ac, die Verbrauchern digitale Dienstleistungen anbieten. Wir pr\u00fcfen kostenlos, ob Ihre Website betroffen ist."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "K\u00f6nnen Sie auch bestehende Websites pr\u00fcfen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, wir f\u00fchren Accessibility-Audits durch und pr\u00fcfen Ihre bestehende Website auf BFSG-Konformit\u00e4t, technische SEO-Fehler und Conversion-Potenziale. Sie erhalten einen priorisierten Ma\u00dfnahmenplan mit konkreten Handlungsempfehlungen."
+      }
+    }
+  ]
+}
+    </script>
+
+    <!-- JSON-LD: WebSite -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "url": "https://dk-dk.de",
+  "name": "agentur dk",
+  "inLanguage": "de-DE"
+}
+    </script>
+  </Fragment>
+
   <Header />
 
   <main id="main-content">
-    <section
-      style="
-        min-height: 60vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 4rem 1.5rem;
-        background-color: var(--color-bg);
-      "
-      aria-label="Provisorische Startseite"
-    >
-      <div style="max-width: 640px;">
-        <p
-          style="
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--color-primary-light);
-            margin-bottom: 1rem;
-          "
-        >Phase 1 – Astro-Grundgerüst</p>
-        <h1
-          style="
-            font-family: var(--font-display);
-            font-size: clamp(1.9375rem, 5vw, 3.0625rem);
-            font-weight: 700;
-            color: var(--color-text);
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-          "
-        >agentur dk</h1>
-        <p style="color: var(--color-text-muted); font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem;">
-          Diese Seite ist ein temporärer Platzhalter für den Astro-Build-Test.<br />
-          Die vollständige Startseite wird in Phase 3 portiert.
-        </p>
-        <a
-          href={`${base}leistungen`}
-          style="
-            display: inline-flex;
-            align-items: center;
-            padding: 0.75rem 1.75rem;
-            background-color: var(--color-primary);
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9375rem;
-            border-radius: var(--radius-md);
-            min-height: 44px;
-            transition: background-color var(--transition-fast);
-          "
-          onmouseover="this.style.backgroundColor='var(--color-primary-hover)'"
-          onmouseout="this.style.backgroundColor='var(--color-primary)'"
-        >Leistungen ansehen</a>
+
+    <!-- Hero Section -->
+    <section class="hero section" aria-label="Online-Agentur Köln">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <h1 class="hero__headline" aria-label="Sichtbarkeit, die wirkt. Barrierefreiheit, die überzeugt.">
+            <span id="typewriter-text" data-texts='["Sichtbarkeit, die wirkt.", "Barrierefreiheit, die überzeugt.", "WordPress, das performt.", "Marketing, das konvertiert."]'>Sichtbarkeit, die wirkt.</span><span class="typewriter-caret" aria-hidden="true"></span>
+          </h1>
+          <p class="hero__subline">
+            agentur dk macht Ihr Unternehmen digital sichtbar — mit Website-Leasing, professioneller WordPress-Entwicklung (barrierefrei nach BFSG), strategischem SEO/GEO und zielgruppengenauem Online-Marketing.
+          </p>
+          <div class="hero__actions">
+            <a href="#contact" class="btn btn--accent btn--lg">Projekt anfragen</a>
+          </div>
+
+          <!-- Leistungs-Check -->
+          <div class="leistungs-check" data-quiz data-base={base} role="region" aria-label="Leistungs-Check">
+            <div class="quiz-widget__live u-sr-only" aria-live="polite" aria-atomic="true"></div>
+            <div data-quiz-inner></div>
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- Kundenlogo-Leiste -->
+    <section class="section logo-strip" aria-label="Unsere Kunden">
+      <div class="container">
+        <p class="logo-strip__label">Vertrauen von</p>
+        <div class="logo-strip__track-wrap" aria-hidden="true">
+          <ul class="logo-strip__track" role="list">
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 1</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 2</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 3</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">TARGOBANK</span></li>
+            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 5</span></li>
+            <!-- Duplikate für nahtlose CSS-Animation -->
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 1</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 2</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 3</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">TARGOBANK</span></li>
+            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 5</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unsere Schwerpunkte -->
+    <section class="schwerpunkte-section section section--light" aria-labelledby="schwerpunkte-heading">
+      <div class="container">
+        <p class="schwerpunkte-section__eyebrow">Unsere Schwerpunkte</p>
+        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Was wir für Sie tun</h2>
+        <p class="schwerpunkte-section__lead">Zwei Bereiche, in denen wir besonders stark sind – und in denen wir Unternehmen nachweislich weiterhelfen.</p>
+        <div class="schwerpunkte-grid">
+          <!-- Karte A -->
+          <article class="schwerpunkt-card" data-reveal>
+            <div class="schwerpunkt-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9" y1="14.5" x2="15" y2="14.5"/>
+              </svg>
+            </div>
+            <h3 class="schwerpunkt-card__title">Website-Leasing &amp; digitale Sichtbarkeit</h3>
+            <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
+            <a href={`${base}website-leasing`} class="btn btn--outline schwerpunkt-card__link">Mehr zum Website-Leasing</a>
+          </article>
+          <!-- Karte B -->
+          <article class="schwerpunkt-card" data-reveal>
+            <div class="schwerpunkt-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
+              </svg>
+            </div>
+            <h3 class="schwerpunkt-card__title">BFSG &amp; digitale Barrierefreiheit</h3>
+            <p class="schwerpunkt-card__text">Seit Juni 2025 gilt das BFSG. Wir machen Ihre Website barrierearm nach EN 301 549 / WCAG 2.2 AA – rechtssicher und im echten Code, ohne Overlay-Plugins.</p>
+            <a href={`${base}bfsg-wordpress-website-agentur#bfsg-check`} class="btn btn--outline schwerpunkt-card__link">BFSG-Check starten</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services section section--light">
+      <div class="container">
+        <p class="section-label" aria-hidden="true">Leistungen</p>
+        <h2 class="section-title">Was wir für Sie tun</h2>
+        <ul class="services__grid" role="list">
+
+          <!-- Card 0: Website-Leasing (hervorgehoben) -->
+          <li class="service-card service-card--featured" data-reveal>
+            <span class="service-card__number" aria-hidden="true">Neu</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9" y1="14.5" x2="15" y2="14.5"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Website-Leasing</h3>
+            <p class="card__body">
+              Professionelle Website ohne hohe Einmalkosten – monatliche Flatrate, Wartung und Hosting auf Wunsch inklusive.
+            </p>
+            <a href={`${base}website-leasing`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Website-Leasing</span></a>
+          </li>
+
+          <!-- Card 1: Barrierefreie Websites -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">01</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Barrierefreie Websites (BFSG)</h3>
+            <p class="card__body">
+              Wir entwickeln digitale Angebote, die BFSG- und WCAG-konform sind. Von der Prüfung bis zur Konformitätserklärung – alles aus einer Hand. Keine rechtlichen Risiken, sondern echte Zugänglichkeit.
+            </p>
+            <a href={`${base}bfsg-wordpress-website-agentur`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Barrierefreie Websites (BFSG)</span></a>
+          </li>
+
+          <!-- Card 2: WordPress-Entwicklung -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">02</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 class="card__title">WordPress-Entwicklung</h3>
+            <p class="card__body">
+              Maßgeschneiderte WordPress-Websites mit sauberem Code, schnellen Ladezeiten und nahtloser Bedienung. Wir bauen Websites, die Ihr Team selbst pflegen kann – ohne technisches Vorwissen.
+            </p>
+            <a href={`${base}wordpress-entwicklung`} class="card__link">Mehr erfahren<span class="u-sr-only"> über WordPress-Entwicklung</span></a>
+          </li>
+
+          <!-- Card 3: SEO & GEO -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">03</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><polyline points="8 13 10 11 12 13 14 9"/>
+              </svg>
+            </div>
+            <h3 class="card__title">SEO &amp; GEO</h3>
+            <p class="card__body">
+              Klassische Suchmaschinenoptimierung kombiniert mit Generative Engine Optimization (GEO) für ChatGPT, Google Gemini und Co. Wir sichern Ihre Sichtbarkeit – heute und morgen.
+            </p>
+            <a href={`${base}seo-geo`} class="card__link">Mehr erfahren<span class="u-sr-only"> über SEO und GEO</span></a>
+          </li>
+
+          <!-- Card 4: Online-Marketing -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">04</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 11v2h4l5 5V6L7 11H3z"/><path d="M19 6a6 6 0 010 12"/><path d="M15.54 8.46a3 3 0 010 7.07"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Online-Marketing</h3>
+            <p class="card__body">
+              Strategisches Online-Marketing, das Ihre Zielgruppe dort erreicht, wo sie sich aufhält. Von Content-Strategie über Social Media bis hin zu E-Mail-Kampagnen – messbar und effizient.
+            </p>
+            <a href={`${base}online-marketing`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Online-Marketing</span></a>
+          </li>
+
+          <!-- Card 5: Corporate Design -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">05</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="7" cy="7" r="1.5"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Corporate Design</h3>
+            <p class="card__body">
+              Ein einheitliches Erscheinungsbild, das Vertrauen schafft. Wir entwickeln Logo, Farbwelt und Designsystem für eine konsistente Markenkommunikation auf allen Kanälen.
+            </p>
+            <a href={`${base}corporate-design`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Corporate Design</span></a>
+          </li>
+
+          <!-- Card 6: KI-Services -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">06</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="7" width="10" height="10" rx="1"/><line x1="9" y1="3" x2="9" y2="7"/><line x1="15" y1="3" x2="15" y2="7"/><line x1="9" y1="17" x2="9" y2="21"/><line x1="15" y1="17" x2="15" y2="21"/><line x1="3" y1="9" x2="7" y2="9"/><line x1="3" y1="15" x2="7" y2="15"/><line x1="17" y1="9" x2="21" y2="9"/><line x1="17" y1="15" x2="21" y2="15"/>
+              </svg>
+            </div>
+            <h3 class="card__title">KI-Services</h3>
+            <p class="card__body">
+              KI-gestützte Content-Produktion, Prozessautomatisierung und GEO-Strategien für Ihr Unternehmen. Wir setzen künstliche Intelligenz da ein, wo sie echten Mehrwert bringt.
+            </p>
+            <a href={`${base}ki-services`} class="card__link">Mehr erfahren<span class="u-sr-only"> über KI-Services</span></a>
+          </li>
+
+          <!-- Card 7: Social Recruiting -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">07</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><circle cx="18" cy="7" r="2.5"/><path d="M22 21v-2a3.5 3.5 0 00-2.5-3.35"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Social Recruiting</h3>
+            <p class="card__body">
+              Fachkräfte aktiv über LinkedIn, Meta &amp; Co. ansprechen – mit KI-gestützter Zielgruppenanalyse und Kampagnen, die Bewerbungen bringen. Statt Warten: gezielt finden.
+            </p>
+            <a href={`${base}social-recruiting`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Social Recruiting</span></a>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- Why agentur dk -->
+    <section class="why-us section section--light" aria-label="Warum agentur dk">
+      <div class="container">
+        <p class="section-label" aria-hidden="true">Warum wir</p>
+        <h2 class="section-title">Direkt, persönlich, effizient</h2>
+        <ul class="usp-list" role="list">
+          <li class="usp-card" data-reveal>
+            <div class="usp-card__check" aria-hidden="true">
+              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="usp-card__content">
+              <h3 class="usp-card__title">1-Personen-Entscheidung</h3>
+              <p class="usp-card__body">Sie sprechen direkt mit dem Inhaber – kurze Entscheidungswege, volle Verantwortung, kein Abteilungs-Ping-Pong.</p>
+            </div>
+          </li>
+          <li class="usp-card" data-reveal>
+            <div class="usp-card__check" aria-hidden="true">
+              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="usp-card__content">
+              <h3 class="usp-card__title">BFSG-Konformität aus einer Hand</h3>
+              <p class="usp-card__body">Von der Analyse bis zur zertifizierten Umsetzung. Wir begleiten Sie durch den gesamten BFSG-Prozess und liefern rechtssichere Ergebnisse.</p>
+            </div>
+          </li>
+          <li class="usp-card" data-reveal>
+            <div class="usp-card__check" aria-hidden="true">
+              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="usp-card__content">
+              <h3 class="usp-card__title">Köln &amp; deutschlandweit</h3>
+              <p class="usp-card__body">Lokal verwurzelt, digital skalierbar. Wir kennen den Kölner Markt und arbeiten erfolgreich mit Kunden in ganz Deutschland zusammen.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process section section--light" aria-label="Unser Vorgehen">
+      <div class="container">
+        <p class="section-label" aria-hidden="true">Unser Vorgehen</p>
+        <h2 class="section-title">So arbeiten wir zusammen</h2>
+        <ol class="process__list" role="list">
+          <li class="process__item" data-reveal>
+            <div class="process__step-number" aria-hidden="true">1</div>
+            <div class="process__step-content">
+              <h3 class="process__step-title">Kennenlernen</h3>
+              <p class="process__step-body">Kostenloses Erstgespräch, Analyse Ihrer Ziele und Ihrer aktuellen Situation. Wir hören zu, bevor wir handeln.</p>
+            </div>
+          </li>
+          <li class="process__item" data-reveal>
+            <div class="process__step-number" aria-hidden="true">2</div>
+            <div class="process__step-content">
+              <h3 class="process__step-title">Konzept</h3>
+              <p class="process__step-body">Strategie und Maßnahmenplan, abgestimmt auf Ihre Ziele und Ihr Budget. Transparent, verständlich, verbindlich.</p>
+            </div>
+          </li>
+          <li class="process__item" data-reveal>
+            <div class="process__step-number" aria-hidden="true">3</div>
+            <div class="process__step-content">
+              <h3 class="process__step-title">Umsetzung</h3>
+              <p class="process__step-body">Saubere, barrierefreie Entwicklung nach aktuellen Standards. Regelmäßige Updates halten Sie auf dem Laufenden.</p>
+            </div>
+          </li>
+          <li class="process__item" data-reveal>
+            <div class="process__step-number" aria-hidden="true">4</div>
+            <div class="process__step-content">
+              <h3 class="process__step-title">Wachstum</h3>
+              <p class="process__step-body">Laufende Optimierung und Support. Wir messen, analysieren und verbessern – damit Ihre Website dauerhaft erfolgreich bleibt.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq section section--light">
+      <div class="container">
+        <p class="section-label" aria-hidden="true">FAQ</p>
+        <h2 class="section-title">Häufige Fragen</h2>
+        <div class="accordion">
+
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button type="button" class="accordion__trigger" id="faq-trigger-1" aria-expanded="false" aria-controls="faq-panel-1">
+                <span>Was ist Website-Leasing und für wen lohnt es sich?</span>
+                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                </svg>
+              </button>
+            </h3>
+            <div id="faq-panel-1" class="accordion__panel" role="region" aria-labelledby="faq-trigger-1" hidden>
+              <p>Beim Website-Leasing erhalten Sie eine professionell entwickelte WordPress-Website gegen eine feste monatliche Rate — ohne hohe Einmalinvestition. Das Modell eignet sich besonders für Unternehmen, die schnell einen hochwertigen Webauftritt benötigen, aber keine große Anfangsinvestition tätigen möchten. Wartung und Hosting sind auf Wunsch inklusive. <a href={`${base}website-leasing`} class="text-link">Mehr zum Website-Leasing</a></p>
+            </div>
+          </div>
+
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button type="button" class="accordion__trigger" id="faq-trigger-2" aria-expanded="false" aria-controls="faq-panel-2">
+                <span>Was kostet eine professionelle WordPress-Website?</span>
+                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                </svg>
+              </button>
+            </h3>
+            <div id="faq-panel-2" class="accordion__panel" role="region" aria-labelledby="faq-trigger-2" hidden>
+              <p>Je nach Umfang und bestehendem System beginnen WordPress-Projekte bei ca. 2.500 €. Alternativ bieten wir Website-Leasing ab einer monatlichen Rate an — ohne Einmalkosten. Für größere Relaunches mit Design, Entwicklung und BFSG-Konformitätserklärung kalkulieren wir individuell. Wir erstellen Ihnen ein transparentes Festpreisangebot.</p>
+            </div>
+          </div>
+
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button type="button" class="accordion__trigger" id="faq-trigger-3" aria-expanded="false" aria-controls="faq-panel-3">
+                <span>Wie lange dauert ein WordPress-Relaunch?</span>
+                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                </svg>
+              </button>
+            </h3>
+            <div id="faq-panel-3" class="accordion__panel" role="region" aria-labelledby="faq-trigger-3" hidden>
+              <p>Typische Projekte dauern 4–8 Wochen – abhängig von Seitenanzahl, Funktionsumfang und der Verfügbarkeit von Inhalten. Dank flacher Hierarchien und direkter Kommunikation halten wir Zeitpläne zuverlässig ein.</p>
+            </div>
+          </div>
+
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button type="button" class="accordion__trigger" id="faq-trigger-4" aria-expanded="false" aria-controls="faq-panel-4">
+                <span>Bieten Sie auch laufende Betreuung an?</span>
+                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                </svg>
+              </button>
+            </h3>
+            <div id="faq-panel-4" class="accordion__panel" role="region" aria-labelledby="faq-trigger-4" hidden>
+              <p>Ja, wir bieten flexible Wartungs- und Support-Pakete an: von monatlichen Updates und Sicherheits-Patches bis hin zu laufendem SEO und Content-Pflege. So bleibt Ihre Website dauerhaft performant, sicher und BFSG-konform.</p>
+            </div>
+          </div>
+
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button type="button" class="accordion__trigger" id="faq-trigger-5" aria-expanded="false" aria-controls="faq-panel-5">
+                <span>Was ist GEO (Generative Engine Optimization)?</span>
+                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                </svg>
+              </button>
+            </h3>
+            <div id="faq-panel-5" class="accordion__panel" role="region" aria-labelledby="faq-trigger-5" hidden>
+              <p>GEO bezeichnet die Optimierung von Inhalten für KI-Systeme wie ChatGPT, Google Gemini oder Perplexity, damit Ihr Unternehmen in KI-generierten Antworten sichtbar wird. Dies ergänzt klassisches SEO und sichert Ihnen Reichweite im Zeitalter der generativen Suche.</p>
+            </div>
+          </div>
+
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button type="button" class="accordion__trigger" id="faq-trigger-6" aria-expanded="false" aria-controls="faq-panel-6">
+                <span>Was ist das BFSG und gilt es für uns?</span>
+                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                </svg>
+              </button>
+            </h3>
+            <div id="faq-panel-6" class="accordion__panel" role="region" aria-labelledby="faq-trigger-6" hidden>
+              <p>Das BFSG (Barrierefreiheitsstärkungsgesetz) verpflichtet ab dem 28. Juni 2025 Anbieter privater Websites und digitaler Produkte zur Barrierefreiheit gemäß EN 301 549. Es gilt für Unternehmen mit mehr als 10 Mitarbeitenden oder einem Jahresumsatz über 2 Mio. €, die Verbrauchern digitale Dienstleistungen anbieten. Wir prüfen kostenlos, ob Ihre Website betroffen ist.</p>
+            </div>
+          </div>
+
+          <div class="accordion__item">
+            <h3 class="accordion__heading">
+              <button type="button" class="accordion__trigger" id="faq-trigger-7" aria-expanded="false" aria-controls="faq-panel-7">
+                <span>Können Sie auch bestehende Websites prüfen?</span>
+                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                </svg>
+              </button>
+            </h3>
+            <div id="faq-panel-7" class="accordion__panel" role="region" aria-labelledby="faq-trigger-7" hidden>
+              <p>Ja, wir führen Accessibility-Audits durch und prüfen Ihre bestehende Website auf BFSG-Konformität, technische SEO-Fehler und Conversion-Potenziale. Sie erhalten einen priorisierten Maßnahmenplan mit konkreten Handlungsempfehlungen.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact section" aria-label="Kontakt">
+      <div class="container contact__inner">
+        <!-- Contact Info -->
+        <div class="contact__info">
+          <p class="section-label" aria-hidden="true">Kontakt</p>
+          <h2 class="section-title">Projekt anfragen</h2>
+          <address class="contact__address">
+            <p>
+              agentur dk – design &amp; kommunikation<br>
+              Daniel Kontelis<br>
+              Sachsenring 57<br>
+              D-50677 Köln
+            </p>
+            <p>
+              <a href="tel:+4922198655229" class="contact__link">
+                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.42 11.42 0 0 0 3.58.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.42 11.42 0 0 0 .57 3.58 1 1 0 0 1-.24 1.01l-2.21 2.2z" fill="currentColor"/>
+                </svg>
+                +49 221 986 55 229
+              </a>
+            </p>
+            <p>
+              <a href="mailto:mail@dk-dk.de" class="contact__link">
+                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/>
+                </svg>
+                mail@dk-dk.de
+              </a>
+            </p>
+            <p>
+              <a href="https://www.linkedin.com/in/daniel-kontelis/" class="contact__link" rel="noopener noreferrer" target="_blank">
+                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zm2-6a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" fill="currentColor"/>
+                </svg>
+                LinkedIn<span class="u-sr-only"> (öffnet in neuem Tab)</span>
+              </a>
+            </p>
+          </address>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact__form-wrapper">
+          <LeadForm page="Startseite" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Referenzen -->
+    <section class="referenzen-section section section--light" aria-labelledby="referenzen-heading">
+      <div class="container">
+        <p class="schwerpunkte-section__eyebrow">Ausgewählte Projekte</p>
+        <h2 class="schwerpunkte-section__heading" id="referenzen-heading">Was wir geleistet haben</h2>
+        <p class="schwerpunkte-section__lead">Ein Auszug aus unseren Projekten – von öffentlicher Hand über Finanzdienstleister bis zu Bildungsträgern.</p>
+        <div class="case-grid">
+          <article class="case-card" data-reveal>
+            <div class="case-card__visual case-card__visual--blue" aria-hidden="true">
+              <span class="case-card__initials">BMBFSJ</span>
+            </div>
+            <div class="case-card__body">
+              <span class="case-card__tag">Öffentliche Hand / BFSG</span>
+              <h3 class="case-card__title">Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend</h3>
+              <p class="case-card__desc">Konzeption, Gestaltung und Umsetzung eines deutschlandweiten Eltern-Anfrageportals für Familienhotels. Der Fokus liegt auf sozialschwachen Familien mit Kindern mit Handicap. Herausforderung: neue barrierearme Website und reibungsloser Buchungsprozess für alle.</p>
+              <a href={`${base}projekte`} class="case-card__link">Projekt ansehen&nbsp;→</a>
+            </div>
+          </article>
+          <article class="case-card" data-reveal>
+            <div class="case-card__visual case-card__visual--green" aria-hidden="true">
+              <span class="case-card__initials">TARG</span>
+            </div>
+            <div class="case-card__body">
+              <span class="case-card__tag">Finanzdienstleistung / Social Recruiting</span>
+              <h3 class="case-card__title">TARGOBANK AG</h3>
+              <p class="case-card__desc">Social-Recruiting-Kampagne für NRW mit Konzeption, Planung und Videodreh. Herausforderung: modernen Recruitingprozess in bestehende Konzernprozesse integrieren.</p>
+              <a href={`${base}projekte`} class="case-card__link">Projekt ansehen&nbsp;→</a>
+            </div>
+          </article>
+          <article class="case-card" data-reveal>
+            <div class="case-card__visual case-card__visual--purple" aria-hidden="true">
+              <span class="case-card__initials">BFW</span>
+            </div>
+            <div class="case-card__body">
+              <span class="case-card__tag">Bildung / Barrierefreiheit</span>
+              <h3 class="case-card__title">Berufsförderungswerk Düren &amp; Mainz</h3>
+              <p class="case-card__desc">Konzeption, Gestaltung und Entwicklung einer Website für die Zielgruppe blinde Menschen. Herausforderung: Usability und Design für sehende und blinde Menschen kombinieren.</p>
+              <a href={`${base}projekte`} class="case-card__link">Projekt ansehen&nbsp;→</a>
+            </div>
+          </article>
+        </div>
+        <div class="referenzen-section__cta">
+          <a href={`${base}projekte`} class="btn btn--outline">Alle Projekte ansehen</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Strip -->
+    <StatsStrip stats={[
+      { number: "20+", label: "Jahre Erfahrung" },
+      { number: "600+", label: "Projekte umgesetzt" },
+      { number: "500+", label: "Kunden betreut" }
+    ]} />
+
+    <!-- Closing CTA -->
+    <section class="closing-cta section" aria-label="Jetzt starten">
+      <div class="closing-cta__inner">
+        <span class="closing-cta__label">Kontakt aufnehmen</span>
+        <h2 class="closing-cta__title">Bereit für Ihre neue Website?</h2>
+        <p class="closing-cta__sub">Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden.</p>
+        <div class="closing-cta__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">Jetzt anfragen</a>
+          <a href="tel:+4922198655229" class="closing-cta__phone">oder rufen Sie uns an: +49&nbsp;221&nbsp;986&nbsp;55&nbsp;229</a>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <Footer />
+
+  <!-- Inline styles carried from legacy (logo strip + service featured card) -->
+  <style is:global>
+    .service-card--featured{border-color:var(--color-primary,#1C60AD);background:linear-gradient(135deg,var(--color-surface,#1e1e1e) 0%,rgba(28,96,173,.12) 100%)}
+    .service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .service-card--featured .card__link{color:var(--color-primary-light,#5090d0)}
+    .logo-strip{padding-block:2rem;width:100vw;margin-inline:calc(50% - 50vw);overflow:hidden}
+    .logo-strip__label{text-align:center;font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted,#a8a8a8);margin-bottom:1.5rem}
+    .logo-strip__track-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%)}
+    .logo-strip__track{display:flex;gap:3rem;width:max-content;animation:logo-scroll 30s linear infinite;list-style:none;margin:0;padding:0}
+    @keyframes logo-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @media(prefers-reduced-motion:reduce){.logo-strip__track{animation:none}}
+    .logo-strip__placeholder{display:inline-block;padding:.5rem 1.5rem;background:var(--color-surface,#1e1e1e);border:1px solid var(--color-border,#333);border-radius:4px;color:var(--color-text-muted,#999);font-size:.875rem;white-space:nowrap}
+    .referenzen-section__cta{text-align:center;margin-top:var(--space-10,2.5rem)}
+  </style>
+
+  <!-- Leistungs-Check quiz script -->
+  <script>
+  (function initLeistungsCheck() {
+    'use strict';
+
+    const widget = document.querySelector('[data-quiz]');
+    if (!widget) return;
+
+    const BASE = (widget as HTMLElement).dataset.base ?? '/website/';
+    const inner      = widget.querySelector('[data-quiz-inner]');
+    const liveRegion = widget.querySelector('.quiz-widget__live');
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const SERVICES: Record<string, { title: string; href: string; blurb: string; formValue: string }> = {
+      mehr_umsatz: {
+        title:     'Online-Marketing',
+        href:      BASE + 'online-marketing',
+        blurb:     'Kampagnen, Ads & Conversion-Optimierung – für mehr Anfragen und messbaren Umsatz.',
+        formValue: 'Online-Marketing',
+      },
+      mitarbeiter: {
+        title:     'Social Recruiting',
+        href:      BASE + 'social-recruiting',
+        blurb:     'Zielgruppengenau neue Mitarbeiter finden – auf den Plattformen, wo sie wirklich sind.',
+        formValue: 'Social Recruiting',
+      },
+      bfsg: {
+        title:     'BFSG & Barrierefreiheit',
+        href:      BASE + 'bfsg-wordpress-website-agentur',
+        blurb:     'Rechtssichere digitale Barrierefreiheit nach WCAG 2.2 & EN 301 549 – bis zur BFSG-Deadline.',
+        formValue: 'Barrierefreie Website (BFSG)',
+      },
+      sichtbarkeit: {
+        title:     'SEO & GEO',
+        href:      BASE + 'seo-geo',
+        blurb:     'Besser gefunden werden – in Suchmaschinen und KI-Antworten.',
+        formValue: 'SEO & GEO',
+      },
+      marke: {
+        title:     'Corporate Design',
+        href:      BASE + 'corporate-design',
+        blurb:     'Markenauftritt, der bleibt und überzeugt – von Logo bis Styleguide.',
+        formValue: 'Corporate Design',
+      },
+    };
+
+    const STEP1_OPTIONS = [
+      { key: 'mehr_umsatz',  label: 'Mehr Umsatz & Anfragen' },
+      { key: 'mitarbeiter',  label: 'Neue Mitarbeiter gewinnen' },
+      { key: 'bfsg',         label: 'BFSG & Barrierefreiheit' },
+      { key: 'sichtbarkeit', label: 'Mehr Sichtbarkeit online' },
+      { key: 'marke',        label: 'Stärkere Marke aufbauen' },
+    ];
+
+    const STEP2_CONFIG: Record<string, { question: string; options: { key: string; label: string }[] }> = {
+      mehr_umsatz: {
+        question: 'Was ist dein Hauptziel?',
+        options: [
+          { key: 'anfragen',   label: 'Mehr Anfragen generieren' },
+          { key: 'shop',       label: 'Produkte online verkaufen' },
+          { key: 'optimieren', label: 'Bestehende Website optimieren' },
+        ],
+      },
+      mitarbeiter: {
+        question: 'Wen suchst du?',
+        options: [
+          { key: 'fachkraefte', label: 'Fachkräfte & Spezialisten' },
+          { key: 'nachwuchs',   label: 'Azubis & Nachwuchs' },
+          { key: 'mehrere',     label: 'Mehrere Stellen gleichzeitig' },
+        ],
+      },
+      sichtbarkeit: {
+        question: 'Wo möchtest du sichtbarer werden?',
+        options: [
+          { key: 'seo',    label: 'Google & Suchmaschinen (SEO)' },
+          { key: 'geo',    label: 'KI-Suchen & AI-Antworten (GEO)' },
+          { key: 'beides', label: 'Überall – beides gleichzeitig' },
+        ],
+      },
+    };
+
+    let selectedTopic: string | null = null;
+    let selectedDetailLabel: string | null = null;
+
+    function announce(msg: string) {
+      if (!liveRegion) return;
+      liveRegion.textContent = '';
+      requestAnimationFrame(function () { liveRegion.textContent = msg; });
+    }
+
+    function track(obj: Record<string, string>) {
+      if ((window as any).dataLayer) (window as any).dataLayer.push(obj);
+    }
+
+    function focusFirst(container: Element) {
+      const el = container.querySelector('button') as HTMLButtonElement | null;
+      if (el) el.focus({ preventScroll: true });
+    }
+
+    function makeOptionBtn(label: string, compact: boolean, onSelect: () => void) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = compact ? 'lc-option lc-option--compact' : 'lc-option';
+      btn.setAttribute('aria-pressed', 'false');
+      btn.textContent = label;
+      btn.addEventListener('click', function () { onSelect(); });
+      return btn;
+    }
+
+    function backArrowSVG() {
+      return '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/></svg>';
+    }
+
+    function renderStep1(fromRestart: boolean) {
+      selectedTopic = null;
+      selectedDetailLabel = null;
+      delete (widget as HTMLElement).dataset.quizTopic;
+      delete (widget as HTMLElement).dataset.quizDetail;
+      if (inner) inner.innerHTML = '';
+
+      const step = document.createElement('div');
+      step.className = 'lc-step';
+
+      const question = document.createElement('p');
+      question.className = 'lc-question';
+      question.textContent = 'Was möchtest du erreichen?';
+      step.appendChild(question);
+
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'lc-fieldset';
+
+      const legend = document.createElement('legend');
+      legend.className = 'u-sr-only';
+      legend.textContent = 'Was möchtest du erreichen?';
+      fieldset.appendChild(legend);
+
+      const grid = document.createElement('div');
+      grid.className = 'lc-grid';
+      fieldset.appendChild(grid);
+
+      STEP1_OPTIONS.forEach(function (opt) {
+        grid.appendChild(makeOptionBtn(opt.label, false, function () {
+          selectedTopic = opt.key;
+          (widget as HTMLElement).dataset.quizTopic = opt.key;
+          track({ event: 'quiz_answer', question: 'need', answer: opt.key });
+          announce('Gewählt: ' + opt.label);
+          if (STEP2_CONFIG[opt.key]) {
+            renderStep2(opt.key, opt.label);
+          } else {
+            renderResult();
+          }
+        }));
+      });
+
+      step.appendChild(fieldset);
+      if (inner) inner.appendChild(step);
+
+      if (fromRestart) {
+        focusFirst(step);
+        announce('Leistungs-Check neu gestartet. Schritt 1: Was möchtest du erreichen?');
+      }
+    }
+
+    function renderStep2(topicKey: string, topicLabel: string) {
+      if (inner) inner.innerHTML = '';
+      const cfg = STEP2_CONFIG[topicKey];
+
+      announce('Schritt 2: ' + cfg.question);
+
+      const step = document.createElement('div');
+      step.className = 'lc-step';
+
+      const backBtn = document.createElement('button');
+      backBtn.type = 'button';
+      backBtn.className = 'lc-back';
+      backBtn.innerHTML = backArrowSVG() + ' Zurück';
+      backBtn.addEventListener('click', function () { renderStep1(true); });
+      step.appendChild(backBtn);
+
+      const breadcrumb = document.createElement('p');
+      breadcrumb.className = 'lc-breadcrumb';
+      breadcrumb.setAttribute('aria-hidden', 'true');
+      breadcrumb.textContent = topicLabel + ' \u2192';
+      step.appendChild(breadcrumb);
+
+      const question = document.createElement('p');
+      question.className = 'lc-question';
+      question.textContent = cfg.question;
+      step.appendChild(question);
+
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'lc-fieldset';
+
+      const legend = document.createElement('legend');
+      legend.className = 'u-sr-only';
+      legend.textContent = cfg.question;
+      fieldset.appendChild(legend);
+
+      const grid = document.createElement('div');
+      grid.className = 'lc-grid lc-grid--compact';
+      fieldset.appendChild(grid);
+
+      cfg.options.forEach(function (opt) {
+        grid.appendChild(makeOptionBtn(opt.label, true, function () {
+          selectedDetailLabel = opt.label;
+          (widget as HTMLElement).dataset.quizDetail = opt.key;
+          track({ event: 'quiz_answer', question: 'detail', answer: opt.key });
+          announce('Gewählt: ' + opt.label + '. Lade Empfehlung …');
+          renderResult();
+        }));
+      });
+
+      step.appendChild(fieldset);
+      if (inner) inner.appendChild(step);
+      focusFirst(step);
+    }
+
+    function renderResult() {
+      if (inner) inner.innerHTML = '';
+      if (!selectedTopic) return;
+      const service = SERVICES[selectedTopic];
+      announce('Deine Empfehlung: ' + service.title);
+      track({ event: 'quiz_complete', topic: selectedTopic });
+
+      const result = document.createElement('div');
+      result.className = 'lc-result';
+
+      const tag = document.createElement('span');
+      tag.className = 'lc-result__tag';
+      tag.setAttribute('aria-hidden', 'true');
+      tag.textContent = 'Unsere Empfehlung';
+      result.appendChild(tag);
+
+      const title = document.createElement('p');
+      title.className = 'lc-result__title';
+      title.setAttribute('tabindex', '-1');
+      title.textContent = service.title;
+      result.appendChild(title);
+
+      const blurb = document.createElement('p');
+      blurb.className = 'lc-result__blurb';
+      blurb.textContent = service.blurb;
+      result.appendChild(blurb);
+
+      const actions = document.createElement('div');
+      actions.className = 'lc-result__actions';
+
+      const ctaBtn = document.createElement('button');
+      ctaBtn.type = 'button';
+      ctaBtn.className = 'btn btn--accent';
+      ctaBtn.textContent = 'Anfrage stellen';
+      ctaBtn.addEventListener('click', function () { transferToForm(service); });
+      actions.appendChild(ctaBtn);
+
+      const learnLink = document.createElement('a');
+      learnLink.href = service.href;
+      learnLink.className = 'btn btn--outline';
+      learnLink.textContent = 'Mehr erfahren';
+      actions.appendChild(learnLink);
+
+      result.appendChild(actions);
+
+      const restartBtn = document.createElement('button');
+      restartBtn.type = 'button';
+      restartBtn.className = 'lc-restart';
+      restartBtn.textContent = '\u21BA Neu starten';
+      restartBtn.addEventListener('click', function () { renderStep1(true); });
+      result.appendChild(restartBtn);
+
+      if (inner) inner.appendChild(result);
+      title.focus({ preventScroll: true });
+    }
+
+    function transferToForm(service: { formValue: string; title: string }) {
+      const checkbox = document.querySelector(
+        'input[name="interesse[]"][value="' + service.formValue + '"]'
+      ) as HTMLInputElement | null;
+      if (checkbox) {
+        checkbox.checked = true;
+        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      const step1Option = STEP1_OPTIONS.find(function (o) { return o.key === selectedTopic; });
+      const topicLabel = step1Option ? step1Option.label : service.title;
+      const note = selectedDetailLabel
+        ? 'Anfrage \u00FCber den Leistungs-Check: ' + topicLabel + ' \u2192 ' + selectedDetailLabel
+        : 'Anfrage \u00FCber den Leistungs-Check: ' + topicLabel;
+
+      const msgField = document.querySelector('#lf-message') as HTMLTextAreaElement | null;
+      if (msgField && !msgField.value) {
+        msgField.value = note;
+      }
+
+      const contactSection = document.querySelector('#contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({
+          behavior: prefersReduced ? 'auto' : 'smooth',
+          block: 'start',
+        });
+      }
+
+      if (checkbox) {
+        setTimeout(function () {
+          checkbox.focus({ preventScroll: true });
+        }, prefersReduced ? 0 : 600);
+      }
+
+      track({ event: 'quiz_cta_click', topic: selectedTopic ?? '' });
+    }
+
+    renderStep1(false);
+  })();
+  </script>
+
+  <!-- Typewriter script -->
+  <script>
+  (function initTypewriter() {
+    const el = document.getElementById('typewriter-text');
+    if (!el) return;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    let textsRaw: string | null = null;
+    try { textsRaw = el.dataset.texts ?? null; } catch { return; }
+    if (!textsRaw) return;
+
+    let texts: string[];
+    try { texts = JSON.parse(textsRaw); } catch { return; }
+    if (!texts.length) return;
+
+    let textIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    const PAUSE_END = 2200;
+    const PAUSE_START = 400;
+    const TYPE_SPEED = 60;
+    const DEL_SPEED = 30;
+
+    function tick() {
+      const current = texts[textIdx];
+      if (isDeleting) {
+        charIdx--;
+        el.textContent = current.slice(0, charIdx);
+        if (charIdx === 0) {
+          isDeleting = false;
+          textIdx = (textIdx + 1) % texts.length;
+          setTimeout(tick, PAUSE_START);
+          return;
+        }
+        setTimeout(tick, DEL_SPEED);
+      } else {
+        charIdx++;
+        el.textContent = current.slice(0, charIdx);
+        if (charIdx === current.length) {
+          isDeleting = true;
+          setTimeout(tick, PAUSE_END);
+          return;
+        }
+        setTimeout(tick, TYPE_SPEED);
+      }
+    }
+
+    // Start after initial pause
+    setTimeout(tick, PAUSE_END);
+  })();
+  </script>
+
 </BaseLayout>

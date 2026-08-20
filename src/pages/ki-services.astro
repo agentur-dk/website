@@ -1,0 +1,215 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const title = 'KI-Services & KI-Agenten für Unternehmen – agentur dk Köln';
+const description = 'KI-Services aus Köln: KI-Telefon-Agenten mit 24/7-Verfügbarkeit, automatisierte Terminbuchung und KI-gestützte Textoptimierung. Jetzt Potenzial freischalten.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "KI-Services für Unternehmen",
+      "provider": {
+        "@type": "Organization",
+        "name": "agentur dk – design & kommunikation",
+        "url": "https://dk-dk.de"
+      },
+      "description": "KI-Telefon-Agenten mit 24/7-Verfügbarkeit, automatisierter Terminbuchung, Social Recruiting mit KI und KI-gestützter Textoptimierung.",
+      "areaServed": { "@type": "Country", "name": "DE" },
+      "serviceType": "Digital Agency",
+      "url": "https://dk-dk.de/ki-services"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was ist ein KI-Telefon-Agent?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ein KI-Telefon-Agent nimmt Anrufe automatisch entgegen, beantwortet Fragen und bucht Termine – rund um die Uhr, auch außerhalb Ihrer Geschäftszeiten. Anrufer merken kaum einen Unterschied."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Für wen lohnt sich ein KI-Telefon-Agent?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Für alle Unternehmen mit vielen eingehenden Anrufen: Praxen, Handwerksbetriebe, Kanzleien, Agenturen und Dienstleister. Jeder verpasste Anruf ist ein verlorener Kunde."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was kann KI-gestützte Textoptimierung?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "KI unterstützt bei Webtexten, Kampagnen und Produktbeschreibungen – schneller, konsistenter und abgestimmt auf Ihre Zielgruppe. Du behalten die Kontrolle, wir liefern die Qualität."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Sind KI-Lösungen datenschutzkonform?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Wir setzen auf europäische Anbieter und DSGVO-konforme Konfigurationen. Ihre Daten bleiben geschützt – das ist bei KI-Projekten für uns Grundvoraussetzung."
+          }
+        }
+      ]
+    }
+    </script>
+  </Fragment>
+
+  <Header />
+  <main id="main-content" tabindex="-1">
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><a href={`${base}leistungen`}>Leistungen</a></li>
+          <li aria-current="page">KI-Services</li>
+        </ol>
+      </div>
+    </nav>
+
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <p class="section__label">KI-Services</p>
+        <h1 id="hero-heading" class="section__headline">KI, die für Sie arbeitet – nicht umgekehrt</h1>
+        <p class="section__lead">KI-Telefon-Agenten mit 24/7-Verfügbarkeit, automatisierte Terminbuchung, KI-Recruiting und Textoptimierung: praktische KI-Lösungen für Ihren Alltag.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">KI-Potenzial besprechen</a>
+          <a href={`${base}seo-geo`} class="btn btn--outline btn--lg">GEO-Sichtbarkeit sichern</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" aria-labelledby="ki-problem">
+      <div class="container">
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <h2 id="ki-problem" class="section__heading">Verpasste Anrufe, leere Terminkalender, endlose Texte</h2>
+            <p>Jeder verpasste Anruf ist ein verlorener Kunde. Jede Stunde Textarbeit ist Zeit, die in Ihrem Kerngeschäft fehlt.</p>
+            <p>Wir setzen KI dort ein, wo sie sofort spürbaren Nutzen bringt – pragmatisch, datenschutzkonform und ohne Hype.</p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Wo KI Ihnen konkret hilft</h3>
+            <ul class="checklist">
+              <li class="checklist__item">KI-Telefon-Agent: nimmt Anrufe an, auch nachts und am Wochenende</li>
+              <li class="checklist__item">Automatische Terminbuchung ohne Zettelwirtschaft</li>
+              <li class="checklist__item">KI-gestützte Zielgruppenansprache im Recruiting</li>
+              <li class="checklist__item">Textoptimierung für Website, Kampagnen und Angebote</li>
+              <li class="checklist__item">DSGVO-konforme Umsetzung mit europäischen Anbietern</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="ki-leistungen">
+      <div class="container">
+        <p class="section__label">Leistungen</p>
+        <div class="card-grid card-grid--3col">
+          <article class="card" data-reveal>
+            <h3 class="card__heading">KI-Telefon-Agenten</h3>
+            <p class="card__body">Automatische Annahme, Beantwortung und Weiterleitung von Anrufen – 24/7 verfügbar.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Terminbuchung</h3>
+            <p class="card__body">Kunden buchen Termine selbstständig – per Anruf, Website oder Link.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">KI-Recruiting</h3>
+            <p class="card__body">Zielgruppenanalyse und personalisierte Ansprache für Ihre Stellenanzeigen.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Textoptimierung</h3>
+            <p class="card__body">Webtexte, Kampagnen und Angebote – schneller, konsistenter, besser.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">KI-Readiness</h3>
+            <p class="card__body">Ihre Inhalte für KI-Systeme aufbereiten: llms.txt, Struktur, Zitierfähigkeit.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Beratung &amp; Umsetzung</h3>
+            <p class="card__body">Gemeinsam finden wir heraus, wo KI bei Ihnen echten Nutzen stiftet.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="ki-prozess">
+      <div class="container">
+        <p class="section__label">So arbeiten wir</p>
+        <h2 id="ki-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <ol class="process-list" role="list">
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">01</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Potenzialanalyse</h3>
+              <p class="process-list__body">Wir identifizieren Prozesse, die sich mit KI spürbar verbessern lassen.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">02</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Konzept &amp; Auswahl</h3>
+              <p class="process-list__body">Passende Lösung und Anbieter – DSGVO-konform und budgetgerecht.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">03</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Umsetzung &amp; Integration</h3>
+              <p class="process-list__body">Einrichtung, Anbindung an Ihre Systeme und Testbetrieb.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">04</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Betrieb &amp; Optimierung</h3>
+              <p class="process-list__body">Laufende Verbesserung, Monitoring und Support.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section--sm" aria-label="Passende Leistungen">
+      <div class="container">
+        <h2 class="section__subheading">Passende Leistungen</h2>
+        <ul class="footer-col__list" role="list">
+          <li><a href={`${base}seo-geo`} class="footer-col__link">SEO &amp; GEO</a></li>
+          <li><a href={`${base}social-recruiting`} class="footer-col__link">Social Recruiting</a></li>
+          <li><a href={`${base}online-marketing`} class="footer-col__link">Online-Marketing</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <FaqAccordion
+      heading="Häufige Fragen"
+      items={[
+        { question: 'Was ist ein KI-Telefon-Agent?', answer: 'Ein KI-Telefon-Agent nimmt Anrufe automatisch entgegen, beantwortet Fragen und bucht Termine – rund um die Uhr, auch außerhalb Ihrer Geschäftszeiten. Anrufer merken kaum einen Unterschied.' },
+        { question: 'Für wen lohnt sich ein KI-Telefon-Agent?', answer: 'Für alle Unternehmen mit vielen eingehenden Anrufen: Praxen, Handwerksbetriebe, Kanzleien, Agenturen und Dienstleister. Jeder verpasste Anruf ist ein verlorener Kunde.' },
+        { question: 'Was kann KI-gestützte Textoptimierung?', answer: 'KI unterstützt bei Webtexten, Kampagnen und Produktbeschreibungen – schneller, konsistenter und abgestimmt auf Ihre Zielgruppe. Du behalten die Kontrolle, wir liefern die Qualität.' },
+        { question: 'Sind KI-Lösungen datenschutzkonform?', answer: 'Ja. Wir setzen auf europäische Anbieter und DSGVO-konforme Konfigurationen. Ihre Daten bleiben geschützt – das ist bei KI-Projekten für uns Grundvoraussetzung.' },
+      ]}
+    />
+
+    <LeadForm page="KI-Services" heading="Jetzt unverbindlich anfragen" />
+
+  </main>
+  <Footer />
+</BaseLayout>

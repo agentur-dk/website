@@ -1,0 +1,317 @@
+---
+// BfsgCheck — interactive BFSG self-check, no props
+---
+
+<div class="bfsg-quiz" id="bfsg-quiz" aria-live="polite">
+
+  <!-- Schritt 1 -->
+  <fieldset class="bfsg-step" id="bfsg-step-1" data-step="1">
+    <legend class="bfsg-step__legend">Frage 1 von 4</legend>
+    <p class="bfsg-step__question">Erbringen Sie Dienstleistungen?<sup>1</sup></p>
+    <div class="bfsg-step__options bfsg-yn-grid" role="radiogroup" aria-labelledby="bfsg-q1-label">
+      <span id="bfsg-q1-label" class="sr-only">Erbringen Sie Dienstleistungen?</span>
+      <label class="bfsg-option"><input type="radio" name="q1" value="ja" class="bfsg-option__radio"><span class="bfsg-option__label">Ja</span></label>
+      <label class="bfsg-option"><input type="radio" name="q1" value="nein" class="bfsg-option__radio"><span class="bfsg-option__label">Nein</span></label>
+    </div>
+    <div class="bfsg-step__nav">
+      <button type="button" class="btn btn--primary bfsg-next-btn" data-next="2">Weiter →</button>
+    </div>
+  </fieldset>
+
+  <!-- Schritt 2 -->
+  <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-2" data-step="2">
+    <legend class="bfsg-step__legend">Frage 2 von 4</legend>
+    <p class="bfsg-step__question">Haben Sie 10 oder mehr Mitarbeiter?</p>
+    <div class="bfsg-step__options bfsg-yn-grid" role="radiogroup" aria-labelledby="bfsg-q2-label">
+      <span id="bfsg-q2-label" class="sr-only">Haben Sie 10 oder mehr Mitarbeiter?</span>
+      <label class="bfsg-option"><input type="radio" name="q2" value="ja" class="bfsg-option__radio"><span class="bfsg-option__label">Ja</span></label>
+      <label class="bfsg-option"><input type="radio" name="q2" value="nein" class="bfsg-option__radio"><span class="bfsg-option__label">Nein</span></label>
+    </div>
+    <div class="bfsg-step__nav">
+      <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="1">← Zurück</button>
+      <button type="button" class="btn btn--primary bfsg-next-btn" data-next="3">Weiter →</button>
+    </div>
+  </fieldset>
+
+  <!-- Schritt 3 -->
+  <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-3" data-step="3">
+    <legend class="bfsg-step__legend">Frage 3 von 4</legend>
+    <p class="bfsg-step__question">Über 2 Mio. Euro Jahresumsatz oder Bilanzsumme?</p>
+    <div class="bfsg-step__options bfsg-yn-grid" role="radiogroup" aria-labelledby="bfsg-q3-label">
+      <span id="bfsg-q3-label" class="sr-only">Über 2 Mio. Euro Jahresumsatz oder Bilanzsumme?</span>
+      <label class="bfsg-option"><input type="radio" name="q3" value="ja" class="bfsg-option__radio"><span class="bfsg-option__label">Ja</span></label>
+      <label class="bfsg-option"><input type="radio" name="q3" value="nein" class="bfsg-option__radio"><span class="bfsg-option__label">Nein</span></label>
+    </div>
+    <div class="bfsg-step__nav">
+      <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="2">← Zurück</button>
+      <button type="button" class="btn btn--primary bfsg-next-btn" data-next="4">Weiter →</button>
+    </div>
+  </fieldset>
+
+  <!-- Schritt 4 -->
+  <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-4" data-step="4">
+    <legend class="bfsg-step__legend">Frage 4 von 4</legend>
+    <p class="bfsg-step__question">Bieten Sie Produkte wie Webshops, E-Books oder Terminals an?</p>
+    <div class="bfsg-step__options bfsg-yn-grid" role="radiogroup" aria-labelledby="bfsg-q4-label">
+      <span id="bfsg-q4-label" class="sr-only">Bieten Sie Produkte wie Webshops, E-Books oder Terminals an?</span>
+      <label class="bfsg-option"><input type="radio" name="q4" value="ja" class="bfsg-option__radio"><span class="bfsg-option__label">Ja</span></label>
+      <label class="bfsg-option"><input type="radio" name="q4" value="nein" class="bfsg-option__radio"><span class="bfsg-option__label">Nein</span></label>
+    </div>
+    <div class="bfsg-step__nav">
+      <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="3">← Zurück</button>
+      <button type="button" class="btn btn--primary" id="bfsg-submit-btn">Ergebnis anzeigen →</button>
+    </div>
+  </fieldset>
+
+  <!-- Ergebnis -->
+  <div class="bfsg-result bfsg-result--hidden" id="bfsg-result" role="region" aria-labelledby="bfsg-result-title" aria-live="assertive">
+    <h3 class="bfsg-result__title" id="bfsg-result-title"></h3>
+    <p class="bfsg-result__text" id="bfsg-result-text"></p>
+    <div class="bfsg-result__actions">
+      <a href="https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach" class="btn btn--primary" target="_blank" rel="noopener noreferrer">Erstberatung buchen</a>
+      <button type="button" class="btn btn--outline" id="bfsg-restart-btn">Check neustarten</button>
+    </div>
+  </div>
+
+</div>
+
+<p class="bfsg-disclaimer">Der BFSG Check ist ein Test, welcher die wesentlichen Kriterien des Anwendungsbereiches in vereinfachter Form überprüft. Erklärungsbedürftige und unbestimmte Rechtsbegriffe werden für eine bessere Verständlichkeit vereinfacht und reduziert. Rechtlich verbindlich kann das Ergebnis des Selbsttests daher nicht sein.</p>
+
+<details class="accordion">
+  <summary class="accordion__trigger">Fußnoten &amp; rechtliche Erläuterungen anzeigen</summary>
+  <div class="accordion__body">
+    <ol class="bfsg-footnotes">
+      <li>Dienstleistungssektor: Die gesetzlichen Vorgaben für Dienstleistungen sind in § 1 Abs. 3 BFSG verankert.</li>
+      <li>B2C vs. B2B Fokus: Laut § 1 Abs. 3 BFSG sind im Dienstleistungsbereich (inklusive E-Commerce) primär Angebote für Verbraucher (§ 13 BGB) betroffen. Um nicht unter das Gesetz zu fallen, muss eine klare Ausrichtung auf Geschäftskunden (§ 14 BGB) und der Ausschluss von Privatpersonen zweifelsfrei erkennbar sein.</li>
+      <li>E-Commerce Definition: Dienstleistungen im elektronischen Geschäftsverkehr gemäß § 1 Abs. 3 Nr. 5 BFSG umfassen laut § 2 Nr. 26 BFSG alle Plattformen, Apps und Webshops, über die Verträge wie Käufe oder Buchungen unmittelbar online abgeschlossen werden können.</li>
+      <li>Individuelle Anfragen &amp; Buchungen: Die Definition erstreckt sich nach § 2 Nr. 26 BFSG auch auf digitale Services zur Vorbereitung von Verträgen, wie etwa Online-Terminreservierungen. Während rein informative Seiten meist ausgenommen sind, fallen geschäftliche B2C-Webseiten mit interaktiven Buchungstools in der Regel unter diese Kriterien.</li>
+      <li>Ausnahme für Kleinstunternehmen: Unternehmen mit weniger als 10 Mitarbeitern und einem Jahresumsatz bzw. einer Bilanzsumme von maximal 2 Mio. Euro sind im Dienstleistungsbereich (z. B. Onlineshop-Betrieb) gemäß § 3 Abs. 3 BFSG von den Verpflichtungen befreit. Die Personalstärke wird dabei in Jahresarbeitseinheiten berechnet.</li>
+      <li>Sonderregelungen &amp; Fristen: Es existieren Ausnahmen für statische Archive oder Kartendienste (§ 1 Abs. 4 BFSG). In Einzelfällen kann eine „unverhältnismäßige Belastung" (§ 17 BFSG) geltend gemacht werden. Für bestimmte Produkte gelten zudem Übergangsfristen nach § 38 BFSG.</li>
+      <li>Hardware &amp; Produkte: § 1 Abs. 2 BFSG listet betroffene Produktkategorien auf, vorrangig Geräte mit interaktiven Benutzeroberflächen.</li>
+      <li>E-Books: Elektronische Bücher und die zugehörige Lese-Software fallen unter § 1 Abs. 3 Nr. 4 BFSG.</li>
+      <li>Finanzdienstleistungen: Bankservices für Privatkunden sind in § 1 Abs. 3 Nr. 3 BFSG geregelt.</li>
+      <li>Telekommunikation: Regelungen hierzu finden sich in § 1 Abs. 3 Nr. 1 BFSG.</li>
+      <li>Personenbeförderung: Elektronische Tickets, Apps und Terminals im Verkehrswesen unterliegen § 1 Abs. 3 Nr. 2 BFSG, wobei für kommunale Anbieter teilweise Ausnahmen gelten.</li>
+      <li>Interaktive Endgeräte: Spezifische Anforderungen für Verbraucherendgeräte sind in § 1 Abs. 2 Nr. 5 BFSG definiert.</li>
+      <li>Computersysteme: Hardwaresysteme für Universalrechner und deren Betriebssysteme fallen unter § 1 Abs. 2 Nr. 1 BFSG.</li>
+      <li>Selbstbedienungsterminals: Geldautomaten, Zahlungs- und Fahrausweisautomaten werden in § 1 Abs. 2 Nr. 2 BFSG präzisiert.</li>
+      <li>Medien- &amp; Kommunikationsgeräte: Endgeräte für Telekommunikation oder audiovisuelle Medien sind durch § 1 Abs. 2 Nr. 3 und 4 BFSG abgedeckt.</li>
+    </ol>
+    <p class="bfsg-footnotes__update">Aktualisierung: 18.08.2026</p>
+  </div>
+</details>
+
+<style>
+  .bfsg-step { transition: opacity .3s ease; }
+  .bfsg-step--hidden { display: none; }
+  .bfsg-result--hidden { display: none; }
+  .bfsg-yn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+  .bfsg-option {
+    display: flex;
+    cursor: pointer;
+  }
+  .bfsg-option__radio {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap; border: 0;
+  }
+  .bfsg-option__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    min-height: 64px;
+  }
+  .bfsg-option__radio:checked + .bfsg-option__label {
+    border-color: var(--color-primary);
+    background-color: rgba(28, 96, 173, 0.12);
+    color: var(--color-primary-light);
+  }
+  .bfsg-option__label:hover {
+    border-color: var(--color-primary-light);
+  }
+  .bfsg-step__legend {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+  .bfsg-step__question {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+  .bfsg-step__nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+  .bfsg-result {
+    padding: 2rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .bfsg-result__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+  }
+  .bfsg-result__text {
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  .bfsg-result__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .bfsg-disclaimer {
+    margin-top: 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-faint);
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .bfsg-footnotes {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+  }
+  .bfsg-footnotes li { margin-bottom: 0.5rem; }
+  .bfsg-footnotes__update {
+    font-size: 0.75rem;
+    color: var(--color-text-faint);
+    margin-top: 0.75rem;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+</style>
+
+<script>
+(function() {
+  const quiz = document.getElementById('bfsg-quiz');
+  if (!quiz) return;
+
+  const steps = quiz.querySelectorAll('.bfsg-step');
+  const resultEl = document.getElementById('bfsg-result');
+  const resultTitle = document.getElementById('bfsg-result-title');
+  const resultText = document.getElementById('bfsg-result-text');
+  const submitBtn = document.getElementById('bfsg-submit-btn');
+  const restartBtn = document.getElementById('bfsg-restart-btn');
+  const answers: Record<string, string | null> = {};
+
+  function showStep(n: number) {
+    steps.forEach(s => s.classList.add('bfsg-step--hidden'));
+    const target = document.getElementById('bfsg-step-' + n);
+    if (target) {
+      target.classList.remove('bfsg-step--hidden');
+      const firstInput = target.querySelector<HTMLElement>('input, button');
+      if (firstInput) firstInput.focus();
+    }
+  }
+
+  function getVal(name: string) {
+    const checked = quiz.querySelector<HTMLInputElement>('input[name="' + name + '"]:checked');
+    return checked ? checked.value : null;
+  }
+
+  function showResult() {
+    answers.q1 = getVal('q1');
+    answers.q2 = getVal('q2');
+    answers.q3 = getVal('q3');
+    answers.q4 = getVal('q4');
+
+    let title: string, text: string;
+    if (answers.q1 === 'nein') {
+      title = 'Voraussichtlich nicht betroffen';
+      text = 'Da Sie keine Dienstleistungen für Verbraucher erbringen, greift das BFSG für Ihren Bereich wahrscheinlich nicht. Buchen Sie eine Ersteinschätzung zur Sicherheit.';
+    } else if (answers.q2 === 'nein' && answers.q3 === 'nein') {
+      title = 'Kleinstunternehmen-Regelung';
+      text = 'Sie gelten als Kleinstunternehmen (<10 MA und <2 Mio. Umsatz). Diese sind von den meisten Dienstleistungspflichten befreit.';
+    } else {
+      title = 'Wahrscheinlich betroffen';
+      text = 'Nach Ihren Angaben ist Ihr Unternehmen voraussichtlich vom BFSG betroffen. Ihre Website muss schon seit dem 28. Juni 2025 barrierefrei sein.';
+    }
+
+    steps.forEach(s => s.classList.add('bfsg-step--hidden'));
+    if (resultTitle) resultTitle.textContent = title;
+    if (resultText) resultText.textContent = text;
+    if (resultEl) {
+      resultEl.classList.remove('bfsg-result--hidden');
+      (resultEl as HTMLElement).focus();
+    }
+  }
+
+  function restart() {
+    quiz.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach(r => r.checked = false);
+    if (resultEl) resultEl.classList.add('bfsg-result--hidden');
+    showStep(1);
+  }
+
+  quiz.addEventListener('click', function(e) {
+    const target = e.target as HTMLElement;
+    const nextBtn = target.closest('.bfsg-next-btn');
+    const backBtn = target.closest('.bfsg-back-btn');
+
+    if (nextBtn) {
+      const next = parseInt((nextBtn as HTMLElement).dataset.next ?? '0', 10);
+      const currentStep = (nextBtn as HTMLElement).closest('.bfsg-step') as HTMLElement;
+      const stepNum = parseInt(currentStep.dataset.step ?? '0', 10);
+      const answered = quiz.querySelector('input[name="q' + stepNum + '"]:checked');
+      if (!answered) {
+        const firstOpt = currentStep.querySelector<HTMLElement>('.bfsg-option__radio');
+        if (firstOpt) firstOpt.focus();
+        return;
+      }
+      if (stepNum === 1 && getVal('q1') === 'nein') { showResult(); return; }
+      showStep(next);
+    }
+
+    if (backBtn) {
+      const prev = parseInt((backBtn as HTMLElement).dataset.prev ?? '0', 10);
+      showStep(prev);
+    }
+  });
+
+  if (submitBtn) submitBtn.addEventListener('click', function() {
+    const answered = quiz.querySelector('input[name="q4"]:checked');
+    if (!answered) {
+      const firstOpt = document.querySelector<HTMLElement>('#bfsg-step-4 .bfsg-option__radio');
+      if (firstOpt) firstOpt.focus();
+      return;
+    }
+    showResult();
+  });
+
+  if (restartBtn) restartBtn.addEventListener('click', restart);
+})();
+</script>

@@ -1,0 +1,374 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Referenzen & Projekte | agentur dk – Websites, WordPress & SEO Köln"
+  description="Referenzen der agentur dk: WordPress-Websites, Website-Leasing, BFSG/Barrierefreiheit, SEO/GEO, Online-Marketing und Corporate Design für TARGOBANK, Bundesministerium, Apotheken und KMU."
+>
+  <Fragment slot="head">
+    <!-- JSON-LD: CollectionPage -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Referenzen & Projekte – agentur dk",
+  "url": "https://dk-dk.de/projekte",
+  "inLanguage": "de-DE",
+  "description": "Auswahl realisierter Projekte der agentur dk: WordPress, BFSG/Barrierefreiheit, SEO, GEO, Online-Marketing und Corporate Design.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "url": "https://dk-dk.de",
+    "name": "agentur dk"
+  },
+  "provider": {
+    "@type": "Organization",
+    "@id": "https://dk-dk.de/#organization",
+    "name": "agentur dk – design & kommunikation"
+  },
+  "hasPart": [
+    {
+      "@type": "CreativeWork",
+      "name": "TARGOBANK – Rahmenvertrag Corporate Landingpages",
+      "description": "Konzeption und Relaunch mehrerer barrierefreier Corporate-Landingpages im Rahmenvertrag.",
+      "creator": { "@type": "Organization", "@id": "https://dk-dk.de/#organization" }
+    },
+    {
+      "@type": "CreativeWork",
+      "name": "Öffentlicher Auftraggeber (Bundesministerium) – BFSG-konformer Relaunch",
+      "description": "BFSG-konformer Relaunch eines bundesbehördlichen Webauftritts nach EN 301 549 und WCAG 2.2 AA.",
+      "creator": { "@type": "Organization", "@id": "https://dk-dk.de/#organization" }
+    },
+    {
+      "@type": "CreativeWork",
+      "name": "DU BIST GRIECHE – eigene Plattform",
+      "description": "Aufbau und SEO-Optimierung eines Gastronomie-Empfehlungsportals als Eigenentwicklung.",
+      "creator": { "@type": "Organization", "@id": "https://dk-dk.de/#organization" }
+    }
+  ]
+}
+    </script>
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header container">
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><span aria-current="page">Referenzen</span></li>
+        </ol>
+      </nav>
+      <h1 class="page-header__title">Referenzen &amp; Projekte</h1>
+      <p class="page-header__lead">Ausgewählte Projekte aus den Bereichen WordPress, BFSG, SEO, GEO, Online-Marketing und Corporate Design.</p>
+    </div>
+
+    <!-- Filter + Grid Section -->
+    <section class="section" aria-labelledby="projekte-heading">
+      <div class="container">
+        <h2 id="projekte-heading" class="u-sr-only">Projektübersicht</h2>
+
+        <!-- Filter -->
+        <div class="filter-group-wrapper">
+          <p class="section-label" aria-hidden="true">Filtern nach</p>
+          <div
+            id="filter-group"
+            class="filter-group"
+            role="group"
+            aria-label="Projekte nach Leistung filtern"
+          >
+            <button type="button" class="chip chip--active" data-filter="all" aria-pressed="true">Alle</button>
+            <button type="button" class="chip" data-filter="WordPress" aria-pressed="false">WordPress</button>
+            <button type="button" class="chip" data-filter="BFSG" aria-pressed="false">BFSG / Barrierefreiheit</button>
+            <button type="button" class="chip" data-filter="SEO" aria-pressed="false">SEO</button>
+            <button type="button" class="chip" data-filter="GEO" aria-pressed="false">GEO</button>
+            <button type="button" class="chip" data-filter="Online-Marketing" aria-pressed="false">Online-Marketing</button>
+            <button type="button" class="chip" data-filter="Corporate-Design" aria-pressed="false">Corporate Design</button>
+            <button type="button" class="chip" data-filter="KI" aria-pressed="false">KI</button>
+            <button type="button" class="chip" data-filter="Social-Recruiting" aria-pressed="false">Social Recruiting</button>
+          </div>
+          <p class="filter-status" id="filter-status" aria-live="polite" aria-atomic="true">11 Projekte angezeigt</p>
+        </div>
+
+        <!-- Cases Grid -->
+        <ul class="projects-grid" id="projects-grid" role="list">
+
+          <!-- PDF-Projekte: Bundesministerium -->
+          <li class="case-card" data-reveal data-tags="BFSG WordPress">
+            <div class="case-card__visual case-card__visual--blue" aria-hidden="true">
+              <span class="case-card__initials">BMBFSJ</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">Öffentliche Hand</span></li>
+                <li><span class="badge">BFSG</span></li>
+              </ul>
+              <h3 class="case-card__title">Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend</h3>
+              <p class="case-card__meta">Öffentliche Hand · 2025</p>
+              <p class="case-card__desc">Konzeption, Gestaltung und Umsetzung eines deutschlandweiten Eltern-Anfrageportals für Familienhotels. Der Fokus liegt auf sozialschwachen Familien mit Kindern mit Handicap. Herausforderung: neue barrierearme Website und reibungsloser Buchungsprozess für alle.</p>
+            </div>
+          </li>
+
+          <!-- PDF-Projekt: TARGOBANK Social Recruiting -->
+          <li class="case-card" data-reveal data-tags="Online-Marketing Social-Recruiting">
+            <div class="case-card__visual case-card__visual--green" aria-hidden="true">
+              <span class="case-card__initials">TARG</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">Finanzdienstleistung</span></li>
+                <li><span class="badge">Social Recruiting</span></li>
+              </ul>
+              <h3 class="case-card__title">TARGOBANK AG</h3>
+              <p class="case-card__meta">Finanzdienstleistung · 2024</p>
+              <p class="case-card__desc">Social-Recruiting-Kampagne für NRW mit Konzeption, Planung und Videodreh. Herausforderung: modernen Recruitingprozess in bestehende Konzernprozesse integrieren.</p>
+            </div>
+          </li>
+
+          <!-- PDF-Projekt: Berufsförderungswerk -->
+          <li class="case-card" data-reveal data-tags="BFSG WordPress">
+            <div class="case-card__visual case-card__visual--purple" aria-hidden="true">
+              <span class="case-card__initials">BFW</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">Bildung</span></li>
+                <li><span class="badge">BFSG / Barrierefreiheit</span></li>
+              </ul>
+              <h3 class="case-card__title">Berufsförderungswerk Düren &amp; Mainz</h3>
+              <p class="case-card__meta">Bildung · 2025</p>
+              <p class="case-card__desc">Konzeption, Gestaltung und Entwicklung einer Website für die Zielgruppe blinde Menschen. Herausforderung: Usability und Design für sehende und blinde Menschen kombinieren.</p>
+            </div>
+          </li>
+
+          <!-- Case 1: TARGOBANK -->
+          <li class="case-card" data-reveal data-tags="WordPress Corporate-Design Online-Marketing">
+            <div class="case-card__visual case-card__visual--blue" aria-hidden="true">
+              <span class="case-card__initials">TB</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">WordPress</span></li>
+                <li><span class="badge">Corporate Design</span></li>
+                <li><span class="badge">Online-Marketing</span></li>
+              </ul>
+              <h3 class="case-card__title">TARGOBANK (Rahmenvertrag)</h3>
+              <p class="case-card__meta">Finanzdienstleistung · 2024</p>
+              <p class="case-card__desc">
+                Konzeption und Entwicklung mehrerer Corporate-Landingpages im Rahmen eines langfristigen Agenturvertrags. Fokus auf klare Messaging-Hierarchie, Conversion-Optimierung und konsistentes Corporate Design.
+              </p>
+              <p class="case-card__kpi">+45 % Conversion-Rate durch A/B-optimierte Landingpages</p>
+            </div>
+          </li>
+
+          <!-- Case 2: Bundesministerium -->
+          <li class="case-card" data-reveal data-tags="WordPress BFSG">
+            <div class="case-card__visual case-card__visual--slate" aria-hidden="true">
+              <span class="case-card__initials">ÖA</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">BFSG / Barrierefreiheit</span></li>
+                <li><span class="badge">WordPress</span></li>
+              </ul>
+              <h3 class="case-card__title">Öffentlicher Auftraggeber (Bundesministerium)</h3>
+              <p class="case-card__meta">Öffentliche Hand · 2025</p>
+              <p class="case-card__desc">
+                Vollständiger BFSG-konformer Relaunch eines bundesbehördlichen Webauftritts. Umsetzung nach EN 301 549 und WCAG 2.2 AA inklusive Erstellung der offiziellen Barrierefreiheitserklärung und Konformitätsprüfung.
+              </p>
+              <p class="case-card__kpi">100 % WCAG 2.2 AA Konformität – Prüfung bestanden</p>
+            </div>
+          </li>
+
+          <!-- Case 3: DU BIST GRIECHE -->
+          <li class="case-card" data-reveal data-tags="WordPress SEO GEO Corporate-Design">
+            <div class="case-card__visual case-card__visual--teal" aria-hidden="true">
+              <span class="case-card__initials">DG</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">WordPress</span></li>
+                <li><span class="badge">SEO</span></li>
+                <li><span class="badge">GEO</span></li>
+                <li><span class="badge">Corporate Design</span></li>
+              </ul>
+              <h3 class="case-card__title">DU BIST GRIECHE – eigene Plattform</h3>
+              <p class="case-card__meta">Gastronomie / Eigenprojekt · 2025</p>
+              <p class="case-card__desc">
+                Konzeption, Design und Entwicklung eines eigenständigen Gastronomie-Empfehlungsportals. Vollständige SEO-Architektur, strukturierte Daten und GEO-Strategie für maximale Sichtbarkeit in klassischer und KI-basierter Suche.
+              </p>
+              <p class="case-card__kpi">+180 % organischer Traffic in 6 Monaten</p>
+            </div>
+          </li>
+
+          <!-- Case 4: Apotheken-Netzwerk -->
+          <li class="case-card" data-reveal data-tags="WordPress BFSG SEO">
+            <div class="case-card__visual case-card__visual--green" aria-hidden="true">
+              <span class="case-card__initials">AN</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">WordPress</span></li>
+                <li><span class="badge">BFSG / Barrierefreiheit</span></li>
+                <li><span class="badge">SEO</span></li>
+              </ul>
+              <h3 class="case-card__title">Apotheken-Netzwerk</h3>
+              <p class="case-card__meta">Gesundheit / Pharma · 2025</p>
+              <p class="case-card__desc">
+                BFSG-konforme WordPress-Websites für 8 Apothekenstandorte aus einer Hand: einheitliches Design-System, individuelle lokale Anpassungen und vollständige Barrierefreiheitsprüfung für jeden Standort.
+              </p>
+              <p class="case-card__kpi">Alle 8 Standorte pünktlich BFSG-konform – vor Fristablauf</p>
+            </div>
+          </li>
+
+          <!-- Case 5: KMU Handel -->
+          <li class="case-card" data-reveal data-tags="WordPress Online-Marketing SEO">
+            <div class="case-card__visual case-card__visual--orange" aria-hidden="true">
+              <span class="case-card__initials">KH</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">WordPress</span></li>
+                <li><span class="badge">Online-Marketing</span></li>
+                <li><span class="badge">SEO</span></li>
+              </ul>
+              <h3 class="case-card__title">KMU Handel</h3>
+              <p class="case-card__meta">Handel / E-Commerce · 2024</p>
+              <p class="case-card__desc">
+                E-Commerce-Relaunch mit WooCommerce, Conversion-Optimierung und integrierter SEO-Strategie. Neuaufbau der Produktkategorien und Einführung einer datengetriebenen Online-Marketing-Kampagne.
+              </p>
+              <p class="case-card__kpi">+120 % E-Commerce-Umsatz im Folgequartal</p>
+            </div>
+          </li>
+
+          <!-- Case 6: Dienstleister B2B -->
+          <li class="case-card" data-reveal data-tags="Corporate-Design WordPress KI">
+            <div class="case-card__visual case-card__visual--indigo" aria-hidden="true">
+              <span class="case-card__initials">B2</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">Corporate Design</span></li>
+                <li><span class="badge">WordPress</span></li>
+                <li><span class="badge">KI</span></li>
+              </ul>
+              <h3 class="case-card__title">Dienstleister B2B</h3>
+              <p class="case-card__meta">B2B-Dienstleistung · 2024</p>
+              <p class="case-card__desc">
+                Vollständiges Rebranding inklusive Logoentwicklung, Farbwelt, Designsystem und Umsetzung einer KI-gestützten Content-Strategie. Neue Website als zentrale Vertriebs- und Positionierungsplattform.
+              </p>
+              <p class="case-card__kpi">+38 % Markenwahrnehmung im Wettbewerbsvergleich</p>
+            </div>
+          </li>
+
+          <!-- Case 7: Social Recruiting -->
+          <li class="case-card" data-reveal data-tags="Social-Recruiting Online-Marketing">
+            <div class="case-card__visual case-card__visual--rose" aria-hidden="true">
+              <span class="case-card__initials">SR</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">Social Recruiting</span></li>
+                <li><span class="badge">Online-Marketing</span></li>
+              </ul>
+              <h3 class="case-card__title">Social-Recruiting-Kampagne (Mittelstand)</h3>
+              <p class="case-card__meta">HR / Recruiting · 2025</p>
+              <p class="case-card__desc">
+                Konzeption und Steuerung einer mehrstufigen Performance-Kampagne zur Fachkräftegewinnung über LinkedIn und Meta. Zielgruppenanalyse, Creatives, A/B-Tests und laufende Optimierung.
+              </p>
+              <p class="case-card__kpi">42 qualifizierte Bewerbungen in 3 Wochen</p>
+            </div>
+          </li>
+
+          <!-- Case 8: GEO-Optimierung -->
+          <li class="case-card" data-reveal data-tags="SEO GEO WordPress">
+            <div class="case-card__visual case-card__visual--purple" aria-hidden="true">
+              <span class="case-card__initials">GE</span>
+            </div>
+            <div class="case-card__body">
+              <ul class="case-card__tags" role="list" aria-label="Leistungen">
+                <li><span class="badge">SEO</span></li>
+                <li><span class="badge">GEO</span></li>
+                <li><span class="badge">WordPress</span></li>
+              </ul>
+              <h3 class="case-card__title">Lokale GEO-Sichtbarkeitsoffensive</h3>
+              <p class="case-card__meta">Gastgewerbe / Regional · 2025</p>
+              <p class="case-card__desc">
+                Aufbau einer strukturierten Content-Architektur und GEO-Strategie (Generative Engine Optimization) für ein regionales Gastgewerbeunternehmen. Optimierung für ChatGPT, Perplexity und Google Gemini.
+              </p>
+              <p class="case-card__kpi">Top-3-Nennung in ChatGPT-Empfehlungen für die Region</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- Closing CTA -->
+    <section class="closing-cta section" aria-label="Jetzt starten">
+      <div class="closing-cta__inner">
+        <span class="closing-cta__label">Kontakt aufnehmen</span>
+        <h2 class="closing-cta__title">Ihr Projekt ist das nächste?</h2>
+        <p class="closing-cta__sub">Erzählen Sie uns von Ihrem Vorhaben – wir melden uns innerhalb von 24 Stunden.</p>
+        <div class="closing-cta__actions">
+          <a href={`${base}#contact`} class="btn btn--primary btn--lg">Jetzt anfragen</a>
+          <a href="tel:+4922198655229" class="closing-cta__phone">oder rufen Sie uns an: +49&nbsp;221&nbsp;986&nbsp;55&nbsp;229</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+  <!-- Project filter script -->
+  <script>
+  (function initProjectFilter() {
+    'use strict';
+
+    const filterGroup = document.getElementById('filter-group');
+    const grid = document.getElementById('projects-grid');
+    const statusEl = document.getElementById('filter-status');
+    if (!filterGroup || !grid) return;
+
+    const allCards = Array.from(grid.querySelectorAll<HTMLElement>('[data-tags]'));
+    const totalCount = allCards.length;
+
+    filterGroup.addEventListener('click', function (e) {
+      const btn = (e.target as Element).closest<HTMLButtonElement>('[data-filter]');
+      if (!btn) return;
+
+      const filter = btn.dataset.filter ?? 'all';
+
+      // Update button states
+      filterGroup.querySelectorAll('[data-filter]').forEach(function (b) {
+        const isActive = b === btn;
+        b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        b.classList.toggle('chip--active', isActive);
+      });
+
+      let visibleCount = 0;
+
+      allCards.forEach(function (card) {
+        const tags = (card.dataset.tags ?? '').split(' ');
+        const show = filter === 'all' || tags.includes(filter);
+        card.hidden = !show;
+        if (show) visibleCount++;
+      });
+
+      if (statusEl) {
+        statusEl.textContent = visibleCount === totalCount
+          ? totalCount + ' Projekte angezeigt'
+          : visibleCount + ' von ' + totalCount + ' Projekten angezeigt';
+      }
+    });
+  })();
+  </script>
+</BaseLayout>

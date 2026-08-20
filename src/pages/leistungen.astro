@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Leistungen | agentur dk – Website-Leasing, WordPress & Digital-Agentur Köln"
+  description="Alle Leistungen der agentur dk: Website-Leasing, WordPress-Websites (barrierefrei nach BFSG), SEO/GEO, Online-Marketing, Social Recruiting, Corporate Design und KI-Services."
+>
+  <Fragment slot="head">
+    <!-- JSON-LD: WebPage -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Leistungen – agentur dk",
+  "url": "https://dk-dk.de/leistungen",
+  "inLanguage": "de-DE",
+  "description": "Alle Leistungen der agentur dk: BFSG-barrierefreie WordPress-Websites, SEO, GEO, Online-Marketing, Social Recruiting, Corporate Design und KI-Services.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "url": "https://dk-dk.de",
+    "name": "agentur dk"
+  },
+  "provider": {
+    "@type": "Organization",
+    "@id": "https://dk-dk.de/#organization",
+    "name": "agentur dk – design & kommunikation"
+  }
+}
+    </script>
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header container">
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><span aria-current="page">Leistungen</span></li>
+        </ol>
+      </nav>
+      <h1 class="page-header__title">Leistungen</h1>
+      <p class="page-header__lead">Von BFSG-barrierefreien WordPress-Websites über SEO &amp; GEO bis zu KI-Services: Alle Leistungen der agentur dk im Überblick.</p>
+    </div>
+
+    <!-- Unsere Schwerpunkte -->
+    <section class="schwerpunkte-section section section--light" aria-labelledby="schwerpunkte-heading-l">
+      <div class="container">
+        <p class="schwerpunkte-section__eyebrow">Was wir tun</p>
+        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading-l">Digitale Lösungen mit Schwerpunkt</h2>
+        <p class="schwerpunkte-section__lead">Neben unserem vollständigen Leistungsspektrum haben wir zwei Kernbereiche, in denen wir besonders tiefes Know-how und nachgewiesene Ergebnisse vorweisen können.</p>
+        <div class="schwerpunkte-grid">
+          <!-- Karte A -->
+          <article class="schwerpunkt-card" data-reveal>
+            <div class="schwerpunkt-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9" y1="14.5" x2="15" y2="14.5"/>
+              </svg>
+            </div>
+            <h3 class="schwerpunkt-card__title">Website-Leasing &amp; digitale Sichtbarkeit</h3>
+            <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
+            <a href={`${base}website-leasing`} class="btn btn--outline schwerpunkt-card__link">Mehr zum Website-Leasing</a>
+          </article>
+          <!-- Karte B -->
+          <article class="schwerpunkt-card" data-reveal>
+            <div class="schwerpunkt-card__icon" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
+              </svg>
+            </div>
+            <h3 class="schwerpunkt-card__title">BFSG &amp; digitale Barrierefreiheit</h3>
+            <p class="schwerpunkt-card__text">Seit Juni 2025 gilt das BFSG. Wir machen Ihre Website barrierearm nach EN 301 549 / WCAG 2.2 AA – rechtssicher und im echten Code, ohne Overlay-Plugins.</p>
+            <a href={`${base}bfsg-wordpress-website-agentur#bfsg-check`} class="btn btn--outline schwerpunkt-card__link">BFSG-Check starten</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Grid Section -->
+    <section class="services section section--light">
+      <div class="container">
+        <ul class="services__grid" role="list">
+
+          <!-- Card 1: Barrierefreie Websites -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">01</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Barrierefreie Websites (BFSG)</h3>
+            <p class="card__body">
+              Wir entwickeln digitale Angebote, die BFSG- und WCAG-konform sind. Von der Prüfung bis zur Konformitätserklärung – alles aus einer Hand. Keine rechtlichen Risiken, sondern echte Zugänglichkeit.
+            </p>
+            <a href={`${base}bfsg-wordpress-website-agentur`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Barrierefreie Websites (BFSG)</span></a>
+          </li>
+
+          <!-- Card 2: WordPress-Entwicklung -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">02</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 class="card__title">WordPress-Entwicklung</h3>
+            <p class="card__body">
+              Maßgeschneiderte WordPress-Websites mit sauberem Code, schnellen Ladezeiten und nahtloser Bedienung. Wir bauen Websites, die Ihr Team selbst pflegen kann – ohne technisches Vorwissen.
+            </p>
+            <a href={`${base}wordpress-entwicklung`} class="card__link">Mehr erfahren<span class="u-sr-only"> über WordPress-Entwicklung</span></a>
+          </li>
+
+          <!-- Card 3: SEO & GEO -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">03</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><polyline points="8 13 10 11 12 13 14 9"/>
+              </svg>
+            </div>
+            <h3 class="card__title">SEO &amp; GEO</h3>
+            <p class="card__body">
+              Klassische Suchmaschinenoptimierung kombiniert mit Generative Engine Optimization (GEO) für ChatGPT, Google Gemini und Co. Wir sichern Ihre Sichtbarkeit – heute und morgen.
+            </p>
+            <a href={`${base}seo-geo`} class="card__link">Mehr erfahren<span class="u-sr-only"> über SEO und GEO</span></a>
+          </li>
+
+          <!-- Card 4: Online-Marketing -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">04</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 11v2h4l5 5V6L7 11H3z"/><path d="M19 6a6 6 0 010 12"/><path d="M15.54 8.46a3 3 0 010 7.07"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Online-Marketing</h3>
+            <p class="card__body">
+              Strategisches Online-Marketing, das Ihre Zielgruppe dort erreicht, wo sie sich aufhält. Von Content-Strategie über Social Media bis hin zu E-Mail-Kampagnen – messbar und effizient.
+            </p>
+            <a href={`${base}online-marketing`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Online-Marketing</span></a>
+          </li>
+
+          <!-- Card 5: Corporate Design -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">05</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="7" cy="7" r="1.5"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Corporate Design</h3>
+            <p class="card__body">
+              Ein einheitliches Erscheinungsbild, das Vertrauen schafft. Wir entwickeln Logo, Farbwelt und Designsystem für eine konsistente Markenkommunikation auf allen Kanälen.
+            </p>
+            <a href={`${base}corporate-design`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Corporate Design</span></a>
+          </li>
+
+          <!-- Card 6: KI-Services -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">06</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="7" width="10" height="10" rx="1"/><line x1="9" y1="3" x2="9" y2="7"/><line x1="15" y1="3" x2="15" y2="7"/><line x1="9" y1="17" x2="9" y2="21"/><line x1="15" y1="17" x2="15" y2="21"/><line x1="3" y1="9" x2="7" y2="9"/><line x1="3" y1="15" x2="7" y2="15"/><line x1="17" y1="9" x2="21" y2="9"/><line x1="17" y1="15" x2="21" y2="15"/>
+              </svg>
+            </div>
+            <h3 class="card__title">KI-Services</h3>
+            <p class="card__body">
+              KI-gestützte Content-Produktion, Prozessautomatisierung und GEO-Strategien für Ihr Unternehmen. Wir setzen künstliche Intelligenz da ein, wo sie echten Mehrwert bringt.
+            </p>
+            <a href={`${base}ki-services`} class="card__link">Mehr erfahren<span class="u-sr-only"> über KI-Services</span></a>
+          </li>
+
+          <!-- Card 7: Social Recruiting -->
+          <li class="service-card" data-reveal>
+            <span class="service-card__number" aria-hidden="true">07</span>
+            <div class="card__icon">
+              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><circle cx="18" cy="7" r="2.5"/><path d="M22 21v-2a3.5 3.5 0 00-2.5-3.35"/>
+              </svg>
+            </div>
+            <h3 class="card__title">Social Recruiting</h3>
+            <p class="card__body">
+              Fachkräfte aktiv über LinkedIn, Meta &amp; Co. ansprechen – mit KI-gestützter Zielgruppenanalyse und Kampagnen, die Bewerbungen bringen. Statt Warten: gezielt finden.
+            </p>
+            <a href={`${base}social-recruiting`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Social Recruiting</span></a>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- Closing CTA -->
+    <section class="closing-cta section" aria-label="Jetzt starten">
+      <div class="closing-cta__inner">
+        <span class="closing-cta__label">Kontakt aufnehmen</span>
+        <h2 class="closing-cta__title">Bereit, Ihr Projekt zu starten?</h2>
+        <p class="closing-cta__sub">Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden.</p>
+        <div class="closing-cta__actions">
+          <a href={`${base}#contact`} class="btn btn--primary btn--lg">Projekt anfragen</a>
+          <a href="tel:+4922198655229" class="closing-cta__phone">oder rufen Sie uns an: +49&nbsp;221&nbsp;986&nbsp;55&nbsp;229</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>

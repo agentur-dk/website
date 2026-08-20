@@ -14,88 +14,35 @@ const leistungenLinks = [
 ];
 ---
 
-<footer
-  aria-label="Seiten-Footer"
-  style="background: var(--gradient-footer);"
->
-  <div
-    style="
-      max-width: var(--container-max);
-      margin-inline: auto;
-      padding-inline: 1.5rem;
-      padding-block: 4rem 3rem;
-    "
-  >
-    <div
-      style="
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-        gap: 2.5rem;
-      "
-    >
+<footer aria-label="Seiten-Footer" class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__grid">
       <!-- Col 1: Agentur -->
       <div>
         <a
           href={`${base}`}
           aria-label="agentur dk – design & kommunikation – Zur Startseite"
-          style="
-            display: inline-flex;
-            flex-direction: column;
-            text-decoration: none;
-            color: inherit;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-          "
+          class="footer-logo"
         >
-          <span
-            style="
-              font-family: var(--font-display);
-              font-weight: 700;
-              font-size: 1.1rem;
-              color: #ffffff;
-              letter-spacing: -0.02em;
-            "
-          >agentur dk</span>
-          <span
-            style="
-              font-size: 0.7rem;
-              color: #d4d4d4;
-              letter-spacing: 0.08em;
-              text-transform: uppercase;
-            "
-          >design & kommunikation</span>
+          <span class="footer-logo__name">agentur dk</span>
+          <span class="footer-logo__tagline">design & kommunikation</span>
         </a>
-        <p style="font-size: 0.875rem; color: #d4d4d4; margin-bottom: 1rem; line-height: 1.6;">
+        <p class="footer-desc">
           Professionelle Websites, Website-Leasing, SEO/GEO und Online-Marketing aus Köln. Persönlich, schnell, professionell.
         </p>
-        <address style="font-style: normal; font-size: 0.875rem; color: #d4d4d4;">
+        <address class="footer-address">
           Sachsenring 57<br />D-50677 Köln
         </address>
       </div>
 
       <!-- Col 2: Leistungen -->
       <div>
-        <h2
-          style="
-            font-family: var(--font-display);
-            font-size: 0.8125rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #ffffff;
-            margin-bottom: 1rem;
-          "
-        >Leistungen</h2>
+        <h2 class="footer-heading">Leistungen</h2>
         <nav aria-label="Leistungen im Footer">
-          <ul role="list" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem;">
+          <ul role="list" class="footer-nav-list">
             {leistungenLinks.map((l) => (
               <li>
-                <a
-                  href={`${base}${l.href}`}
-                  style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem; transition: color var(--transition-fast);"
-                  onmouseover="this.style.color='#ffffff'"
-                  onmouseout="this.style.color='#d4d4d4'"
-                >{l.label}</a>
+                <a href={`${base}${l.href}`} class="footer-link">{l.label}</a>
               </li>
             ))}
           </ul>
@@ -104,67 +51,31 @@ const leistungenLinks = [
 
       <!-- Col 3: Unternehmen (Rechtliches) -->
       <div>
-        <h2
-          style="
-            font-family: var(--font-display);
-            font-size: 0.8125rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #ffffff;
-            margin-bottom: 1rem;
-          "
-        >Unternehmen</h2>
+        <h2 class="footer-heading">Unternehmen</h2>
         <nav aria-label="Unternehmen im Footer">
-          <ul role="list" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem;">
-            <li>
-              <a href={`${base}projekte`} style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">Referenzen & Projekte</a>
-            </li>
-            <li>
-              <a href={`${base}barrierefreiheit`} style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">Barrierefreiheitserklärung</a>
-            </li>
-            <li>
-              <a href={`${base}impressum`} style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">Impressum</a>
-            </li>
-            <li>
-              <a href={`${base}datenschutz`} style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">Datenschutz</a>
-            </li>
+          <ul role="list" class="footer-nav-list">
+            <li><a href={`${base}projekte`} class="footer-link">Referenzen & Projekte</a></li>
+            <li><a href={`${base}barrierefreiheit`} class="footer-link">Barrierefreiheitserklärung</a></li>
+            <li><a href={`${base}impressum`} class="footer-link">Impressum</a></li>
+            <li><a href={`${base}datenschutz`} class="footer-link">Datenschutz</a></li>
           </ul>
         </nav>
       </div>
 
       <!-- Col 4: Kontakt -->
       <div>
-        <h2
-          style="
-            font-family: var(--font-display);
-            font-size: 0.8125rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #ffffff;
-            margin-bottom: 1rem;
-          "
-        >Kontakt</h2>
-        <ul role="list" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem;">
-          <li>
-            <a href="mailto:mail@dk-dk.de" style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">mail@dk-dk.de</a>
-          </li>
-          <li>
-            <a href="tel:+4922198655229" style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">+49 221 986 55 229</a>
-          </li>
-          <li>
-            <span style="color: #d4d4d4; font-size: 0.875rem;">Köln · Mo–Fr 9–18 Uhr</span>
-          </li>
+        <h2 class="footer-heading">Kontakt</h2>
+        <ul role="list" class="footer-nav-list">
+          <li><a href="mailto:mail@dk-dk.de" class="footer-link">mail@dk-dk.de</a></li>
+          <li><a href="tel:+4922198655229" class="footer-link">+49 221 986 55 229</a></li>
+          <li><span class="footer-text">Köln · Mo–Fr 9–18 Uhr</span></li>
           <li>
             <a
               href="https://www.linkedin.com/in/daniel-kontelis/"
               rel="noopener noreferrer"
               target="_blank"
-              style="color: #d4d4d4; text-decoration: none; font-size: 0.875rem;"
-              onmouseover="this.style.color='#ffffff'"
-              onmouseout="this.style.color='#d4d4d4'"
-            >LinkedIn<span style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0"> (öffnet in neuem Tab)</span></a>
+              class="footer-link"
+            >LinkedIn<span class="sr-only"> (öffnet in neuem Tab)</span></a>
           </li>
         </ul>
       </div>
@@ -172,44 +83,161 @@ const leistungenLinks = [
   </div>
 
   <!-- Footer bottom bar -->
-  <div
-    style="
-      border-top: 1px solid rgba(255,255,255,0.15);
-      padding-block: 1.25rem;
-    "
-  >
-    <div
-      style="
-        max-width: var(--container-max);
-        margin-inline: auto;
-        padding-inline: 1.5rem;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-      "
-    >
-      <p style="font-size: 0.8125rem; color: #d4d4d4; margin: 0;">
+  <div class="site-footer__bottom">
+    <div class="site-footer__bottom-inner">
+      <p class="footer-copyright">
         &copy; <span id="copyright-year"></span> agentur dk – design & kommunikation
       </p>
-      <ul
-        role="list"
-        style="
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          gap: 1.5rem;
-        "
-      >
-        <li><a href={`${base}impressum`} style="color: #d4d4d4; text-decoration: none; font-size: 0.8125rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">Impressum</a></li>
-        <li><a href={`${base}datenschutz`} style="color: #d4d4d4; text-decoration: none; font-size: 0.8125rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">Datenschutz</a></li>
-        <li><a href={`${base}barrierefreiheit`} style="color: #d4d4d4; text-decoration: none; font-size: 0.8125rem;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#d4d4d4'">Barrierefreiheit</a></li>
+      <ul role="list" class="footer-legal-list">
+        <li><a href={`${base}impressum`} class="footer-link footer-link--sm">Impressum</a></li>
+        <li><a href={`${base}datenschutz`} class="footer-link footer-link--sm">Datenschutz</a></li>
+        <li><a href={`${base}barrierefreiheit`} class="footer-link footer-link--sm">Barrierefreiheit</a></li>
       </ul>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    background: var(--gradient-footer);
+  }
+
+  .site-footer__inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    padding-block: 4rem 3rem;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 2.5rem;
+  }
+
+  /* Logo */
+  .footer-logo {
+    display: inline-flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .footer-logo__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-logo__tagline {
+    font-size: 0.7rem;
+    color: #d4d4d4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .footer-desc {
+    font-size: 0.875rem;
+    color: #d4d4d4;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .footer-address {
+    font-style: normal;
+    font-size: 0.875rem;
+    color: #d4d4d4;
+  }
+
+  /* Column headings */
+  .footer-heading {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 1rem;
+  }
+
+  /* Nav lists */
+  .footer-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Links */
+  .footer-link {
+    color: #d4d4d4;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color var(--transition-fast);
+  }
+
+  .footer-link:hover {
+    color: #ffffff;
+  }
+
+  .footer-link--sm {
+    font-size: 0.8125rem;
+  }
+
+  .footer-text {
+    color: #d4d4d4;
+    font-size: 0.875rem;
+  }
+
+  /* Screen-reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  /* Bottom bar */
+  .site-footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-block: 1.25rem;
+  }
+
+  .site-footer__bottom-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .footer-copyright {
+    font-size: 0.8125rem;
+    color: #d4d4d4;
+    margin: 0;
+  }
+
+  .footer-legal-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+  }
+</style>
 
 <script>
   const yearEl = document.getElementById('copyright-year');

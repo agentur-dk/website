@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="WordPress-Entwicklung Köln – Individuelle Websites & Relaunch | agentur dk"
+  description="Professionelle WordPress-Entwicklung, Relaunch und WooCommerce-Shops aus Köln. Barrierefrei, performant, Core Web Vitals optimiert. Jetzt kostenlos beraten lassen."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "WordPress-Entwicklung und Relaunch",
+      "provider": {
+        "@type": "Organization",
+        "name": "agentur dk – design & kommunikation",
+        "url": "https://dk-dk.de"
+      },
+      "description": "WordPress-Relaunch, Neuentwicklung, WooCommerce-Shops und Performance-Optimierung (Core Web Vitals) durch eine Kölner Digitalagentur.",
+      "areaServed": { "@type": "Country", "name": "DE" },
+      "serviceType": "Digital Agency",
+      "url": "https://dk-dk.de/wordpress-entwicklung"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Wie lange dauert ein WordPress-Relaunch?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ein typischer Relaunch dauert 4–8 Wochen, abhängig von Umfang, Seitenzahl und Integrationen. Bei laufenden Projekten liefern wir in Wochen-Sprints sichtbare Ergebnisse – mit Zwischenständen zum Abnehmen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Können Sie unsere bestehende WordPress-Seite übernehmen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Wir analysieren Theme, Plugins und Struktur, übernehmen die Inhalte und entwickeln auf dieser Basis weiter. So bleibt Ihre SEO-Sichtbarkeit erhalten und wird gezielt ausgebaut."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Warum ist Barrierefreiheit bei WordPress wichtig?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Seit dem 28. Juni 2025 verpflichtet das BFSG viele Unternehmen zur digitalen Barrierefreiheit. Wir bauen WordPress-Seiten nach EN 301 549 und WCAG 2.2 AA – rechtssicher und für alle Nutzer zugänglich."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Optimieren Sie auch bestehende WordPress-Seiten?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, wir verbessern Ladezeiten (Core Web Vitals), Sicherheit, Struktur und SEO bestehender Installationen – ohne Komplett-Relaunch, wenn das sinnvoll ist."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was kostet eine WordPress-Website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Je nach Umfang starten WordPress-Projekte bei ca. 2.500 €. Nach einem kostenlosen Erstgespräch erhalten Sie ein transparentes Festpreisangebot – ohne versteckte Kosten."
+          }
+        }
+      ]
+    }
+    </script>
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content" tabindex="-1">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><a href={`${base}leistungen`}>Leistungen</a></li>
+          <li aria-current="page">WordPress-Entwicklung</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- SECTION: Hero -->
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <p class="section__label">WordPress-Entwicklung</p>
+        <h1 id="hero-heading" class="section__headline">WordPress-Websites, die verkaufen – und Bestand haben</h1>
+        <p class="section__lead">Relaunch, Neuentwicklung oder Shop: Wir bauen WordPress barrierefrei nach EN 301 549, schnell nach Core Web Vitals und mit klarer Conversion-Optimierung – persönlich aus Köln.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">Projekt anfragen</a>
+          <a href={`${base}seo-geo`} class="btn btn--outline btn--lg">SEO &amp; GEO dazu buchen</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Problem / Benefits -->
+    <section class="section section--dark" aria-labelledby="wp-problem">
+      <div class="container">
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <h2 id="wp-problem" class="section__heading">Ihre Website kann mehr, als sie zeigt</h2>
+            <p>Viele Websites sind technisch veraltet: langsam, unsicher und nicht barrierefrei. Die Folgen spürst Sie direkt – in Google-Rankings, Conversion und Vertrauen.</p>
+            <p>Wir bringen Ihre WordPress-Website auf den aktuellen Stand: sauberer Code, klare Struktur, echte Performance. Und das Ganze rechtssicher nach BFSG.</p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Typische Probleme, die wir lösen</h3>
+            <ul class="checklist">
+              <li class="checklist__item">Ladezeiten über 3 Sekunden kosten Conversions</li>
+              <li class="checklist__item">Kein BFSG-Konformität – Risiko seit Juni 2025</li>
+              <li class="checklist__item">Unübersichtliche Struktur, hohe Absprungrate</li>
+              <li class="checklist__item">Wartung und Updates liegen brach</li>
+              <li class="checklist__item">Mobiles Arbeiten fühlt sich wie Notlösung an</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Leistungen -->
+    <section class="section section--light" aria-labelledby="wp-leistungen">
+      <div class="container">
+        <p class="section__label">Leistungen</p>
+        <div class="card-grid card-grid--3col">
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Relaunch &amp; Neuentwicklung</h3>
+            <p class="card__body">WordPress-Aufbau mit barrierefreier Basis, modernem Design und sauberer Technik – ohne Altlasten.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">WooCommerce-Shops</h3>
+            <p class="card__body">Online-Shops mit reibungslosem Checkout, Zahlarten und Bestandsführung – conversion-optimiert aufgebaut.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Performance &amp; Core Web Vitals</h3>
+            <p class="card__body">Ladezeiten-Analyse, Bild-Optimierung, Caching und Server-Tuning für Top-Werte bei Google.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Wartung &amp; Support</h3>
+            <p class="card__body">Updates, Backups, Sicherheit und laufende Pflege – Sie kümmern sich um Ihr Geschäft, wir um Ihre Website.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Landingpages</h3>
+            <p class="card__body">Fokussierte Landingpages mit klarem Ziel: mehr Leads, mehr Anfragen, mehr Umsatz.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">BFSG-Umsetzung</h3>
+            <p class="card__body">Barrierefreie Umsetzung nach WCAG 2.2 AA und EN 301 549 – inklusive Konformitätserklärung.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Prozess -->
+    <section class="section section--light" aria-labelledby="wp-prozess">
+      <div class="container">
+        <p class="section__label">So arbeiten wir</p>
+        <h2 id="wp-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <ol class="process-list" role="list">
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">01</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Analyse &amp; Strategie</h3>
+              <p class="process-list__body">Wir prüfen Ihre Website, Ziele und Zielgruppe – und definieren, was der Relaunch konkret bringen soll.</p>
+            </div>
+          </li>
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">02</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Design &amp; Konzept</h3>
+              <p class="process-list__body">Barrierefreies Design, klare Struktur und Inhalte, die Ihre Botschaft transportieren.</p>
+            </div>
+          </li>
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">03</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Entwicklung &amp; Tests</h3>
+              <p class="process-list__body">Sauberer WordPress-Code, alle Seiten responsiv, getestet mit Tastatur und Screenreader.</p>
+            </div>
+          </li>
+          <li class="process-list__item" data-reveal>
+            <span class="process-list__number" aria-hidden="true">04</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Launch &amp; Betreuung</h3>
+              <p class="process-list__body">Umzug, Go-live, Monitoring und laufende Optimierung – inklusive Wartungsoption.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SECTION: Weitere Leistungen -->
+    <section class="section section--sm" aria-label="Passende Leistungen">
+      <div class="container">
+        <h2 class="section__subheading">Passende Leistungen</h2>
+        <ul class="footer-col__list" role="list">
+          <li><a href={`${base}bfsg-wordpress-website-agentur`} class="footer-col__link">BFSG &amp; Barrierefreiheit</a></li>
+          <li><a href={`${base}seo-geo`} class="footer-col__link">SEO &amp; GEO</a></li>
+          <li><a href={`${base}online-marketing`} class="footer-col__link">Online-Marketing</a></li>
+          <li><a href={`${base}corporate-design`} class="footer-col__link">Corporate Design</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION: FAQ -->
+    <FaqAccordion
+      heading="Häufige Fragen"
+      items={[
+        {
+          question: "Wie lange dauert ein WordPress-Relaunch?",
+          answer: "Ein typischer Relaunch dauert 4–8 Wochen, abhängig von Umfang, Seitenzahl und Integrationen. Bei laufenden Projekten liefern wir in Wochen-Sprints sichtbare Ergebnisse – mit Zwischenständen zum Abnehmen.",
+        },
+        {
+          question: "Können Sie unsere bestehende WordPress-Seite übernehmen?",
+          answer: "Ja. Wir analysieren Theme, Plugins und Struktur, übernehmen die Inhalte und entwickeln auf dieser Basis weiter. So bleibt Ihre SEO-Sichtbarkeit erhalten und wird gezielt ausgebaut.",
+        },
+        {
+          question: "Warum ist Barrierefreiheit bei WordPress wichtig?",
+          answer: "Seit dem 28. Juni 2025 verpflichtet das BFSG viele Unternehmen zur digitalen Barrierefreiheit. Wir bauen WordPress-Seiten nach EN 301 549 und WCAG 2.2 AA – rechtssicher und für alle Nutzer zugänglich.",
+        },
+        {
+          question: "Optimieren Sie auch bestehende WordPress-Seiten?",
+          answer: "Ja, wir verbessern Ladezeiten (Core Web Vitals), Sicherheit, Struktur und SEO bestehender Installationen – ohne Komplett-Relaunch, wenn das sinnvoll ist.",
+        },
+        {
+          question: "Was kostet eine WordPress-Website?",
+          answer: "Je nach Umfang starten WordPress-Projekte bei ca. 2.500 €. Nach einem kostenlosen Erstgespräch erhalten Sie ein transparentes Festpreisangebot – ohne versteckte Kosten.",
+        },
+      ]}
+    />
+
+    <!-- SECTION: Kontakt -->
+    <LeadForm page="WordPress-Entwicklung" heading="Jetzt unverbindlich anfragen" />
+
+  </main>
+
+  <Footer />
+</BaseLayout>

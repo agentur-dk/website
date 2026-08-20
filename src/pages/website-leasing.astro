@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const title = 'Website-Leasing – Professionelle Website ohne Einmalkosten | agentur dk';
+const description = 'Professionelle Website zum monatlichen Festpreis – ohne hohe Einmalkosten. Mit Wartung, Hosting und technischem Support auf Wunsch inklusive. Jetzt individuelles Angebot anfragen.';
+---
+
+<BaseLayout noindex={true} title={title} description={description}>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Website-Leasing",
+      "provider": {
+        "@type": "Organization",
+        "name": "agentur dk – design & kommunikation",
+        "url": "https://dk-dk.de"
+      },
+      "description": "Professionelle WordPress-Website gegen monatliche Rate – ohne hohe Einmalkosten, mit Wartung und Hosting auf Wunsch.",
+      "areaServed": { "@type": "Country", "name": "DE" },
+      "serviceType": "Digital Agency",
+      "url": "https://dk-dk.de/website-leasing"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was ist Website-Leasing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ein Modell, bei dem Sie eine professionell entwickelte Website gegen eine monatliche Pauschale nutzen, anstatt einmalig einen hohen Betrag zu investieren. Wartung und Hosting können auf Wunsch integriert werden."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wer ist Website-Leasing für geeignet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Website-Leasing eignet sich besonders für KMU, Selbstständige und Gründer, die eine professionelle Online-Präsenz wünschen, ohne dabei ihr Budget auf einmal zu belasten."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bleibe ich flexibel?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Inhalte können jederzeit angepasst werden. Erweiterungen sind möglich. Wir besprechen alle Änderungen direkt mit Ihnen – kein Umweg über Agenturen oder Ticketsysteme."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ist Website-Leasing BFSG-konform?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, wir entwickeln alle Websites – auch im Leasing-Modell – nach WCAG 2.2 AA und EN 301 549. BFSG-Konformität ist kein Aufpreis, sondern Standard."
+          }
+        }
+      ]
+    }
+    </script>
+  </Fragment>
+
+  <Header />
+  <main id="main-content" tabindex="-1">
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><a href={`${base}leistungen`}>Leistungen</a></li>
+          <li aria-current="page">Website-Leasing</li>
+        </ol>
+      </div>
+    </nav>
+
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <p class="section__label">Website-Leasing</p>
+        <h1 id="hero-heading" class="section__headline">Ihre professionelle Website – monatlich, planbar, ohne Risiko</h1>
+        <p class="section__lead">Website-Leasing macht professionelle Web-Präsenz ohne hohe Einmalinvestition möglich. Sie zahlen eine feste monatliche Rate und erhalten dafür eine fertige, barrierefrei umgesetzte Website – Wartung und Hosting auf Wunsch inklusive.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">Individuelles Angebot anfragen</a>
+          <a href={`${base}wordpress-entwicklung`} class="btn btn--outline btn--lg">Mehr über WordPress-Entwicklung</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="leasing-vorteile">
+      <div class="container">
+        <p class="section__label">Ihre Vorteile</p>
+        <h2 id="leasing-vorteile" class="section__heading">Warum Website-Leasing?</h2>
+        <div class="card-grid card-grid--4col">
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Kosteneffizient</h3>
+            <p class="card__body">Kein großer finanzieller Aufwand zu Beginn. Die Website wird finanzierbar ohne Liquiditätsengpass.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Immer aktuell</h3>
+            <p class="card__body">Regelmäßige Updates und Wartung sind inklusive. Ihre Website bleibt technisch auf dem neuesten Stand.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Anpassungsfähig</h3>
+            <p class="card__body">Inhalte lassen sich schnell ändern – auch selbst, wenn gewünscht. Keine langen Wartezeiten für kleine Anpassungen.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Technischer Support</h3>
+            <p class="card__body">Bei Fragen und Problemen steht Ihnen direkter Support zur Verfügung. Kein Ticket-System, keine Warteschlangen.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Planungssicherheit</h3>
+            <p class="card__body">Feste monatliche Kosten ohne versteckte Posten. Volle Transparenz in der Budgetplanung.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Startklar für SEO</h3>
+            <p class="card__body">Die Website ist von Anfang an technisch SEO-optimiert aufgebaut. Ein solider Grundstein für Ihre Sichtbarkeit.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Mitwachsend</h3>
+            <p class="card__body">Das Leasing-Modell skaliert mit Ihrem Unternehmen. Erweiterungen und neue Seiten sind unkompliziert möglich.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Sicherheit</h3>
+            <p class="card__body">Regelmäßige Sicherheitsupdates und Backups schützen Ihre Website und Ihre Daten.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="content-cta" data-reveal>
+        <p class="content-cta__eyebrow">Website-Leasing anfragen</p>
+        <h3 class="content-cta__title">Ihre professionelle Website ab dem ersten Monat</h3>
+        <p class="content-cta__sub">Kein großes Investitionsrisiko: Ihr komplettes Website-Paket in einer monatlichen Flatrate – inklusive Design, Entwicklung und laufender Betreuung.</p>
+        <div class="content-cta__actions">
+          <a href="https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach" class="btn btn--primary" target="_blank" rel="noopener noreferrer">Erstberatung buchen</a>
+          <a href="tel:+4922198655229" class="content-cta__phone">oder rufen Sie uns an: +49&nbsp;221&nbsp;986&nbsp;55&nbsp;229</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="section section--dark" aria-labelledby="leasing-angebot">
+      <div class="container">
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <p class="section__label">Ihr individuelles Angebot</p>
+            <h2 id="leasing-angebot" class="section__heading">Transparente Konditionen – maßgeschneidert für Sie</h2>
+            <p>Da jede Unternehmens-Website individuell ist, erstellen wir Ihnen gerne ein maßgeschneidertes Angebot. Der Umfang hängt von Ihren konkreten Anforderungen ab: Seitenanzahl, gewünschte Funktionen, Design-Aufwand und ob Wartung sowie Hosting integriert werden sollen.</p>
+            <p>Eines gilt immer: volle Kostentransparenz, keine versteckten Gebühren und eine feste monatliche Rate, die Sie sicher planen können.</p>
+            <a href="#contact" class="btn btn--primary btn--lg">Individuelles Angebot anfragen</a>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Was ist im Leasing typischerweise enthalten?</h3>
+            <ul class="checklist">
+              <li class="checklist__item">Professionell entwickelte WordPress-Website</li>
+              <li class="checklist__item">Barrierefreie Umsetzung nach WCAG 2.2 AA</li>
+              <li class="checklist__item">Technische SEO-Grundoptimierung</li>
+              <li class="checklist__item">Regelmäßige Updates &amp; Wartung (auf Wunsch)</li>
+              <li class="checklist__item">Hosting &amp; Sicherheits-Backups (auf Wunsch)</li>
+              <li class="checklist__item">Direkter Support ohne Ticketsystem</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="leasing-prozess">
+      <div class="container">
+        <p class="section__label">So arbeiten wir</p>
+        <h2 id="leasing-prozess" class="section__heading">In vier Schritten zu Ihrer Leasing-Website</h2>
+        <ol class="process-list" role="list">
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">01</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Analyse &amp; Konzept</h3>
+              <p class="process-list__body">Wir klären gemeinsam Umfang, Design und Funktionen. Auf Basis Ihrer Anforderungen erstellen wir Ihnen ein individuelles Angebot.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">02</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Umsetzung</h3>
+              <p class="process-list__body">Barrierefreie Entwicklung Ihrer Website nach modernen Standards – mit klarer Struktur und technisch sauberem Code.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">03</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Start &amp; Übergabe</h3>
+              <p class="process-list__body">Ihr Auftritt geht live. Sie erhalten eine Einweisung in die Pflege und können kleine Anpassungen selbst vornehmen – wenn Sie das möchten.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">04</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Laufende Betreuung</h3>
+              <p class="process-list__body">Updates, Wartung und Support – dauerhaft abgedeckt. Sie konzentrieren sich auf Ihr Geschäft, wir kümmern uns um Ihre Website.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section--sm" aria-label="Passende Leistungen">
+      <div class="container">
+        <h2 class="section__subheading">Passende Leistungen</h2>
+        <ul class="footer-col__list" role="list">
+          <li><a href={`${base}wordpress-entwicklung`} class="footer-col__link">WordPress-Entwicklung</a></li>
+          <li><a href={`${base}bfsg-wordpress-website-agentur`} class="footer-col__link">BFSG &amp; Barrierefreiheit</a></li>
+          <li><a href={`${base}seo-geo`} class="footer-col__link">SEO &amp; GEO</a></li>
+          <li><a href={`${base}online-marketing`} class="footer-col__link">Online-Marketing</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <FaqAccordion
+      heading="Häufige Fragen"
+      items={[
+        { question: 'Was ist Website-Leasing?', answer: 'Ein Modell, bei dem Sie eine professionell entwickelte Website gegen eine monatliche Pauschale nutzen, anstatt einmalig einen hohen Betrag zu investieren. Wartung und Hosting können auf Wunsch integriert werden.' },
+        { question: 'Wer ist Website-Leasing für geeignet?', answer: 'Website-Leasing eignet sich besonders für KMU, Selbstständige und Gründer, die eine professionelle Online-Präsenz wünschen, ohne dabei ihr Budget auf einmal zu belasten.' },
+        { question: 'Bleibe ich flexibel?', answer: 'Ja. Inhalte können jederzeit angepasst werden. Erweiterungen sind möglich. Wir besprechen alle Änderungen direkt mit Ihnen – kein Umweg über Agenturen oder Ticketsysteme.' },
+        { question: 'Ist Website-Leasing BFSG-konform?', answer: 'Ja, wir entwickeln alle Websites – auch im Leasing-Modell – nach WCAG 2.2 AA und EN 301 549. BFSG-Konformität ist kein Aufpreis, sondern Standard.' },
+      ]}
+    />
+
+    <LeadForm page="Website-Leasing" heading="Jetzt individuelles Angebot anfragen" />
+
+  </main>
+  <Footer />
+</BaseLayout>

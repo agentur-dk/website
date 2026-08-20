@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Seite nicht gefunden (404) | agentur dk"
+  description="Die gesuchte Seite konnte leider nicht gefunden werden. Besuche unsere Startseite oder entdecke unsere Leistungen."
+  noindex={true}
+>
+  <Header />
+
+  <main id="main-content">
+    <div class="error-page">
+      <div class="error-page__inner">
+        <p class="error-page__code" aria-label="Fehler 404">404</p>
+        <h1 class="error-page__title">Seite nicht gefunden</h1>
+        <p class="error-page__desc">
+          Die gesuchte Seite existiert leider nicht oder wurde verschoben.
+          Kein Problem – wir helfen Ihnen weiter.
+        </p>
+        <div class="error-page__actions">
+          <a href={`${base}`} class="btn btn--accent btn--lg">Zur Startseite</a>
+          <a href={`${base}leistungen`} class="btn btn--outline btn--lg">Unsere Leistungen</a>
+        </div>
+        <hr class="error-page__divider" aria-hidden="true">
+        <ul class="error-page__links" role="list">
+          <li><a href={`${base}projekte`}>Referenzen &amp; Projekte</a></li>
+          <li><a href={`${base}barrierefreiheit`}>Barrierefreiheit</a></li>
+          <li><a href={`${base}#contact`}>Kontakt</a></li>
+          <li><a href={`${base}impressum`}>Impressum</a></li>
+          <li><a href={`${base}datenschutz`}>Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: calc(100vh - 128px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-block: var(--space-20);
+  }
+  .error-page__inner {
+    max-width: 560px;
+  }
+  .error-page__code {
+    font-family: var(--font-mono);
+    font-size: clamp(4rem, 15vw, 8rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-light);
+    letter-spacing: var(--letter-spacing-mono);
+    line-height: 1;
+    margin-bottom: var(--space-6);
+  }
+  .error-page__title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+  .error-page__desc {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    margin-bottom: var(--space-10);
+  }
+  .error-page__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+  }
+  .error-page__divider {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin-block: var(--space-12);
+  }
+  .error-page__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+  }
+  .error-page__links a {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    letter-spacing: var(--letter-spacing-mono);
+    transition: color var(--transition-fast);
+  }
+  .error-page__links a:hover {
+    color: var(--color-accent);
+  }
+  .error-page__links a:focus-visible {
+    outline: var(--border-width-focus) solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+</style>

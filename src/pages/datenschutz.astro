@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const title = 'Datenschutzerklärung – agentur dk';
+const description = 'Datenschutzerklärung von agentur dk Köln: Hosting, Kontaktformular, Consent-Management. Keine Tracking-Tools ohne Einwilligung.';
+---
+
+<BaseLayout noConsent={true} title={title} description={description}>
+  <Header />
+  <main id="main-content" tabindex="-1">
+    <div class="section container container--narrow">
+
+      <h1>Datenschutzerklärung</h1>
+      <p>Informationen zum Umgang mit Ihren personenbezogenen Daten</p>
+
+      <section aria-labelledby="ds-verantwortlicher">
+        <h2 id="ds-verantwortlicher">1. Verantwortlicher</h2>
+        <address>
+          Daniel Kontelis<br />
+          agentur dk – design &amp; kommunikation<br />
+          Sachsenring 57, D-50677 Köln<br />
+          E-Mail: <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a><br />
+          Telefon: <a href="tel:+4922198655229">+49 221 986 55 229</a>
+        </address>
+      </section>
+
+      <section aria-labelledby="ds-hosting">
+        <h2 id="ds-hosting">2. Hosting</h2>
+        <p>
+          Diese Website wird auf GitHub Pages gehostet (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Bei jedem Seitenaufruf wirst durch GitHub technisch notwendige Daten in Server-Logfiles gespeichert: IP-Adresse (anonymisiert), Datum/Uhrzeit, aufgerufene URL, Referrer, Browser und Betriebssystem. Diese Daten werden ausschließlich zur Aufrechterhaltung des Betriebs genutzt und nach spätestens 7 Tagen gelöscht. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).
+        </p>
+        <p>
+          GitHub Privacy Policy: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement</a>
+        </p>
+      </section>
+
+      <section aria-labelledby="ds-kontaktformular">
+        <h2 id="ds-kontaktformular">3. Kontaktformular</h2>
+        <p>
+          Wenn Sie uns über das Kontaktformular kontaktieren, werden die von Ihnen eingegebenen Daten (Name, E-Mail, Nachricht) zur Bearbeitung Ihrer Anfrage bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter. Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse). Die Daten werden nach Abschluss des Vorgangs gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten bestehen.
+        </p>
+      </section>
+
+      <section aria-labelledby="ds-cookies">
+        <h2 id="ds-cookies">4. Cookies und lokale Speicherung</h2>
+        <p>
+          Wir setzen keine Tracking-Cookies ohne Ihre Einwilligung. Unsere Website nutzt <strong>ausschließlich localStorage</strong> (kein HTTP-Cookie) zur Speicherung Ihrer Datenschutzeinstellungen (Schlüssel: <code>dk_consent_v1</code>). Diese Einstellung verbleibt in Ihrem Browser bis zur manuellen Löschung oder bis Sie Ihre Einwilligung widerrufen. Drittanbieter-Cookies werden auf dieser Website nicht gesetzt, sofern Sie keine entsprechende Einwilligung erteilt haben.
+        </p>
+      </section>
+
+      <section aria-labelledby="ds-analytics">
+        <h2 id="ds-analytics">4a. Google Analytics (nur mit Einwilligung)</h2>
+        <p>
+          Diese Website nutzt <strong>Google Analytics</strong> (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland) ausschließlich nach Ihrer ausdrücklichen Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Ohne Ihre Einwilligung wird <strong>kein Tracking ausgeführt</strong> und kein Google-Tag geladen.
+        </p>
+        <p>
+          Der Google-Tag wird erst nach Ihrer Zustimmung über das Consent-Banner aktiviert. Dabei wird die <strong>IP-Anonymisierung</strong> (anonymize_ip) aktiviert, sodass Ihre IP-Adresse gekürzt und nicht vollständig übertragen wird. Die Verarbeitung dient der statistischen Auswertung der Nutzung unserer Website (Reichweitenmessung).
+        </p>
+        <p>
+          Ihre Einwilligung kannst Sie jederzeit mit Wirkung für die Zukunft widerrufen – über den Link „Cookie-Einstellungen" im Footer. Die Datenübertragung in die USA erfolgt auf Grundlage des Angemessenheitsbeschlusses der EU-Kommission (EU-US Data Privacy Framework).
+        </p>
+      </section>
+
+      <section aria-labelledby="ds-consent">
+        <h2 id="ds-consent">5. Consent-Management</h2>
+        <p>
+          Wir setzen ein selbst entwickeltes, leichtgewichtiges Consent-Management ein, das ausschließlich auf Ihrem Gerät (localStorage) operiert und keine Daten an Dritte überträgt. Sie können Ihre Einwilligung jederzeit über den Link „Datenschutz widerrufen" im Footer widerrufen.
+        </p>
+      </section>
+
+      <section aria-labelledby="ds-rechte">
+        <h2 id="ds-rechte">6. Ihre Rechte (Art. 15–21 DSGVO)</h2>
+        <p>
+          Sie hast das Recht auf: Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Zur Geltendmachung Ihrer Rechte wende Sie an: <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a>
+        </p>
+      </section>
+
+      <section aria-labelledby="ds-beschwerde">
+        <h2 id="ds-beschwerde">7. Beschwerderecht</h2>
+        <p>Sie hast das Recht, sich bei der zuständigen Aufsichtsbehörde zu beschweren:</p>
+        <address>
+          Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen (LDI NRW)<br />
+          Kavalleriestr. 2–4, 40213 Düsseldorf<br />
+          <a href="https://www.ldi.nrw.de" target="_blank" rel="noopener noreferrer">https://www.ldi.nrw.de</a>
+        </address>
+      </section>
+
+      <section aria-labelledby="ds-weitergabe">
+        <h2 id="ds-weitergabe">8. Keine Weitergabe an Dritte</h2>
+        <p>
+          Wir geben Ihre personenbezogenen Daten nicht an Dritte weiter, es sei denn, dies ist zur Vertragserfüllung erforderlich, Sie hast ausdrücklich eingewilligt oder wir sind gesetzlich dazu verpflichtet.
+        </p>
+      </section>
+
+      <section aria-labelledby="ds-aktualitaet">
+        <h2 id="ds-aktualitaet">9. Aktualität dieser Datenschutzerklärung</h2>
+        <p>
+          Diese Datenschutzerklärung ist aktuell gültig und hat den Stand: August 2026. Mit der Weiterentwicklung unserer Website und/oder bei geänderten gesetzlichen Vorgaben kann es notwendig werden, diese Datenschutzerklärung anzupassen.
+        </p>
+      </section>
+
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

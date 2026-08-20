@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const title = 'Impressum – agentur dk';
+const description = 'Impressum von agentur dk – design & kommunikation, Sachsenring 57, 50677 Köln. Alle Pflichtangaben nach §5 DDG.';
+---
+
+<BaseLayout noConsent={true} title={title} description={description}>
+  <Header />
+  <main id="main-content" tabindex="-1">
+    <div class="section container container--narrow">
+
+      <h1>Impressum</h1>
+      <p>Pflichtangaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)</p>
+
+      <section aria-labelledby="impressum-angaben">
+        <h2 id="impressum-angaben">Angaben gemäß § 5 DDG</h2>
+        <p>
+          agentur dk – design &amp; kommunikation<br />
+          Inhaber: Daniel Kontelis<br />
+          Sachsenring 57<br />
+          D-50677 Köln
+        </p>
+        <p>
+          Telefon: <a href="tel:+4922198655229">+49 221 986 55 229</a><br />
+          E-Mail: <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a><br />
+          Website: <a href="https://www.dk-dk.de" rel="noopener">www.dk-dk.de</a>
+        </p>
+      </section>
+
+      <section aria-labelledby="impressum-verantwortlich">
+        <h2 id="impressum-verantwortlich">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+        <p>
+          Daniel Kontelis<br />
+          Sachsenring 57<br />
+          D-50677 Köln
+        </p>
+      </section>
+
+      <section aria-labelledby="impressum-odr">
+        <h2 id="impressum-odr">EU-Streitschlichtung</h2>
+        <p>
+          Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) der Europäischen Kommission informieren. Diese ist unter folgendem Link erreichbar:
+          <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a>
+        </p>
+        <p>Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+      </section>
+
+      <section aria-labelledby="impressum-vsbg">
+        <h2 id="impressum-vsbg">Verbraucherstreitbeilegung / Universalschlichtungsstelle (§ 36 VSBG)</h2>
+        <p>Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+      </section>
+
+      <section aria-labelledby="impressum-haftung">
+        <h2 id="impressum-haftung">Haftungsausschluss</h2>
+
+        <h3>Haftung für Inhalte</h3>
+        <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgeunseren Gesetzen verantwortlich. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar.</p>
+
+        <h3>Haftung für Links</h3>
+        <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+
+        <h3>Urheberrecht</h3>
+        <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+      </section>
+
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

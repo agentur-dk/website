@@ -1,0 +1,215 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const title = 'Corporate Design Agentur Köln – Logo, Brand Identity & Manuals – agentur dk';
+const description = 'Corporate Design aus Köln: Logo-Entwicklung, Brand Identity und Design Manuals für Print & Digital. Wiedererkennbar, konsistent, professionell.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Corporate Design",
+      "provider": {
+        "@type": "Organization",
+        "name": "agentur dk – design & kommunikation",
+        "url": "https://dk-dk.de"
+      },
+      "description": "Logo-Entwicklung, Brand Identity und Corporate Design Manuals für Print und Digital – ein konsistentes Erscheinungsbild für Ihre Marke.",
+      "areaServed": { "@type": "Country", "name": "DE" },
+      "serviceType": "Digital Agency",
+      "url": "https://dk-dk.de/corporate-design"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was gehört zu einem Corporate Design?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Logo, Farbwelt, Typografie, Bildsprache, Gestaltungsraster und Anwendungsregeln – dokumentiert in einem Manual, damit Ihre Marke überall gleich auftritt."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Brauche ich ein Design Manual?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sobald mehrere Menschen oder Agenturen für Ihre Marke gestalten, lohnt sich ein Manual. Es sichert Konsistenz in Print, Web und Social Media – und spart langfristig Zeit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie lange dauert ein Logo-Design?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ein professionelles Logo entsteht in der Regel in 2–4 Wochen – inklusive Recherche, Entwürfen, Feedback-Schleifen und der Übergabe aller druck- und webfähigen Dateien."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Können Sie unser bestehendes Design überarbeiten?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Wir modernisieren bestehende Marken, ohne die Wiedererkennung zu verlieren – ein Relaunch des Corporate Designs, der Ihre Marke zukunftsfähig macht."
+          }
+        }
+      ]
+    }
+    </script>
+  </Fragment>
+
+  <Header />
+  <main id="main-content" tabindex="-1">
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><a href={`${base}leistungen`}>Leistungen</a></li>
+          <li aria-current="page">Corporate Design</li>
+        </ol>
+      </div>
+    </nav>
+
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <p class="section__label">Corporate Design</p>
+        <h1 id="hero-heading" class="section__headline">Eine Marke, die man wiedererkennt</h1>
+        <p class="section__lead">Logo, Farbwelt, Typografie und Design Manual – ein konsistentes Erscheinungsbild für Print und Digital, das Vertrauen schafft.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">Marke entwickeln</a>
+          <a href={`${base}wordpress-entwicklung`} class="btn btn--outline btn--lg">Website dazu ansehen</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" aria-labelledby="cd-problem">
+      <div class="container">
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <h2 id="cd-problem" class="section__heading">Wiedererkennung ist kein Zufall</h2>
+            <p>Marken, die überall gleich auftreten, wirken professionell und vertrauenswürdig. Marken, die bei jedem Touchpoint anders aussehen, verwirren.</p>
+            <p>Wir entwickeln Corporate Designs, die zu Ihrem Unternehmen passen – und dokumentieren sie so, dass sie jeder konsistent anwenden kann.</p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Was ein starkes Corporate Design leistet</h3>
+            <ul class="checklist">
+              <li class="checklist__item">Einheitliches Bild in Print, Web und Social Media</li>
+              <li class="checklist__item">Mehr Vertrauen durch professionellen Auftritt</li>
+              <li class="checklist__item">Klarheit für Ihre Kunden – vom Logo bis zum Formular</li>
+              <li class="checklist__item">Grundlage für Website, Kampagnen und Präsentationen</li>
+              <li class="checklist__item">Manual als Regelwerk für alle, die für Sie gestalten</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="cd-leistungen">
+      <div class="container">
+        <p class="section__label">Leistungen</p>
+        <div class="card-grid card-grid--3col">
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Logo-Entwicklung</h3>
+            <p class="card__body">Vom Entwurf bis zur Übergabe: alle druck- und webfähigen Dateien inklusive.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Brand Identity</h3>
+            <p class="card__body">Farbwelt, Typografie, Bildsprache und Tonality – das Gesicht Ihrer Marke.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Corporate Design Manual</h3>
+            <p class="card__body">Regelwerk mit Anwendungsbeispielen für Agenturen, Mitarbeiter und Partner.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Gestaltungsvorlagen</h3>
+            <p class="card__body">Briefpapier, Visitenkarten, Präsentationen und Social-Media-Vorlagen aus einem Guss.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Digital-Design</h3>
+            <p class="card__body">UI/UX-Grundlagen und Webdesign, das zur Marke passt – barrierefrei umsetzbar.</p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Marken-Relaunch</h3>
+            <p class="card__body">Modernisierung bestehender Marken, ohne die Wiedererkennung zu verlieren.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="cd-prozess">
+      <div class="container">
+        <p class="section__label">So arbeiten wir</p>
+        <h2 id="cd-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <ol class="process-list" role="list">
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">01</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Markenanalyse</h3>
+              <p class="process-list__body">Positionierung, Zielgruppe und Wettbewerb verstehen – die Basis für gute Gestaltung.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">02</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Konzept &amp; Entwürfe</h3>
+              <p class="process-list__body">Erste Designrichtungen mit Begründung – Sie entscheiden, wir schärfen.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">03</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Ausarbeitung</h3>
+              <p class="process-list__body">Feinschliff des gewählten Konzepts: Logo, Farben, Typografie, Anwendungen.</p>
+            </div>
+          </li>
+          <li class="process-list__item">
+            <span class="process-list__number" aria-hidden="true">04</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Manual &amp; Übergabe</h3>
+              <p class="process-list__body">Dokumentation und Dateien – damit Ihre Marke überall gleich aussieht.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section--sm" aria-label="Passende Leistungen">
+      <div class="container">
+        <h2 class="section__subheading">Passende Leistungen</h2>
+        <ul class="footer-col__list" role="list">
+          <li><a href={`${base}wordpress-entwicklung`} class="footer-col__link">WordPress-Entwicklung</a></li>
+          <li><a href={`${base}online-marketing`} class="footer-col__link">Online-Marketing</a></li>
+          <li><a href={`${base}seo-geo`} class="footer-col__link">SEO &amp; GEO</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <FaqAccordion
+      heading="Häufige Fragen"
+      items={[
+        { question: 'Was gehört zu einem Corporate Design?', answer: 'Logo, Farbwelt, Typografie, Bildsprache, Gestaltungsraster und Anwendungsregeln – dokumentiert in einem Manual, damit Ihre Marke überall gleich auftritt.' },
+        { question: 'Brauche ich ein Design Manual?', answer: 'Sobald mehrere Menschen oder Agenturen für Ihre Marke gestalten, lohnt sich ein Manual. Es sichert Konsistenz in Print, Web und Social Media – und spart langfristig Zeit.' },
+        { question: 'Wie lange dauert ein Logo-Design?', answer: 'Ein professionelles Logo entsteht in der Regel in 2–4 Wochen – inklusive Recherche, Entwürfen, Feedback-Schleifen und der Übergabe aller druck- und webfähigen Dateien.' },
+        { question: 'Können Sie unser bestehendes Design überarbeiten?', answer: 'Ja. Wir modernisieren bestehende Marken, ohne die Wiedererkennung zu verlieren – ein Relaunch des Corporate Designs, der Ihre Marke zukunftsfähig macht.' },
+      ]}
+    />
+
+    <LeadForm page="Corporate Design" heading="Jetzt unverbindlich anfragen" />
+
+  </main>
+  <Footer />
+</BaseLayout>
