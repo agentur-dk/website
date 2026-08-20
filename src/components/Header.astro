@@ -1,0 +1,295 @@
+---
+const base = import.meta.env.BASE_URL;
+
+const leistungen = [
+  { href: 'bfsg-wordpress-website-agentur', label: 'BFSG & Barrierefreiheit' },
+  { href: 'wordpress-entwicklung', label: 'WordPress-Entwicklung' },
+  { href: 'website-leasing', label: 'Website-Leasing' },
+  { href: 'seo-geo', label: 'SEO & GEO' },
+  { href: 'online-marketing', label: 'Online-Marketing' },
+  { href: 'social-recruiting', label: 'Social Recruiting' },
+  { href: 'corporate-design', label: 'Corporate Design' },
+  { href: 'ki-services', label: 'KI-Services' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  style="
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  "
+>
+  <div
+    style="
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      gap: 1.5rem;
+    "
+  >
+    <!-- Logo -->
+    <a
+      href={`${base}`}
+      aria-label="agentur dk – design & kommunikation – Zur Startseite"
+      style="
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        line-height: 1.2;
+        flex-shrink: 0;
+      "
+    >
+      <span
+        style="
+          font-family: var(--font-display);
+          font-weight: 700;
+          font-size: 1.1rem;
+          color: var(--color-text);
+          letter-spacing: -0.02em;
+        "
+      >agentur dk</span>
+      <span
+        style="
+          font-size: 0.7rem;
+          color: var(--color-text-muted);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        "
+      >design & kommunikation</span>
+    </a>
+
+    <!-- Mobile toggle -->
+    <button
+      type="button"
+      id="nav-toggle"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+      aria-label="Menü öffnen"
+      style="
+        display: none;
+        background: none;
+        border: none;
+        color: var(--color-text);
+        cursor: pointer;
+        padding: 0.5rem;
+      "
+    >
+      <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor"></path>
+      </svg>
+    </button>
+
+    <!-- Primary navigation -->
+    <nav id="nav-menu" aria-label="Hauptnavigation">
+      <ul
+        role="list"
+        style="
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        "
+      >
+        <li>
+          <a
+            href={`${base}`}
+            aria-current={currentPath === `${base}` || currentPath === `${base}index.html` ? 'page' : undefined}
+            style="
+              display: block;
+              padding: 0.5rem 0.75rem;
+              color: var(--color-text-muted);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.9375rem;
+              border-radius: var(--radius-md);
+              transition: color var(--transition-fast), background-color var(--transition-fast);
+            "
+            onmouseover="this.style.color='var(--color-text)';this.style.backgroundColor='var(--color-surface-alt)'"
+            onmouseout="this.style.color='var(--color-text-muted)';this.style.backgroundColor=''"
+          >Start</a>
+        </li>
+
+        <!-- Leistungen dropdown -->
+        <li style="position: relative;">
+          <a
+            href={`${base}leistungen`}
+            id="leistungen-btn"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="leistungen-dropdown"
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.25rem;
+              padding: 0.5rem 0.75rem;
+              color: var(--color-text-muted);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.9375rem;
+              border-radius: var(--radius-md);
+              transition: color var(--transition-fast), background-color var(--transition-fast);
+              cursor: pointer;
+            "
+            onmouseover="this.style.color='var(--color-text)';this.style.backgroundColor='var(--color-surface-alt)'"
+            onmouseout="this.style.color='var(--color-text-muted)';this.style.backgroundColor=''"
+          >
+            Leistungen
+            <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" style="flex-shrink:0">
+              <path d="M7 10l5 5 5-5z" fill="currentColor"></path>
+            </svg>
+          </a>
+          <ul
+            id="leistungen-dropdown"
+            role="list"
+            aria-label="Leistungen"
+            hidden
+            style="
+              position: absolute;
+              top: calc(100% + 0.5rem);
+              left: 0;
+              min-width: 220px;
+              background-color: var(--color-surface);
+              border: 1px solid var(--color-border);
+              border-radius: var(--radius-md);
+              box-shadow: var(--shadow-md);
+              list-style: none;
+              margin: 0;
+              padding: 0.5rem 0;
+              z-index: 100;
+            "
+          >
+            {leistungen.map((l) => (
+              <li>
+                <a
+                  href={`${base}${l.href}`}
+                  style="
+                    display: block;
+                    padding: 0.5rem 1rem;
+                    color: var(--color-text-muted);
+                    text-decoration: none;
+                    font-size: 0.9rem;
+                    transition: color var(--transition-fast), background-color var(--transition-fast);
+                  "
+                  onmouseover="this.style.color='var(--color-text)';this.style.backgroundColor='var(--color-surface-alt)'"
+                  onmouseout="this.style.color='var(--color-text-muted)';this.style.backgroundColor=''"
+                >{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        </li>
+
+        <li>
+          <a
+            href={`${base}projekte`}
+            aria-current={currentPath.includes('projekte') ? 'page' : undefined}
+            style="
+              display: block;
+              padding: 0.5rem 0.75rem;
+              color: var(--color-text-muted);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.9375rem;
+              border-radius: var(--radius-md);
+              transition: color var(--transition-fast), background-color var(--transition-fast);
+            "
+            onmouseover="this.style.color='var(--color-text)';this.style.backgroundColor='var(--color-surface-alt)'"
+            onmouseout="this.style.color='var(--color-text-muted)';this.style.backgroundColor=''"
+          >Referenzen</a>
+        </li>
+
+        <li>
+          <a
+            href={`${base}barrierefreiheit`}
+            aria-current={currentPath.includes('barrierefreiheit') ? 'page' : undefined}
+            style="
+              display: block;
+              padding: 0.5rem 0.75rem;
+              color: var(--color-text-muted);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.9375rem;
+              border-radius: var(--radius-md);
+              transition: color var(--transition-fast), background-color var(--transition-fast);
+            "
+            onmouseover="this.style.color='var(--color-text)';this.style.backgroundColor='var(--color-surface-alt)'"
+            onmouseout="this.style.color='var(--color-text-muted)';this.style.backgroundColor=''"
+          >Barrierefreiheit</a>
+        </li>
+
+        <li>
+          <a
+            href="#contact"
+            style="
+              display: inline-block;
+              padding: 0.5rem 1.25rem;
+              background-color: var(--color-primary);
+              color: #ffffff;
+              text-decoration: none;
+              font-weight: 700;
+              font-size: 0.875rem;
+              border-radius: var(--radius-md);
+              min-height: 44px;
+              line-height: 1;
+              display: flex;
+              align-items: center;
+              transition: background-color var(--transition-fast);
+            "
+            onmouseover="this.style.backgroundColor='var(--color-primary-hover)'"
+            onmouseout="this.style.backgroundColor='var(--color-primary)'"
+          >Projekt anfragen</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-menu');
+  const leistungenBtn = document.getElementById('leistungen-btn');
+  const leistungenDropdown = document.getElementById('leistungen-dropdown');
+
+  // Mobile toggle
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    if (menu) menu.style.display = expanded ? '' : 'block';
+  });
+
+  // Leistungen dropdown
+  leistungenBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const expanded = leistungenBtn.getAttribute('aria-expanded') === 'true';
+    leistungenBtn.setAttribute('aria-expanded', String(!expanded));
+    if (leistungenDropdown) leistungenDropdown.hidden = expanded;
+  });
+
+  // Close dropdown on outside click
+  document.addEventListener('click', (e) => {
+    if (leistungenDropdown && leistungenBtn && !leistungenBtn.contains(e.target as Node) && !leistungenDropdown.contains(e.target as Node)) {
+      leistungenDropdown.hidden = true;
+      leistungenBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close dropdown on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && leistungenDropdown) {
+      leistungenDropdown.hidden = true;
+      leistungenBtn?.setAttribute('aria-expanded', 'false');
+      leistungenBtn?.focus();
+    }
+  });
+</script>

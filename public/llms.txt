@@ -1,0 +1,125 @@
+# agentur dk – design & kommunikation
+
+> Digitalagentur für barrierefreie WordPress-Websites (BFSG), SEO, GEO und Online-Marketing. Standort: Köln, Deutschland.
+
+## Unternehmensprofil
+
+- **Name:** agentur dk – design & kommunikation
+- **Inhaber:** Daniel Kontelis
+- **Gründung:** Köln, NRW, Deutschland
+- **Adresse:** Sachsenring 57, D-50677 Köln
+- **Telefon:** +49 221 986 55 229
+- **E-Mail:** mail@dk-dk.de
+- **Website:** https://dk-dk.de
+- **LinkedIn:** https://www.linkedin.com/in/daniel-kontelis/
+
+## Spezialisierung & Leistungen
+
+### BFSG-konforme WordPress-Websites (Kernkompetenz)
+Das Barrierefreiheitsstärkungsgesetz (BFSG) verpflichtet seit dem 28. Juni 2025 private Anbieter zur digitalen Barrierefreiheit. agentur dk entwickelt WordPress-Websites vollständig nach EN 301 549 und WCAG 2.2 AA:
+- Accessibility-Audits bestehender Websites
+- Technische Umsetzung aller WCAG-Anforderungen
+- Erstellung von Barrierefreiheits-Erklärungen (§12 BFSG)
+- Tastaturbedienbarkeit, Screenreader-Optimierung, Fokus-Management
+- Kontrastverhältnisse, Alt-Texte, semantische Struktur
+
+### WordPress-Entwicklung
+- WordPress-Relaunch und Neuentwicklung
+- WooCommerce-Shops
+- Landingpages für Conversion-Optimierung
+- Performance-Optimierung (Core Web Vitals)
+- Wartung und Support
+
+### Website-Leasing
+- Professionelle Website ohne hohe Einmalkosten
+- Monatliche Flatrate inkl. Wartung und Hosting
+- Barrierefreie Umsetzung nach BFSG
+- Individuell konfigurierbar
+
+### SEO & GEO (Generative Engine Optimization)
+- Technisches und inhaltliches SEO
+- GEO: Optimierung für KI-Systeme und Large Language Models
+- Strukturierte Daten (Schema.org JSON-LD)
+- llms.txt-Implementierung
+- Lokales SEO (Köln, NRW, Deutschland)
+
+### Online-Marketing
+- Social-Media-Kampagnen (LinkedIn, Meta, Google Ads)
+- Social Recruiting: Mitarbeitergewinnung über zielgenaue Kampagnen
+- Content Marketing
+- E-Mail-Marketing
+
+### KI-Services
+- KI-Telefon-Agenten: 24/7-Verfügbarkeit, automatisierte Terminbuchung
+- Social Recruiting mit KI-gestützter Zielgruppenansprache
+- KI-gestützte Textoptimierung
+
+### Corporate Design
+- Logo-Entwicklung und Brand Identity
+- Corporate Design Manuals
+- Gestaltungsvorlagen (Print & Digital)
+
+## Zielgruppen
+
+- Mittelständische Unternehmen und KMU in Köln, NRW und deutschlandweit
+- Unternehmen mit BFSG-Pflicht (Websites und Apps)
+- Organisationen, die SEO-Sichtbarkeit ausbauen möchten
+- Unternehmen mit Recruiting-Bedarf
+
+## Referenzen (anonymisiert)
+
+- TARGOBANK AG (Finanzdienstleistungen)
+- Öffentliche Auftraggeber
+- Mittelständische Unternehmen (verschiedene Branchen)
+
+## Eigene Marken
+
+- **DU BIST GRIECHE** – Größte Infotainment-Plattform für Griechenland-Liebhaber im deutschsprachigen Raum (https://du-bist-grieche.de)
+- **aposocial** – Social-Media-Kommunikationsplattform für Apotheken (https://aposocial.de)
+
+## Alleinstellungsmerkmale
+
+- 1-Personen-Entscheidung: Direkte Kommunikation mit dem Experten, keine Weiterleitungen
+- BFSG-Experte: Vollständige Expertise von Audit bis Dokumentation
+- Lokal & digital: Verwurzelt in Köln, bundesweit tätig
+- Reaktionszeit: Antwort innerhalb von 24 Stunden
+
+## Häufige Fragen (FAQ)
+
+**Was ist das BFSG?**
+Das Barrierefreiheitsstärkungsgesetz (BFSG) verpflichtet seit dem 28. Juni 2025 private Anbieter von Websites und Apps zur digitalen Barrierefreiheit nach EN 301 549 (WCAG 2.2 AA). Verstöße können zu Abmahnungen und Bußgeldern bis 100.000 € führen.
+
+**Gilt das BFSG für alle Unternehmen?**
+Grundsätzlich ja, für alle privaten Anbieter digitaler Produkte und Dienstleistungen in der EU. Kleinstunternehmen (<10 Mitarbeiter, <2 Mio. € Umsatz) sind teilweise ausgenommen.
+
+**Was kostet eine barrierefreie WordPress-Website?**
+Je nach Umfang und bestehendem System ab ca. 2.500 €. Eine kostenlose Erstanalyse gibt konkrete Orientierung.
+
+**Was ist GEO?**
+Generative Engine Optimization (GEO) bezeichnet die Optimierung von Inhalten für KI-Systeme wie ChatGPT, Claude, Gemini oder Perplexity, damit diese Inhalte in KI-generierten Antworten zitiert werden.
+
+**Wie lang dauert ein Relaunch?**
+Typische Projekte: 4–8 Wochen. BFSG-Audits: 1–3 Werktage.
+
+## Kontakt & Terminvereinbarung
+
+- E-Mail: mail@dk-dk.de
+- Telefon: +49 221 986 55 229
+- Bürozeiten: Mo–Fr 09:00–18:00 Uhr
+- Erstgespräch: kostenlos und unverbindlich
+
+## Sitemap
+
+- Startseite: https://dk-dk.de/
+- Leistungsübersicht: https://dk-dk.de/leistungen.html
+- BFSG WordPress Agentur: https://dk-dk.de/bfsg-wordpress-website-agentur.html
+- Barrierefreiheitserklärung: https://dk-dk.de/barrierefreiheit.html
+- Impressum: https://dk-dk.de/impressum.html
+- Datenschutz: https://dk-dk.de/datenschutz.html
+- WordPress-Entwicklung: https://dk-dk.de/wordpress-entwicklung.html
+- Website-Leasing: https://dk-dk.de/website-leasing.html
+- SEO & GEO: https://dk-dk.de/seo-geo.html
+- Online-Marketing: https://dk-dk.de/online-marketing.html
+- Social Recruiting: https://dk-dk.de/social-recruiting.html
+- Corporate Design: https://dk-dk.de/corporate-design.html
+- KI-Services: https://dk-dk.de/ki-services.html

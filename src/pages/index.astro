@@ -1,0 +1,80 @@
+---
+/**
+ * PROVISORISCHE STARTSEITE — Phase 1 Smoke-Test
+ * Wird in Phase 3 durch die vollständige Portierung von index.html ersetzt.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="agentur dk – Websites, Website-Leasing & Digital-Agentur Köln"
+  description="Ihre Agentur in Köln für professionelle WordPress-Websites, Website-Leasing, barrierefreies Webdesign (BFSG), SEO/GEO und Online-Marketing. Persönlich, schnell, professionell."
+>
+  <Header />
+
+  <main id="main-content">
+    <section
+      style="
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 4rem 1.5rem;
+        background-color: var(--color-bg);
+      "
+      aria-label="Provisorische Startseite"
+    >
+      <div style="max-width: 640px;">
+        <p
+          style="
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-primary-light);
+            margin-bottom: 1rem;
+          "
+        >Phase 1 – Astro-Grundgerüst</p>
+        <h1
+          style="
+            font-family: var(--font-display);
+            font-size: clamp(1.9375rem, 5vw, 3.0625rem);
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+          "
+        >agentur dk</h1>
+        <p style="color: var(--color-text-muted); font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem;">
+          Diese Seite ist ein temporärer Platzhalter für den Astro-Build-Test.<br />
+          Die vollständige Startseite wird in Phase 3 portiert.
+        </p>
+        <a
+          href={`${base}leistungen`}
+          style="
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.75rem;
+            background-color: var(--color-primary);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            border-radius: var(--radius-md);
+            min-height: 44px;
+            transition: background-color var(--transition-fast);
+          "
+          onmouseover="this.style.backgroundColor='var(--color-primary-hover)'"
+          onmouseout="this.style.backgroundColor='var(--color-primary)'"
+        >Leistungen ansehen</a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

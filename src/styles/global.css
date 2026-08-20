@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+/* ============================================================
+   LOCAL FONTS — no CDN
+   ============================================================ */
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/website/fonts/space-grotesk-v3-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/website/fonts/space-grotesk-v3-latin-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/website/fonts/space-grotesk-v3-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/website/fonts/manrope-v20-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/website/fonts/manrope-v20-latin-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/website/fonts/manrope-v20-latin-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/website/fonts/manrope-v20-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('/website/fonts/roboto-mono-v31-latin-300.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('/website/fonts/roboto-mono-v31-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('/website/fonts/roboto-mono-v31-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   TAILWIND v4 @theme — Design Tokens (aus tokens.css 1:1)
+   ============================================================ */
+@theme {
+  /* Colors — dark theme */
+  --color-bg:                  #121212;
+  --color-surface:             #1e1e1e;
+  --color-surface-alt:         #2a2a2a;
+  --color-border:              #333333;
+  --color-border-strong:       #555555;
+  --color-text:                #e8e8e8;
+  --color-text-muted:          #a8a8a8;
+  --color-text-faint:          #909090;
+  --color-text-inverse:        #121212;
+  --color-primary:             #1C60AD;
+  --color-primary-hover:       #2570C8;
+  --color-primary-light:       #5090d0;
+  --color-accent:              #5090d0;
+  --color-accent-dark:         #1C60AD;
+  --color-focus:               #6db3f2;
+
+  /* Colors — semantic */
+  --color-error:               #ff6b6b;
+  --color-error-text:          #ff9999;
+  --color-success:             #5dbf6a;
+
+  /* Colors — light sections */
+  --color-bg-light:            #f5f6f8;
+  --color-surface-light:       #ffffff;
+  --color-surface-alt-light:   #e9ebef;
+  --color-border-light:        #d5d9de;
+  --color-border-strong-light: #9aa1a9;
+  --color-text-on-light:       #14171c;
+  --color-text-muted-on-light: #4a515a;
+  --color-text-faint-on-light: #5e6470;
+  --color-primary-on-light:    #1C60AD;
+  --color-focus-on-light:      #1C60AD;
+  --color-success-on-light:    #2e7d32;
+
+  /* Fonts */
+  --font-display: 'Space Grotesk', 'Manrope', sans-serif;
+  --font-body:    'Manrope', 'Space Grotesk', sans-serif;
+  --font-mono:    'Roboto Mono', 'Courier New', monospace;
+
+  /* Font sizes */
+  --font-size-xs:   0.75rem;
+  --font-size-sm:   0.875rem;
+  --font-size-base: 1rem;
+  --font-size-md:   1.25rem;
+  --font-size-lg:   1.5625rem;
+  --font-size-xl:   1.9375rem;
+  --font-size-2xl:  2.4375rem;
+  --font-size-3xl:  3.0625rem;
+
+  /* Spacing — 4pt base */
+  --spacing-1:  0.25rem;
+  --spacing-2:  0.5rem;
+  --spacing-3:  0.75rem;
+  --spacing-4:  1rem;
+  --spacing-5:  1.25rem;
+  --spacing-6:  1.5rem;
+  --spacing-8:  2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-32: 8rem;
+
+  /* Border radius */
+  --radius-none: 0;
+  --radius-sm:   2px;
+  --radius-md:   4px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:    0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-focus: 0 0 0 3px var(--color-focus), 0 0 0 6px rgba(251, 234, 107, 0.2);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Layout */
+  --container-max:    1140px;
+  --container-wide:   1280px;
+  --container-narrow: 720px;
+
+  /* Gradients */
+  --gradient-footer: linear-gradient(to right bottom, #000000 0%, #281621 20%, #412848 40%, #474078 60%, #1c60ad 100%);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/* Focus visible ring */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 600;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: top var(--transition-fast);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
