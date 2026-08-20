@@ -167,6 +167,10 @@
 
   /* Gradients */
   --gradient-footer: linear-gradient(to right bottom, #000000 0%, #281621 20%, #412848 40%, #474078 60%, #1c60ad 100%);
+
+  /* On-gradient text (CTA/Footer context, per DESIGN_GUIDE.md) */
+  --color-on-gradient:      #ffffff;
+  --color-text-on-gradient: #d4d4d4;
 }
 
 /* ============================================================

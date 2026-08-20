@@ -1,0 +1,188 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqItem[];
+  heading?: string;
+}
+
+const { items, heading } = Astro.props;
+
+const baseId = `faq-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<section class="faq-section" aria-labelledby={heading ? `${baseId}-heading` : undefined}>
+  <div class="faq-inner">
+    {heading && (
+      <h2 id={`${baseId}-heading`} class="faq-heading">{heading}</h2>
+    )}
+    <dl class="faq-list">
+      {items.map((item, i) => {
+        const btnId = `${baseId}-btn-${i}`;
+        const panelId = `${baseId}-panel-${i}`;
+        return (
+          <div class="faq-item">
+            <dt class="faq-term">
+              <button
+                type="button"
+                id={btnId}
+                class="faq-btn"
+                aria-expanded="false"
+                aria-controls={panelId}
+              >
+                <span class="faq-btn__text">{item.question}</span>
+                <span class="faq-btn__icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </span>
+              </button>
+            </dt>
+            <dd
+              id={panelId}
+              class="faq-panel"
+              role="region"
+              aria-labelledby={btnId}
+              hidden
+            >
+              <div class="faq-panel__inner">
+                {item.answer}
+              </div>
+            </dd>
+          </div>
+        );
+      })}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .faq-section {
+    padding-block: 5rem;
+  }
+
+  .faq-inner {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .faq-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.9375rem, 4vw, 2.4375rem);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0 0 2.5rem;
+    text-align: center;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .faq-term {
+    margin: 0;
+  }
+
+  .faq-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.25rem 0;
+    background: none;
+    border: none;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .faq-btn:hover {
+    color: var(--color-primary-light);
+  }
+
+  .faq-btn:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .faq-btn__text {
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  .faq-btn__icon {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    transition: transform var(--transition-base);
+  }
+
+  .faq-btn[aria-expanded="true"] .faq-btn__icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-panel {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .faq-panel__inner {
+    padding-bottom: 1.25rem;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+</style>
+
+<script>
+  function initFaq(section: Element) {
+    const buttons = section.querySelectorAll<HTMLButtonElement>('.faq-btn');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        const panelId = btn.getAttribute('aria-controls');
+        const panel = panelId ? document.getElementById(panelId) : null;
+
+        // Close all others in this accordion
+        buttons.forEach((other) => {
+          if (other !== btn) {
+            other.setAttribute('aria-expanded', 'false');
+            const otherId = other.getAttribute('aria-controls');
+            const otherPanel = otherId ? document.getElementById(otherId) : null;
+            if (otherPanel) otherPanel.hidden = true;
+          }
+        });
+
+        // Toggle clicked
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        if (panel) panel.hidden = isOpen;
+      });
+    });
+  }
+
+  document.querySelectorAll('.faq-section').forEach(initFaq);
+</script>
