@@ -57,8 +57,9 @@ const { noConsent = false } = Astro.props;
     </div>
 
     <script>
+      import { STORAGE_KEY, parseConsent, serializeConsent, mayLoadGA } from '../lib/consent';
+
       (function initConsent() {
-        const STORAGE_KEY = 'dk_consent_v1';
         const banner = document.getElementById('consent-banner');
         const modal = document.getElementById('consent-modal');
         if (!banner) return;
@@ -67,13 +68,12 @@ const { noConsent = false } = Astro.props;
         let lastFocused: Element | null = null;
 
         function getConsent() {
-          try { return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null'); } catch(_) { return null; }
+          return parseConsent(localStorage.getItem(STORAGE_KEY));
         }
-        function saveConsent(settings: Record<string, unknown>) {
-          settings.timestamp = new Date().toISOString();
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        function saveConsent(settings: { necessary: boolean; statistics: boolean }) {
+          localStorage.setItem(STORAGE_KEY, serializeConsent(settings));
         }
-        function applyConsent(settings: Record<string, unknown>) {
+        function applyConsent(settings: { necessary: boolean; statistics: boolean }) {
           document.dispatchEvent(new CustomEvent('dk:consent', { detail: settings }));
         }
         function lockScroll() { document.body.style.overflow = 'hidden'; }
@@ -174,8 +174,8 @@ const { noConsent = false } = Astro.props;
           (window as any).gtag('config', GA_ID, { anonymize_ip: true });
         }
         document.addEventListener('dk:consent', function(e) {
-          const detail = (e as CustomEvent).detail;
-          if (detail && detail.statistics) loadGoogleTag();
+          const detail = (e as CustomEvent<{ necessary: boolean; statistics: boolean }>).detail;
+          if (mayLoadGA(detail)) loadGoogleTag();
         });
 
         (window as any).dkConsent = {

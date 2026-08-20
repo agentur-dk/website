@@ -666,6 +666,8 @@ const base = import.meta.env.BASE_URL;
 
   <!-- Leistungs-Check quiz script -->
   <script>
+  import { SERVICES as QUIZ_SERVICES, STEP1_OPTIONS, getStep2Config, hasStep2 } from '../lib/quiz';
+
   (function initLeistungsCheck() {
     'use strict';
 
@@ -678,73 +680,10 @@ const base = import.meta.env.BASE_URL;
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const SERVICES: Record<string, { title: string; href: string; blurb: string; formValue: string }> = {
-      mehr_umsatz: {
-        title:     'Online-Marketing',
-        href:      BASE + 'online-marketing',
-        blurb:     'Kampagnen, Ads & Conversion-Optimierung – für mehr Anfragen und messbaren Umsatz.',
-        formValue: 'Online-Marketing',
-      },
-      mitarbeiter: {
-        title:     'Social Recruiting',
-        href:      BASE + 'social-recruiting',
-        blurb:     'Zielgruppengenau neue Mitarbeiter finden – auf den Plattformen, wo sie wirklich sind.',
-        formValue: 'Social Recruiting',
-      },
-      bfsg: {
-        title:     'BFSG & Barrierefreiheit',
-        href:      BASE + 'bfsg-wordpress-website-agentur',
-        blurb:     'Rechtssichere digitale Barrierefreiheit nach WCAG 2.2 & EN 301 549 – bis zur BFSG-Deadline.',
-        formValue: 'Barrierefreie Website (BFSG)',
-      },
-      sichtbarkeit: {
-        title:     'SEO & GEO',
-        href:      BASE + 'seo-geo',
-        blurb:     'Besser gefunden werden – in Suchmaschinen und KI-Antworten.',
-        formValue: 'SEO & GEO',
-      },
-      marke: {
-        title:     'Corporate Design',
-        href:      BASE + 'corporate-design',
-        blurb:     'Markenauftritt, der bleibt und überzeugt – von Logo bis Styleguide.',
-        formValue: 'Corporate Design',
-      },
-    };
-
-    const STEP1_OPTIONS = [
-      { key: 'mehr_umsatz',  label: 'Mehr Umsatz & Anfragen' },
-      { key: 'mitarbeiter',  label: 'Neue Mitarbeiter gewinnen' },
-      { key: 'bfsg',         label: 'BFSG & Barrierefreiheit' },
-      { key: 'sichtbarkeit', label: 'Mehr Sichtbarkeit online' },
-      { key: 'marke',        label: 'Stärkere Marke aufbauen' },
-    ];
-
-    const STEP2_CONFIG: Record<string, { question: string; options: { key: string; label: string }[] }> = {
-      mehr_umsatz: {
-        question: 'Was ist dein Hauptziel?',
-        options: [
-          { key: 'anfragen',   label: 'Mehr Anfragen generieren' },
-          { key: 'shop',       label: 'Produkte online verkaufen' },
-          { key: 'optimieren', label: 'Bestehende Website optimieren' },
-        ],
-      },
-      mitarbeiter: {
-        question: 'Wen suchst du?',
-        options: [
-          { key: 'fachkraefte', label: 'Fachkräfte & Spezialisten' },
-          { key: 'nachwuchs',   label: 'Azubis & Nachwuchs' },
-          { key: 'mehrere',     label: 'Mehrere Stellen gleichzeitig' },
-        ],
-      },
-      sichtbarkeit: {
-        question: 'Wo möchtest du sichtbarer werden?',
-        options: [
-          { key: 'seo',    label: 'Google & Suchmaschinen (SEO)' },
-          { key: 'geo',    label: 'KI-Suchen & AI-Antworten (GEO)' },
-          { key: 'beides', label: 'Überall – beides gleichzeitig' },
-        ],
-      },
-    };
+    // Resolve relative hrefs to absolute paths using BASE from data attribute
+    const SERVICES = Object.fromEntries(
+      Object.entries(QUIZ_SERVICES).map(([k, v]) => [k, { ...v, href: BASE + v.href }])
+    );
 
     let selectedTopic: string | null = null;
     let selectedDetailLabel: string | null = null;
@@ -811,7 +750,7 @@ const base = import.meta.env.BASE_URL;
           (widget as HTMLElement).dataset.quizTopic = opt.key;
           track({ event: 'quiz_answer', question: 'need', answer: opt.key });
           announce('Gewählt: ' + opt.label);
-          if (STEP2_CONFIG[opt.key]) {
+          if (hasStep2(opt.key)) {
             renderStep2(opt.key, opt.label);
           } else {
             renderResult();
@@ -830,7 +769,8 @@ const base = import.meta.env.BASE_URL;
 
     function renderStep2(topicKey: string, topicLabel: string) {
       if (inner) inner.innerHTML = '';
-      const cfg = STEP2_CONFIG[topicKey];
+      const cfg = getStep2Config(topicKey);
+      if (!cfg) return;
 
       announce('Schritt 2: ' + cfg.question);
 

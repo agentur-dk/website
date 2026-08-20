@@ -588,6 +588,8 @@ const topics = [
 </style>
 
 <script>
+  import { validateEmail, validateName, validateMessage, isHoneypotFilled, isSpamSubmit } from '../lib/form-validation';
+
   (function () {
     const form = document.getElementById('lf-form') as HTMLFormElement | null;
     if (!form) return;
@@ -633,46 +635,46 @@ const topics = [
     function validateStep2(): boolean {
       let valid = true;
 
-      const name = form.querySelector<HTMLInputElement>('#lf-name');
-      const email = form.querySelector<HTMLInputElement>('#lf-email');
-      const website = form.querySelector<HTMLInputElement>('#lf-website');
-      const message = form.querySelector<HTMLTextAreaElement>('#lf-message');
+      const nameEl = form.querySelector<HTMLInputElement>('#lf-name');
+      const emailEl = form.querySelector<HTMLInputElement>('#lf-email');
+      const websiteEl = form.querySelector<HTMLInputElement>('#lf-website');
+      const messageEl = form.querySelector<HTMLTextAreaElement>('#lf-message');
 
-      if (name && !name.value.trim()) {
-        showError(name, 'lf-name-error', true);
-        if (valid) name.focus();
+      if (nameEl && !validateName(nameEl.value)) {
+        showError(nameEl, 'lf-name-error', true);
+        if (valid) nameEl.focus();
         valid = false;
-      } else if (name) {
-        showError(name, 'lf-name-error', false);
+      } else if (nameEl) {
+        showError(nameEl, 'lf-name-error', false);
       }
 
-      if (email && (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value))) {
-        showError(email, 'lf-email-error', true);
-        if (valid) email.focus();
+      if (emailEl && !validateEmail(emailEl.value)) {
+        showError(emailEl, 'lf-email-error', true);
+        if (valid) emailEl.focus();
         valid = false;
-      } else if (email) {
-        showError(email, 'lf-email-error', false);
+      } else if (emailEl) {
+        showError(emailEl, 'lf-email-error', false);
       }
 
-      if (website && website.value.trim()) {
+      if (websiteEl && websiteEl.value.trim()) {
         try {
-          new URL(website.value.trim());
-          showError(website, 'lf-website-error', false);
+          new URL(websiteEl.value.trim());
+          showError(websiteEl, 'lf-website-error', false);
         } catch {
-          showError(website, 'lf-website-error', true);
-          if (valid) website.focus();
+          showError(websiteEl, 'lf-website-error', true);
+          if (valid) websiteEl.focus();
           valid = false;
         }
-      } else if (website) {
-        showError(website, 'lf-website-error', false);
+      } else if (websiteEl) {
+        showError(websiteEl, 'lf-website-error', false);
       }
 
-      if (message && message.value.trim().length < 10) {
-        showError(message, 'lf-message-error', true);
-        if (valid) message.focus();
+      if (messageEl && !validateMessage(messageEl.value)) {
+        showError(messageEl, 'lf-message-error', true);
+        if (valid) messageEl.focus();
         valid = false;
-      } else if (message) {
-        showError(message, 'lf-message-error', false);
+      } else if (messageEl) {
+        showError(messageEl, 'lf-message-error', false);
       }
 
       return valid;
@@ -686,11 +688,11 @@ const topics = [
 
       // Honeypot check
       const gotcha = form.querySelector<HTMLInputElement>('[name="_gotcha"]');
-      if (gotcha?.value) return; // Bot — silently ignore
+      if (gotcha && isHoneypotFilled(gotcha.value)) return; // Bot — silently ignore
 
       // Timing check (< 2.5s = likely bot)
       const started = Number(startedInput?.value ?? 0);
-      if (started && Date.now() - started < 2500) return; // Silently drop
+      if (isSpamSubmit(started, Date.now())) return; // Silently drop
 
       if (!validateStep2()) return;
 

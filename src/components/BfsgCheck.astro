@@ -217,6 +217,9 @@
 </style>
 
 <script>
+import type { BfsgAnswers } from '../lib/bfsg-logic';
+import { getResult } from '../lib/bfsg-logic';
+
 (function() {
   const quiz = document.getElementById('bfsg-quiz');
   if (!quiz) return;
@@ -227,7 +230,6 @@
   const resultText = document.getElementById('bfsg-result-text');
   const submitBtn = document.getElementById('bfsg-submit-btn');
   const restartBtn = document.getElementById('bfsg-restart-btn');
-  const answers: Record<string, string | null> = {};
 
   function showStep(n: number) {
     steps.forEach(s => s.classList.add('bfsg-step--hidden'));
@@ -239,32 +241,24 @@
     }
   }
 
-  function getVal(name: string) {
+  function getVal(name: string): 'ja' | 'nein' | null {
     const checked = quiz.querySelector<HTMLInputElement>('input[name="' + name + '"]:checked');
-    return checked ? checked.value : null;
+    const v = checked ? checked.value : null;
+    return v === 'ja' || v === 'nein' ? v : null;
   }
 
   function showResult() {
-    answers.q1 = getVal('q1');
-    answers.q2 = getVal('q2');
-    answers.q3 = getVal('q3');
-    answers.q4 = getVal('q4');
-
-    let title: string, text: string;
-    if (answers.q1 === 'nein') {
-      title = 'Voraussichtlich nicht betroffen';
-      text = 'Da Sie keine Dienstleistungen für Verbraucher erbringen, greift das BFSG für Ihren Bereich wahrscheinlich nicht. Buchen Sie eine Ersteinschätzung zur Sicherheit.';
-    } else if (answers.q2 === 'nein' && answers.q3 === 'nein') {
-      title = 'Kleinstunternehmen-Regelung';
-      text = 'Sie gelten als Kleinstunternehmen (<10 MA und <2 Mio. Umsatz). Diese sind von den meisten Dienstleistungspflichten befreit.';
-    } else {
-      title = 'Wahrscheinlich betroffen';
-      text = 'Nach Ihren Angaben ist Ihr Unternehmen voraussichtlich vom BFSG betroffen. Ihre Website muss schon seit dem 28. Juni 2025 barrierefrei sein.';
-    }
+    const answers: BfsgAnswers = {
+      q1: getVal('q1'),
+      q2: getVal('q2'),
+      q3: getVal('q3'),
+      q4: getVal('q4'),
+    };
+    const result = getResult(answers);
 
     steps.forEach(s => s.classList.add('bfsg-step--hidden'));
-    if (resultTitle) resultTitle.textContent = title;
-    if (resultText) resultText.textContent = text;
+    if (resultTitle) resultTitle.textContent = result.title;
+    if (resultText) resultText.textContent = result.text;
     if (resultEl) {
       resultEl.classList.remove('bfsg-result--hidden');
       (resultEl as HTMLElement).focus();
