@@ -1878,3 +1878,33 @@ a:not([class]):focus-visible {
     accent-color: var(--color-primary);
   }
 }
+
+/* ============================================================
+   @layer utilities — Container-Override
+   Tailwind v4 generiert eine eigene .container-Utility im
+   utilities-Layer (max-width: 80rem bei großen Viewports).
+   Da utilities > components, überschreibt diese unsere
+   Komponenten-Definition. Der folgende Block stellt sicher,
+   dass unsere Werte im selben Layer (utilities) deklariert
+   sind und damit zuverlässig greifen.
+   ============================================================ */
+@layer utilities {
+  .container {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    width: 100%;
+  }
+  .container--wide {
+    max-width: var(--container-wide);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    width: 100%;
+  }
+  .container--narrow {
+    max-width: var(--container-narrow);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    width: 100%;
+  }
+}
