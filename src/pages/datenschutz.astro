@@ -12,10 +12,19 @@ const description = 'Datenschutzerklärung von agentur dk Köln: Hosting, Kontak
 <BaseLayout noConsent={true} title={title} description={description}>
   <Header />
   <main id="main-content" tabindex="-1">
-    <div class="section container container--narrow">
 
-      <h1>Datenschutzerklärung</h1>
-      <p>Informationen zum Umgang mit Ihren personenbezogenen Daten</p>
+    <div class="page-header container">
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><span aria-current="page">Datenschutz</span></li>
+        </ol>
+      </nav>
+      <h1 class="page-header__title">Datenschutzerklärung</h1>
+      <p class="page-header__lead">Informationen zum Umgang mit Ihren personenbezogenen Daten</p>
+    </div>
+
+    <div class="section container container--narrow">
 
       <section aria-labelledby="ds-verantwortlicher">
         <h2 id="ds-verantwortlicher">1. Verantwortlicher</h2>

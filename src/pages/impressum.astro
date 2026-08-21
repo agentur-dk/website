@@ -12,10 +12,19 @@ const description = 'Impressum von agentur dk – design & kommunikation, Sachse
 <BaseLayout noConsent={true} title={title} description={description}>
   <Header />
   <main id="main-content" tabindex="-1">
-    <div class="section container container--narrow">
 
-      <h1>Impressum</h1>
-      <p>Pflichtangaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)</p>
+    <div class="page-header container">
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li><span aria-current="page">Impressum</span></li>
+        </ol>
+      </nav>
+      <h1 class="page-header__title">Impressum</h1>
+      <p class="page-header__lead">Pflichtangaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)</p>
+    </div>
+
+    <div class="section container container--narrow">
 
       <section aria-labelledby="impressum-angaben">
         <h2 id="impressum-angaben">Angaben gemäß § 5 DDG</h2>

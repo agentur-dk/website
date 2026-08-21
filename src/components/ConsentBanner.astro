@@ -100,7 +100,6 @@ const { noConsent = false } = Astro.props;
           applyConsent(existing);
         } else if (!exemptPath) {
           banner.hidden = false;
-          lockScroll();
           requestAnimationFrame(function() {
             const first = getFocusables()[0] as HTMLElement | undefined;
             if (first) first.focus();
@@ -182,7 +181,6 @@ const { noConsent = false } = Astro.props;
           revoke: function() {
             localStorage.removeItem(STORAGE_KEY);
             banner.hidden = false;
-            lockScroll();
             requestAnimationFrame(function() {
               const first = getFocusables()[0] as HTMLElement | undefined;
               if (first) first.focus();
