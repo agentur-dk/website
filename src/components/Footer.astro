@@ -1,17 +1,12 @@
 ---
-const base = import.meta.env.BASE_URL;
+import {
+  siteConfig,
+  footerLeistungenNav,
+  footerUnternehmenNav,
+  footerLegalNav,
+} from '../config/site.config';
 
-const leistungenLinks = [
-  { href: 'leistungen', label: 'Alle Leistungen' },
-  { href: 'bfsg-wordpress-website-agentur', label: 'BFSG & Barrierefreiheit' },
-  { href: 'wordpress-entwicklung', label: 'WordPress-Entwicklung' },
-  { href: 'website-leasing', label: 'Website-Leasing' },
-  { href: 'seo-geo', label: 'SEO & GEO' },
-  { href: 'online-marketing', label: 'Online-Marketing' },
-  { href: 'social-recruiting', label: 'Social Recruiting' },
-  { href: 'corporate-design', label: 'Corporate Design' },
-  { href: 'ki-services', label: 'KI-Services' },
-];
+const base = import.meta.env.BASE_URL;
 ---
 
 <footer aria-label="Seiten-Footer" class="site-footer">
@@ -40,7 +35,7 @@ const leistungenLinks = [
         <h2 class="footer-heading">Leistungen</h2>
         <nav aria-label="Leistungen im Footer">
           <ul role="list" class="footer-nav-list">
-            {leistungenLinks.map((l) => (
+            {footerLeistungenNav.map((l) => (
               <li>
                 <a href={`${base}${l.href}.html`} class="footer-link">{l.label}</a>
               </li>
@@ -49,16 +44,16 @@ const leistungenLinks = [
         </nav>
       </div>
 
-      <!-- Col 3: Unternehmen (Rechtliches) -->
+      <!-- Col 3: Unternehmen -->
       <div>
         <h2 class="footer-heading">Unternehmen</h2>
         <nav aria-label="Unternehmen im Footer">
           <ul role="list" class="footer-nav-list">
-            <li><a href={`${base}ueber-uns.html`} class="footer-link">Über uns</a></li>
-            <li><a href={`${base}projekte.html`} class="footer-link">Referenzen & Projekte</a></li>
-            <li><a href={`${base}barrierefreiheit.html`} class="footer-link">Barrierefreiheitserklärung</a></li>
-            <li><a href={`${base}impressum.html`} class="footer-link">Impressum</a></li>
-            <li><a href={`${base}datenschutz.html`} class="footer-link">Datenschutz</a></li>
+            {footerUnternehmenNav.map((l) => (
+              <li>
+                <a href={`${base}${l.href}.html`} class="footer-link">{l.label}</a>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
@@ -67,12 +62,12 @@ const leistungenLinks = [
       <div>
         <h2 class="footer-heading">Kontakt</h2>
         <ul role="list" class="footer-nav-list">
-          <li><a href="mailto:mail@dk-dk.de" class="footer-link">mail@dk-dk.de</a></li>
-          <li><a href="tel:+4922198655229" class="footer-link">+49 221 986 55 229</a></li>
-          <li><span class="footer-text">Köln · Mo–Fr 9–18 Uhr</span></li>
+          <li><a href={`mailto:${siteConfig.contact.email}`} class="footer-link">{siteConfig.contact.email}</a></li>
+          <li><a href={`tel:${siteConfig.contact.phone}`} class="footer-link">{siteConfig.contact.phoneDisplay}</a></li>
+          <li><span class="footer-text">{siteConfig.contact.city} · {siteConfig.contact.hours}</span></li>
           <li>
             <a
-              href="https://www.linkedin.com/in/daniel-kontelis/"
+              href={siteConfig.contact.linkedin}
               rel="noopener noreferrer"
               target="_blank"
               class="footer-link"
@@ -87,12 +82,14 @@ const leistungenLinks = [
   <div class="site-footer__bottom">
     <div class="site-footer__bottom-inner">
       <p class="footer-copyright">
-        &copy; <span id="copyright-year"></span> agentur dk – design & kommunikation
+        &copy; <span id="copyright-year"></span> {siteConfig.name} – {siteConfig.tagline}
       </p>
       <ul role="list" class="footer-legal-list">
-        <li><a href={`${base}impressum.html`} class="footer-link footer-link--sm">Impressum</a></li>
-        <li><a href={`${base}datenschutz.html`} class="footer-link footer-link--sm">Datenschutz</a></li>
-        <li><a href={`${base}barrierefreiheit.html`} class="footer-link footer-link--sm">Barrierefreiheit</a></li>
+        {footerLegalNav.map((l) => (
+          <li>
+            <a href={`${base}${l.href}.html`} class="footer-link footer-link--sm">{l.label}</a>
+          </li>
+        ))}
       </ul>
     </div>
   </div>

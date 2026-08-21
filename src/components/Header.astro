@@ -1,17 +1,7 @@
 ---
-const base = import.meta.env.BASE_URL;
+import { leistungenNav } from '../config/site.config';
 
-const leistungen = [
-  { href: 'bfsg-wordpress-website-agentur', label: 'BFSG & Barrierefreiheit' },
-  { href: 'wordpress-entwicklung', label: 'WordPress-Entwicklung' },
-  { href: 'website-leasing', label: 'Website-Leasing' },
-  { href: 'seo-geo', label: 'SEO & GEO' },
-  { href: 'online-marketing', label: 'Online-Marketing' },
-  { href: 'social-recruiting', label: 'Social Recruiting' },
-  { href: 'corporate-design', label: 'Corporate Design' },
-  { href: 'ki-services', label: 'KI-Services' },
-];
-
+const base        = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -74,7 +64,7 @@ const currentPath = Astro.url.pathname;
             hidden
             class="nav-dropdown"
           >
-            {leistungen.map((l) => (
+            {leistungenNav.map((l) => (
               <li>
                 <a href={`${base}${l.href}.html`} class="nav-dropdown__link">{l.label}</a>
               </li>

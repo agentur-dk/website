@@ -1,0 +1,88 @@
+---
+import { cn } from '../../../lib/cn';
+
+interface Props {
+  id:       string;
+  name?:    string;
+  label:    string;
+  required?: boolean;
+  checked?:  boolean;
+  class?:   string;
+}
+
+const {
+  id,
+  name     = id,
+  label,
+  required = false,
+  checked  = false,
+  class:   extraClass,
+} = Astro.props;
+---
+
+<label class={cn('form-checkbox-label', extraClass)}>
+  <input
+    type="checkbox"
+    id={id}
+    name={name}
+    required={required}
+    checked={checked}
+    class="form-checkbox"
+  />
+  <span class="form-checkbox-custom" aria-hidden="true"></span>
+  <span class="form-checkbox-text">
+    {required && <span aria-hidden="true" class="u-sr-only">Pflichtfeld: </span>}
+    <slot>{label}</slot>
+  </span>
+</label>
+
+<style>
+  .form-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+  .form-checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .form-checkbox-custom {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    border: 2px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-alt);
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .form-checkbox:checked + .form-checkbox-custom {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+  }
+  .form-checkbox:checked + .form-checkbox-custom::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 6px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+  }
+  .form-checkbox:focus-visible + .form-checkbox-custom {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .form-checkbox-text {
+    flex: 1;
+  }
+</style>

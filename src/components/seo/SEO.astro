@@ -1,0 +1,46 @@
+---
+import { siteConfig } from '../../config/site.config';
+
+interface Props {
+  title?:       string;
+  description?: string;
+  noindex?:     boolean;
+  ogImage?:     string;
+  canonical?:   string;
+}
+
+const {
+  title       = 'agentur dk – Websites, Website-Leasing & Digital-Agentur Köln',
+  description = siteConfig.description,
+  noindex     = false,
+  ogImage,
+  canonical:  canonicalProp,
+} = Astro.props;
+
+const base            = import.meta.env.BASE_URL;
+const resolvedOgImage = ogImage ?? `${base}${siteConfig.ogImage}`;
+
+const { pathname } = Astro.url;
+const canonical    = canonicalProp ?? (
+  pathname.endsWith('/')
+    ? `${siteConfig.url}${pathname}index.html`
+    : `${siteConfig.url}${pathname}`
+);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<link rel="canonical" href={canonical} />
+
+<meta property="og:title"       content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type"        content="website" />
+<meta property="og:locale"      content="de_DE" />
+<meta property="og:image"       content={resolvedOgImage} />
+
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image"       content={resolvedOgImage} />

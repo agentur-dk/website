@@ -1,0 +1,50 @@
+---
+import { cn } from '../../../lib/cn';
+
+type Variant = 'primary' | 'accent' | 'outline' | 'ghost' | 'secondary' | 'link';
+type Size    = 'sm' | 'md' | 'lg';
+
+interface Props {
+  variant?:  Variant;
+  size?:     Size;
+  href?:     string;
+  type?:     'button' | 'submit' | 'reset';
+  full?:     boolean;
+  disabled?: boolean;
+  class?:    string;
+  [key: string]: unknown;
+}
+
+const {
+  variant  = 'primary',
+  size     = 'md',
+  href,
+  type     = 'button',
+  full     = false,
+  disabled = false,
+  class:   extraClass,
+  ...rest
+} = Astro.props;
+
+const classes = cn(
+  'btn',
+  variant !== 'primary' && `btn--${variant}`,
+  variant === 'primary' && 'btn--primary',
+  size === 'sm' && 'btn--sm',
+  size === 'lg' && 'btn--lg',
+  full && 'btn--full',
+  extraClass,
+);
+
+const Tag = href ? 'a' : 'button';
+---
+
+{href ? (
+  <a href={href} class={classes} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={classes} disabled={disabled} {...rest}>
+    <slot />
+  </button>
+)}

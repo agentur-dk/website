@@ -1,0 +1,13 @@
+---
+import { cn } from '../../../lib/cn';
+
+interface Props {
+  class?: string;
+}
+
+const { class: extraClass } = Astro.props;
+---
+
+<span class={cn('badge', extraClass)}>
+  <slot />
+</span>

@@ -1,0 +1,62 @@
+/* ============================================================
+   Design Tokens — Colors
+   Quelle: DESIGN_GUIDE.md + global.css @theme
+   Variablen-Präfix: --dk- (verhindert Zirkularreferenzen
+   mit dem @theme-Block in global.css)
+   ============================================================ */
+:root {
+  /* Dark theme — Hintergründe */
+  --dk-color-bg:                  #121212;
+  --dk-color-surface:             #1e1e1e;
+  --dk-color-surface-alt:         #2a2a2a;
+
+  /* Dark theme — Rahmen */
+  --dk-color-border:              #333333;
+  --dk-color-border-strong:       #555555;
+
+  /* Dark theme — Text */
+  --dk-color-text:                #e8e8e8;
+  --dk-color-text-muted:          #a8a8a8;
+  --dk-color-text-faint:          #909090;
+  --dk-color-text-inverse:        #121212;
+
+  /* Marke */
+  --dk-color-primary:             #1C60AD;
+  --dk-color-primary-hover:       #2570C8;
+  --dk-color-primary-light:       #5090d0;
+  --dk-color-accent:              #5090d0;
+  --dk-color-accent-dark:         #1C60AD;
+  --dk-color-focus:               #6db3f2;
+
+  /* Semantisch */
+  --dk-color-error:               #ff6b6b;
+  --dk-color-error-text:          #ff9999;
+  --dk-color-success:             #5dbf6a;
+
+  /* Light-Sektionen */
+  --dk-color-bg-light:            #f5f6f8;
+  --dk-color-surface-light:       #ffffff;
+  --dk-color-surface-alt-light:   #e9ebef;
+  --dk-color-border-light:        #d5d9de;
+  --dk-color-border-strong-light: #9aa1a9;
+  --dk-color-text-on-light:       #14171c;
+  --dk-color-text-muted-on-light: #4a515a;
+  --dk-color-text-faint-on-light: #5e6470;
+  --dk-color-primary-on-light:    #1C60AD;
+  --dk-color-focus-on-light:      #1C60AD;
+  --dk-color-success-on-light:    #2e7d32;
+
+  /* Gradient (Footer / Closing-CTA) */
+  --dk-gradient-footer: linear-gradient(
+    to right bottom,
+    #000000  0%,
+    #281621 20%,
+    #412848 40%,
+    #474078 60%,
+    #1c60ad 100%
+  );
+
+  /* Auf-Gradient-Text */
+  --dk-color-on-gradient:      #ffffff;
+  --dk-color-text-on-gradient: #d4d4d4;
+}

@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
 
 /* ============================================================
    LOCAL FONTS — no CDN
@@ -75,102 +78,126 @@
 }
 
 /* ============================================================
-   TAILWIND v4 @theme — Design Tokens (aus tokens.css 1:1)
+   Metric-Fallback-Fonts — reduzieren CLS bis Webfonts laden.
+   Die eigentlichen Fonts bleiben lokal aus public/fonts/.
+   ============================================================ */
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial');
+  ascent-override:   102%;
+  descent-override:   30%;
+  line-gap-override:   0%;
+  size-adjust:        103%;
+}
+@font-face {
+  font-family: 'Space Grotesk Fallback';
+  src: local('Arial');
+  ascent-override:    98%;
+  descent-override:   28%;
+  line-gap-override:   0%;
+  size-adjust:        99%;
+}
+
+/* ============================================================
+   TAILWIND v4 @theme — Design Tokens
+   Werte kommen aus src/styles/tokens/*.css (--dk-* Prefix).
+   Getrenntes Mapping verhindert Zirkularreferenzen und hält
+   die Token-Dateien als Single Source of Truth.
    ============================================================ */
 @theme {
   /* Colors — dark theme */
-  --color-bg:                  #121212;
-  --color-surface:             #1e1e1e;
-  --color-surface-alt:         #2a2a2a;
-  --color-border:              #333333;
-  --color-border-strong:       #555555;
-  --color-text:                #e8e8e8;
-  --color-text-muted:          #a8a8a8;
-  --color-text-faint:          #909090;
-  --color-text-inverse:        #121212;
-  --color-primary:             #1C60AD;
-  --color-primary-hover:       #2570C8;
-  --color-primary-light:       #5090d0;
-  --color-accent:              #5090d0;
-  --color-accent-dark:         #1C60AD;
-  --color-focus:               #6db3f2;
+  --color-bg:                  var(--dk-color-bg);
+  --color-surface:             var(--dk-color-surface);
+  --color-surface-alt:         var(--dk-color-surface-alt);
+  --color-border:              var(--dk-color-border);
+  --color-border-strong:       var(--dk-color-border-strong);
+  --color-text:                var(--dk-color-text);
+  --color-text-muted:          var(--dk-color-text-muted);
+  --color-text-faint:          var(--dk-color-text-faint);
+  --color-text-inverse:        var(--dk-color-text-inverse);
+  --color-primary:             var(--dk-color-primary);
+  --color-primary-hover:       var(--dk-color-primary-hover);
+  --color-primary-light:       var(--dk-color-primary-light);
+  --color-accent:              var(--dk-color-accent);
+  --color-accent-dark:         var(--dk-color-accent-dark);
+  --color-focus:               var(--dk-color-focus);
 
   /* Colors — semantic */
-  --color-error:               #ff6b6b;
-  --color-error-text:          #ff9999;
-  --color-success:             #5dbf6a;
+  --color-error:               var(--dk-color-error);
+  --color-error-text:          var(--dk-color-error-text);
+  --color-success:             var(--dk-color-success);
 
   /* Colors — light sections */
-  --color-bg-light:            #f5f6f8;
-  --color-surface-light:       #ffffff;
-  --color-surface-alt-light:   #e9ebef;
-  --color-border-light:        #d5d9de;
-  --color-border-strong-light: #9aa1a9;
-  --color-text-on-light:       #14171c;
-  --color-text-muted-on-light: #4a515a;
-  --color-text-faint-on-light: #5e6470;
-  --color-primary-on-light:    #1C60AD;
-  --color-focus-on-light:      #1C60AD;
-  --color-success-on-light:    #2e7d32;
+  --color-bg-light:            var(--dk-color-bg-light);
+  --color-surface-light:       var(--dk-color-surface-light);
+  --color-surface-alt-light:   var(--dk-color-surface-alt-light);
+  --color-border-light:        var(--dk-color-border-light);
+  --color-border-strong-light: var(--dk-color-border-strong-light);
+  --color-text-on-light:       var(--dk-color-text-on-light);
+  --color-text-muted-on-light: var(--dk-color-text-muted-on-light);
+  --color-text-faint-on-light: var(--dk-color-text-faint-on-light);
+  --color-primary-on-light:    var(--dk-color-primary-on-light);
+  --color-focus-on-light:      var(--dk-color-focus-on-light);
+  --color-success-on-light:    var(--dk-color-success-on-light);
 
-  /* Fonts */
-  --font-display: 'Space Grotesk', 'Manrope', sans-serif;
-  --font-body:    'Manrope', 'Space Grotesk', sans-serif;
-  --font-mono:    'Roboto Mono', 'Courier New', monospace;
+  /* Fonts (mit Metric-Fallbacks für CLS-Reduktion) */
+  --font-display: var(--dk-font-display);
+  --font-body:    var(--dk-font-body);
+  --font-mono:    var(--dk-font-mono);
 
   /* Font sizes */
-  --font-size-xs:   0.75rem;
-  --font-size-sm:   0.875rem;
-  --font-size-base: 1rem;
-  --font-size-md:   1.25rem;
-  --font-size-lg:   1.5625rem;
-  --font-size-xl:   1.9375rem;
-  --font-size-2xl:  2.4375rem;
-  --font-size-3xl:  3.0625rem;
+  --font-size-xs:   var(--dk-font-size-xs);
+  --font-size-sm:   var(--dk-font-size-sm);
+  --font-size-base: var(--dk-font-size-base);
+  --font-size-md:   var(--dk-font-size-md);
+  --font-size-lg:   var(--dk-font-size-lg);
+  --font-size-xl:   var(--dk-font-size-xl);
+  --font-size-2xl:  var(--dk-font-size-2xl);
+  --font-size-3xl:  var(--dk-font-size-3xl);
 
   /* Spacing — 4pt base */
-  --spacing-1:  0.25rem;
-  --spacing-2:  0.5rem;
-  --spacing-3:  0.75rem;
-  --spacing-4:  1rem;
-  --spacing-5:  1.25rem;
-  --spacing-6:  1.5rem;
-  --spacing-8:  2rem;
-  --spacing-10: 2.5rem;
-  --spacing-12: 3rem;
-  --spacing-16: 4rem;
-  --spacing-20: 5rem;
-  --spacing-24: 6rem;
-  --spacing-32: 8rem;
+  --spacing-1:  var(--dk-spacing-1);
+  --spacing-2:  var(--dk-spacing-2);
+  --spacing-3:  var(--dk-spacing-3);
+  --spacing-4:  var(--dk-spacing-4);
+  --spacing-5:  var(--dk-spacing-5);
+  --spacing-6:  var(--dk-spacing-6);
+  --spacing-8:  var(--dk-spacing-8);
+  --spacing-10: var(--dk-spacing-10);
+  --spacing-12: var(--dk-spacing-12);
+  --spacing-16: var(--dk-spacing-16);
+  --spacing-20: var(--dk-spacing-20);
+  --spacing-24: var(--dk-spacing-24);
+  --spacing-32: var(--dk-spacing-32);
 
-  /* Border radius */
-  --radius-none: 0;
-  --radius-sm:   2px;
-  --radius-md:   4px;
-  --radius-full: 9999px;
+  /* Border radius — immer eckig (kein rounded-full für UI) */
+  --radius-none: var(--dk-radius-none);
+  --radius-sm:   var(--dk-radius-sm);
+  --radius-md:   var(--dk-radius-md);
+  --radius-full: var(--dk-radius-full);
 
   /* Shadows */
-  --shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md:    0 4px 12px rgba(0, 0, 0, 0.5);
-  --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
-  --shadow-focus: 0 0 0 3px var(--color-focus), 0 0 0 6px rgba(251, 234, 107, 0.2);
+  --shadow-sm:    var(--dk-shadow-sm);
+  --shadow-md:    var(--dk-shadow-md);
+  --shadow-lg:    var(--dk-shadow-lg);
+  --shadow-focus: 0 0 0 3px var(--dk-color-focus), 0 0 0 6px rgba(251, 234, 107, 0.2);
 
   /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 400ms ease;
+  --transition-fast: var(--dk-transition-fast);
+  --transition-base: var(--dk-transition-base);
+  --transition-slow: var(--dk-transition-slow);
 
   /* Layout */
-  --container-max:    1140px;
-  --container-wide:   1280px;
-  --container-narrow: 720px;
+  --container-max:    var(--dk-container-max);
+  --container-wide:   var(--dk-container-wide);
+  --container-narrow: var(--dk-container-narrow);
 
   /* Gradients */
-  --gradient-footer: linear-gradient(to right bottom, #000000 0%, #281621 20%, #412848 40%, #474078 60%, #1c60ad 100%);
+  --gradient-footer: var(--dk-gradient-footer);
 
   /* On-gradient text (CTA/Footer context, per DESIGN_GUIDE.md) */
-  --color-on-gradient:      #ffffff;
-  --color-text-on-gradient: #d4d4d4;
+  --color-on-gradient:      var(--dk-color-on-gradient);
+  --color-text-on-gradient: var(--dk-color-text-on-gradient);
 }
 
 /* ============================================================
