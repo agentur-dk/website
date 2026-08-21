@@ -1,0 +1,465 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StatsStrip from '../components/StatsStrip.astro';
+import CtaSection from '../components/CtaSection.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Über uns | agentur dk – Design, Technik & Kommunikation Köln"
+  description="agentur dk ist eine inhabergeführte Agentur aus Köln für Websites, Design, Marketing und Branding. Kunden wie TARGOBANK und Bundesministerien vertrauen auf unsere ganzheitliche Beratung."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "Über uns – agentur dk",
+  "url": "https://dk-dk.de/ueber-uns",
+  "inLanguage": "de-DE",
+  "description": "Wer steckt hinter agentur dk? Inhabergeführte Agentur für Websites, Design, Marketing und Branding aus Köln.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "url": "https://dk-dk.de",
+    "name": "agentur dk"
+  },
+  "about": {
+    "@type": "Organization",
+    "@id": "https://dk-dk.de/#organization",
+    "name": "agentur dk – design & kommunikation"
+  }
+}
+    </script>
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="section section--hero" aria-labelledby="ueber-hero-heading">
+      <div class="container">
+        <span class="section__label">Über uns</span>
+        <h1 id="ueber-hero-heading" class="section__headline">
+          Kleine Agentur.<br />Klarer Fokus.
+        </h1>
+        <p class="section__lead">
+          agentur dk steht für design & kommunikation – und genau das machen wir: Websites, Branding, Marketing und technische Umsetzung aus einer Hand. Inhabergeführt, direkt, verbindlich.
+        </p>
+        <div class="ueber-hero__actions">
+          <a href="#contact" class="btn btn--primary btn--lg">Gespräch vereinbaren</a>
+          <a href={`${base}leistungen.html`} class="btn btn--outline btn--lg">Unsere Leistungen</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wer wir sind (dark) -->
+    <section class="section section--dark" aria-labelledby="wer-wir-sind-heading" data-reveal>
+      <div class="container">
+        <div class="ueber-grid">
+          <div class="ueber-grid__text">
+            <span class="section__label">Hintergrund</span>
+            <h2 id="wer-wir-sind-heading" class="section__heading">Was uns ausmacht</h2>
+            <p class="ueber-body">
+              agentur dk ist eine inhabergeführte Agentur – das bedeutet: Ihr Ansprechpartner ist auch derjenige, der die Arbeit macht. Keine Projektmanager-Hierarchie, keine ausgelagerten Teilbereiche. Direkte Kommunikation, klare Entscheidungen.
+            </p>
+            <p class="ueber-body">
+              Wir denken ganzheitlich: Design, Technik, Marketing und Branding sind bei uns keine Silos. Ein stimmiges digitales Erscheinungsbild entsteht nur, wenn alle Disziplinen zusammenpassen – das ist unser Anspruch bei jedem Projekt.
+            </p>
+            <p class="ueber-body">
+              Referenzkunden wie die <strong class="ueber-highlight">TARGOBANK</strong> und das <strong class="ueber-highlight">Bundesministerium für Familie, Senioren, Frauen und Jugend (BMFSFJ)</strong> vertrauen auf unsere Arbeit. Daneben betreiben wir mit <strong class="ueber-highlight">DU BIST GRIECHE</strong> eine eigene digitale Plattform – weil wir nicht nur für Kunden bauen, sondern selbst Produkte entwickeln und betreiben.
+            </p>
+          </div>
+          <div class="ueber-grid__visual" aria-hidden="true">
+            <div class="ueber-visual-block">
+              <span class="ueber-visual-block__dk">dk</span>
+              <span class="ueber-visual-block__sub">design & kommunikation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <StatsStrip stats={[
+      { number: "20+", label: "Jahre Erfahrung" },
+      { number: "600+", label: "Projekte umgesetzt" },
+      { number: "500+", label: "Kunden betreut" },
+      { number: "1", label: "eigene digitale Plattform" },
+    ]} />
+
+    <!-- Werte (light) -->
+    <section class="section section--light" aria-labelledby="werte-heading">
+      <div class="container">
+        <span class="section__label">Arbeitsweise</span>
+        <h2 id="werte-heading" class="section__heading">Was uns antreibt</h2>
+        <p class="section__lead">
+          Drei Prinzipien, die jedes Projekt prägen – nicht als Versprechen, sondern als Haltung.
+        </p>
+        <ul class="werte-grid" role="list">
+          <li class="wert-card" data-reveal>
+            <div class="wert-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+            <h3 class="wert-card__title">Ganzheitlich denken</h3>
+            <p class="wert-card__body">
+              Design und Technik, Inhalt und Struktur, Sichtbarkeit und Konversion – alles hängt zusammen. Wir betrachten Ihre digitale Präsenz als System, nicht als Sammlung von Einzelaufgaben.
+            </p>
+          </li>
+          <li class="wert-card" data-reveal>
+            <div class="wert-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <h3 class="wert-card__title">Direkt umsetzen</h3>
+            <p class="wert-card__body">
+              Wir reden nicht lange über Möglichkeiten – wir setzen um. Kurze Wege, schnelle Entscheidungen, verlässliche Zeitpläne. Ihr Projekt bekommt die Aufmerksamkeit, die es verdient.
+            </p>
+          </li>
+          <li class="wert-card" data-reveal>
+            <div class="wert-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 class="wert-card__title">Nachhaltig aufbauen</h3>
+            <p class="wert-card__body">
+              Eine gute Website ist keine Einmalsache. Wir bauen auf Standards, die tragen – technisch, gestalterisch und inhaltlich. Damit Ihre Investition langfristig wirkt.
+            </p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Prozess (dark surface) -->
+    <section class="section section--dark" aria-labelledby="prozess-heading">
+      <div class="container">
+        <span class="section__label">Wie wir arbeiten</span>
+        <h2 id="prozess-heading" class="section__heading">Unser Prozess</h2>
+        <p class="section__lead">
+          Vier Schritte, die bei jedem Projekt gleich sind – damit Sie immer wissen, wo Sie stehen.
+        </p>
+        <ol class="process-list" role="list">
+          <li class="process-list__item section--dark" data-reveal>
+            <span class="process-list__number" aria-hidden="true">01</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Kennenlernen</h3>
+              <p class="process-list__body">Erstes Gespräch, kostenfrei und unverbindlich. Wir hören zu, fragen nach und verstehen, was Sie wirklich brauchen – nicht, was sich auf Anhieb gut verkauft.</p>
+            </div>
+          </li>
+          <li class="process-list__item section--dark" data-reveal>
+            <span class="process-list__number" aria-hidden="true">02</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Konzept</h3>
+              <p class="process-list__body">Strategie, Struktur und Maßnahmenplan – abgestimmt auf Ihre Ziele und Ihr Budget. Kein Blindflug, kein Overengineering. Transparent und verbindlich.</p>
+            </div>
+          </li>
+          <li class="process-list__item section--dark" data-reveal>
+            <span class="process-list__number" aria-hidden="true">03</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Umsetzung</h3>
+              <p class="process-list__body">Saubere Entwicklung, klares Design, barrierefrei nach aktuellem Standard. Regelmäßige Updates halten Sie auf dem Laufenden – ohne Überraschungen.</p>
+            </div>
+          </li>
+          <li class="process-list__item section--dark" data-reveal>
+            <span class="process-list__number" aria-hidden="true">04</span>
+            <div class="process-list__content">
+              <h3 class="process-list__heading">Begleitung</h3>
+              <p class="process-list__body">Übergabe, Einweisung, Support. Wer will, bleibt in Betreuung. Wer selbst weitermachen möchte, bekommt alles, was er braucht – ohne Abhängigkeit.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Referenzen-Auszug (light) -->
+    <section class="section section--light" aria-labelledby="referenzen-auszug-heading">
+      <div class="container">
+        <span class="section__label">Referenzen</span>
+        <h2 id="referenzen-auszug-heading" class="section__heading">Ausgewählte Kunden</h2>
+        <p class="section__lead">
+          Wir arbeiten für Unternehmen und Organisationen, die auf Qualität setzen – von Bundesbehörden bis zu Finanzdienstleistern.
+        </p>
+        <ul class="referenz-list" role="list">
+          <li class="referenz-card" data-reveal>
+            <div class="referenz-card__visual referenz-card__visual--blue" aria-hidden="true">
+              <span class="referenz-card__kuerzel">TRG</span>
+            </div>
+            <div class="referenz-card__content">
+              <h3 class="referenz-card__name">TARGOBANK AG</h3>
+              <p class="referenz-card__desc">
+                Digitale Kommunikation und Webprojekte für eine der führenden deutschen Direktbanken. Anforderungen an Datenschutz, Barrierefreiheit und Corporate Design wurden vollständig erfüllt.
+              </p>
+            </div>
+          </li>
+          <li class="referenz-card" data-reveal>
+            <div class="referenz-card__visual referenz-card__visual--green" aria-hidden="true">
+              <span class="referenz-card__kuerzel">BMF</span>
+            </div>
+            <div class="referenz-card__content">
+              <h3 class="referenz-card__name">Bundesministerium BMFSFJ</h3>
+              <p class="referenz-card__desc">
+                Bundesministerium für Familie, Senioren, Frauen und Jugend. Öffentliche Auftraggeber stellen höchste Ansprüche an Barrierefreiheit, Datensouveränität und technische Standards.
+              </p>
+            </div>
+          </li>
+          <li class="referenz-card" data-reveal>
+            <div class="referenz-card__visual referenz-card__visual--purple" aria-hidden="true">
+              <span class="referenz-card__kuerzel">DBG</span>
+            </div>
+            <div class="referenz-card__content">
+              <h3 class="referenz-card__name">DU BIST GRIECHE</h3>
+              <p class="referenz-card__desc">
+                Eigene digitale Plattform, entwickelt und betrieben von agentur dk. Beweis, dass wir nicht nur für andere bauen – sondern selbst Produkte aufbauen und am Leben erhalten.
+              </p>
+            </div>
+          </li>
+        </ul>
+        <div class="referenzen-section__cta">
+          <a href={`${base}projekte.html`} class="btn btn--outline">Alle Referenzen ansehen</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <CtaSection
+      title="Lassen Sie uns zusammenarbeiten."
+      text="Kostenloses Erstgespräch, direkt mit dem Inhaber. Wir hören zu, bevor wir anbieten."
+      buttonLabel="Jetzt anfragen"
+      buttonHref="#contact"
+    />
+
+    <!-- Contact anchor (for CTA link target) -->
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="container container--narrow">
+        <span class="section__label">Kontakt</span>
+        <h2 id="contact-heading" class="section__heading">So erreichen Sie uns</h2>
+        <address class="ueber-contact" style="font-style: normal;">
+          <p class="ueber-contact__item">
+            <strong>agentur dk – design & kommunikation</strong><br />
+            Sachsenring 57 · D-50677 Köln
+          </p>
+          <p class="ueber-contact__item">
+            <a href="tel:+4922198655229" class="contact__link">+49&nbsp;221&nbsp;986&nbsp;55&nbsp;229</a>
+          </p>
+          <p class="ueber-contact__item">
+            <a href="mailto:mail@dk-dk.de" class="contact__link">mail@dk-dk.de</a>
+          </p>
+          <p class="ueber-contact__item ueber-contact__hours">
+            Mo–Fr · 09:00–18:00 Uhr
+          </p>
+        </address>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .ueber-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  /* Who we are grid */
+  .ueber-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .ueber-grid {
+      grid-template-columns: 1fr;
+    }
+    .ueber-grid__visual {
+      display: none;
+    }
+  }
+
+  .ueber-body {
+    font-size: 1.0625rem;
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    margin: 0 0 1.25rem;
+  }
+  .ueber-body:last-child {
+    margin-bottom: 0;
+  }
+  .ueber-highlight {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  /* Decorative visual block */
+  .ueber-visual-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 160px;
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    background: rgba(28, 96, 173, 0.08);
+    gap: 0.25rem;
+  }
+  .ueber-visual-block__dk {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .ueber-visual-block__sub {
+    font-size: 0.6875rem;
+    color: var(--color-text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* Werte grid */
+  .werte-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .wert-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--color-surface-light);
+    border: 1px solid var(--color-border-light);
+    border-top: 3px solid var(--color-primary-on-light);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    padding: 2rem;
+    transition: box-shadow 250ms ease;
+  }
+  .wert-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  .wert-card__icon {
+    color: var(--color-primary-on-light);
+  }
+  .wert-card__title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-on-light);
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1.3;
+  }
+  .wert-card__body {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted-on-light);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* Referenz list */
+  .referenz-list {
+    display: grid;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .referenz-card {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background-color: var(--color-surface-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    transition: border-color 250ms ease, box-shadow 250ms ease;
+  }
+  .referenz-card:hover {
+    border-color: var(--color-primary-on-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  @media (max-width: 480px) {
+    .referenz-card {
+      flex-direction: column;
+    }
+  }
+  .referenz-card__visual {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .referenz-card__visual--blue   { background-color: var(--color-primary); }
+  .referenz-card__visual--green  { background-color: #2e7d32; }
+  .referenz-card__visual--purple { background-color: #412848; }
+  .referenz-card__kuerzel {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .referenz-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .referenz-card__name {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-text-on-light);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .referenz-card__desc {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted-on-light);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* Contact */
+  .ueber-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .ueber-contact__item {
+    font-size: 1.0625rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .ueber-contact__hours {
+    color: var(--color-text-faint);
+    font-size: 0.9375rem;
+  }
+</style>

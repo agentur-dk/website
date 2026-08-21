@@ -92,10 +92,10 @@ const currentPath = Astro.url.pathname;
 
         <li>
           <a
-            href={`${base}barrierefreiheit.html`}
-            aria-current={currentPath.includes('barrierefreiheit') ? 'page' : undefined}
+            href={`${base}ueber-uns.html`}
+            aria-current={currentPath.includes('ueber-uns') ? 'page' : undefined}
             class="nav-link"
-          >Barrierefreiheit</a>
+          >Über uns</a>
         </li>
 
         <li>
@@ -116,6 +116,7 @@ const currentPath = Astro.url.pathname;
   }
 
   .site-header__inner {
+    width: 100%;
     max-width: var(--container-max);
     margin-inline: auto;
     padding-inline: 1.5rem;

@@ -96,6 +96,32 @@ const canonical = pathname.endsWith('/')
         targets.forEach(function(el) { observer.observe(el); });
       })();
 
+      // Inline accordion (.accordion__trigger pattern used on index, leistungen, etc.)
+      (function initAccordion() {
+        document.querySelectorAll<HTMLElement>('.accordion').forEach(function(accordion) {
+          const triggers = accordion.querySelectorAll<HTMLButtonElement>('.accordion__trigger');
+          triggers.forEach(function(trigger) {
+            trigger.addEventListener('click', function() {
+              const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+              const panelId = trigger.getAttribute('aria-controls');
+              const panel = panelId ? document.getElementById(panelId) : null;
+              // Close all others in this accordion
+              triggers.forEach(function(other) {
+                if (other !== trigger) {
+                  other.setAttribute('aria-expanded', 'false');
+                  const otherId = other.getAttribute('aria-controls');
+                  const otherPanel = otherId ? document.getElementById(otherId) : null;
+                  if (otherPanel) otherPanel.hidden = true;
+                }
+              });
+              // Toggle clicked
+              trigger.setAttribute('aria-expanded', String(!isOpen));
+              if (panel) panel.hidden = isOpen;
+            });
+          });
+        });
+      })();
+
       // Back to top
       (function initBackToTop() {
         const btn = document.querySelector('.back-to-top');

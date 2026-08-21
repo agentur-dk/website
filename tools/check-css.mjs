@@ -92,6 +92,16 @@ const SCOPED_COMPONENT_CLASSES = new Set([
   'logo-strip__track-wrap',
   // index.astro service-card featured (inline is:global)
   'service-card--featured',
+  // ueber-uns.astro (scoped page styles)
+  'ueber-hero__actions',
+  'ueber-grid', 'ueber-grid__text', 'ueber-grid__visual',
+  'ueber-body', 'ueber-highlight',
+  'ueber-visual-block', 'ueber-visual-block__dk', 'ueber-visual-block__sub',
+  'werte-grid', 'wert-card', 'wert-card__icon', 'wert-card__title', 'wert-card__body',
+  'referenz-list', 'referenz-card', 'referenz-card__visual',
+  'referenz-card__visual--blue', 'referenz-card__visual--green', 'referenz-card__visual--purple',
+  'referenz-card__kuerzel', 'referenz-card__content', 'referenz-card__name', 'referenz-card__desc',
+  'ueber-contact', 'ueber-contact__item', 'ueber-contact__hours',
 ]);
 
 // ------------------------------------------------------------------
