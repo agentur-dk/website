@@ -13,7 +13,8 @@
     "test": "vitest run",
     "check:links": "node tools/check-links.mjs",
     "check:meta": "node tools/check-meta.mjs",
-    "validate": "npm run build && npm run check:links && npm run check:meta"
+    "check:css": "node tools/check-css.mjs",
+    "validate": "npm run build && npm run check:links && npm run check:meta && npm run check:css"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",
