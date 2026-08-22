@@ -13,9 +13,6 @@
       <label class="bfsg-option"><input type="radio" name="q1" value="ja" class="bfsg-option__radio"><span class="bfsg-option__label" data-choice="ja">Ja</span></label>
       <label class="bfsg-option"><input type="radio" name="q1" value="nein" class="bfsg-option__radio"><span class="bfsg-option__label" data-choice="nein">Nein</span></label>
     </div>
-    <div class="bfsg-step__nav">
-      <button type="button" class="btn btn--primary bfsg-next-btn" data-next="2">Weiter →</button>
-    </div>
   </fieldset>
 
   <!-- Schritt 2 -->
@@ -29,7 +26,6 @@
     </div>
     <div class="bfsg-step__nav">
       <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="1">← Zurück</button>
-      <button type="button" class="btn btn--primary bfsg-next-btn" data-next="3">Weiter →</button>
     </div>
   </fieldset>
 
@@ -44,7 +40,6 @@
     </div>
     <div class="bfsg-step__nav">
       <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="2">← Zurück</button>
-      <button type="button" class="btn btn--primary bfsg-next-btn" data-next="4">Weiter →</button>
     </div>
   </fieldset>
 
@@ -59,7 +54,6 @@
     </div>
     <div class="bfsg-step__nav">
       <button type="button" class="btn btn--ghost bfsg-back-btn" data-prev="3">← Zurück</button>
-      <button type="button" class="btn btn--primary" id="bfsg-submit-btn">Ergebnis anzeigen →</button>
     </div>
   </fieldset>
 
@@ -299,7 +293,6 @@ import { getResult } from '../lib/bfsg-logic';
   const resultEl = document.getElementById('bfsg-result');
   const resultTitle = document.getElementById('bfsg-result-title');
   const resultText = document.getElementById('bfsg-result-text');
-  const submitBtn = document.getElementById('bfsg-submit-btn');
   const restartBtn = document.getElementById('bfsg-restart-btn');
 
   function showStep(n: number) {
@@ -342,39 +335,27 @@ import { getResult } from '../lib/bfsg-logic';
     showStep(1);
   }
 
-  quiz.addEventListener('click', function(e) {
-    const target = e.target as HTMLElement;
-    const nextBtn = target.closest('.bfsg-next-btn');
-    const backBtn = target.closest('.bfsg-back-btn');
-
-    if (nextBtn) {
-      const next = parseInt((nextBtn as HTMLElement).dataset.next ?? '0', 10);
-      const currentStep = (nextBtn as HTMLElement).closest('.bfsg-step') as HTMLElement;
-      const stepNum = parseInt(currentStep.dataset.step ?? '0', 10);
-      const answered = quiz.querySelector('input[name="q' + stepNum + '"]:checked');
-      if (!answered) {
-        const firstOpt = currentStep.querySelector<HTMLElement>('.bfsg-option__radio');
-        if (firstOpt) firstOpt.focus();
-        return;
-      }
-      if (stepNum === 1 && getVal('q1') === 'nein') { showResult(); return; }
-      showStep(next);
+  quiz.addEventListener('change', function(e) {
+    const input = e.target as HTMLInputElement;
+    if (input.type !== 'radio') return;
+    const name = input.name;
+    if (name === 'q1') {
+      if (getVal('q1') === 'nein') { showResult(); } else { showStep(2); }
+    } else if (name === 'q2') {
+      showStep(3);
+    } else if (name === 'q3') {
+      showStep(4);
+    } else if (name === 'q4') {
+      showResult();
     }
+  });
 
+  quiz.addEventListener('click', function(e) {
+    const backBtn = (e.target as HTMLElement).closest('.bfsg-back-btn');
     if (backBtn) {
       const prev = parseInt((backBtn as HTMLElement).dataset.prev ?? '0', 10);
       showStep(prev);
     }
-  });
-
-  if (submitBtn) submitBtn.addEventListener('click', function() {
-    const answered = quiz.querySelector('input[name="q4"]:checked');
-    if (!answered) {
-      const firstOpt = document.querySelector<HTMLElement>('#bfsg-step-4 .bfsg-option__radio');
-      if (firstOpt) firstOpt.focus();
-      return;
-    }
-    showResult();
   });
 
   if (restartBtn) restartBtn.addEventListener('click', restart);
