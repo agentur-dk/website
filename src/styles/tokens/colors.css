@@ -18,6 +18,11 @@
   --dk-color-text:                #e8e8e8;
   --dk-color-text-muted:          #a8a8a8;
   --dk-color-text-faint:          #909090;
+  /* Dekorative Großziffern auf Karten. Eigenes Token, weil hier vorher
+     ein Rahmen-Token als Textfarbe diente: --color-border erreicht auf
+     hellem Grund nur 1,41:1 und lag damit unter der Schwelle von 3:1,
+     die für Text ab 24px fett gilt. */
+  --dk-color-decor:               #4a4a4a;
   --dk-color-text-inverse:        #121212;
 
   /* Marke */
@@ -42,6 +47,7 @@
   --dk-color-text-on-light:       #14171c;
   --dk-color-text-muted-on-light: #4a515a;
   --dk-color-text-faint-on-light: #5e6470;
+  --dk-color-decor-on-light:      #8d949e;   /* 3,06:1 auf #ffffff */
   --dk-color-primary-on-light:    #1C60AD;
   --dk-color-focus-on-light:      #1C60AD;
   --dk-color-success-on-light:    #2e7d32;

@@ -334,6 +334,7 @@ a:not([class]):focus-visible {
     --color-text: var(--color-text-on-light);
     --color-text-muted: var(--color-text-muted-on-light);
     --color-text-faint: var(--color-text-faint-on-light);
+    --color-decor: var(--dk-color-decor-on-light);
     --color-surface: var(--color-surface-light);
     --color-surface-alt: var(--color-surface-alt-light);
     --color-border: var(--color-border-light);
@@ -547,7 +548,7 @@ a:not([class]):focus-visible {
     font-family: var(--font-display);
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-border);
+    color: var(--color-decor);
     line-height: 1;
     pointer-events: none;
     user-select: none;
@@ -1714,7 +1715,9 @@ a:not([class]):focus-visible {
   }
   /* Visual color variants */
   .case-card__visual--indigo  { background-color: #474078; }
-  .case-card__visual--orange  { background-color: #c25a00; }
+  /* #c25a00 lag mit weißer Schrift bei 4,42:1 und damit knapp unter dem
+     AA-Minimum von 4,5:1. Die übrigen sieben Varianten liegen darüber. */
+  .case-card__visual--orange  { background-color: #b85400; }
   .case-card__visual--rose    { background-color: #9f1239; }
   .case-card__visual--slate   { background-color: #475569; }
 

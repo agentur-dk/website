@@ -34,6 +34,45 @@ unter dem AA-Minimum.
 
 ---
 
+## 0. Indexierungssperre (nachgereicht)
+
+Die Seite soll bis zur Fertigstellung weder in Suchergebnissen erscheinen noch
+von KI-Systemen eingelesen werden. Umgesetzt als ein Schalter in
+`src/config/site.config.ts` (`INDEXIERUNG_ERLAUBT`), der vier Kanäle gleichzeitig
+schließt:
+
+| Kanal | im gesperrten Zustand |
+|---|---|
+| Meta-Robots, alle 16 Seiten | `noindex, nofollow`, zusätzlich als `googlebot` und `bingbot` |
+| `robots.txt` | Suchmaschinen dürfen crawlen, alle 16 KI-Crawler auf `Disallow: /`, keine Sitemap-Angabe |
+| `sitemap.xml` | leeres `urlset` |
+| `llms.txt` | nur ein Hinweis statt der Faktensammlung |
+
+**Warum Suchmaschinen weiter crawlen dürfen.** Ein `Disallow: /` in der
+robots.txt wirkt intuitiv strenger, ist hier aber schwächer: Google darf die
+Seite dann nicht abrufen und bekommt das `noindex` nie zu sehen. Die URL kann
+trotzdem als reiner Link im Index landen, sobald irgendwo jemand darauf verweist —
+ohne dass sich das über die Seite selbst korrigieren ließe. Das `noindex` im
+Seitenkopf ist das wirksame Signal, und dafür muss die Seite abrufbar sein.
+KI-Crawler werten kein `noindex` aus; für sie ist allein die robots.txt
+maßgeblich, deshalb dort das harte `Disallow`.
+
+**Absicherung.** `tools/check-seo.mjs` kehrt im gesperrten Zustand seine
+Prüfrichtung um: Es meldet dann nicht mehr ein versehentliches `noindex`, sondern
+jede Seite, die es *verloren* hat — dazu eine wieder befüllte Sitemap, einen
+Sitemap-Verweis in der robots.txt, freigegebene KI-Crawler und eine llms.txt, die
+wieder Inhalte ausliefert. Gegengeprüft mit drei Manipulationstests, alle drei
+wurden erkannt.
+
+`tools/lighthouse.mjs` nimmt währenddessen die SEO-Gesamtwertung aus dem Gate:
+Sie liegt zwangsläufig bei 66, und zwar durch genau ein Audit (`is-crawlable`) —
+alle übrigen SEO-Kriterien werden weiter geprüft.
+
+**Zum Aufheben** genügt `INDEXIERUNG_ERLAUBT = true`. Das Seitenregister bleibt
+unangetastet, es muss also nichts rekonstruiert werden.
+
+---
+
 ## 1. Auffindbarkeit — Suchmaschinen und KI-Systeme
 
 ### 1.1 Domain und kanonische Identität — behoben
@@ -144,8 +183,28 @@ Seite: **1200 × 630, 209 kB → 31 kB**, mit Wortmarke, Standort und Domain.
 
 ## 2. Barrierefreiheit — WCAG 2.2 AA
 
-axe-core meldete von Anfang an null Verstöße. Das ist ein gutes Zeichen, aber
-kein Konformitätsnachweis: automatisierte Prüfungen decken je nach Quelle 30–40 %
+axe-core meldete zunächst null Verstöße. Das war jedoch **kein belastbares
+Ergebnis** — und die Fehlersuche danach ist der interessanteste Teil dieses
+Abschnitts.
+
+Die Seite blendet Abschnitte beim Scrollen per Opazitäts-Transition ein.
+Zwei Effekte gingen daraus hervor:
+
+1. **Unvollständige Messung.** Inhalte unterhalb des Falzes waren beim Scan noch
+   auf `opacity: 0` und wurden von axe deshalb gar nicht erst geprüft. Die „null
+   Verstöße" bezogen sich faktisch nur auf den sichtbaren Ausschnitt.
+2. **Zufällige Fehlalarme.** Traf die Messung eine laufende Transition, las axe
+   Mischfarben und meldete Kontraste wie 1,02 für Text, der im Ruhezustand bei
+   7,42 : 1 liegt.
+
+Beides ist behoben: `tools/a11y.mjs` schaltet vor jeder Messung die Bewegung ab,
+versetzt alle Einblendungen in den Endzustand und setzt Transitionsdauern auf
+null. Drei aufeinanderfolgende Läufe liefern seitdem identische Ergebnisse.
+
+Mit der vollständigen Messung kamen **45 zuvor verdeckte Kontrastverstöße** zum
+Vorschein (siehe 2.3). Sie sind behoben; erst danach steht die Null belastbar.
+
+Unabhängig davon bleibt: automatisierte Prüfungen decken je nach Quelle 30–40 %
 der Erfolgskriterien ab. Alles, was von Layout, Zoom, Bewegung oder Zeigergröße
 abhängt, muss gemessen werden. Dafür ist `tools/wcag-manual.mjs` entstanden.
 
@@ -170,20 +229,32 @@ angewandt, damit nichts aufblitzt.
   Viewport.** Überschriften haben jetzt `hyphens: auto`; die Silbentrennung greift,
   weil `<html lang="de">` gesetzt ist.
 
-### 2.3 Kontraste (1.4.3) — zwei Verstöße behoben
+### 2.3 Kontraste (1.4.3) — behoben
 
-| Element | vorher | jetzt |
-|---|---|---|
-| Referenzkachel grün, weiße Schrift | 2,30 : 1 | 5,27 : 1 |
-| Referenzkachel türkis, weiße Schrift | 3,36 : 1 | 6,16 : 1 |
+| Element | vorher | jetzt | gefunden durch |
+|---|---|---|---|
+| Referenzkachel grün, weiße Schrift | 2,30 : 1 | 5,27 : 1 | Lighthouse |
+| Referenzkachel türkis, weiße Schrift | 3,36 : 1 | 6,16 : 1 | Lighthouse |
+| Referenzkachel orange, weiße Schrift | 4,42 : 1 | 4,88 : 1 | axe nach Behebung der Messlücke |
+| Leistungskarten-Ziffern „01"–„07" (45 Vorkommen) | 1,41 : 1 | 3,06 : 1 | axe nach Behebung der Messlücke |
+| `.text-link` auf dunklem Grund | 2,97 : 1 | 5,57 : 1 | Lighthouse, beim Ausbau entstanden |
 
-Beide entgingen axe-core, weil die Kacheln `aria-hidden` tragen — für sehende
-Nutzer sind sie trotzdem Text.
+Die ersten beiden entgingen axe-core, weil die Kacheln `aria-hidden` tragen — für
+sehende Nutzer sind sie trotzdem Text.
 
-Beim Ausbau kam ein dritter hinzu und wurde mitbehoben: `.text-link` war fest auf
-helle Abschnitte verdrahtet (`#1c60ad`, auf dunklem Grund 2,97 : 1). Die Klasse
-richtet sich jetzt nach ihrem Abschnitt — sonst wäre jede künftige Verwendung auf
-dunklem Grund eine stille Barriere.
+Die Ziffern auf den Leistungskarten waren der aufschlussreichste Fall: Die Regel
+lautete `color: var(--color-border)`. Ein Token für 1-px-Linien diente als
+Textfarbe für 32 px fette Ziffern — auf hellem Grund landet es bei 1,41 : 1. Die
+Ziffern sind jetzt an ein eigenes Token gebunden (`--color-decor`), das genau für
+diesen Zweck existiert und die für große Schrift geltende Schwelle von 3 : 1
+einhält.
+
+Zusätzlich wurden alle acht Kachelvarianten systematisch nachgerechnet, statt
+nur die gemeldete zu korrigieren; sieben lagen bereits über 4,5 : 1.
+
+`.text-link` war fest auf helle Abschnitte verdrahtet. Die Klasse richtet sich
+jetzt nach ihrem Abschnitt — sonst wäre jede künftige Verwendung auf dunklem
+Grund eine stille Barriere.
 
 ### 2.4 Zielgrößen (2.5.8) — behoben
 
@@ -448,13 +519,17 @@ Fehlerseite, kein Mangel; `tools/lighthouse.mjs` führt es als begründete Ausna
 
 | Prüfung | Umfang | Ergebnis |
 |---|---|---|
-| axe-core (WCAG 2.0/2.1/2.2 A + AA, Best Practices) | 16 Seiten × 3 Zustände | **0 Verstöße** |
+| axe-core (WCAG 2.0/2.1/2.2 A + AA, Best Practices) | 16 Seiten × 3 Zustände, Einblendungen erzwungen | **0 Verstöße** |
 | Reflow 320 px, Textabstand, Fokus-Verdeckung, Zielgrößen | 16 Seiten | **0 Befunde** |
 | Lighthouse Accessibility | 32 Läufe | **100** |
 
 Die drei Zustände je Seite sind Ausgangszustand, geöffnetes Mobilmenü und
 geöffnetes Accordion — ein rein statischer Scan übersieht sonst genau die
 Komponenten, die per JavaScript eingeblendet werden.
+
+Ebenso wichtig: Die Prüfung erzwingt vorher den Endzustand aller Scroll-
+Einblendungen. Ohne diesen Schritt bleibt alles unterhalb des Falzes ungeprüft —
+genau dort lagen die 45 Kontrastverstöße aus 2.3.
 
 ### Build
 

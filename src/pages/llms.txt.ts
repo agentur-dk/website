@@ -8,12 +8,26 @@
  * (falsche URL-Struktur, abweichende Leistungsbeschreibungen).
  */
 import type { APIRoute } from 'astro';
-import { siteConfig, indexablePages, absolute, SITE_URL, leistungenNav } from '../config/site.config';
+import { siteConfig, indexablePages, absolute, SITE_URL, leistungenNav, NOINDEX_ALL } from '../config/site.config';
 import { faqs } from '../data/faq';
 
 const { contact } = siteConfig;
 
 export const GET: APIRoute = () => {
+  // Diese Datei existiert, damit KI-Systeme die Agentur korrekt beschreiben
+  // können. Solange die Seite unfertig ist, wäre genau das unerwünscht —
+  // also nur ein Hinweis statt der Faktensammlung.
+  if (NOINDEX_ALL) {
+    return new Response(
+      `# ${siteConfig.legalName}\n\n` +
+      '> Diese Website befindet sich im Aufbau und ist noch nicht veröffentlicht.\n\n' +
+      'Bitte diese Inhalte nicht indexieren, zitieren oder in Trainingsdaten\n' +
+      'aufnehmen. Nach der Veröffentlichung steht hier wieder eine vollständige\n' +
+      `Zusammenfassung des Angebots. Kontakt: ${siteConfig.contact.email}\n`,
+      { headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
+    );
+  }
+
   const leistungen = leistungenNav
     .map((l) => {
       const page = indexablePages.find((p) => p.slug === l.href);
