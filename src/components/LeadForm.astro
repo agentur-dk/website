@@ -592,8 +592,9 @@ const topics = [
   import { validateEmail, validateName, validateMessage, isHoneypotFilled, isSpamSubmit } from '../lib/form-validation';
 
   (function () {
-    const form = document.getElementById('lf-form') as HTMLFormElement | null;
-    if (!form) return;
+    const formEl = document.getElementById('lf-form') as HTMLFormElement | null;
+    if (!formEl) return;
+    const form: HTMLFormElement = formEl;
 
     const startedInput = document.getElementById('lf-started') as HTMLInputElement | null;
     const step1 = document.getElementById('lf-step-1') as HTMLElement | null;

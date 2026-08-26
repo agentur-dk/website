@@ -7,7 +7,11 @@
   /* Font-Familien */
   --dk-font-display: 'Space Grotesk', 'Space Grotesk Fallback', 'Manrope', sans-serif;
   --dk-font-body:    'Manrope', 'Manrope Fallback', 'Space Grotesk', sans-serif;
-  --dk-font-mono:    'Roboto Mono', 'Courier New', monospace;
+  /* System-Monospace statt Webfont: Roboto Mono wurde ausschließlich auf der
+     404-Seite verwendet — 80 Zeichen auf der gesamten Site, wofür drei
+     Schriftdateien im Repository lagen und eine geladen wurde. */
+  --dk-font-mono:    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
+                     'Liberation Mono', 'Courier New', monospace;
 
   /* Schriftgrößen — 8-stufige Skala */
   --dk-font-size-xs:   0.75rem;    /* 12px */

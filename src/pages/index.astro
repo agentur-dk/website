@@ -4,128 +4,16 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import LeadForm from '../components/LeadForm.astro';
 import StatsStrip from '../components/StatsStrip.astro';
+import { faqs } from '../data/faq';
 
 const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="agentur dk – Websites, Website-Leasing & Digital-Agentur Köln"
-  description="Ihre Agentur in Köln für professionelle WordPress-Websites, Website-Leasing, barrierefreies Webdesign (BFSG), SEO/GEO und Online-Marketing. Persönlich, schnell, professionell."
+  slug=""
+  title="Digitalagentur Köln – WordPress, BFSG & SEO | agentur dk"
+  description="Digitalagentur aus Köln für barrierefreie WordPress-Websites (BFSG), Website-Leasing, SEO/GEO und Online-Marketing. Direkt beim Inhaber."
 >
-  <Fragment slot="head">
-    <!-- JSON-LD: Organization + LocalBusiness -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": ["Organization", "ProfessionalService"],
-  "@id": "https://dk-dk.de/#organization",
-  "name": "agentur dk \u2013 design & kommunikation",
-  "url": "https://dk-dk.de",
-  "logo": "https://dk-dk.de/images/og-image-website.png",
-  "image": "https://dk-dk.de/images/og-image-website.png",
-  "description": "Agentur f\u00fcr barrierefreie WordPress-Websites (BFSG), SEO, GEO und Online-Marketing in K\u00f6ln.",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Sachsenring 57",
-    "addressLocality": "K\u00f6ln",
-    "postalCode": "50677",
-    "addressCountry": "DE"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 50.9286,
-    "longitude": 6.9604
-  },
-  "telephone": "+49-221-986-55-229",
-  "email": "mail@dk-dk.de",
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-    "opens": "09:00",
-    "closes": "18:00"
-  },
-  "sameAs": ["https://www.linkedin.com/in/daniel-kontelis/"],
-  "founder": { "@type": "Person", "name": "Daniel Kontelis" }
-}
-    </script>
-
-    <!-- JSON-LD: FAQPage -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Was ist Website-Leasing und f\u00fcr wen lohnt es sich?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Beim Website-Leasing erhalten Sie eine professionell entwickelte WordPress-Website gegen eine feste monatliche Rate \u2014 ohne hohe Einmalinvestition. Das Modell eignet sich besonders f\u00fcr Unternehmen, die schnell einen hochwertigen Webauftritt ben\u00f6tigen, aber keine gro\u00dfe Anfangsinvestition t\u00e4tigen m\u00f6chten. Wartung und Hosting sind auf Wunsch inklusive."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Was kostet eine professionelle WordPress-Website?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Je nach Umfang und bestehendem System beginnen WordPress-Projekte bei ca. 2.500 \u20ac. Alternativ bieten wir Website-Leasing ab einer monatlichen Rate an \u2014 ohne Einmalkosten. F\u00fcr gr\u00f6\u00dfere Relaunches kalkulieren wir individuell und erstellen ein transparentes Festpreisangebot."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Wie lange dauert ein WordPress-Relaunch?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Typische Projekte dauern 4\u20138 Wochen \u2013 abh\u00e4ngig von Seitenanzahl, Funktionsumfang und der Verf\u00fcgbarkeit von Inhalten. Dank flacher Hierarchien und direkter Kommunikation halten wir Zeitpl\u00e4ne zuverl\u00e4ssig ein."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Bieten Sie auch laufende Betreuung an?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Ja, wir bieten flexible Wartungs- und Support-Pakete an: von monatlichen Updates und Sicherheits-Patches bis hin zu laufendem SEO und Content-Pflege. So bleibt Ihre Website dauerhaft performant, sicher und BFSG-konform."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Was ist GEO (Generative Engine Optimization)?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "GEO bezeichnet die Optimierung von Inhalten f\u00fcr KI-Systeme wie ChatGPT, Google Gemini oder Perplexity, damit Ihr Unternehmen in KI-generierten Antworten sichtbar wird. Dies erg\u00e4nzt klassisches SEO und sichert Ihnen Reichweite im Zeitalter der generativen Suche."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Was ist das BFSG und gilt es f\u00fcr uns?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Das BFSG (Barrierefreiheitsst\u00e4rkungsgesetz) verpflichtet ab dem 28. Juni 2025 Anbieter privater Websites und digitaler Produkte zur Barrierefreiheit gem\u00e4\u00df EN 301 549. Es gilt f\u00fcr Unternehmen mit mehr als 10 Mitarbeitenden oder einem Jahresumsatz \u00fcber 2 Mio. \u20ac, die Verbrauchern digitale Dienstleistungen anbieten. Wir pr\u00fcfen kostenlos, ob Ihre Website betroffen ist."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "K\u00f6nnen Sie auch bestehende Websites pr\u00fcfen?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Ja, wir f\u00fchren Accessibility-Audits durch und pr\u00fcfen Ihre bestehende Website auf BFSG-Konformit\u00e4t, technische SEO-Fehler und Conversion-Potenziale. Sie erhalten einen priorisierten Ma\u00dfnahmenplan mit konkreten Handlungsempfehlungen."
-      }
-    }
-  ]
-}
-    </script>
-
-    <!-- JSON-LD: WebSite -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "url": "https://dk-dk.de",
-  "name": "agentur dk",
-  "inLanguage": "de-DE"
-}
-    </script>
-  </Fragment>
 
   <Header />
 
@@ -135,9 +23,10 @@ const base = import.meta.env.BASE_URL;
     <section class="hero section" aria-label="Online-Agentur Köln">
       <div class="container hero__inner">
         <div class="hero__content">
-          <h1 class="hero__headline" aria-label="Sichtbarkeit, die wirkt. Barrierefreiheit, die überzeugt.">
-            <span id="typewriter-text" data-texts='["Sichtbarkeit, die wirkt.", "Barrierefreiheit, die überzeugt.", "WordPress, das performt.", "Marketing, das konvertiert."]'>Sichtbarkeit, die wirkt.</span><span class="typewriter-caret" aria-hidden="true"></span>
-          </h1>
+          <h1 class="hero__headline">Digitalagentur aus Köln für barrierefreie WordPress-Websites</h1>
+          <p class="hero__claim" aria-hidden="true">
+            <span id="typewriter-text" data-texts='["Sichtbarkeit, die wirkt.", "Barrierefreiheit, die überzeugt.", "WordPress, das performt.", "Marketing, das konvertiert."]'>Sichtbarkeit, die wirkt.</span><span class="typewriter-caret"></span>
+          </p>
           <p class="hero__subline">
             agentur dk macht Ihr Unternehmen digital sichtbar — mit Website-Leasing, professioneller WordPress-Entwicklung (barrierefrei nach BFSG), strategischem SEO/GEO und zielgruppengenauem Online-Marketing.
           </p>
@@ -155,22 +44,26 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Kundenlogo-Leiste -->
-    <section class="section logo-strip" aria-label="Unsere Kunden">
+    <section class="section logo-strip" aria-labelledby="logo-strip-heading">
       <div class="container">
-        <p class="logo-strip__label">Vertrauen von</p>
-        <div class="logo-strip__track-wrap" aria-hidden="true">
+        <h2 class="logo-strip__label" id="logo-strip-heading">Vertrauen von</h2>
+        <div class="logo-strip__track-wrap">
           <ul class="logo-strip__track" role="list">
-            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 1</span></li>
-            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 2</span></li>
-            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 3</span></li>
-            <li class="logo-strip__item"><span class="logo-strip__placeholder">TARGOBANK</span></li>
-            <li class="logo-strip__item"><span class="logo-strip__placeholder">Kundenlogo 5</span></li>
-            <!-- Duplikate für nahtlose CSS-Animation -->
-            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 1</span></li>
-            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 2</span></li>
-            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 3</span></li>
-            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">TARGOBANK</span></li>
-            <li class="logo-strip__item" aria-hidden="true"><span class="logo-strip__placeholder">Kundenlogo 5</span></li>
+            <li><span class="logo-strip__name">TARGOBANK AG</span></li>
+            <li><span class="logo-strip__name">Bundesministerium BMBFSJ</span></li>
+            <li><span class="logo-strip__name">Berufsförderungswerk Düren</span></li>
+            <li><span class="logo-strip__name">Berufsförderungswerk Mainz</span></li>
+            <li><span class="logo-strip__name">DU BIST GRIECHE</span></li>
+            <li><span class="logo-strip__name">aposocial</span></li>
+            <!-- Zweiter Durchlauf nur für die nahtlose Schleife — für
+                 Screenreader ausgeblendet, damit die Namen nicht doppelt
+                 vorgelesen werden. -->
+            <li aria-hidden="true"><span class="logo-strip__name">TARGOBANK AG</span></li>
+            <li aria-hidden="true"><span class="logo-strip__name">Bundesministerium BMBFSJ</span></li>
+            <li aria-hidden="true"><span class="logo-strip__name">Berufsförderungswerk Düren</span></li>
+            <li aria-hidden="true"><span class="logo-strip__name">Berufsförderungswerk Mainz</span></li>
+            <li aria-hidden="true"><span class="logo-strip__name">DU BIST GRIECHE</span></li>
+            <li aria-hidden="true"><span class="logo-strip__name">aposocial</span></li>
           </ul>
         </div>
       </div>
@@ -180,7 +73,7 @@ const base = import.meta.env.BASE_URL;
     <section class="schwerpunkte-section section section--light" aria-labelledby="schwerpunkte-heading">
       <div class="container">
         <p class="schwerpunkte-section__eyebrow">Unsere Schwerpunkte</p>
-        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Was wir für Sie tun</h2>
+        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Unsere zwei Schwerpunkte</h2>
         <p class="schwerpunkte-section__lead">Zwei Bereiche, in denen wir besonders stark sind – und in denen wir Unternehmen nachweislich weiterhelfen.</p>
         <div class="schwerpunkte-grid">
           <!-- Karte A -->
@@ -213,7 +106,7 @@ const base = import.meta.env.BASE_URL;
     <section id="services" class="services section section--light">
       <div class="container">
         <p class="section-label" aria-hidden="true">Leistungen</p>
-        <h2 class="section-title">Was wir für Sie tun</h2>
+        <h2 class="section-title">Alle Leistungen im Überblick</h2>
         <ul class="services__grid" role="list">
 
           <!-- Card 0: Website-Leasing (hervorgehoben) -->
@@ -427,105 +320,21 @@ const base = import.meta.env.BASE_URL;
         <p class="section-label" aria-hidden="true">FAQ</p>
         <h2 class="section-title">Häufige Fragen</h2>
         <div class="accordion">
-
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button type="button" class="accordion__trigger" id="faq-trigger-1" aria-expanded="false" aria-controls="faq-panel-1">
-                <span>Was ist Website-Leasing und für wen lohnt es sich?</span>
-                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                </svg>
-              </button>
-            </h3>
-            <div id="faq-panel-1" class="accordion__panel" role="region" aria-labelledby="faq-trigger-1" hidden>
-              <p>Beim Website-Leasing erhalten Sie eine professionell entwickelte WordPress-Website gegen eine feste monatliche Rate — ohne hohe Einmalinvestition. Das Modell eignet sich besonders für Unternehmen, die schnell einen hochwertigen Webauftritt benötigen, aber keine große Anfangsinvestition tätigen möchten. Wartung und Hosting sind auf Wunsch inklusive. <a href={`${base}website-leasing.html`} class="text-link">Mehr zum Website-Leasing</a></p>
+          {faqs[''].items.map((item, i) => (
+            <div class="accordion__item">
+              <h3 class="accordion__heading">
+                <button type="button" class="accordion__trigger" id={`faq-trigger-${i + 1}`} aria-expanded="false" aria-controls={`faq-panel-${i + 1}`}>
+                  <span>{item.question}</span>
+                  <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                    <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
+                  </svg>
+                </button>
+              </h3>
+              <div id={`faq-panel-${i + 1}`} class="accordion__panel" role="region" aria-labelledby={`faq-trigger-${i + 1}`} hidden>
+                <p>{item.answer}</p>
+              </div>
             </div>
-          </div>
-
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button type="button" class="accordion__trigger" id="faq-trigger-2" aria-expanded="false" aria-controls="faq-panel-2">
-                <span>Was kostet eine professionelle WordPress-Website?</span>
-                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                </svg>
-              </button>
-            </h3>
-            <div id="faq-panel-2" class="accordion__panel" role="region" aria-labelledby="faq-trigger-2" hidden>
-              <p>Je nach Umfang und bestehendem System beginnen WordPress-Projekte bei ca. 2.500 €. Alternativ bieten wir Website-Leasing ab einer monatlichen Rate an — ohne Einmalkosten. Für größere Relaunches mit Design, Entwicklung und BFSG-Konformitätserklärung kalkulieren wir individuell. Wir erstellen Ihnen ein transparentes Festpreisangebot.</p>
-            </div>
-          </div>
-
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button type="button" class="accordion__trigger" id="faq-trigger-3" aria-expanded="false" aria-controls="faq-panel-3">
-                <span>Wie lange dauert ein WordPress-Relaunch?</span>
-                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                </svg>
-              </button>
-            </h3>
-            <div id="faq-panel-3" class="accordion__panel" role="region" aria-labelledby="faq-trigger-3" hidden>
-              <p>Typische Projekte dauern 4–8 Wochen – abhängig von Seitenanzahl, Funktionsumfang und der Verfügbarkeit von Inhalten. Dank flacher Hierarchien und direkter Kommunikation halten wir Zeitpläne zuverlässig ein.</p>
-            </div>
-          </div>
-
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button type="button" class="accordion__trigger" id="faq-trigger-4" aria-expanded="false" aria-controls="faq-panel-4">
-                <span>Bieten Sie auch laufende Betreuung an?</span>
-                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                </svg>
-              </button>
-            </h3>
-            <div id="faq-panel-4" class="accordion__panel" role="region" aria-labelledby="faq-trigger-4" hidden>
-              <p>Ja, wir bieten flexible Wartungs- und Support-Pakete an: von monatlichen Updates und Sicherheits-Patches bis hin zu laufendem SEO und Content-Pflege. So bleibt Ihre Website dauerhaft performant, sicher und BFSG-konform.</p>
-            </div>
-          </div>
-
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button type="button" class="accordion__trigger" id="faq-trigger-5" aria-expanded="false" aria-controls="faq-panel-5">
-                <span>Was ist GEO (Generative Engine Optimization)?</span>
-                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                </svg>
-              </button>
-            </h3>
-            <div id="faq-panel-5" class="accordion__panel" role="region" aria-labelledby="faq-trigger-5" hidden>
-              <p>GEO bezeichnet die Optimierung von Inhalten für KI-Systeme wie ChatGPT, Google Gemini oder Perplexity, damit Ihr Unternehmen in KI-generierten Antworten sichtbar wird. Dies ergänzt klassisches SEO und sichert Ihnen Reichweite im Zeitalter der generativen Suche.</p>
-            </div>
-          </div>
-
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button type="button" class="accordion__trigger" id="faq-trigger-6" aria-expanded="false" aria-controls="faq-panel-6">
-                <span>Was ist das BFSG und gilt es für uns?</span>
-                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                </svg>
-              </button>
-            </h3>
-            <div id="faq-panel-6" class="accordion__panel" role="region" aria-labelledby="faq-trigger-6" hidden>
-              <p>Das BFSG (Barrierefreiheitsstärkungsgesetz) verpflichtet ab dem 28. Juni 2025 Anbieter privater Websites und digitaler Produkte zur Barrierefreiheit gemäß EN 301 549. Es gilt für Unternehmen mit mehr als 10 Mitarbeitenden oder einem Jahresumsatz über 2 Mio. €, die Verbrauchern digitale Dienstleistungen anbieten. Wir prüfen kostenlos, ob Ihre Website betroffen ist.</p>
-            </div>
-          </div>
-
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button type="button" class="accordion__trigger" id="faq-trigger-7" aria-expanded="false" aria-controls="faq-panel-7">
-                <span>Können Sie auch bestehende Websites prüfen?</span>
-                <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                </svg>
-              </button>
-            </h3>
-            <div id="faq-panel-7" class="accordion__panel" role="region" aria-labelledby="faq-trigger-7" hidden>
-              <p>Ja, wir führen Accessibility-Audits durch und prüfen Ihre bestehende Website auf BFSG-Konformität, technische SEO-Fehler und Conversion-Potenziale. Sie erhalten einen priorisierten Maßnahmenplan mit konkreten Handlungsempfehlungen.</p>
-            </div>
-          </div>
-
+          ))}
         </div>
       </div>
     </section>
@@ -573,7 +382,7 @@ const base = import.meta.env.BASE_URL;
 
         <!-- Contact Form -->
         <div class="contact__form-wrapper">
-          <LeadForm page="Startseite" />
+          <LeadForm page="Startseite" heading="Ihre Anfrage in zwei Schritten" />
         </div>
       </div>
     </section>
@@ -654,14 +463,16 @@ const base = import.meta.env.BASE_URL;
     .service-card--featured{border-color:var(--color-primary,#1C60AD);background:linear-gradient(135deg,var(--color-surface,#1e1e1e) 0%,rgba(28,96,173,.12) 100%)}
     .service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
     .service-card--featured .card__link{color:var(--color-primary-light,#5090d0)}
-    .logo-strip{padding-block:2rem;width:100vw;margin-inline:calc(50% - 50vw);overflow:hidden}
-    .logo-strip__label{text-align:center;font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted,#a8a8a8);margin-bottom:1.5rem}
+    .logo-strip{padding-block:2rem;overflow:hidden}
+    .logo-strip__label{text-align:center;font-family:var(--font-body);font-weight:600;font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted,#a8a8a8);margin-bottom:1.5rem}
     .logo-strip__track-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%)}
     .logo-strip__track{display:flex;gap:3rem;width:max-content;animation:logo-scroll 30s linear infinite;list-style:none;margin:0;padding:0}
     @keyframes logo-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
     @media(prefers-reduced-motion:reduce){.logo-strip__track{animation:none}}
-    .logo-strip__placeholder{display:inline-block;padding:.5rem 1.5rem;background:var(--color-surface,#1e1e1e);border:1px solid var(--color-border,#333);border-radius:4px;color:var(--color-text-muted,#999);font-size:.875rem;white-space:nowrap}
+    html[data-motion="paused"] .logo-strip__track{animation-play-state:paused}
+    .logo-strip__name{display:inline-block;padding:.5rem 1.5rem;background:var(--color-surface,#1e1e1e);border:1px solid var(--color-border,#333);border-radius:4px;color:var(--color-text,#e8e8e8);font-family:var(--font-display);font-size:.875rem;font-weight:500;letter-spacing:.01em;white-space:nowrap}
     .referenzen-section__cta{text-align:center;margin-top:var(--space-10,2.5rem)}
+    .hero__claim{font-family:var(--font-display);font-size:clamp(1.25rem,3vw,1.75rem);font-weight:500;color:var(--color-text-muted);letter-spacing:-.01em;line-height:1.3;min-height:2.2em;margin:0 0 1.25rem}
   </style>
 
   <!-- Leistungs-Check quiz script -->
@@ -922,10 +733,21 @@ const base = import.meta.env.BASE_URL;
   <!-- Typewriter script -->
   <script>
   (function initTypewriter() {
-    const el = document.getElementById('typewriter-text');
-    if (!el) return;
+    const found = document.getElementById('typewriter-text');
+    if (!found) return;
+    const el: HTMLElement = found;
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
+
+    // WCAG 2.2.2: die Schleife muss anhaltbar sein. Der Schalter im Footer
+    // setzt data-motion am <html>; hier wird der Zustand bei jedem Tick
+    // geprüft und beim Fortsetzen wieder angestoßen.
+    const isPaused = () => document.documentElement.dataset.motion === 'paused';
+    let waking = false;
+    document.addEventListener('dk:motionchange', function (e) {
+      const paused = (e as CustomEvent).detail.paused;
+      if (!paused && !waking) { waking = true; setTimeout(function () { waking = false; tick(); }, PAUSE_START); }
+    });
 
     let textsRaw: string | null = null;
     try { textsRaw = el.dataset.texts ?? null; } catch { return; }
@@ -944,6 +766,7 @@ const base = import.meta.env.BASE_URL;
     const DEL_SPEED = 30;
 
     function tick() {
+      if (isPaused()) return;
       const current = texts[textIdx];
       if (isDeleting) {
         charIdx--;

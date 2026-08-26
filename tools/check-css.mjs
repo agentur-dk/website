@@ -1,219 +1,119 @@
+#!/usr/bin/env node
 /**
- * check-css.mjs — CSS Class Regression Check
+ * tools/check-css.mjs — findet Klassen im HTML, für die es keine CSS-Regel gibt.
  *
- * Walks all dist/*.html files, extracts class tokens, reads all dist/_astro/*.css,
- * and reports classes that appear in HTML but not in built CSS.
+ * Solche Klassen sind fast immer Tippfehler oder Reste eines Refactorings:
+ * das Element sieht dann anders aus als gedacht, ohne dass etwas kaputtgeht.
  *
- * Skips:
- *  - Tailwind variant prefixes (hover:, focus:, md:, etc.)
- *  - Arbitrary values (classes containing [ or ])
- *  - Known JS-only dynamic classes added at runtime
- *
- * Exit code 1 if any missing classes are found.
+ * Die frühere Fassung las nur dist/_astro/*.css und pflegte daneben eine
+ * über hundert Zeilen lange Allowlist aller komponenten-scoped Klassen —
+ * die veraltete zwangsläufig. Seit das CSS inline ausgeliefert wird, steht
+ * ohnehin alles im HTML: hier werden externe Dateien und <style>-Blöcke
+ * gemeinsam ausgewertet, wodurch die Allowlist auf das schrumpft, was
+ * wirklich erst zur Laufzeit entsteht.
  */
-
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const rootDir = join(__dirname, '..');
-const distDir = join(rootDir, 'dist');
-const astroDir = join(distDir, '_astro');
+const DIST = 'dist';
 
-// Tailwind variant prefixes to strip before checking
-const VARIANT_PREFIXES = [
-  'hover', 'focus', 'focus-visible', 'active', 'disabled',
-  'sm', 'md', 'lg', 'xl', '2xl',
-  'dark', 'group-hover', 'peer-hover',
+/** Klassen, die erst JavaScript setzt und die deshalb nie im HTML stehen. */
+const RUNTIME_ONLY = new Set([
+  'is-open',                 // mobiles Menü
+  'is-visible',              // Scroll-Reveal
+  'lf-status--success',      // Formular-Rückmeldung
+  'lf-status--error',
+  'lf-steps__item--active',
+  'bfsg-step--hidden',
+  'bfsg-result--hidden',
+]);
+
+/**
+ * Klassen ohne eigene CSS-Regel, die es bewusst gibt: reine
+ * JavaScript-Anker oder Strukturhaken, deren Aussehen vollständig von
+ * Eltern- oder Kindregeln kommt. Jeder Eintrag braucht eine Begründung —
+ * ohne die wächst so eine Liste zu dem zu, was sie hier vorher war:
+ * über hundert Zeilen, die niemand mehr prüft.
+ */
+const NO_STYLE_BY_DESIGN = new Map([
+  ['bfsg-back-btn',      'JS-Anker: Zurück-Navigation im BFSG-Check'],
+  ['lf-step',            'JS-Anker: Schrittwechsel im Lead-Formular'],
+  ['bfsg-quiz',          'Strukturhaken neben #bfsg-quiz'],
+  ['lf-form',            'Strukturhaken neben #lf-form'],
+  ['bfsg-check-section', 'Abschnittshaken, Optik kommt von .section'],
+  ['bfsg-step__options', 'Layout kommt von .bfsg-yn-grid auf demselben Element'],
+  ['cta-content',        'Layout kommt von .cta-inner'],
+  ['cta-actions',        'Layout kommt von .cta-inner'],
+  ['ueber-grid__text',   'Layout kommt von .ueber-grid'],
+]);
+
+/** Tailwind-Varianten, die vor dem Vergleich abgetrennt werden. */
+const VARIANTS = new Set([
+  'hover', 'focus', 'focus-visible', 'focus-within', 'active', 'disabled',
+  'sm', 'md', 'lg', 'xl', '2xl', 'dark', 'group-hover', 'peer-hover',
   'aria-expanded', 'data-state', 'before', 'after', 'placeholder',
-  'first', 'last', 'odd', 'even', 'not',
-];
-
-// Classes that are added dynamically by JavaScript at runtime (not in HTML source)
-const RUNTIME_ONLY_CLASSES = new Set([
-  'is-open',            // nav mobile menu toggle
-  'lf-status--success', // form status success
-  'lf-status--error',   // form status error
-  'lf-steps__item--active', // already in HTML as static class on first item but also toggled
+  'first', 'last', 'odd', 'even', 'not', 'motion-safe', 'motion-reduce',
 ]);
 
-// Classes that are legitimately defined only in scoped component <style> blocks
-// (Astro scopes these so they won't appear in global CSS)
-const SCOPED_COMPONENT_CLASSES = new Set([
-  // Header (scoped)
-  'site-header', 'site-header__inner', 'site-logo', 'site-logo__name', 'site-logo__tagline',
-  'nav-toggle', 'nav-list', 'nav-link', 'nav-link--dropdown', 'nav-chevron',
-  'nav-item--dropdown', 'nav-dropdown', 'nav-dropdown__link', 'nav-cta',
-  // Footer (scoped)
-  'site-footer', 'site-footer__inner', 'site-footer__grid', 'site-footer__bottom', 'site-footer__bottom-inner',
-  'footer-logo', 'footer-logo__name', 'footer-logo__tagline', 'footer-desc', 'footer-address',
-  'footer-heading', 'footer-nav-list', 'footer-link', 'footer-link--sm', 'footer-text',
-  'footer-copyright', 'footer-legal-list',
-  // ServiceCard (scoped)
-  'service-card', 'service-card__number', 'service-card__icon', 'service-card__title',
-  'service-card__text', 'service-card__link',
-  // ReferenceCard (scoped)
-  'ref-card', 'ref-card__header', 'ref-card__logo', 'ref-card__logo--blue', 'ref-card__logo--green',
-  'ref-card__logo--purple', 'ref-card__logo--teal', 'ref-card__logo--default',
-  'ref-card__meta', 'ref-card__client', 'ref-card__industry', 'ref-card__text',
-  'ref-card__tags', 'ref-card__tag', 'ref-card__link',
-  // LogoStrip (scoped)
-  'logo-strip', 'logo-strip__label', 'logo-strip__track-wrapper', 'logo-strip__track',
-  'logo-strip__item', 'logo-strip__img', 'logo-strip__placeholder',
-  // StatsStrip (scoped)
-  'stats-strip', 'stats-inner', 'stats-heading', 'stats-list', 'stats-item',
-  'stats-number', 'stats-suffix', 'stats-label',
-  // FaqAccordion (scoped)
-  'faq-section', 'faq-inner', 'faq-heading', 'faq-list', 'faq-item', 'faq-term',
-  'faq-btn', 'faq-btn__text', 'faq-btn__icon', 'faq-panel', 'faq-panel__inner',
-  // CtaSection (scoped)
-  'cta-section', 'cta-inner', 'cta-content', 'cta-title', 'cta-text', 'cta-actions', 'cta-btn',
-  // TabNav (scoped)
-  'tabnav', 'tabnav__list', 'tabnav__item', 'tabnav__link',
-  // LeadForm (scoped — lf-* prefix)
-  'lf-section', 'lf-inner', 'lf-heading', 'lf-honeypot', 'lf-steps', 'lf-steps__item',
-  'lf-steps__num', 'lf-step', 'lf-step__title', 'lf-step__nav', 'lf-step__nav--end',
-  'lf-fieldset', 'lf-legend', 'lf-optional', 'lf-topics', 'lf-topic', 'lf-topic__input',
-  'lf-topic__box', 'lf-topic__label', 'lf-other', 'lf-row', 'lf-group', 'lf-label',
-  'lf-control', 'lf-textarea', 'lf-error', 'lf-privacy', 'lf-privacy__link',
-  'lf-btn', 'lf-btn--primary', 'lf-btn--ghost', 'lf-status', 'lf-form',
-  // BfsgCheck (scoped — bfsg-* prefix)
-  'bfsg-quiz', 'bfsg-step', 'bfsg-step--hidden', 'bfsg-step__legend', 'bfsg-step__question',
-  'bfsg-step__options', 'bfsg-yn-grid', 'bfsg-step__nav', 'bfsg-option', 'bfsg-option__radio',
-  'bfsg-option__label', 'bfsg-next-btn', 'bfsg-back-btn', 'bfsg-result', 'bfsg-result--hidden',
-  'bfsg-result__title', 'bfsg-result__text', 'bfsg-result__actions',
-  'bfsg-disclaimer', 'bfsg-footnotes', 'bfsg-footnotes__update', 'bfsg-check-section',
-  // 404 page (scoped)
-  'error-page', 'error-page__inner', 'error-page__code', 'error-page__title',
-  'error-page__desc', 'error-page__actions', 'error-page__divider', 'error-page__links',
-  // index.astro logo strip (inline is:global but self-contained)
-  'logo-strip__track-wrap',
-  // index.astro service-card featured (inline is:global)
-  'service-card--featured',
-  // ueber-uns.astro (scoped page styles)
-  'ueber-hero__actions',
-  'ueber-grid', 'ueber-grid__text', 'ueber-grid__visual',
-  'ueber-body', 'ueber-highlight',
-  'ueber-visual-block', 'ueber-visual-block__dk', 'ueber-visual-block__sub',
-  'werte-grid', 'wert-card', 'wert-card__icon', 'wert-card__title', 'wert-card__body',
-  'referenz-list', 'referenz-card', 'referenz-card__visual',
-  'referenz-card__visual--blue', 'referenz-card__visual--green', 'referenz-card__visual--purple',
-  'referenz-card__kuerzel', 'referenz-card__content', 'referenz-card__name', 'referenz-card__desc',
-  'ueber-contact', 'ueber-contact__item', 'ueber-contact__hours',
-]);
-
-// ------------------------------------------------------------------
-
-function extractClasses(html) {
-  const classes = new Set();
-  const re = /class="([^"]*)"/g;
-  let m;
-  while ((m = re.exec(html)) !== null) {
-    m[1].split(/\s+/).filter(Boolean).forEach(cls => classes.add(cls));
-  }
-  return classes;
-}
-
-function normalizeClass(cls) {
-  // Strip Tailwind variants
-  for (const prefix of VARIANT_PREFIXES) {
-    if (cls.startsWith(prefix + ':')) {
-      cls = cls.slice(prefix.length + 1);
-    }
-  }
-  return cls;
-}
-
-function shouldSkip(cls) {
-  // Skip arbitrary values
-  if (cls.includes('[') || cls.includes(']')) return true;
-  // Skip classes containing colons (Tailwind utilities)
-  if (cls.includes(':')) return true;
-  // Skip pure Tailwind utility classes (patterns like p-4, mt-8, etc.)
-  // These are legitimate utilities — we only care about BEM/semantic classes
-  return false;
-}
-
-// ------------------------------------------------------------------
-
-if (!existsSync(distDir)) {
-  console.error('❌ dist/ directory not found. Run `npm run build` first.');
+if (!existsSync(DIST)) {
+  console.error('dist/ fehlt — zuerst `npm run build` ausführen.');
   process.exit(1);
 }
 
-// Load all CSS
-let allCss = '';
+const htmlFiles = readdirSync(DIST).filter((f) => f.endsWith('.html'));
+
+// ---- CSS einsammeln: externe Dateien und Inline-Blöcke -------------------
+let css = '';
+const astroDir = join(DIST, '_astro');
 if (existsSync(astroDir)) {
-  const cssFiles = readdirSync(astroDir).filter(f => f.endsWith('.css'));
-  for (const f of cssFiles) {
-    allCss += readFileSync(join(astroDir, f), 'utf8') + '\n';
+  for (const f of readdirSync(astroDir).filter((f) => f.endsWith('.css'))) {
+    css += readFileSync(join(astroDir, f), 'utf8');
   }
 }
-// Also check root dist CSS files
-const rootCssFiles = readdirSync(distDir).filter(f => f.endsWith('.css'));
-for (const f of rootCssFiles) {
-  allCss += readFileSync(join(distDir, f), 'utf8') + '\n';
+for (const f of htmlFiles) {
+  const html = readFileSync(join(DIST, f), 'utf8');
+  for (const m of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)) css += m[1];
 }
 
-if (!allCss) {
-  console.warn('⚠️  No CSS files found in dist/. Skipping check.');
-  process.exit(0);
-}
-
-// Load all HTML files
-const htmlFiles = readdirSync(distDir).filter(f => f.endsWith('.html'));
-
-let totalMissing = 0;
-const report = [];
-
-for (const htmlFile of htmlFiles.sort()) {
-  const html = readFileSync(join(distDir, htmlFile), 'utf8');
-  const classes = extractClasses(html);
-  const missing = [];
-
-  for (const cls of classes) {
-    if (shouldSkip(cls)) continue;
-    const normalized = normalizeClass(cls);
-    if (shouldSkip(normalized)) continue;
-    if (RUNTIME_ONLY_CLASSES.has(normalized)) continue;
-    if (SCOPED_COMPONENT_CLASSES.has(normalized)) continue;
-
-    // Check if class appears in built CSS
-    // We look for the class as a selector: .classname or .classname{ or .classname.
-    const pattern = '.' + normalized.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const inCss = allCss.includes('.' + normalized + '{') ||
-                  allCss.includes('.' + normalized + ' ') ||
-                  allCss.includes('.' + normalized + '.') ||
-                  allCss.includes('.' + normalized + ':') ||
-                  allCss.includes('.' + normalized + ',') ||
-                  allCss.includes('.' + normalized + '\n') ||
-                  allCss.includes('.' + normalized + '\r');
-
-    if (!inCss) {
-      missing.push(normalized);
-    }
-  }
-
-  if (missing.length > 0) {
-    report.push({ file: htmlFile, missing });
-    totalMissing += missing.length;
-  }
-}
-
-if (totalMissing === 0) {
-  console.log(`✅ All CSS classes found in built CSS (${htmlFiles.length} HTML files checked)`);
-  process.exit(0);
-} else {
-  console.log(`\n❌ Missing CSS classes found:\n`);
-  for (const { file, missing } of report) {
-    console.log(`  ${file}:`);
-    for (const cls of missing) {
-      console.log(`    - .${cls}`);
-    }
-  }
-  console.log(`\nTotal: ${totalMissing} missing class(es) across ${report.length} file(s)`);
-  console.log('\nTo fix: add these classes to src/styles/global.css @layer components or the relevant component <style> block.\n');
+if (!css.trim()) {
+  console.error('Kein CSS gefunden — weder in dist/_astro/ noch inline. Build defekt?');
   process.exit(1);
 }
+
+// Alle Klassenselektoren aus dem CSS. Escapes (\:, \/, \.) werden entfernt,
+// damit Tailwind-Utilities wie `md\:flex` als `md:flex` vergleichbar sind.
+const defined = new Set();
+for (const m of css.matchAll(/\.((?:[\w-]|\\.)+)/g)) {
+  defined.add(m[1].replace(/\\(.)/g, '$1'));
+}
+
+const stripVariants = (cls) => {
+  const parts = cls.split(':');
+  while (parts.length > 1 && VARIANTS.has(parts[0])) parts.shift();
+  return parts.join(':');
+};
+
+const missing = new Map();
+for (const f of htmlFiles) {
+  const html = readFileSync(join(DIST, f), 'utf8');
+  for (const m of html.matchAll(/class="([^"]*)"/g)) {
+    for (const raw of m[1].split(/\s+/).filter(Boolean)) {
+      if (raw.includes('[') || raw.includes(']')) continue;   // beliebige Werte
+      if (RUNTIME_ONLY.has(raw) || NO_STYLE_BY_DESIGN.has(raw)) continue;
+      const cls = stripVariants(raw);
+      if (defined.has(cls) || defined.has(raw)) continue;
+      if (!missing.has(raw)) missing.set(raw, new Set());
+      missing.get(raw).add(f);
+    }
+  }
+}
+
+if (missing.size) {
+  console.error(`CSS-Prüfung: ${missing.size} Klasse(n) ohne Regel\n`);
+  for (const [cls, files] of [...missing].sort()) {
+    console.error(`  ✗ .${cls}  →  ${[...files].join(', ')}`);
+  }
+  process.exit(1);
+}
+console.log(`✓ CSS-Prüfung: alle Klassen aus ${htmlFiles.length} Seiten haben eine Regel ` +
+            `(${defined.size} Selektoren im CSS)`);

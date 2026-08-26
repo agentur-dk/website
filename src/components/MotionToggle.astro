@@ -1,0 +1,89 @@
+---
+/**
+ * Bewegungs-Schalter (WCAG 2.2.2 „Pause, Stop, Hide").
+ *
+ * Auf der Seite laufen zwei Animationen unbegrenzt weiter: die
+ * Schreibmaschinen-Zeile im Hero und die Logo-Laufschrift. Beide starten
+ * automatisch, dauern länger als fünf Sekunden und stehen neben anderen
+ * Inhalten — damit verlangt 2.2.2 ein Bedienelement zum Anhalten.
+ * `prefers-reduced-motion` allein genügt nicht: es hilft nur Nutzern, die
+ * die Einstellung im Betriebssystem gesetzt haben.
+ *
+ * Der Zustand hängt als data-motion am <html>-Element, damit CSS und JS
+ * ihn ohne Umweg lesen können, und überlebt Seitenwechsel via localStorage.
+ */
+---
+
+<button
+  type="button"
+  class="motion-toggle"
+  data-motion-toggle
+  aria-pressed="false"
+>
+  <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24">
+    <path class="motion-toggle__pause" d="M8 5h3v14H8zm5 0h3v14h-3z" fill="currentColor" />
+    <path class="motion-toggle__play"  d="M8 5l11 7-11 7z" fill="currentColor" />
+  </svg>
+  <span data-motion-label>Animationen pausieren</span>
+</button>
+
+<script is:inline>
+  // Inline und vor dem Rendern: verhindert, dass eine pausierte Animation
+  // beim Laden kurz aufblitzt.
+  (function () {
+    try {
+      if (localStorage.getItem('dk-motion') === 'paused') {
+        document.documentElement.dataset.motion = 'paused';
+      }
+    } catch (e) { /* localStorage gesperrt — Animationen laufen normal */ }
+  })();
+</script>
+
+<script>
+  (function initMotionToggle() {
+    const found = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+    if (!found) return;
+    // Nach der Prüfung an eine nicht-nullable Konstante binden: gehoistete
+    // Funktionsdeklarationen behalten die Verengung sonst nicht.
+    const btn: HTMLButtonElement = found;
+    const label = btn.querySelector('[data-motion-label]');
+
+    function apply(paused: boolean) {
+      document.documentElement.dataset.motion = paused ? 'paused' : '';
+      btn.setAttribute('aria-pressed', String(paused));
+      if (label) label.textContent = paused ? 'Animationen abspielen' : 'Animationen pausieren';
+      try { localStorage.setItem('dk-motion', paused ? 'paused' : 'running'); } catch (e) { /* ignorieren */ }
+      // Die Schreibmaschine läuft in einer eigenen Timer-Schleife und
+      // fragt diesen Zustand bei jedem Tick ab.
+      document.dispatchEvent(new CustomEvent('dk:motionchange', { detail: { paused } }));
+    }
+
+    apply(document.documentElement.dataset.motion === 'paused');
+    btn.addEventListener('click', () => apply(btn.getAttribute('aria-pressed') !== 'true'));
+  })();
+</script>
+
+<style>
+  .motion-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* 44px Zielhöhe — deutlich über den 24px, die 2.5.8 mindestens fordert. */
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm, 4px);
+    color: var(--color-text-muted);
+    font: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+  .motion-toggle:hover { color: var(--color-text); border-color: var(--color-border-strong); }
+  .motion-toggle:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+
+  .motion-toggle__play  { display: none; }
+  :global(html[data-motion='paused']) .motion-toggle__pause { display: none; }
+  :global(html[data-motion='paused']) .motion-toggle__play  { display: inline; }
+</style>

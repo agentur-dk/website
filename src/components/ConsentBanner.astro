@@ -60,9 +60,12 @@ const { noConsent = false } = Astro.props;
       import { STORAGE_KEY, parseConsent, serializeConsent, mayLoadGA } from '../lib/consent';
 
       (function initConsent() {
-        const banner = document.getElementById('consent-banner');
+        const bannerEl = document.getElementById('consent-banner');
         const modal = document.getElementById('consent-modal');
-        if (!banner) return;
+        if (!bannerEl) return;
+        // Nach der Prüfung nicht-nullable binden — gehoistete
+        // Funktionsdeklarationen weiter unten behalten die Verengung sonst nicht.
+        const banner: HTMLElement = bannerEl;
 
         const exemptPath = /\/(datenschutz|impressum)(\.html|\/|$)/.test(window.location.pathname);
         let lastFocused: Element | null = null;
@@ -76,6 +79,9 @@ const { noConsent = false } = Astro.props;
         function applyConsent(settings: { necessary: boolean; statistics: boolean }) {
           document.dispatchEvent(new CustomEvent('dk:consent', { detail: settings }));
         }
+        // Beide Ebenen sind als role="dialog" aria-modal="true" ausgezeichnet.
+        // Dann darf der Hintergrund nicht mitscrollen — lockScroll war
+        // definiert, wurde aber nie aufgerufen.
         function lockScroll() { document.body.style.overflow = 'hidden'; }
         function unlockScroll() { document.body.style.overflow = ''; }
         function getFocusables() {
@@ -92,7 +98,7 @@ const { noConsent = false } = Astro.props;
           }
         }
         function hideBanner() { banner.hidden = true; }
-        function hideModal() { if (modal) modal.hidden = true; }
+        function hideModal() { if (modal) modal.hidden = true; unlockScroll(); }
 
         const existing = getConsent();
         if (existing) {
@@ -100,6 +106,7 @@ const { noConsent = false } = Astro.props;
           applyConsent(existing);
         } else if (!exemptPath) {
           banner.hidden = false;
+          lockScroll();
           requestAnimationFrame(function() {
             const first = getFocusables()[0] as HTMLElement | undefined;
             if (first) first.focus();
@@ -136,6 +143,7 @@ const { noConsent = false } = Astro.props;
         const settingsBtn = document.getElementById('consent-open-settings');
         if (settingsBtn && modal) settingsBtn.addEventListener('click', function() {
           modal.hidden = false;
+          lockScroll();
           const first = modal.querySelector<HTMLElement>('button, input, a');
           if (first) first.focus();
         });

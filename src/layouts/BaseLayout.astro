@@ -2,24 +2,44 @@
 import '../styles/global.css';
 import ConsentBanner from '../components/ConsentBanner.astro';
 import SEO from '../components/seo/SEO.astro';
+import Fonts from '../components/seo/Fonts.astro';
+import { pageGraph, type ServiceInfo } from '../lib/schema';
 
 interface Props {
-  title?:       string;
-  description?: string;
+  /** Seiten-Slug ohne Endung; '' für die Startseite. Steuert Canonical,
+   *  Breadcrumb und die Zuordnung der FAQ-Daten. */
+  slug:         string;
+  title:        string;
+  description:  string;
   noindex?:     boolean;
   noConsent?:   boolean;
   ogImage?:     string;
+  /** Leistungsseiten liefern hier ihre Service-Daten für den JSON-LD-Graphen. */
+  service?:     ServiceInfo;
+  /** Feinerer Schema.org-Typ der Seite (Standard: WebPage). */
+  pageType?:    'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage';
+  /** Zusätzliche JSON-LD-Knoten (z. B. ItemList auf der Referenzseite). */
+  schemaExtra?: Record<string, unknown>[];
 }
 
 const {
+  slug,
   title,
   description,
   noindex   = false,
   noConsent = false,
   ogImage,
+  service,
+  pageType,
+  schemaExtra,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
+
+// Ein einziger @graph statt mehrerer loser JSON-LD-Blöcke: so erkennen
+// Crawler und LLM-Parser die Beziehungen zwischen Seite, Anbieter,
+// Breadcrumb, FAQ und Leistung.
+const graph = pageGraph({ slug, title, description, pageType, service, extra: schemaExtra });
 ---
 
 <!doctype html>
@@ -29,39 +49,27 @@ const base = import.meta.env.BASE_URL;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <SEO
-      title={title}
-      description={description}
-      noindex={noindex}
-      ogImage={ogImage}
-    />
+    <SEO slug={slug} title={title} description={description} noindex={noindex} ogImage={ogImage} />
 
     <meta name="theme-color" content="#121212" />
-
-    <slot name="head" />
-
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
 
-    <!-- Preload critical fonts -->
-    <link
-      rel="preload"
-      href={`${base}fonts/space-grotesk-v3-latin-700.woff2`}
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href={`${base}fonts/manrope-v20-latin-400.woff2`}
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <Fonts />
+
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />
+
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
     <ConsentBanner noConsent={noConsent} />
     <slot />
+
+    <button type="button" class="back-to-top" aria-label="Nach oben scrollen" hidden>
+      <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
+        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z" fill="currentColor"/>
+      </svg>
+    </button>
 
     <script>
       // Scroll reveal
@@ -125,12 +133,6 @@ const base = import.meta.env.BASE_URL;
         });
       })();
     </script>
-
-    <button type="button" class="back-to-top" aria-label="Nach oben scrollen" hidden>
-      <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
-        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z" fill="currentColor"/>
-      </svg>
-    </button>
   </body>
 </html>
 
@@ -138,6 +140,7 @@ const base = import.meta.env.BASE_URL;
   [data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
   [data-reveal].is-visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { [data-reveal] { opacity: 1; transform: none; } }
+
   .back-to-top {
     position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300;
     width: 44px; height: 44px; border-radius: 50%;

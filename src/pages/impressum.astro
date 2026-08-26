@@ -5,11 +5,14 @@ import Footer from '../components/Footer.astro';
 
 const base = import.meta.env.BASE_URL;
 
-const title = 'Impressum – agentur dk';
-const description = 'Impressum von agentur dk – design & kommunikation, Sachsenring 57, 50677 Köln. Alle Pflichtangaben nach §5 DDG.';
 ---
 
-<BaseLayout noConsent={true} title={title} description={description}>
+<BaseLayout
+  slug="impressum"
+  title="Impressum | agentur dk"
+  description="Impressum von agentur dk – design & kommunikation, Sachsenring 57, 50677 Köln. Alle Pflichtangaben nach § 5 DDG."
+  noConsent={true}
+>
   <Header />
   <main id="main-content" tabindex="-1">
 

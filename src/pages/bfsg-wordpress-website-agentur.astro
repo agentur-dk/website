@@ -10,75 +10,16 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="Barrierefreie WordPress-Website (BFSG) – agentur dk"
-  description="BFSG-konforme WordPress-Websites aus Köln: EN 301 549, WCAG 2.2 AA, Selbstcheck und professionelle Umsetzung. Jetzt kostenlos prüfen lassen."
+  slug="bfsg-wordpress-website-agentur"
+  title="Barrierefreie WordPress-Website nach BFSG | agentur dk"
+  description="BFSG-konforme WordPress-Websites aus Köln nach EN 301 549 und WCAG 2.2 AA: Audit, Umsetzung, Erklärung. Kostenloser Selbstcheck in zwei Minuten."
+    service={{
+      name:        'BFSG-konforme WordPress-Entwicklung',
+      description: 'Accessibility-Audit, technische Umsetzung nach EN 301 549 / WCAG 2.2 AA und Erstellung der Barrierefreiheitserklärung nach § 12 BFSG.',
+      serviceType: 'Web Accessibility Consulting',
+      offers: ['Accessibility-Audit', 'WCAG 2.2 AA Umsetzung', 'Barrierefreiheits-Erklärung', 'Tastaturbedienbarkeit', 'Screenreader-Optimierung', 'Laufende Überwachung'],
+    }}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Barrierefreie WordPress-Websites nach BFSG",
-      "provider": {
-        "@type": "Organization",
-        "name": "agentur dk – design & kommunikation",
-        "url": "https://dk-dk.de"
-      },
-      "description": "Entwicklung BFSG-konformer WordPress-Websites nach EN 301 549 und WCAG 2.2 AA. Accessibility-Audit, technische Umsetzung und Barrierefreiheits-Erklärung.",
-      "areaServed": { "@type": "Country", "name": "DE" },
-      "serviceType": "Web Development",
-      "url": "https://dk-dk.de/bfsg-wordpress-website-agentur"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Gilt das BFSG auch für kleine Unternehmen?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja, das BFSG gilt grundsätzlich für alle privaten Anbieter digitaler Produkte und Dienstleistungen in der EU, die sich an Verbraucher richten. Eine Ausnahme gilt für Kleinstunternehmen mit weniger als 10 Beschäftigten und einem Jahresumsatz bzw. einer Bilanzsumme von maximal 2 Millionen Euro – diese sind von den Dienstleistungspflichten weitgehend befreit."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Was passiert, wenn ich das BFSG ignoriere?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Verstöße gegen das BFSG können zu Abmahnungen durch Wettbewerber und Verbraucherschutzverbände sowie zu Bußgeldern bis zu 100.000 € führen. Zudem kann die Marktüberwachungsbehörde den Betrieb der Website oder des Online-Shops untersagen."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Kann unser bestehendes WordPress-Theme angepasst werden?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "In vielen Fällen ja. Wir analysieren Ihr Theme und die eingesetzten Plugins auf Barrierefreiheit und erarbeiten einen priorisierten Maßnahmenplan. Je nach Theme-Qualität und Komplexität empfehlen wir entweder eine gezielte Anpassung oder einen Neubau mit barrierefreier Basis."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Was ist der Unterschied zwischen BFSG und BITV?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Die BITV (Barrierefreie Informationstechnik-Verordnung) gilt für öffentliche Stellen wie Behörden und staatliche Einrichtungen. Das BFSG (Barrierefreiheitsstärkungsgesetz) weitet diese Pflicht auf private Unternehmen im elektronischen Geschäftsverkehr aus und setzt den European Accessibility Act (EAA) in deutsches Recht um."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Wie lange dauert eine BFSG-Konformitätsprüfung?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Eine vollständige Prüfung dauert je nach Seitenumfang 1–3 Werktage. Sie umfasst einen automatisierten technischen Scan sowie einen manuellen Audit mit Screenreader und Tastatur. Anschließend erhalten Sie einen detaillierten Maßnahmenplan mit Priorisierung."
-          }
-        }
-      ]
-    }
-    </script>
-  </Fragment>
 
   <Header />
 
@@ -214,31 +155,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: FAQ -->
-    <FaqAccordion
-      heading="Häufige Fragen zur BFSG-Konformität"
-      items={[
-        {
-          question: "Gilt das BFSG auch für kleine Unternehmen?",
-          answer: "Ja, das BFSG gilt grundsätzlich für alle privaten Anbieter digitaler Produkte und Dienstleistungen in der EU, die sich an Verbraucher richten. Eine Ausnahme gilt für Kleinstunternehmen mit weniger als 10 Beschäftigten und einem Jahresumsatz bzw. einer Bilanzsumme von maximal 2 Millionen Euro — diese sind von den Dienstleistungspflichten weitgehend befreit. Empfehlenswert ist dennoch eine Überprüfung, da die Grenzen im Einzelfall fließend sein können.",
-        },
-        {
-          question: "Was passiert, wenn ich das BFSG ignoriere?",
-          answer: "Verstöße gegen das BFSG können zu Abmahnungen durch Wettbewerber, Verbände und Verbraucherschutzorganisationen führen. Zusätzlich drohen Bußgelder von bis zu 100.000 €. Die Marktüberwachungsbehörde ist befugt, den Betrieb der nicht konformen Website oder des Online-Shops zu untersagen. Ein frühzeitiges Handeln schützt Sie vor diesen Risiken.",
-        },
-        {
-          question: "Kann unser bestehendes WordPress-Theme angepasst werden?",
-          answer: "In vielen Fällen ja. Wir analysieren Ihr Theme und die eingesetzten Plugins auf Barrierefreiheit und erarbeiten einen priorisierten Maßnahmenplan. Je nach Theme-Qualität und Komplexität empfehlen wir entweder eine gezielte Anpassung des bestehenden Themes oder einen Neubau auf barrierefreier Basis. Accessibility-Overlays und Plugins sind in der Regel keine rechtssichere Lösung — sie beheben nicht die strukturellen Probleme im Code.",
-        },
-        {
-          question: "Was ist der Unterschied zwischen BFSG und BITV?",
-          answer: "Die BITV (Barrierefreie Informationstechnik-Verordnung) gilt für öffentliche Stellen wie Behörden, Hochschulen und staatliche Einrichtungen. Das BFSG (Barrierefreiheitsstärkungsgesetz) weitet diese Pflicht auf private Unternehmen im elektronischen Geschäftsverkehr aus und setzt den European Accessibility Act (EAA) in deutsches Recht um. Beide Standards beziehen sich auf die technischen Anforderungen der EN 301 549 und WCAG.",
-        },
-        {
-          question: "Wie lange dauert eine BFSG-Konformitätsprüfung?",
-          answer: "Eine vollständige Prüfung dauert je nach Seitenumfang 1–3 Werktage. Sie umfasst einen automatisierten technischen Scan sowie einen manuellen Audit mit Screenreader (NVDA, VoiceOver) und Tastaturnavigation nach EN 301 549. Anschließend erhalten Sie einen detaillierten Maßnahmenplan mit Priorisierung und Aufwandsschätzung.",
-        },
-      ]}
-    />
+    <FaqAccordion slug="bfsg-wordpress-website-agentur" />
 
     <!-- SECTION: Weitere Leistungen -->
     <section class="section section--sm" aria-label="Weitere Leistungen">

@@ -4,98 +4,88 @@
 @import "./tokens/spacing.css";
 
 /* ============================================================
-   LOCAL FONTS — no CDN
-   ============================================================ */
-@font-face {
-  font-family: 'Space Grotesk';
-  src: url('/website/fonts/space-grotesk-v3-latin-400.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  src: url('/website/fonts/space-grotesk-v3-latin-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  src: url('/website/fonts/space-grotesk-v3-latin-700.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Manrope';
-  src: url('/website/fonts/manrope-v20-latin-400.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Manrope';
-  src: url('/website/fonts/manrope-v20-latin-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Manrope';
-  src: url('/website/fonts/manrope-v20-latin-600.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Manrope';
-  src: url('/website/fonts/manrope-v20-latin-700.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Roboto Mono';
-  src: url('/website/fonts/roboto-mono-v31-latin-300.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Roboto Mono';
-  src: url('/website/fonts/roboto-mono-v31-latin-regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Roboto Mono';
-  src: url('/website/fonts/roboto-mono-v31-latin-700.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* ============================================================
-   Metric-Fallback-Fonts — reduzieren CLS bis Webfonts laden.
-   Die eigentlichen Fonts bleiben lokal aus public/fonts/.
+   Metric-Fallback-Fonts — halten das Layout beim Font-Swap stabil.
+   Erzeugt von `node tools/font-metrics.mjs --write`, nicht von Hand
+   ändern. Je Schriftschnitt eine eigene Face: ein gemeinsames
+   size-adjust pro Familie trifft nur ein Gewicht, die übrigen springen.
    ============================================================ */
 @font-face {
   font-family: 'Manrope Fallback';
   src: local('Arial');
-  ascent-override:   102%;
-  descent-override:   30%;
-  line-gap-override:   0%;
-  size-adjust:        103%;
+  font-weight: 400;
+  ascent-override:   102.3%;
+  descent-override:  28.68%;
+  line-gap-override: 0%;
+  size-adjust:       104.6%;
+}
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial');
+  font-weight: 500;
+  ascent-override:   103.07%;
+  descent-override:  28.9%;
+  line-gap-override: 0%;
+  size-adjust:       103.81%;
+}
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial');
+  font-weight: 600;
+  ascent-override:   108.75%;
+  descent-override:  30.49%;
+  line-gap-override: 0%;
+  size-adjust:       98.39%;
+}
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial');
+  font-weight: 700;
+  ascent-override:   106.21%;
+  descent-override:  29.78%;
+  line-gap-override: 0%;
+  size-adjust:       100.74%;
 }
 @font-face {
   font-family: 'Space Grotesk Fallback';
   src: local('Arial');
-  ascent-override:    98%;
-  descent-override:   28%;
-  line-gap-override:   0%;
-  size-adjust:        99%;
+  font-weight: 400;
+  ascent-override:   91.07%;
+  descent-override:  26.95%;
+  line-gap-override: 0%;
+  size-adjust:       107.61%;
+}
+@font-face {
+  font-family: 'Space Grotesk Fallback';
+  src: local('Arial');
+  font-weight: 500;
+  ascent-override:   94.69%;
+  descent-override:  28.02%;
+  line-gap-override: 0%;
+  size-adjust:       103.5%;
+}
+@font-face {
+  font-family: 'Space Grotesk Fallback';
+  src: local('Arial');
+  font-weight: 700;
+  ascent-override:   98.14%;
+  descent-override:  29.04%;
+  line-gap-override: 0%;
+  size-adjust:       99.86%;
+}
+
+/* ============================================================
+   Umbruchverhalten — deutsche Komposita
+   „Datenschutzerklärung" ist als Wort breiter als ein 320px-Viewport
+   und erzwang horizontales Scrollen (WCAG 1.4.10 Reflow). Silbentrennung
+   greift, weil <html lang="de"> gesetzt ist; overflow-wrap fängt den Rest
+   (URLs, E-Mail-Adressen) ab.
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+p, li, dd, dt, address, figcaption {
+  overflow-wrap: break-word;
 }
 
 /* ============================================================
@@ -209,6 +199,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* WCAG 2.4.11: der sticky Header ist 64px hoch und würde Anker-Ziele und
+     per Tab angesprungene Elemente sonst verdecken. */
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -381,7 +374,12 @@ a:not([class]):focus-visible {
     border: 2px solid transparent;
     cursor: pointer;
     transition: background-color 250ms ease, border-color 250ms ease, color 250ms ease, opacity 250ms ease;
-    white-space: nowrap;
+    /* Kein nowrap: mit Versalien und 0.06em Sperrung überschritten lange
+       deutsche Labels bei 320px die Viewport-Breite und erzwangen
+       horizontales Scrollen (WCAG 1.4.10 Reflow). */
+    max-width: 100%;
+    text-align: center;
+    text-wrap: balance;
     user-select: none;
   }
   .btn:focus-visible {
@@ -499,6 +497,9 @@ a:not([class]):focus-visible {
     align-items: center;
     gap: 0.375rem;
     margin-top: 1rem;
+    /* WCAG 2.5.8: eigenständige Schaltfläche, daher mindestens 24px hoch. */
+    min-height: 24px;
+    padding-block: 0.125rem;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--color-primary-light);
@@ -609,10 +610,13 @@ a:not([class]):focus-visible {
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
-  .case-card__visual--blue    { background-color: var(--color-primary); }
-  .case-card__visual--green   { background-color: var(--color-success); }
+  /* Eigene, abgedunkelte Kachelfarben: --color-success (2.3:1) und
+     --color-accent (3.4:1) rissen mit weißer Schrift das 4.5:1-Minimum
+     nach WCAG 1.4.3. Die Werte hier liegen alle über 5:1. */
+  .case-card__visual--blue    { background-color: #1C60AD; }
+  .case-card__visual--green   { background-color: #2b7a4b; }
   .case-card__visual--purple  { background-color: #412848; }
-  .case-card__visual--teal    { background-color: var(--color-accent); }
+  .case-card__visual--teal    { background-color: #116b7a; }
   .case-card__initials {
     font-size: 0.6875rem;
     text-align: center;
@@ -645,6 +649,9 @@ a:not([class]):focus-visible {
     margin: 0;
   }
   .case-card__link {
+    /* WCAG 2.5.8: eigenständige Schaltfläche, mindestens 24px hoch. */
+    min-height: 24px;
+    padding-block: 0.125rem;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--color-primary-light);
@@ -793,6 +800,8 @@ a:not([class]):focus-visible {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
   }
+  html[data-motion='paused'] .typewriter-caret { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) { .typewriter-caret { animation: none; } }
 
   /* ----------------------------------------------------------
      Section label / title (generic page patterns)
@@ -1044,12 +1053,25 @@ a:not([class]):focus-visible {
   }
 
   /* Text links in content */
+  /* .text-link war fest auf helle Abschnitte verdrahtet: --color-primary-on-light
+     (#1c60ad) erreicht auf dem dunklen Grund nur 2,97:1 und verfehlt damit
+     WCAG 1.4.3 deutlich. Die Klasse richtet sich jetzt nach dem Abschnitt,
+     in dem sie steht — sonst wird jede künftige Verwendung auf Dunkel zur
+     stillen Barriere. */
   .text-link {
-    color: var(--color-primary-on-light);
+    color: var(--color-primary-light);   /* 5,57:1 auf --color-bg */
     text-decoration: underline;
     text-underline-offset: 2px;
   }
   .text-link:hover {
+    color: var(--color-text);
+  }
+  .section--light .text-link,
+  .bg-light .text-link {
+    color: var(--color-primary-on-light); /* 5,84:1 auf --color-bg-light */
+  }
+  .section--light .text-link:hover,
+  .bg-light .text-link:hover {
     color: var(--color-text-on-light);
   }
 

@@ -9,75 +9,16 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="WordPress-Entwicklung & Relaunch aus Köln – agentur dk"
-  description="Professionelle WordPress-Entwicklung, Relaunch und WooCommerce-Shops aus Köln. Barrierefrei, performant, Core Web Vitals optimiert. Jetzt kostenlos beraten lassen."
+  slug="wordpress-entwicklung"
+  title="WordPress-Entwicklung & Relaunch Köln | agentur dk"
+  description="WordPress-Relaunch, Neuentwicklung und WooCommerce aus Köln. Barrierefrei nach BFSG, schnell nach Core Web Vitals, wartbar vom eigenen Team."
+    service={{
+      name:        'WordPress-Entwicklung',
+      description: 'Relaunch, Neuentwicklung, WooCommerce-Shops und Performance-Optimierung auf Basis von WordPress – barrierefrei und wartbar.',
+      serviceType: 'Web Development',
+      offers: ['Relaunch & Neuentwicklung', 'WooCommerce-Shops', 'Performance & Core Web Vitals', 'Wartung & Support', 'Landingpages', 'BFSG-Umsetzung'],
+    }}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "WordPress-Entwicklung und Relaunch",
-      "provider": {
-        "@type": "Organization",
-        "name": "agentur dk – design & kommunikation",
-        "url": "https://dk-dk.de"
-      },
-      "description": "WordPress-Relaunch, Neuentwicklung, WooCommerce-Shops und Performance-Optimierung (Core Web Vitals) durch eine Kölner Digitalagentur.",
-      "areaServed": { "@type": "Country", "name": "DE" },
-      "serviceType": "Digital Agency",
-      "url": "https://dk-dk.de/wordpress-entwicklung"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Wie lange dauert ein WordPress-Relaunch?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ein typischer Relaunch dauert 4–8 Wochen, abhängig von Umfang, Seitenzahl und Integrationen. Bei laufenden Projekten liefern wir in Wochen-Sprints sichtbare Ergebnisse – mit Zwischenständen zum Abnehmen."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Können Sie unsere bestehende WordPress-Seite übernehmen?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja. Wir analysieren Theme, Plugins und Struktur, übernehmen die Inhalte und entwickeln auf dieser Basis weiter. So bleibt Ihre SEO-Sichtbarkeit erhalten und wird gezielt ausgebaut."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Warum ist Barrierefreiheit bei WordPress wichtig?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Seit dem 28. Juni 2025 verpflichtet das BFSG viele Unternehmen zur digitalen Barrierefreiheit. Wir bauen WordPress-Seiten nach EN 301 549 und WCAG 2.2 AA – rechtssicher und für alle Nutzer zugänglich."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Optimieren Sie auch bestehende WordPress-Seiten?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja, wir verbessern Ladezeiten (Core Web Vitals), Sicherheit, Struktur und SEO bestehender Installationen – ohne Komplett-Relaunch, wenn das sinnvoll ist."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Was kostet eine WordPress-Website?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Je nach Umfang starten WordPress-Projekte bei ca. 2.500 €. Nach einem kostenlosen Erstgespräch erhalten Sie ein transparentes Festpreisangebot – ohne versteckte Kosten."
-          }
-        }
-      ]
-    }
-    </script>
-  </Fragment>
 
   <Header />
 
@@ -215,31 +156,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: FAQ -->
-    <FaqAccordion
-      heading="Häufige Fragen"
-      items={[
-        {
-          question: "Wie lange dauert ein WordPress-Relaunch?",
-          answer: "Ein typischer Relaunch dauert 4–8 Wochen, abhängig von Umfang, Seitenzahl und Integrationen. Bei laufenden Projekten liefern wir in Wochen-Sprints sichtbare Ergebnisse – mit Zwischenständen zum Abnehmen.",
-        },
-        {
-          question: "Können Sie unsere bestehende WordPress-Seite übernehmen?",
-          answer: "Ja. Wir analysieren Theme, Plugins und Struktur, übernehmen die Inhalte und entwickeln auf dieser Basis weiter. So bleibt Ihre SEO-Sichtbarkeit erhalten und wird gezielt ausgebaut.",
-        },
-        {
-          question: "Warum ist Barrierefreiheit bei WordPress wichtig?",
-          answer: "Seit dem 28. Juni 2025 verpflichtet das BFSG viele Unternehmen zur digitalen Barrierefreiheit. Wir bauen WordPress-Seiten nach EN 301 549 und WCAG 2.2 AA – rechtssicher und für alle Nutzer zugänglich.",
-        },
-        {
-          question: "Optimieren Sie auch bestehende WordPress-Seiten?",
-          answer: "Ja, wir verbessern Ladezeiten (Core Web Vitals), Sicherheit, Struktur und SEO bestehender Installationen – ohne Komplett-Relaunch, wenn das sinnvoll ist.",
-        },
-        {
-          question: "Was kostet eine WordPress-Website?",
-          answer: "Je nach Umfang starten WordPress-Projekte bei ca. 2.500 €. Nach einem kostenlosen Erstgespräch erhalten Sie ein transparentes Festpreisangebot – ohne versteckte Kosten.",
-        },
-      ]}
-    />
+    <FaqAccordion slug="wordpress-entwicklung" />
 
     <!-- SECTION: Kontakt -->
     <LeadForm page="WordPress-Entwicklung" heading="Jetzt unverbindlich anfragen" />

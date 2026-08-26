@@ -2,8 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -17,29 +16,43 @@ concurrency:
 
 jobs:
   build:
-    name: Build
+    name: Build & Gates
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          # tools/lastmod.ts liest das Datum des letzten Commits je Seite für
+          # die Sitemap. Mit dem Standard-Shallow-Checkout stünde für jede
+          # Datei derselbe Zeitpunkt — Google ignoriert solche lastmod-Werte.
+          fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Run tests
+      - name: Typen prüfen
+        run: npm run check:types
+
+      - name: Unit-Tests
         run: npm test
 
-      - name: Build site
+      - name: Build
         run: npm run build
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      # Diese drei Prüfungen arbeiten auf dist/ und brauchen keinen Browser.
+      - name: Interne Links
+        run: npm run check:links
+
+      - name: SEO-Regeln (Titles, Canonicals, JSON-LD, Sitemap)
+        run: npm run check:seo
+
+      - name: CSS-Klassen
+        run: npm run check:css
+
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
@@ -51,6 +64,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4

@@ -7,69 +7,19 @@ import LeadForm from '../components/LeadForm.astro';
 
 const base = import.meta.env.BASE_URL;
 
-const title = 'Social Recruiting mit KI – Mitarbeiter finden – agentur dk';
-const description = 'Social Recruiting aus Köln: Fachkräfte über LinkedIn, Meta & Co. gewinnen – mit KI-gestützter Zielgruppenansprache und messbarem Recruiting-Erfolg.';
 ---
 
-<BaseLayout title={title} description={description}>
-  <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Social Recruiting mit KI",
-      "provider": {
-        "@type": "Organization",
-        "name": "agentur dk – design & kommunikation",
-        "url": "https://dk-dk.de"
-      },
-      "description": "Mitarbeitergewinnung über zielgenaue Social-Media-Kampagnen mit KI-gestützter Zielgruppenansprache – für Fachkräfte in Köln, NRW und deutschlandweit.",
-      "areaServed": { "@type": "Country", "name": "DE" },
-      "serviceType": "Digital Agency",
-      "url": "https://dk-dk.de/social-recruiting"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Was ist Social Recruiting?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Social Recruiting nutzt Social-Media-Plattformen wie LinkedIn, Instagram und Facebook, um passende Kandidatinnen und Kandidaten aktiv anzusprechen – statt nur auf Bewerbungen zu warten."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Wie hilft KI beim Recruiting?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "KI unterstützt bei der Zielgruppenanalyse, der Personalisierung von Ansprachen und der Optimierung von Kampagnen – so erreichst Sie genau die Menschen, die zu Ihrer Stelle passen."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Für welche Positionen funktioniert Social Recruiting?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Von Fachkräften und Spezialisten bis zu Führungspositionen – wir entwickeln Kampagnen für alle Zielgruppen, vom Gesundheitswesen bis zur IT und dem Handwerk."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Wie misst Sie den Recruiting-Erfolg?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Wir tracken Reichweite, Klicks, Bewerbungen und Cost per Application. Sie wissen jederzeit, was Ihre Recruiting-Maßnahmen kosten und was sie bringen."
-          }
-        }
-      ]
-    }
-    </script>
-  </Fragment>
+<BaseLayout
+  slug="social-recruiting"
+  title="Social Recruiting Köln – Fachkräfte finden | agentur dk"
+  description="Fachkräfte über LinkedIn, Meta und Instagram gewinnen – mit KI-gestützter Zielgruppenansprache und Kampagnen, die Bewerbungen bringen."
+    service={{
+      name:        'Social Recruiting',
+      description: 'Mitarbeitergewinnung über zielgenaue Social-Media-Kampagnen mit KI-gestützter Zielgruppenanalyse und Employer Branding.',
+      serviceType: 'Recruitment Marketing',
+      offers: ['Kampagnen auf LinkedIn', 'Meta & Instagram Recruiting', 'KI-gestützte Zielgruppen', 'Employer Branding', 'Kreative & Texte', 'Reporting & Optimierung'],
+    }}
+>
 
   <Header />
   <main id="main-content" tabindex="-1">
@@ -105,7 +55,7 @@ const description = 'Social Recruiting aus Köln: Fachkräfte über LinkedIn, Me
             <p>Wir entwickeln Recruiting-Kampagnen, die genau die Menschen erreichen, die zu Ihrem Unternehmen und Ihrer Stelle passen.</p>
           </div>
           <div class="section__col">
-            <h3 class="section__subheading">Was wir für Sie tust</h3>
+            <h3 class="section__subheading">Was wir für Sie tun</h3>
             <ul class="checklist">
               <li class="checklist__item">Zielgruppenanalyse: Wer passt zu Ihrer Stelle?</li>
               <li class="checklist__item">Personalisierte Ansprache statt Massen-Posting</li>
@@ -198,15 +148,7 @@ const description = 'Social Recruiting aus Köln: Fachkräfte über LinkedIn, Me
       </div>
     </section>
 
-    <FaqAccordion
-      heading="Häufige Fragen"
-      items={[
-        { question: 'Was ist Social Recruiting?', answer: 'Social Recruiting nutzt Social-Media-Plattformen wie LinkedIn, Instagram und Facebook, um passende Kandidatinnen und Kandidaten aktiv anzusprechen – statt nur auf Bewerbungen zu warten.' },
-        { question: 'Wie hilft KI beim Recruiting?', answer: 'KI unterstützt bei der Zielgruppenanalyse, der Personalisierung von Ansprachen und der Optimierung von Kampagnen – so erreichst Sie genau die Menschen, die zu Ihrer Stelle passen.' },
-        { question: 'Für welche Positionen funktioniert Social Recruiting?', answer: 'Von Fachkräften und Spezialisten bis zu Führungspositionen – wir entwickeln Kampagnen für alle Zielgruppen, vom Gesundheitswesen bis zur IT und dem Handwerk.' },
-        { question: 'Wie misst Sie den Recruiting-Erfolg?', answer: 'Wir tracken Reichweite, Klicks, Bewerbungen und Cost per Application. Sie wissen jederzeit, was Ihre Recruiting-Maßnahmen kosten und was sie bringen.' },
-      ]}
-    />
+    <FaqAccordion slug="social-recruiting" />
 
     <LeadForm page="Social Recruiting" heading="Jetzt unverbindlich anfragen" />
 
