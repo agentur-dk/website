@@ -39,8 +39,24 @@ jobs:
       - name: Unit-Tests
         run: npm test
 
+      # Preview-Deploy ohne Custom Domain: dk-dk.de zeigt weiterhin per DNS auf
+      # den alten WordPress-Host, die Domain steht hier also noch nicht zur
+      # Verfügung. GitHub Pages liefert stattdessen unter /website/ aus —
+      # deshalb müssen site und base passend gesetzt werden, sonst zeigen
+      # alle Asset- und Link-Pfade ins Leere.
+      # Für den späteren Go-live: diese beiden env-Zeilen und den
+      # CNAME-Schritt unten entfernen, dann greifen die Defaults (dk-dk.de, /).
       - name: Build
         run: npm run build
+        env:
+          SITE_URL: https://agentur-dk.github.io
+          BASE_PATH: /website/
+
+      # public/CNAME würde die Custom Domain auf dk-dk.de setzen und
+      # agentur-dk.github.io/website/ dorthin umleiten — also auf die alte
+      # Seite. Die Datei bleibt im Repo, nur nicht im Preview-Artefakt.
+      - name: CNAME aus dem Preview-Build entfernen
+        run: rm -f dist/CNAME
 
       # Diese drei Prüfungen arbeiten auf dist/ und brauchen keinen Browser.
       - name: Interne Links
