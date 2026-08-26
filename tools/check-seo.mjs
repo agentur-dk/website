@@ -24,7 +24,7 @@ import { join } from 'path';
 const DIST = 'dist';
 const MAX_TITLE = 60;
 const DESC_MIN = 70, DESC_MAX = 155;
-/** Seiten, die bewusst nicht indexiert werden. */
+/** Seiten, die auch nach der Veröffentlichung nicht indexiert werden. */
 const NOINDEX = new Set(['404.html']);
 
 if (!existsSync(DIST)) {
@@ -44,9 +44,22 @@ const fail = (page, msg) => problems.push(`${page}: ${msg}`);
 const files = readdirSync(DIST).filter((f) => f.endsWith('.html'));
 const titles = new Map(), descs = new Map();
 
+/**
+ * Ist die Indexierungssperre aktiv? Wird am Build abgelesen statt aus der
+ * Konfiguration importiert — geprüft wird, was tatsächlich ausgeliefert wird.
+ *
+ * Im gesperrten Zustand kehrt sich die Prüfrichtung um: dann ist nicht mehr
+ * ein versehentliches `noindex` der Fehler, sondern eine Seite, die es
+ * verloren hat. Ohne diese Umkehrung könnte die Sperre unbemerkt aufreißen.
+ */
+const staging = /name="robots" content="noindex/.test(readFileSync(join(DIST, 'index.html'), 'utf8'));
+if (staging) {
+  console.log('Indexierungssperre ist aktiv — es wird geprüft, dass sie lückenlos greift.\n');
+}
+
 for (const file of files) {
   const html = readFileSync(join(DIST, file), 'utf8');
-  const noindex = NOINDEX.has(file);
+  const noindex = staging || NOINDEX.has(file);
 
   // ---- Title ----
   const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1];
@@ -103,6 +116,7 @@ for (const file of files) {
   const robots = html.match(/<meta name="robots" content="([^"]*)"/i)?.[1] ?? '';
   if (noindex && !robots.includes('noindex')) fail(file, 'sollte noindex sein, ist es aber nicht');
   if (!noindex && robots.includes('noindex')) fail(file, 'ist versehentlich auf noindex gesetzt');
+  if (staging && !robots.includes('nofollow')) fail(file, 'noindex ohne nofollow während der Sperre');
 
   // ---- JSON-LD ----
   const ld = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
@@ -131,10 +145,25 @@ for (const file of files) {
   }
 }
 
-// ---- Sitemap deckt alle indexierbaren Seiten ab ----
+// ---- Sitemap ----
 const sitemap = existsSync(join(DIST, 'sitemap.xml')) ? readFileSync(join(DIST, 'sitemap.xml'), 'utf8') : '';
+const robotsTxt = existsSync(join(DIST, 'robots.txt')) ? readFileSync(join(DIST, 'robots.txt'), 'utf8') : '';
+const llmsTxt = existsSync(join(DIST, 'llms.txt')) ? readFileSync(join(DIST, 'llms.txt'), 'utf8') : '';
+
 if (!sitemap) problems.push('sitemap.xml fehlt');
-else {
+else if (staging) {
+  // Während der Sperre müssen alle vier Kanäle dichthalten, nicht nur das
+  // Meta-Tag. Jede einzelne Lücke reicht, damit Inhalte doch auftauchen.
+  if (/<loc>/.test(sitemap)) problems.push('sitemap.xml listet URLs, obwohl die Sperre aktiv ist');
+  if (/^\s*Sitemap:/m.test(robotsTxt)) problems.push('robots.txt verweist auf die Sitemap, obwohl die Sperre aktiv ist');
+  for (const ua of ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'CCBot']) {
+    const block = robotsTxt.split(/\n\s*\n/).find((b) => b.includes(`User-agent: ${ua}`));
+    if (!block) problems.push(`robots.txt nennt ${ua} nicht`);
+    else if (!/Disallow: \//.test(block)) problems.push(`robots.txt sperrt ${ua} nicht aus`);
+  }
+  if (!/nicht veröffentlicht/i.test(llmsTxt)) problems.push('llms.txt liefert weiterhin Inhalte aus');
+  if (/## Leistungen/.test(llmsTxt)) problems.push('llms.txt enthält die vollständige Faktensammlung');
+} else {
   for (const file of files) {
     if (NOINDEX.has(file)) {
       if (sitemap.includes(`/${file}`)) problems.push(`sitemap.xml enthält die noindex-Seite ${file}`);
@@ -150,4 +179,5 @@ if (problems.length) {
   for (const p of problems) console.error(`  ✗ ${p}`);
   process.exit(1);
 }
-console.log(`✓ SEO-Prüfung: ${files.length} Seiten ohne Beanstandung`);
+console.log(`✓ SEO-Prüfung: ${files.length} Seiten ohne Beanstandung` +
+            (staging ? ' — Indexierungssperre greift auf allen vier Kanälen' : ''));

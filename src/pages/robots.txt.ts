@@ -7,7 +7,7 @@
  * `User-agent: *`-Gruppe nicht als Freigabe werten.
  */
 import type { APIRoute } from 'astro';
-import { SITE_URL, BASE_PATH } from '../config/site.config';
+import { SITE_URL, BASE_PATH, NOINDEX_ALL } from '../config/site.config';
 
 const AI_CRAWLERS = [
   'GPTBot',            // OpenAI – Training
@@ -29,18 +29,41 @@ const AI_CRAWLERS = [
 ];
 
 export const GET: APIRoute = () => {
-  const body = [
+  const header = [
     '# robots.txt — agentur dk',
     '# Generiert aus src/pages/robots.txt.ts, nicht von Hand pflegen.',
     '',
-    'User-agent: *',
-    'Allow: /',
-    '',
-    '# KI-Crawler ausdrücklich willkommen (GEO)',
-    ...AI_CRAWLERS.flatMap((ua) => [`User-agent: ${ua}`, 'Allow: /', '']),
-    `Sitemap: ${SITE_URL}${BASE_PATH}sitemap.xml`,
-    '',
-  ].join('\n');
+  ];
 
-  return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+  const body = NOINDEX_ALL
+    ? [
+        ...header,
+        '# Die Seite ist noch nicht veröffentlicht.',
+        '#',
+        '# Suchmaschinen dürfen bewusst weiter crawlen: nur so sehen sie das',
+        '# "noindex" im Seitenkopf, das die eigentliche Sperre ist. Ein',
+        '# "Disallow: /" würde das verhindern — die URL könnte dann trotzdem',
+        '# als reiner Link im Index erscheinen, sobald jemand darauf verweist.',
+        '',
+        'User-agent: *',
+        'Allow: /',
+        '',
+        '# KI-Crawler dagegen vollständig aussperren: sie werten kein "noindex"',
+        '# aus, für sie ist allein diese Datei maßgeblich.',
+        ...AI_CRAWLERS.flatMap((ua) => [`User-agent: ${ua}`, 'Disallow: /', '']),
+        '# Keine Sitemap, solange nichts indexiert werden soll.',
+        '',
+      ]
+    : [
+        ...header,
+        'User-agent: *',
+        'Allow: /',
+        '',
+        '# KI-Crawler ausdrücklich willkommen (GEO)',
+        ...AI_CRAWLERS.flatMap((ua) => [`User-agent: ${ua}`, 'Allow: /', '']),
+        `Sitemap: ${SITE_URL}${BASE_PATH}sitemap.xml`,
+        '',
+      ];
+
+  return new Response(body.join('\n'), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 };

@@ -4,6 +4,19 @@ Website der agentur dk – design & kommunikation, Köln.
 Statisch gebaut mit Astro, gehostet auf GitHub Pages unter der Custom Domain
 **https://dk-dk.de**.
 
+## ⚠️ Die Seite ist zurzeit für Suchmaschinen gesperrt
+
+Solange sie im Aufbau ist, trägt jede Seite `noindex, nofollow`, KI-Crawler
+sind ausgesperrt, die Sitemap ist leer und `llms.txt` liefert nur einen Hinweis.
+
+**Zum Live-Schalten:** in `src/config/site.config.ts` die Konstante
+`INDEXIERUNG_ERLAUBT` auf `true` setzen. Das ist die einzige Stelle — Meta-Tags,
+robots.txt, Sitemap und llms.txt hängen alle daran.
+Für einen einzelnen Testbuild genügt `SITE_INDEXABLE=true npm run build`.
+
+`npm run check:seo` prüft in beiden Zuständen: solange die Sperre steht, dass sie
+auf allen vier Kanälen lückenlos greift; danach, dass keine Reste zurückbleiben.
+
 ## Stack
 
 | Technologie | Version | Rolle |

@@ -7,7 +7,7 @@
  * Canonical zeigte auf die GitHub-Pages-URL, während JSON-LD und llms.txt
  * dk-dk.de nannten — widersprüchliche Signale für Crawler.
  */
-import { siteConfig, absolute, SITE_URL } from '../../config/site.config';
+import { siteConfig, absolute, SITE_URL, NOINDEX_ALL } from '../../config/site.config';
 
 interface Props {
   /** Seiten-Slug ohne Endung, '' für die Startseite. */
@@ -32,13 +32,22 @@ const {
 
 const canonical       = canonicalProp ?? absolute(slug);
 const resolvedOgImage = ogImage ?? `${SITE_URL}/${siteConfig.ogImage}`;
+
+// Solange die Indexierungssperre steht, überschreibt sie jede Seiteneinstellung.
+const blockIndex = NOINDEX_ALL || noindex;
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
 
-{noindex
-  ? <meta name="robots" content="noindex, follow" />
+{blockIndex
+  ? <>
+      <meta name="robots" content="noindex, nofollow" />
+      {/* googlebot und bingbot zusätzlich einzeln ansprechen: manche Dienste
+          werten nur die auf sie gemünzte Direktive aus. */}
+      <meta name="googlebot" content="noindex, nofollow" />
+      <meta name="bingbot"   content="noindex, nofollow" />
+    </>
   : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
 
 <link rel="canonical" href={canonical} />

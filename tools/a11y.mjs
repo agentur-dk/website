@@ -26,6 +26,33 @@ const ALL_PAGES = [
 const argPages = process.argv.find((a) => a.startsWith('--pages='));
 const pages = argPages ? argPages.split('=')[1].split(',') : ALL_PAGES;
 
+/**
+ * Die Seite blendet Abschnitte beim Scrollen mit einer Opazitäts-Transition
+ * ein. Misst axe mitten in dieser Transition, liest es Mischfarben statt der
+ * tatsächlichen und meldet Kontrastwerte wie 1,02 — Text, der in Wahrheit bei
+ * 7,4 : 1 liegt. Das ist nicht nur Fehlalarm: eine Prüfung, die zufällig
+ * anschlägt, verdeckt irgendwann einen echten Befund.
+ *
+ * Deshalb vor jeder Messung: Bewegung abschalten, Einblendungen sofort in den
+ * Endzustand versetzen, Transitionen auf null.
+ */
+const SETTLE = `
+  *, *::before, *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+`;
+
+async function settle(page) {
+  await page.addStyleTag({ content: SETTLE });
+  await page.evaluate(() => {
+    document.documentElement.dataset.motion = 'paused';
+    document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-visible'));
+  });
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+}
+
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
 const page = await ctx.newPage();
@@ -50,7 +77,9 @@ for (const name of pages) {
 
   for (const [state, setup] of states) {
     if (state !== 'default') await page.reload({ waitUntil: 'networkidle' });
+    await settle(page);
     await setup();
+    await settle(page);
     const { violations } = await new AxeBuilder({ page }).withTags(TAGS).analyze();
     for (const v of violations) {
       total += v.nodes.length;

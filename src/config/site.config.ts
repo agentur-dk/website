@@ -13,6 +13,33 @@ export const SITE_URL = (import.meta.env.SITE ?? 'https://dk-dk.de').replace(/\/
 /** Pfad-Präfix, unter dem die Seite ausgeliefert wird ('/' bei Custom Domain). */
 export const BASE_PATH = import.meta.env.BASE_URL ?? '/';
 
+/* ------------------------------------------------------------
+   Indexierungssperre
+   ------------------------------------------------------------
+   Solange die Seite nicht fertig ist, soll sie weder in
+   Suchergebnissen auftauchen noch von KI-Systemen eingelesen
+   werden. Der Schalter unten wirkt an allen vier Stellen
+   gleichzeitig: Meta-Robots, robots.txt, sitemap.xml und llms.txt.
+
+   ZUM LIVE-SCHALTEN: INDEXIERUNG_ERLAUBT auf true setzen.
+   Für einen einzelnen Build genügt `SITE_INDEXABLE=true npm run build`.
+
+   Wichtig zum Zusammenspiel: Suchmaschinen dürfen weiterhin
+   crawlen. Ein `Disallow: /` würde verhindern, dass Google das
+   `noindex` überhaupt zu sehen bekommt — die URL könnte dann
+   trotzdem als reiner Link im Index landen, sobald irgendwo
+   jemand darauf verweist. Das `noindex` im Seitenkopf ist das
+   wirksame Signal, und dafür muss die Seite abrufbar sein.
+   KI-Crawler werden dagegen hart ausgesperrt: sie werten kein
+   `noindex` aus, für sie zählt nur die robots.txt.
+   ------------------------------------------------------------ */
+const INDEXIERUNG_ERLAUBT = false;
+
+/** true, solange die Seite aus Suchergebnissen herausgehalten wird. */
+export const NOINDEX_ALL: boolean = import.meta.env.SITE_INDEXABLE !== undefined
+  ? import.meta.env.SITE_INDEXABLE !== 'true'
+  : !INDEXIERUNG_ERLAUBT;
+
 /** Baut aus einem Seiten-Slug einen absoluten Link (`''` → Startseite). */
 export const path = (slug: string): string =>
   slug === '' ? BASE_PATH : `${BASE_PATH}${slug}.html`;
