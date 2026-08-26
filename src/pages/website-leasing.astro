@@ -7,69 +7,19 @@ import LeadForm from '../components/LeadForm.astro';
 
 const base = import.meta.env.BASE_URL;
 
-const title = 'Website-Leasing – Professionelle Website ohne Einmalkosten | agentur dk';
-const description = 'Professionelle Website zum monatlichen Festpreis – ohne hohe Einmalkosten. Mit Wartung, Hosting und technischem Support auf Wunsch inklusive. Jetzt individuelles Angebot anfragen.';
 ---
 
-<BaseLayout noindex={true} title={title} description={description}>
-  <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Website-Leasing",
-      "provider": {
-        "@type": "Organization",
-        "name": "agentur dk – design & kommunikation",
-        "url": "https://dk-dk.de"
-      },
-      "description": "Professionelle WordPress-Website gegen monatliche Rate – ohne hohe Einmalkosten, mit Wartung und Hosting auf Wunsch.",
-      "areaServed": { "@type": "Country", "name": "DE" },
-      "serviceType": "Digital Agency",
-      "url": "https://dk-dk.de/website-leasing"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Was ist Website-Leasing?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ein Modell, bei dem Sie eine professionell entwickelte Website gegen eine monatliche Pauschale nutzen, anstatt einmalig einen hohen Betrag zu investieren. Wartung und Hosting können auf Wunsch integriert werden."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Wer ist Website-Leasing für geeignet?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Website-Leasing eignet sich besonders für KMU, Selbstständige und Gründer, die eine professionelle Online-Präsenz wünschen, ohne dabei ihr Budget auf einmal zu belasten."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Bleibe ich flexibel?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja. Inhalte können jederzeit angepasst werden. Erweiterungen sind möglich. Wir besprechen alle Änderungen direkt mit Ihnen – kein Umweg über Agenturen oder Ticketsysteme."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Ist Website-Leasing BFSG-konform?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja, wir entwickeln alle Websites – auch im Leasing-Modell – nach WCAG 2.2 AA und EN 301 549. BFSG-Konformität ist kein Aufpreis, sondern Standard."
-          }
-        }
-      ]
-    }
-    </script>
-  </Fragment>
+<BaseLayout
+  slug="website-leasing"
+  title="Website-Leasing – Website ab Monatsrate | agentur dk"
+  description="Professionelle Website zur festen Monatsrate statt hoher Einmalkosten – inklusive Wartung, Hosting und Support. Jetzt Angebot aus Köln anfragen."
+    service={{
+      name:        'Website-Leasing',
+      description: 'Professionell entwickelte WordPress-Website gegen feste monatliche Rate, inklusive Wartung, Hosting und laufender Optimierung.',
+      serviceType: 'Website Leasing',
+      offers: ['Konzeption & Design', 'Barrierefreie Umsetzung', 'Hosting & Wartung', 'Technischer Support', 'Laufende Optimierung'],
+    }}
+>
 
   <Header />
   <main id="main-content" tabindex="-1">
@@ -223,15 +173,7 @@ const description = 'Professionelle Website zum monatlichen Festpreis – ohne h
       </div>
     </section>
 
-    <FaqAccordion
-      heading="Häufige Fragen"
-      items={[
-        { question: 'Was ist Website-Leasing?', answer: 'Ein Modell, bei dem Sie eine professionell entwickelte Website gegen eine monatliche Pauschale nutzen, anstatt einmalig einen hohen Betrag zu investieren. Wartung und Hosting können auf Wunsch integriert werden.' },
-        { question: 'Wer ist Website-Leasing für geeignet?', answer: 'Website-Leasing eignet sich besonders für KMU, Selbstständige und Gründer, die eine professionelle Online-Präsenz wünschen, ohne dabei ihr Budget auf einmal zu belasten.' },
-        { question: 'Bleibe ich flexibel?', answer: 'Ja. Inhalte können jederzeit angepasst werden. Erweiterungen sind möglich. Wir besprechen alle Änderungen direkt mit Ihnen – kein Umweg über Agenturen oder Ticketsysteme.' },
-        { question: 'Ist Website-Leasing BFSG-konform?', answer: 'Ja, wir entwickeln alle Websites – auch im Leasing-Modell – nach WCAG 2.2 AA und EN 301 549. BFSG-Konformität ist kein Aufpreis, sondern Standard.' },
-      ]}
-    />
+    <FaqAccordion slug="website-leasing" />
 
     <LeadForm page="Website-Leasing" heading="Jetzt individuelles Angebot anfragen" />
 

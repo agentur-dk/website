@@ -1,22 +1,47 @@
 /* ============================================================
-   Site-Konfiguration — zentrale Datenquelle
-   Navigations-Arrays ersetzen die hardkodierten Listen
-   in Header.astro und Footer.astro.
+   Site-Konfiguration — zentrale Datenquelle.
+
+   Alles, was mehr als einmal auftaucht (Domain, Kontaktdaten,
+   Navigation, Seitenregister), steht hier. Sitemap, robots.txt,
+   llms.txt, Canonicals, Breadcrumbs und JSON-LD werden daraus
+   generiert — so können sie nicht mehr auseinanderlaufen.
    ============================================================ */
+
+/** Absolute Basis-URL ohne Slash am Ende — kommt aus astro.config.mjs. */
+export const SITE_URL = (import.meta.env.SITE ?? 'https://dk-dk.de').replace(/\/$/, '');
+
+/** Pfad-Präfix, unter dem die Seite ausgeliefert wird ('/' bei Custom Domain). */
+export const BASE_PATH = import.meta.env.BASE_URL ?? '/';
+
+/** Baut aus einem Seiten-Slug einen absoluten Link (`''` → Startseite). */
+export const path = (slug: string): string =>
+  slug === '' ? BASE_PATH : `${BASE_PATH}${slug}.html`;
+
+/** Baut aus einem Seiten-Slug eine absolute URL für Canonical/JSON-LD. */
+export const absolute = (slug: string): string => `${SITE_URL}${path(slug)}`;
 
 export const siteConfig = {
   name:        'agentur dk',
+  legalName:   'agentur dk – design & kommunikation',
   tagline:     'design & kommunikation',
-  url:         'https://agentur-dk.github.io',
-  description: 'Ihre Agentur in Köln für professionelle WordPress-Websites, Website-Leasing, barrierefreies Webdesign (BFSG), SEO/GEO und Online-Marketing. Persönlich, schnell, professionell.',
+  founder:     'Daniel Kontelis',
+  url:         SITE_URL,
+  description: 'Agentur aus Köln für barrierefreie WordPress-Websites nach BFSG, Website-Leasing, SEO/GEO und Online-Marketing. Direkt beim Inhaber, Antwort in 24 Stunden.',
   ogImage:     'images/og-image-website.png',
+  foundingYear: 2005,
   contact: {
     email:        'mail@dk-dk.de',
     phone:        '+4922198655229',
     phoneDisplay: '+49 221 986 55 229',
+    phoneSchema:  '+49-221-986-55-229',
     addressLine1: 'Sachsenring 57',
+    postalCode:   '50677',
     addressLine2: 'D-50677 Köln',
     city:         'Köln',
+    region:       'Nordrhein-Westfalen',
+    country:      'DE',
+    latitude:     50.9286,
+    longitude:    6.9604,
     hours:        'Mo–Fr 9–18 Uhr',
     linkedin:     'https://www.linkedin.com/in/daniel-kontelis/',
   },
@@ -28,17 +53,91 @@ export interface NavItem {
   external?: boolean;
 }
 
-/** Leistungen-Untermenü (Header + Footer) */
-export const leistungenNav: NavItem[] = [
-  { href: 'bfsg-wordpress-website-agentur', label: 'BFSG & Barrierefreiheit' },
-  { href: 'wordpress-entwicklung',          label: 'WordPress-Entwicklung'   },
-  { href: 'website-leasing',               label: 'Website-Leasing'          },
-  { href: 'seo-geo',                       label: 'SEO & GEO'               },
-  { href: 'online-marketing',              label: 'Online-Marketing'         },
-  { href: 'social-recruiting',             label: 'Social Recruiting'        },
-  { href: 'corporate-design',              label: 'Corporate Design'         },
-  { href: 'ki-services',                   label: 'KI-Services'              },
+/* ------------------------------------------------------------
+   Seitenregister — Quelle für Sitemap, llms.txt und Breadcrumbs.
+   `priority`/`changefreq` steuern die Sitemap, `parent` den
+   Breadcrumb-Pfad, `summary` die llms.txt-Zeile.
+   ------------------------------------------------------------ */
+export interface PageEntry {
+  slug:       string;
+  label:      string;
+  summary:    string;
+  priority:   number;
+  changefreq: 'weekly' | 'monthly' | 'yearly';
+  parent?:    string;
+  /** Aus Sitemap und Index ausgeschlossen (nur 404). */
+  noindex?:   boolean;
+}
+
+export const pages: PageEntry[] = [
+  { slug: '',      label: 'Startseite',  priority: 1.0, changefreq: 'weekly',
+    summary: 'Überblick über alle Leistungen: Website-Leasing, barrierefreie WordPress-Entwicklung, SEO/GEO, Online-Marketing.' },
+
+  { slug: 'leistungen', label: 'Leistungen', priority: 0.9, changefreq: 'monthly',
+    summary: 'Alle Leistungen im Überblick mit Einstieg in die jeweiligen Detailseiten.' },
+
+  { slug: 'bfsg-wordpress-website-agentur', label: 'BFSG & Barrierefreiheit',
+    priority: 0.9, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'BFSG-konforme WordPress-Websites nach EN 301 549 / WCAG 2.2 AA: Audit, Umsetzung, Barrierefreiheitserklärung. Mit kostenlosem Selbstcheck.' },
+
+  { slug: 'wordpress-entwicklung', label: 'WordPress-Entwicklung',
+    priority: 0.8, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'WordPress-Relaunch, Neuentwicklung, WooCommerce und Core-Web-Vitals-Optimierung.' },
+
+  { slug: 'website-leasing', label: 'Website-Leasing',
+    priority: 0.8, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'Professionelle Website zur monatlichen Rate statt hoher Einmalkosten — inklusive Wartung, Hosting und Support.' },
+
+  { slug: 'seo-geo', label: 'SEO & GEO',
+    priority: 0.8, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'Technisches SEO, Content-Optimierung und Generative Engine Optimization für ChatGPT, Claude, Gemini und Perplexity.' },
+
+  { slug: 'online-marketing', label: 'Online-Marketing',
+    priority: 0.8, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'Google Ads, Meta- und LinkedIn-Kampagnen, Content- und E-Mail-Marketing mit messbarem ROAS.' },
+
+  { slug: 'social-recruiting', label: 'Social Recruiting',
+    priority: 0.7, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'Fachkräftegewinnung über LinkedIn und Meta mit KI-gestützter Zielgruppenansprache.' },
+
+  { slug: 'corporate-design', label: 'Corporate Design',
+    priority: 0.7, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'Logo-Entwicklung, Brand Identity, Design-Manuals und Gestaltungsvorlagen für Print und Digital.' },
+
+  { slug: 'ki-services', label: 'KI-Services',
+    priority: 0.7, changefreq: 'monthly', parent: 'leistungen',
+    summary: 'KI-Telefon-Agenten mit 24/7-Erreichbarkeit, automatisierte Terminbuchung und KI-gestützte Textoptimierung.' },
+
+  { slug: 'projekte', label: 'Referenzen & Projekte', priority: 0.8, changefreq: 'monthly',
+    summary: 'Ausgewählte Projekte für Bundesministerium, TARGOBANK, Berufsförderungswerke und Mittelstand.' },
+
+  { slug: 'ueber-uns', label: 'Über uns', priority: 0.8, changefreq: 'monthly',
+    summary: 'Inhabergeführte Agentur aus Köln — Arbeitsweise, Haltung und Team hinter agentur dk.' },
+
+  { slug: 'barrierefreiheit', label: 'Barrierefreiheitserklärung', priority: 0.5, changefreq: 'yearly',
+    summary: 'Erklärung zur Barrierefreiheit nach BFSG/BGG inklusive Konformitätsstatus und Feedback-Kontakt.' },
+
+  { slug: 'impressum', label: 'Impressum', priority: 0.3, changefreq: 'yearly',
+    summary: 'Pflichtangaben nach § 5 DDG.' },
+
+  { slug: 'datenschutz', label: 'Datenschutz', priority: 0.3, changefreq: 'yearly',
+    summary: 'Datenschutzerklärung nach DSGVO: Hosting, Kontaktformular, Consent-Management.' },
+
+  { slug: '404', label: 'Seite nicht gefunden', priority: 0.0, changefreq: 'yearly',
+    noindex: true, summary: '' },
 ];
+
+/** Alle indexierbaren Seiten — Basis für Sitemap und llms.txt. */
+export const indexablePages = pages.filter((p) => !p.noindex);
+
+/** Seiteneintrag zu einem Slug, oder undefined. */
+export const pageBySlug = (slug: string): PageEntry | undefined =>
+  pages.find((p) => p.slug === slug);
+
+/** Leistungen-Untermenü (Header + Footer) — abgeleitet aus dem Seitenregister. */
+export const leistungenNav: NavItem[] = pages
+  .filter((p) => p.parent === 'leistungen')
+  .map((p) => ({ href: p.slug, label: p.label }));
 
 /** Footer: Leistungen inklusive Übersichtsseite */
 export const footerLeistungenNav: NavItem[] = [
@@ -48,16 +147,16 @@ export const footerLeistungenNav: NavItem[] = [
 
 /** Footer: Unternehmen */
 export const footerUnternehmenNav: NavItem[] = [
-  { href: 'ueber-uns',        label: 'Über uns'                  },
-  { href: 'projekte',         label: 'Referenzen & Projekte'     },
-  { href: 'barrierefreiheit', label: 'Barrierefreiheitserklärung'},
-  { href: 'impressum',        label: 'Impressum'                 },
-  { href: 'datenschutz',      label: 'Datenschutz'               },
+  { href: 'ueber-uns',        label: 'Über uns'                   },
+  { href: 'projekte',         label: 'Referenzen & Projekte'      },
+  { href: 'barrierefreiheit', label: 'Barrierefreiheitserklärung' },
+  { href: 'impressum',        label: 'Impressum'                  },
+  { href: 'datenschutz',      label: 'Datenschutz'                },
 ];
 
 /** Footer-Leiste: rechtliche Links */
 export const footerLegalNav: NavItem[] = [
-  { href: 'impressum',        label: 'Impressum'      },
-  { href: 'datenschutz',      label: 'Datenschutz'    },
+  { href: 'impressum',        label: 'Impressum'       },
+  { href: 'datenschutz',      label: 'Datenschutz'     },
   { href: 'barrierefreiheit', label: 'Barrierefreiheit'},
 ];

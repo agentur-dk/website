@@ -1,17 +1,32 @@
 ---
-interface FaqItem {
-  question: string;
-  answer: string;
-}
+/**
+ * FAQ-Accordion.
+ *
+ * Bezieht die Einträge über den Seiten-Slug aus src/data/faq.ts — derselben
+ * Quelle, aus der das FAQPage-JSON-LD entsteht. Vorher standen die Fragen
+ * doppelt im Repo (einmal als Markup, einmal als handgeschriebenes Schema);
+ * ein Mismatch zwischen beidem wertet Google als Verstoß gegen die
+ * Richtlinien für strukturierte Daten.
+ */
+import { faqFor, type FaqItem } from '../data/faq';
 
 interface Props {
-  items: FaqItem[];
+  /** Seiten-Slug; lädt Überschrift und Einträge aus den zentralen FAQ-Daten. */
+  slug?:    string;
+  /** Alternativ: Einträge direkt übergeben (für Sonderfälle). */
+  items?:   FaqItem[];
   heading?: string;
 }
 
-const { items, heading } = Astro.props;
+const { slug, items: itemsProp, heading: headingProp } = Astro.props;
 
-const baseId = `faq-${Math.random().toString(36).slice(2, 8)}`;
+const set     = slug !== undefined ? faqFor(slug) : undefined;
+const items   = itemsProp ?? set?.items ?? [];
+const heading = headingProp ?? set?.heading;
+
+// Deterministische ID aus dem Slug statt Math.random(): sonst änderten sich
+// die Element-IDs bei jedem Build, was reproduzierbare Builds unmöglich macht.
+const baseId = `faq-${(slug ?? 'default').replace(/[^a-z0-9]+/gi, '-')}`;
 ---
 
 <section class="faq-section" aria-labelledby={heading ? `${baseId}-heading` : undefined}>

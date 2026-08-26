@@ -58,7 +58,7 @@
   </fieldset>
 
   <!-- Ergebnis -->
-  <div class="bfsg-result bfsg-result--hidden" id="bfsg-result" role="region" aria-labelledby="bfsg-result-title" aria-live="assertive">
+  <div class="bfsg-result bfsg-result--hidden" id="bfsg-result" role="region" aria-labelledby="bfsg-result-title" tabindex="-1">
     <h3 class="bfsg-result__title" id="bfsg-result-title"></h3>
     <p class="bfsg-result__text" id="bfsg-result-text"></p>
     <div class="bfsg-result__actions">
@@ -286,8 +286,9 @@ import type { BfsgAnswers } from '../lib/bfsg-logic';
 import { getResult } from '../lib/bfsg-logic';
 
 (function() {
-  const quiz = document.getElementById('bfsg-quiz');
-  if (!quiz) return;
+  const quizEl = document.getElementById('bfsg-quiz');
+  if (!quizEl) return;
+  const quiz: HTMLElement = quizEl;
 
   const steps = quiz.querySelectorAll('.bfsg-step');
   const resultEl = document.getElementById('bfsg-result');

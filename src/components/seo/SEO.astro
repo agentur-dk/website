@@ -1,46 +1,66 @@
 ---
-import { siteConfig } from '../../config/site.config';
+/**
+ * Head-Metadaten einer Seite.
+ *
+ * Canonical, Open Graph und Twitter Cards entstehen aus dem Slug und der
+ * zentralen Konfiguration. Vorher fehlten og:url und og:site_name, und der
+ * Canonical zeigte auf die GitHub-Pages-URL, während JSON-LD und llms.txt
+ * dk-dk.de nannten — widersprüchliche Signale für Crawler.
+ */
+import { siteConfig, absolute, SITE_URL } from '../../config/site.config';
 
 interface Props {
-  title?:       string;
-  description?: string;
+  /** Seiten-Slug ohne Endung, '' für die Startseite. */
+  slug:         string;
+  title:        string;
+  description:  string;
   noindex?:     boolean;
   ogImage?:     string;
+  ogType?:      'website' | 'article';
   canonical?:   string;
 }
 
 const {
-  title       = 'agentur dk – Websites, Website-Leasing & Digital-Agentur Köln',
-  description = siteConfig.description,
-  noindex     = false,
+  slug,
+  title,
+  description,
+  noindex = false,
   ogImage,
-  canonical:  canonicalProp,
+  ogType = 'website',
+  canonical: canonicalProp,
 } = Astro.props;
 
-const base            = import.meta.env.BASE_URL;
-const resolvedOgImage = ogImage ?? `${base}${siteConfig.ogImage}`;
-
-const { pathname } = Astro.url;
-const canonical    = canonicalProp ?? (
-  pathname.endsWith('/')
-    ? `${siteConfig.url}${pathname}index.html`
-    : `${siteConfig.url}${pathname}`
-);
+const canonical       = canonicalProp ?? absolute(slug);
+const resolvedOgImage = ogImage ?? `${SITE_URL}/${siteConfig.ogImage}`;
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+{noindex
+  ? <meta name="robots" content="noindex, follow" />
+  : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
 
 <link rel="canonical" href={canonical} />
 
-<meta property="og:title"       content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:type"        content="website" />
-<meta property="og:locale"      content="de_DE" />
-<meta property="og:image"       content={resolvedOgImage} />
+<meta property="og:title"        content={title} />
+<meta property="og:description"  content={description} />
+<meta property="og:type"         content={ogType} />
+<meta property="og:locale"       content="de_DE" />
+<meta property="og:url"          content={canonical} />
+<meta property="og:site_name"    content={siteConfig.name} />
+<meta property="og:image"        content={resolvedOgImage} />
+<meta property="og:image:width"  content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt"    content={`${siteConfig.legalName} — ${siteConfig.tagline}`} />
 
 <meta name="twitter:card"        content="summary_large_image" />
 <meta name="twitter:title"       content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image"       content={resolvedOgImage} />
+<meta name="twitter:image:alt"   content={`${siteConfig.legalName} — ${siteConfig.tagline}`} />
+
+<meta name="author"    content={siteConfig.legalName} />
+<meta name="publisher" content={siteConfig.legalName} />
+<meta name="geo.region"    content="DE-NW" />
+<meta name="geo.placename" content={siteConfig.contact.city} />

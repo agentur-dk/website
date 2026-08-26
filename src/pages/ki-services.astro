@@ -7,69 +7,19 @@ import LeadForm from '../components/LeadForm.astro';
 
 const base = import.meta.env.BASE_URL;
 
-const title = 'KI-Services für Unternehmen – KI-Telefon-Agenten & mehr – agentur dk';
-const description = 'KI-Services aus Köln: KI-Telefon-Agenten mit 24/7-Verfügbarkeit, automatisierte Terminbuchung und KI-gestützte Textoptimierung. Jetzt Potenzial freischalten.';
 ---
 
-<BaseLayout title={title} description={description}>
-  <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "KI-Services für Unternehmen",
-      "provider": {
-        "@type": "Organization",
-        "name": "agentur dk – design & kommunikation",
-        "url": "https://dk-dk.de"
-      },
-      "description": "KI-Telefon-Agenten mit 24/7-Verfügbarkeit, automatisierter Terminbuchung, Social Recruiting mit KI und KI-gestützter Textoptimierung.",
-      "areaServed": { "@type": "Country", "name": "DE" },
-      "serviceType": "Digital Agency",
-      "url": "https://dk-dk.de/ki-services"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Was ist ein KI-Telefon-Agent?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ein KI-Telefon-Agent nimmt Anrufe automatisch entgegen, beantwortet Fragen und bucht Termine – rund um die Uhr, auch außerhalb Ihrer Geschäftszeiten. Anrufer merken kaum einen Unterschied."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Für wen lohnt sich ein KI-Telefon-Agent?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Für alle Unternehmen mit vielen eingehenden Anrufen: Praxen, Handwerksbetriebe, Kanzleien, Agenturen und Dienstleister. Jeder verpasste Anruf ist ein verlorener Kunde."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Was kann KI-gestützte Textoptimierung?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "KI unterstützt bei Webtexten, Kampagnen und Produktbeschreibungen – schneller, konsistenter und abgestimmt auf Ihre Zielgruppe. Du behalten die Kontrolle, wir liefern die Qualität."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Sind KI-Lösungen datenschutzkonform?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja. Wir setzen auf europäische Anbieter und DSGVO-konforme Konfigurationen. Ihre Daten bleiben geschützt – das ist bei KI-Projekten für uns Grundvoraussetzung."
-          }
-        }
-      ]
-    }
-    </script>
-  </Fragment>
+<BaseLayout
+  slug="ki-services"
+  title="KI-Services – KI-Telefon-Agenten & mehr | agentur dk"
+  description="KI-Telefon-Agenten mit 24/7-Erreichbarkeit, automatisierte Terminbuchung und KI-gestützte Texte. KI dort einsetzen, wo sie messbar entlastet."
+    service={{
+      name:        'KI-Services',
+      description: 'KI-Telefon-Agenten, automatisierte Terminbuchung, KI-gestützte Textoptimierung und Beratung zur KI-Readiness von Unternehmen.',
+      serviceType: 'Artificial Intelligence Consulting',
+      offers: ['KI-Telefon-Agenten', 'Terminbuchung', 'KI-Recruiting', 'Textoptimierung', 'KI-Readiness', 'Beratung & Umsetzung'],
+    }}
+>
 
   <Header />
   <main id="main-content" tabindex="-1">
@@ -198,15 +148,7 @@ const description = 'KI-Services aus Köln: KI-Telefon-Agenten mit 24/7-Verfügb
       </div>
     </section>
 
-    <FaqAccordion
-      heading="Häufige Fragen"
-      items={[
-        { question: 'Was ist ein KI-Telefon-Agent?', answer: 'Ein KI-Telefon-Agent nimmt Anrufe automatisch entgegen, beantwortet Fragen und bucht Termine – rund um die Uhr, auch außerhalb Ihrer Geschäftszeiten. Anrufer merken kaum einen Unterschied.' },
-        { question: 'Für wen lohnt sich ein KI-Telefon-Agent?', answer: 'Für alle Unternehmen mit vielen eingehenden Anrufen: Praxen, Handwerksbetriebe, Kanzleien, Agenturen und Dienstleister. Jeder verpasste Anruf ist ein verlorener Kunde.' },
-        { question: 'Was kann KI-gestützte Textoptimierung?', answer: 'KI unterstützt bei Webtexten, Kampagnen und Produktbeschreibungen – schneller, konsistenter und abgestimmt auf Ihre Zielgruppe. Du behalten die Kontrolle, wir liefern die Qualität.' },
-        { question: 'Sind KI-Lösungen datenschutzkonform?', answer: 'Ja. Wir setzen auf europäische Anbieter und DSGVO-konforme Konfigurationen. Ihre Daten bleiben geschützt – das ist bei KI-Projekten für uns Grundvoraussetzung.' },
-      ]}
-    />
+    <FaqAccordion slug="ki-services" />
 
     <LeadForm page="KI-Services" heading="Jetzt unverbindlich anfragen" />
 

@@ -1,602 +1,499 @@
-# Technischer Website-Audit — agentur dk (dk-dk.de)
+# Website-Audit agentur dk — Technik, Inhalt, Barrierefreiheit, Auffindbarkeit
 
-**Erstellt:** 2026-08-16  
-**Auditor:** Senior Web-Auditor  
-**Basis:** Live-Site Stand 15.08.2026 (Git-Snapshot)  
-**Geprüfte Dateien:** index.html, bfsg-wordpress-website-agentur.html, impressum.html, datenschutz.html, barrierefreiheit.html, css/bootstrap.min.css, css/custom.css, js/*.js, fonts/*, images/*, robots.txt, sitemap.xml, llms.txt
-
----
-
-## Astro-Migrationsstatus (Stand 21.08.2026)
-
-**Alle Phasen der Astro-Migration abgeschlossen.** Der Legacy-Stack (plain HTML + build-css.py + css/ + js/) wurde vollständig entfernt.
-
-| Phase | Commit | Inhalt | Status |
-|---|---|---|---|
-| 0/1 | afbfaca | Astro + Tailwind v4 Setup, BaseLayout, Header/Footer, Design-Tokens | ✅ |
-| 2 | 308b9ba | Komponenten-Bibliothek (CtaSection, ServiceCard, ReferenceCard, LogoStrip, StatsStrip, FaqAccordion, TabNav, LeadForm) | ✅ |
-| 3 | 95406c3 | 15 Seiten portiert (Content 1:1, gleiche URLs), Consent/Scroll-Reveal/BFSG/Quiz in Astro | ✅ |
-| 4 | 573b8f3 | Logik in src/lib extrahiert + vitest-Tests + GitHub Actions Deploy-Pipeline | ✅ |
-| 5 | 14565e6 | SEO-Dateien final (sitemap/robots/llms), Canonical-Links, Meta-1:1-Verifikation | ✅ |
-| 8 | — | Legacy-Dateien entfernt, check-meta auf Snapshot, Doku aktualisiert | ✅ |
-
-**Verifikationsergebnisse (Phase 8):**
-- `npm run build` → 15 Seiten (komponenten-vorschau entfernt)
-- `npm run check:links` → alle OK
-- `npm run check:meta` → 0 Mismatches (14 Seiten gegen `tools/legacy-meta.json`)
-- `npm test` → 74 Tests grün
-- Kein Formspree, kein CDN in dist/
-
-**Deploy:** Bereit – wartet auf `git push origin main` (GitHub Actions triggert automatisch).
+**Stand:** 26.08.2026
+**Gegenstand:** alle 16 Seiten der Astro-Site, Komponenten, Build und Auslieferung
+**Zielsetzung:** maximale Auffindbarkeit bei Suchmaschinen und KI-Systemen (SEO/GEO),
+vollständige WCAG-2.2-AA-Konformität, Lighthouse 100 auf Mobil und Desktop
+**Vorgänger:** `docs/AUDIT-2026-08-16-legacy.md` (Audit der Alt-Site vor der Astro-Migration)
 
 ---
 
-## Executive Summary — Top 10 kritischste Findings
+## Zusammenfassung
 
-| # | Finding | Schweregrad | Kategorie |
-|---|---------|------------|-----------|
-| 1 | **Kein Favicon** auf keiner Seite vorhanden | 🔴 Kritisch | Technisch |
-| 2 | **Alle Canonical-URLs relativ** (`canonical href="index.html"`) statt absolut | 🔴 Kritisch | SEO |
-| 3 | **Social-Media-Links sind Platzhalter** — führen zu facebook.com, instagram.com usw., nicht zu Profilen | 🔴 Kritisch | Content |
-| 4 | **Kein Cookie-Consent-Banner** trotz Cookies-Erwähnung in Datenschutz (DSGVO-Verstoß) | 🔴 Kritisch | Security/Recht |
-| 5 | **Datenschutz nennt Google Analytics, kein GA-Code** im HTML — Datenschutzerklärung falsch oder Code vergessen | 🔴 Kritisch | Security/Recht |
-| 6 | **Skip-Link-Selektor in JavaScript kaputt** auf allen 5 Seiten — Fokus-Handling für Tastaturnuzer funktioniert nicht | 🔴 Kritisch | Accessibility |
-| 7 | **Kein `<nav>` Landmark in der Hauptnavigation** — Navigation im Header fehlt komplett auf index.html | 🔴 Kritisch | Accessibility/Semantik |
-| 8 | **BFSG-Check-Formular selbst nicht barrierefrei** — Legend CSS-versteckt, Fragen nicht semantisch mit Radiogruppen verknüpft | 🔴 Kritisch | Accessibility/BFSG |
-| 9 | **176 KB ungenutztes JavaScript** (jQuery, Skel, ScrollEx, ScrollY, main.js-Features) auf Bootstrap-5-Site | 🟠 Hoch | Performance |
-| 10 | **Kein 404.html** vorhanden | 🟠 Hoch | Technisch |
+Der technische Unterbau war bereits solide: saubere Semantik, lokale Schriften,
+kein Tracking ohne Einwilligung, funktionierende Consent-Verwaltung. Die
+gravierenden Befunde lagen nicht in der Umsetzung, sondern in der **Konfiguration
+und in doppelt gepflegten Inhalten** — an Stellen also, an denen Fehler nicht
+auffallen, weil nichts sichtbar kaputtgeht.
 
----
+Drei Befunde hätten unmittelbar Umsatz gekostet:
 
-## 1. HTML-Grundlagen & Semantik
+1. **`website-leasing.html` stand auf `noindex, nofollow`.** Eine der beiden
+   Kernleistungsseiten war für Google und für KI-Crawler vollständig gesperrt.
+2. **Die Domain war widersprüchlich ausgezeichnet.** Canonical, Sitemap und
+   robots.txt zeigten auf `agentur-dk.github.io/website/`, JSON-LD und llms.txt
+   auf `dk-dk.de`. Für Crawler sind das zwei konkurrierende Identitäten.
+3. **Alle `@font-face`-URLs waren auf `/website/` hartkodiert.** Beim Umzug auf
+   die Custom Domain wären sämtliche Schriften ins Leere gelaufen.
 
-### 🟢 Gut
-- DOCTYPE, `lang="de"`, `charset="utf-8"`, `viewport` korrekt auf allen 5 Seiten
-- `<main id="main-content">` korrekt gesetzt auf allen Seiten
-- `<header>` und `<footer>` Landmarks vorhanden
-- Genau eine `<h1>` pro Seite
-- Heading-Hierarchie (h1→h2→h3→h4) ohne Sprünge auf bfsg, impressum, datenschutz
-- `aria-hidden="true"` auf dekorativen Icons
+Dazu kamen acht zu lange Titel, eine Startseite ohne Keyword in der H1,
+Platzhaltertext („Kundenlogo 1") in der Kundenleiste und zwei Kontrastwerte
+unter dem AA-Minimum.
 
-### 🔴 Kritisch
-
-**Kein primäres `<nav>` Landmark im Header** (`index.html`, alle Seiten)  
-Der Header auf `index.html` (Zeilen 485–492) enthält ausschließlich ein leeres `<div class="header-logo">` mit Kommentaren — kein Logo, keine Navigation, kein sichtbarer Inhalt. Auf den anderen Seiten ist zwar ein Logo im Header, aber kein `<nav>`-Element. WCAG 2.2 SC 1.3.6 und BFSG erfordern identifizierbare Navigationsbereiche via Landmarks. Screenreader-Nutzer finden keine Hauptnavigation.
-
-### 🟠 Hoch
-
-**Skip-Link zeigt auf absolute Seiten-URL statt Fragment** (alle 5 Seiten)  
-Alle Skip-Links verwenden `href="index.html#main-content"` statt `href="#main-content"`. Dadurch löst der zugehörige JS-Selektor `document.querySelector('a[href="#main-content"]')` (Zeile 892, index.html) nie aus — kein Match. Das Fokus-Handling via `main.focus()` ist auf allen Seiten **komplett wirkungslos**. Die Seiten führen stattdessen eine vollständige Navigation durch, ohne Fokus zu setzen.
-
-**Leerer Header auf index.html** (`index.html`, Zeilen 485–492)  
-```html
-<header class="site-header header-overlay">
-  <div class="container">
-    <div class="header-logo">
-      <!-- Logo oder Titel, hier erst mal visuell versteckt ... -->
-    </div>
-  </div>
-</header>
-```
-Die Seite hat keinen sichtbaren Header-Inhalt. Das ist ein schwerwiegendes UX- und SEO-Problem (kein Logo, keine Navigation oberhalb des Heroes).
-
-### 🟡 Mittel
-
-**Footer-Spaltenüberschriften als `<span>` statt `<h>` Heading** (alle Seiten, z.B. `index.html` Zeile 841)  
-`<span class="headline d-block fw-bold mb-2">Gefragte Leistungen</span>` — ohne semantischen Heading-Level kein Zugangspunkt für Screenreader-Nutzer in der Fußzeile.
-
-**`<br><br>` für vertikalen Abstand** (`index.html`, Zeile 546)  
-Layoutabstände gehören ins CSS, nicht als semantiklose Leerzeilen ins Markup.
-
-**Heading `h2` mit `d-none` auf index.html** (Zeilen 542–545)  
-Ein `<h2 class="d-none ...">` ist für alle Nutzer (einschließlich Screenreader bei `display:none`) unsichtbar. Entweder ist es inhaltlich relevant (dann zeigen) oder es sollte entfernt werden.
-
-**Inline-`style`-Attribute verbreitet** (`index.html`, `bfsg-wordpress-website-agentur.html`)  
-`style="max-width: 900px;"`, `style="background-image: linear-gradient(...)"` usw. — erschwert Wartung und widerspricht dem Separation-of-Concerns-Prinzip.
+**Ergebnis nach Umsetzung:** siehe [Messwerte](#messwerte).
 
 ---
 
-## 2. SEO
+## 1. Auffindbarkeit — Suchmaschinen und KI-Systeme
 
-### 🟢 Gut
-- Title-Tags unique auf allen 5 Seiten ✅
-- Meta Descriptions unique, alle im Zielbereich 85–160 Zeichen ✅
-- `robots: index, follow` auf indexierten Seiten ✅
-- `robots: noindex, follow` auf impressum/datenschutz korrekt ✅
-- Open Graph vorhanden auf index + bfsg ✅
-- Twitter Cards vorhanden auf index + bfsg ✅
-- JSON-LD Schema vorhanden (Organization, WebPage, FAQPage) ✅
-- robots.txt strukturell korrekt, verweist auf sitemap ✅
-- sitemap.xml mit absoluten URLs ✅
+### 1.1 Domain und kanonische Identität — behoben
 
-### 🔴 Kritisch
+`astro.config.mjs` stand auf `base: '/website/'` und `site: 'https://agentur-dk.github.io'`,
+während JSON-LD und llms.txt durchgängig `dk-dk.de` nannten. Produktion läuft
+hinter der Custom Domain, also an der Wurzel.
 
-**Alle Canonical-URLs sind relative Pfade** (alle 5 Seiten)
+Umgesetzt:
 
-| Seite | Ist | Soll |
-|-------|-----|------|
-| `index.html` Zeile 14 | `href="index.html"` | `href="https://dk-dk.de/"` |
-| `bfsg-...html` Zeile 12 | `href="bfsg-wordpress-website-agentur.html"` | `href="https://dk-dk.de/bfsg-wordpress-website-agentur.html"` |
-| `impressum.html` Zeile 9 | `href="impressum.html"` | `href="https://dk-dk.de/impressum.html"` |
-| `datenschutz.html` Zeile 11 | `href="datenschutz.html"` | `href="https://dk-dk.de/datenschutz.html"` |
-| `barrierefreiheit.html` Zeile 9 | `href="barrierefreiheit.html"` | `href="https://dk-dk.de/barrierefreiheit.html"` |
+- `site: 'https://dk-dk.de'`, `base: '/'`, beides über `SITE_URL`/`BASE_PATH` übersteuerbar
+- **`public/CNAME` angelegt** — die Datei fehlte. Ohne sie setzt jeder Pages-Deploy
+  die Custom-Domain-Einstellung zurück und die Seite fällt auf `github.io` zurück.
+- `sitemap.xml`, `robots.txt` und `llms.txt` sind keine gepflegten Dateien mehr,
+  sondern Endpunkte (`src/pages/*.ts`), die aus `site.config.ts` erzeugt werden.
+  Ein Auseinanderlaufen ist damit strukturell ausgeschlossen.
 
-Relative Canonical-Tags werden von Google zwar interpretiert, sind aber fehleranfällig (z.B. bei CDN, Redirects, lokalen Entwicklungsumgebungen). Standard ist der vollständige absolute URL.
+Die alte `sitemap.xml` listete zudem 14 Seiten, `ueber-uns` fehlte trotz
+Verlinkung in der Hauptnavigation.
 
-### 🟠 Hoch
+### 1.2 `noindex` auf einer Leistungsseite — behoben
 
-**JSON-LD: Organization.logo zeigt auf OG-Image** (`index.html`, Zeile 35)  
-`"logo": "https://dk-dk.de/images/og-image-website.png"` — ein Foto/OG-Bild ist kein Logo. Google's Structured Data Guidelines verlangen ein dediziertes Logobild (idealerweise quadratisch oder Breitformat, PNG mit Transparenz). Das OG-Bild hat 210 KB als PNG-Screenshot/Preview, kein Logo.
+`src/pages/website-leasing.astro` übergab `noindex={true}` an das Layout.
+Lighthouse wies die Seite entsprechend mit SEO 63 aus. Entfernt.
 
-**Fehlende `og:locale` auf allen Seiten**  
-Ohne `<meta property="og:locale" content="de_DE">` kann Facebook/LinkedIn nicht korrekt die Sprache bestimmen.
+`tools/check-seo.mjs` prüft jetzt bei jedem Build, dass ausschließlich die
+404-Seite auf `noindex` steht.
 
-**Fehlende LocalBusiness-Schema** für lokale Sichtbarkeit  
-Eine Kölner Agentur sollte `"@type": "LocalBusiness"` (oder `ProfessionalService`) mit `address`, `geo`, `openingHours`, `priceRange` in JSON-LD haben für Google Business-Integration.
+### 1.3 Titel und Beschreibungen — überarbeitet
 
-**sitemap.xml: lastmod-Daten veraltet** (`sitemap.xml`)  
-Alle Seiten zeigen `<lastmod>2026-01-28</lastmod>` — Stand ca. 7 Monate vor dem Audit-Datum. Die Seiten wurden seitdem offenbar geändert (git-Commits zeigen "Initial: dk-dk.de als Basis für Relaunch"). Veraltete lastmod-Werte können Crawl-Budget-Verschwendung verursachen.
+Acht von sechzehn Titeln lagen über der Anzeigegrenze von rund 60 Zeichen und
+wurden in den Suchergebnissen abgeschnitten, sechs Beschreibungen über 160:
 
-### 🟡 Mittel
+| Seite | Titel vorher | Beschreibung vorher |
+|---|---|---|
+| barrierefreiheit | 81 | 143 |
+| corporate-design | 79 | 147 |
+| leistungen | 79 | 173 |
+| online-marketing | 76 | 152 |
+| projekte | 75 | 186 |
+| seo-geo | 74 | 158 |
+| ki-services | 72 | 157 |
+| website-leasing | 71 | 179 |
+| ueber-uns | 64 | 186 |
 
-**Kein `<meta name="twitter:site">` Tag**  
-Ohne den Twitter-Handle ist die Twitter Card-Attribution lückenhaft.
+Alle 16 Seiten liegen jetzt bei ≤ 60 beziehungsweise 70–155 Zeichen; die Grenzen
+sind als Prüfung hinterlegt, nicht als Vorsatz.
 
-**Title `bfsg-wordpress-website-agentur.html`**: 47 Zeichen (leicht unter dem Zielwert 50–60).  
-Potenzial: `BFSG WordPress Agentur Köln | Barrierearme Websites` (53 Zeichen).
+### 1.4 Strukturierte Daten — von losen Blöcken zu einem Graphen
 
-**Terminkonsistenz SEO-Keywords:**  
-Die Seite wechselt zwischen „barrierearme", „barrierefreie" und „barrierearm" — drei unterschiedliche Varianten desselben Begriffs. Da das BFSG selbst „barrierefrei" verwendet, sollte ein konsequentes Primär-Keyword definiert werden.
+Vorher standen JSON-LD-Blöcke als handgeschriebene Strings in den Seiten. Daraus
+folgten drei Probleme:
 
----
+- **Kein `BreadcrumbList` auf keiner einzigen Seite** — obwohl sichtbare
+  Breadcrumbs existieren. Google zeigt Breadcrumb-Pfade in den Ergebnissen nur
+  bei ausgezeichneten Daten.
+- **Keine Verknüpfung der Entitäten.** Jede Seite wiederholte einen eigenen
+  `Organization`-Knoten ohne `@id`. Für Parser sind das verschiedene Firmen,
+  nicht eine.
+- **404, Impressum und Datenschutz ganz ohne Auszeichnung.**
 
-## 3. Accessibility / WCAG 2.2 + BFSG
+Umgesetzt: `src/lib/schema.ts` erzeugt je Seite **einen** `@graph` aus
+`Organization`, `WebSite`, `WebPage`/`AboutPage`/`CollectionPage`,
+`BreadcrumbList`, `FAQPage` und `Service`. Alle Knoten hängen über `@id`
+zusammen. `knowsAbout` benennt die Fachgebiete explizit — für KI-Systeme das
+maschinenlesbare Gegenstück zum Fließtext.
 
-### 🟢 Gut
-- Skip-Links auf allen Seiten vorhanden (HTML-Struktur korrekt, JS-Fix nötig)
-- `aria-hidden="true"` auf dekorativen FontAwesome-Icons ✅
-- `aria-label` auf Social-Media-Links mit "(öffnet in neuem Fenster)" ✅
-- `aria-label` auf CTA-Buttons ✅
-- `prefers-reduced-motion` für Typewriter-Effekte berücksichtigt ✅
-- Footer-Navs mit `aria-label` zur Unterscheidung ✅
-- `<time datetime="2025-02-19">` in barrierefreiheit.html ✅
-- Farbkontrast Primärblau (#1C60AD) auf Weiß: ~6,7:1 (WCAG AA ✅)
-- `focus-visible`-Styles in impressum.html (gelb, 3px) und via custom.css ✅
+17 Unit-Tests prüfen unter anderem, dass keine `@id`-Referenz ins Leere zeigt.
 
-### 🔴 Kritisch
+### 1.5 FAQ-Inhalte — doppelte Pflege beseitigt
 
-**BFSG-Check-Formular nicht barrierefrei** (`bfsg-wordpress-website-agentur.html`)
+Die 42 FAQ-Einträge existierten zweimal: einmal als sichtbares Markup, einmal als
+handgeschriebenes `FAQPage`-Schema. Beide Fassungen konnten auseinanderlaufen —
+und ein Mismatch zwischen Schema und sichtbarem Text wertet Google als Verstoß
+gegen die Richtlinien für strukturierte Daten.
 
-Das interaktive Herzstück der BFSG-Seite hat mehrere Barrierefreiheits-Probleme:
+Umgesetzt: `src/data/faq.ts` ist die einzige Quelle. Accordion, JSON-LD und
+llms.txt lesen daraus. Nachweis im Build: Schema und sichtbarer Text sind auf
+allen neun FAQ-Seiten identisch.
 
-1. **Legend wird CSS-versteckt** (Zeile 506): `.step-content legend { display: none; }` — das `<legend>`-Element, das die Radiogruppe beschreiben würde, ist komplett versteckt. Für Screenreader gibt es damit keine Gruppenbezeichnung.
-2. **Frage-Text ist ein `<span>`** (Zeile 469): `<span class="question-text">Erbringen Sie Dienstleistungen?</span>` statt `<legend>`. Screenreader lesen die Frage nicht als Beschriftung der Radiogruppe vor.
-3. **Keine `<fieldset>`-Gruppierung** der Radiobuttons: Ohne explizites Fieldset/Legend ist die Zuordnung von Frage zu Antwortoptionen für assistive Technologie nicht nachvollziehbar.
-4. **Keyboard-only-User**: Wenn eine Wahl getroffen wird (`change`-Event), wechselt der nächste Schritt ohne Fokus-Management — Fokus bleibt auf dem gerade geklickten Element, der neue Step erscheint sichtbar aber Fokus ist woanders.
+### 1.6 GEO — Sichtbarkeit in KI-Antworten
 
-**Eine BFSG-Accessibility-Agentur, die im eigenen Check-Tool WCAG-Verstöße produziert, ist ein erheblicher Reputationsschaden.**
+- **`llms.txt` wird generiert** statt gepflegt. Die alte Fassung nannte noch eine
+  abweichende URL-Struktur und Leistungsbeschreibungen, die es so nicht mehr gab.
+  Die neue Fassung enthält Unternehmensprofil, alle Leistungen mit absoluten
+  Links, den BFSG-Sachstand und sämtliche 42 FAQ-Einträge mit Quellenangabe —
+  die dichteste zitierfähige Faktenbasis, die die Site hergibt.
+- **`robots.txt` gibt 16 KI-Crawler ausdrücklich frei** (GPTBot, OAI-SearchBot,
+  ClaudeBot, Claude-User, PerplexityBot, Google-Extended, Applebot-Extended u. a.).
+  Eine reine `User-agent: *`-Gruppe werten nicht alle dieser Bots als Freigabe.
+- **`max-snippet:-1, max-image-preview:large`** erlaubt vollständige Textausschnitte
+  statt der Standardkürzung.
+- Die neue Orientierungstabelle auf `leistungen.html` ordnet acht typische
+  Ausgangslagen der jeweiligen Leistung zu — als `<dl>` ausgezeichnet, also in
+  einer Form, die sowohl Screenreader als auch Parser verlässlich zuordnen.
 
-**Skip-Link-Selektor-Bug** (alle Seiten — identischer Code, alle Seiten z.B. `index.html` Zeile 892)
-```js
-const skip = document.querySelector('a[href="#main-content"]');  // findet nichts
-// tatsächlicher Link: <a href="index.html#main-content" ...>
-```
-Die JS-Handler für Skip-Links sind auf allen Seiten komplett wirkungslos.
+### 1.7 Open Graph — vervollständigt
 
-### 🟠 Hoch
+Es fehlten `og:url` und `og:site_name`; das Vorschaubild war **1536 × 1024**
+statt 1200 × 630 und wurde in Social-Karten oben und unten beschnitten. Es trug
+zudem kein Markenzeichen, obwohl es in jeder geteilten Vorschau und in
+KI-Zitatkarten erscheint.
 
-**Kein primärer Navigations-Landmark** auf keiner Seite  
-Header enthält kein `<nav>` Element. WCAG 2.4.1 (Bypass Blocks) und 1.3.6 (Identify Purpose) setzen identifizierbare Navigations-Landmarks voraus. Ohne `<nav>` können Screenreader-Nutzer nicht per Landmark-Navigation zur Hauptnavigation springen.
-
-**Social-Icon-Links im Footer haben zu kleine Touch-Targets**  
-Die Icons sind nur `14px` FontAwesome-Icons ohne nennenswerten Padding-Bereich. WCAG 2.2 SC 2.5.8 (Minimum Target Size) fordert mindestens 24×24 CSS-Pixel. Tatsächlich fehlen konkrete Größenangaben für `.social a` in custom.css.
-
-**`text-white-50` im Footer: potenzielle Kontrastprobleme**  
-`opacity: 0.5` auf weißem Text über schwarzem Hintergrund ergibt #808080 = ~4,5:1 Kontrast (knapp AA für großen Text, unter AA für Fließtext). Links in Footer-Navigation mit `text-white-50` können unter AA-Grenzwert fallen.
-
-### 🟡 Mittel
-
-**`barrierefreiheit.html` referenziert WCAG 2.1** (Zeile 37), während `bfsg-wordpress-website-agentur.html` und `custom.css` WCAG 2.2 nennen. Die Erklärung zur Barrierefreiheit ist damit nicht konsistent mit dem beworbenen Leistungsumfang.
-
-**`barrierefreiheit.html` lädt kein Critical CSS inline** — die Seite lädt Bootstrap und custom.css nur via `media="print"` Trick, hat aber keinen `<style>`-Block mit Basis-Stilen. Bei verzögertem CSS-Load gibt es keine Focus-Styles.
-
-**`impressum.html` Skip-Link nutzt eigene `.screen-reader` Klasse** (Zeile 57), definiert die Klasse aber nicht inline — sie kommt aus custom.css, das asynchron geladen wird. Vor CSS-Load ist Skip-Link nicht sichtbar.
-
-**`<a>` mit `data-tf-popup` statt `<button>` für Typeform-Trigger** (`index.html`, Zeile 758)  
-Ein `<a>` ohne `href` mit `style="cursor:pointer;"` ist kein aktivierbares Element per Tastatur. Sollte `<button>` sein.
+Neu gerendert über `tools/og-image.mjs` mit den echten Schriften und Farben der
+Seite: **1200 × 630, 209 kB → 31 kB**, mit Wortmarke, Standort und Domain.
 
 ---
 
-## 4. Performance
+## 2. Barrierefreiheit — WCAG 2.2 AA
 
-### 🟢 Gut
-- CSS-Loading via `media="print"` + `onload` (render-blocking vermieden) ✅
-- `<noscript>`-Fallback für CSS ✅
-- Font Preloads für alle 3 Roboto-Mono-Gewichte ✅
-- `font-display: swap` ✅
-- Alle Fonts selbst-gehostet (kein Google Fonts Request) ✅
-- Typeform-Script nur auf index.html, `defer` gesetzt ✅
-- Alle Scripts mit `defer` ✅
+axe-core meldete von Anfang an null Verstöße. Das ist ein gutes Zeichen, aber
+kein Konformitätsnachweis: automatisierte Prüfungen decken je nach Quelle 30–40 %
+der Erfolgskriterien ab. Alles, was von Layout, Zoom, Bewegung oder Zeigergröße
+abhängt, muss gemessen werden. Dafür ist `tools/wcag-manual.mjs` entstanden.
 
-### 🔴 Kritisch
+### 2.1 Bewegung ohne Bedienelement (2.2.2) — behoben
 
-**176 KB ungenutztes JavaScript — jQuery-Stack auf Bootstrap-5-Site**
+Die Schreibmaschinen-Zeile im Hero und die Logo-Laufschrift starten automatisch
+und laufen unbegrenzt weiter. Beide respektierten zwar `prefers-reduced-motion` —
+das hilft aber nur Nutzern, die diese Einstellung im Betriebssystem gesetzt haben.
+2.2.2 verlangt darüber hinaus ein Bedienelement.
 
-| Datei | Größe | Status |
-|-------|-------|--------|
-| `jquery.min.js` | 84 KB | Benötigt nur von Legacy-Scripts |
-| `skel.min.js` | 8,9 KB | **Vollständig ungenutzt** — HTML5 UP Template-Library |
-| `jquery.scrollex.min.js` | 2,2 KB | Ungenutzt — kein `$(...).scrollex()` in HTML |
-| `jquery.scrolly.min.js` | 0,8 KB | Ungenutzt — kein `$(...).scrolly()` in HTML |
-| `util.js` | 6,3 KB | `$.fn.navList()`, `$.fn.panel()`, `$.fn.placeholder()` — keine Aufrufe im HTML |
-| **Gesamt** | **~102 KB** | Davon abhängig: `main.js` (teilweise) |
+Umgesetzt: `MotionToggle.astro` im Footer hält beide Animationen an, merkt sich
+die Entscheidung über Seitenwechsel hinweg und wird vor dem ersten Rendern
+angewandt, damit nichts aufblitzt.
 
-Bootstrap 5 benötigt kein jQuery. `skel.min.js` ist eine Responsive-Library eines alten HTML5-UP-Templates und hat auf dieser Seite keine Funktion.
+### 2.2 Reflow bei 320 px (1.4.10) — drei Verstöße behoben
 
-### 🟠 Hoch
+- `.btn` hatte `white-space: nowrap` bei Versalien und 0,06 em Sperrung. Lange
+  deutsche Beschriftungen wurden 330 px breit und erzwangen horizontales Scrollen.
+- Die Logo-Leiste war zusätzlich auf `100vw` aufgezogen, obwohl der Abschnitt
+  ohnehin volle Breite hat. `100vw` schließt die Scrollbar ein — rund 18 px Überhang.
+- **„Datenschutzerklärung" als einzelnes Wort ist bei 320 px breiter als der
+  Viewport.** Überschriften haben jetzt `hyphens: auto`; die Silbentrennung greift,
+  weil `<html lang="de">` gesetzt ist.
 
-**FontAwesome 4.6.3 — 5 Font-Formate, 764 KB, Vintage 2016**
+### 2.3 Kontraste (1.4.3) — zwei Verstöße behoben
 
-| Datei | Größe | Relevanz |
-|-------|-------|----------|
-| `fontawesome-webfont.svg` | 382 KB | Kein moderner Browser nutzt SVG-Fonts |
-| `fontawesome-webfont.ttf` | 149 KB | Nur für IE9 und frühe Android nötig |
-| `fontawesome-webfont.eot` | 75 KB | Nur für IE8 |
-| `fontawesome-webfont.woff` | 88 KB | Legacy-Fallback |
-| `fontawesome-webfont.woff2` | 70 KB | Das einzig benötigte Format |
+| Element | vorher | jetzt |
+|---|---|---|
+| Referenzkachel grün, weiße Schrift | 2,30 : 1 | 5,27 : 1 |
+| Referenzkachel türkis, weiße Schrift | 3,36 : 1 | 6,16 : 1 |
 
-Es werden nur ~12 Icons der gesamten ~600-Icons-Library genutzt. Empfehlung: Auf eine SVG-Icon-Lösung (Inline SVG / Bootstrap Icons) oder auf ein Subset-Font wechseln. Einsparung: ~690 KB Serverspace, schnellere Übertragung.
+Beide entgingen axe-core, weil die Kacheln `aria-hidden` tragen — für sehende
+Nutzer sind sie trotzdem Text.
 
-**Kritisches CSS massiv dupliziert (Wartungs-Albtraum)**
+Beim Ausbau kam ein dritter hinzu und wurde mitbehoben: `.text-link` war fest auf
+helle Abschnitte verdrahtet (`#1c60ad`, auf dunklem Grund 2,97 : 1). Die Klasse
+richtet sich jetzt nach ihrem Abschnitt — sonst wäre jede künftige Verwendung auf
+dunklem Grund eine stille Barriere.
 
-Jede der 5 HTML-Seiten enthält identische `<style>`-Blöcke mit 200–450 Zeilen CSS:
-- `@font-face` Definitionen (Roboto Mono + FontAwesome)
-- `:root` Custom Properties
-- `html`, `body`, Heading-Styles
-- Utility-Klassen (`.mb-4`, `.py-5`, `.d-flex`, etc.)
-- Button-Styles
+### 2.4 Zielgrößen (2.5.8) — behoben
 
-Diese Styles sind zusätzlich in `custom.css` definiert. Und Bootstrap 5 definiert die Utility-Klassen nochmals. Das ergibt eine **dreifache Definition** derselben Regeln. Das ist kein Performance-Problem (Browser cachen inline CSS nicht), aber ein erhebliches Maintainability-Problem — eine Änderung an einer Farbe muss an 5+ Stellen gepflegt werden.
+`.card__link` und `.case-card__link` waren 22 px hoch. Als eigenständige
+Schaltflächen greift die Inline-Ausnahme nicht; beide liegen jetzt bei 24 px.
 
-**Bootstrap 5 (227 KB) für minimale Anforderungen**  
-Die Site nutzt Bootstrap primär für Grid-System und Accordion. Diese Funktion könnte mit <20 KB Custom CSS abgebildet werden.
+### 2.5 Fokus nicht verdeckt (2.4.11) — vorbeugend behoben
 
-**`og-image-website.png` (210 KB) nicht optimiert**  
-Das einzige Bild im Projekt als PNG. Als WebP könnte es auf ~80–100 KB reduziert werden.
+Der sticky Header ist 64 px hoch und hätte Sprungziele überdeckt.
+`scroll-padding-top: 5rem` verhindert das.
 
-### 🟡 Mittel
+### 2.6 Zwei Fehler in der Bedienlogik — behoben
 
-**`main.js` enthält toten Code** (Zeilen für Gallery/Lightbox, IE-Fixes, Object-fit-Fallback, `#navPanel`):
-- `$('.thumbnails a')` — kein `.thumbnails` im HTML
-- `$('#navPanel')` — kein `#navPanel` im HTML  
-- IE flexbox fixes, object-fit Fallback — IE ist seit 2022 EOL
+- **`lockScroll()` war definiert, wurde aber nie aufgerufen.** Beide
+  Consent-Ebenen sind als `role="dialog" aria-modal="true"` ausgezeichnet, der
+  Hintergrund scrollte trotzdem mit.
+- **Der BFSG-Check setzte den Fokus auf ein `<div>` ohne `tabindex`** —
+  `focus()` läuft dort wirkungslos ins Leere. Nach Abschluss des Selbstchecks
+  landete der Fokus also nirgends. Behoben durch `tabindex="-1"`; das gleichzeitig
+  gesetzte `aria-live="assertive"` entfiel, weil sonst doppelt vorgelesen würde.
 
-**`typeform-embed.js` lokal gespeichert** (62 KB) statt via Typeform CDN — verpasst automatische Updates, mögliche Versions-Diskrepanz.
+### 2.7 Label in Name (2.5.3) — behoben
 
----
-
-## 5. CSS-Qualität
-
-### 🟢 Gut
-- CSS Custom Properties für Farb-Palette konsistent ✅
-- `font-display: swap` in allen @font-face ✅
-- `prefers-reduced-motion` berücksichtigt ✅
-- Mobile-Breakpoints definiert (768px, 576px) ✅
-- `clamp()` für responsive H1 ✅
-
-### 🟠 Hoch
-
-**Dreifache Utility-Klassen-Definitionen**  
-Klassen wie `.mb-4`, `.py-5`, `.d-flex`, `.text-center` sind definiert in:
-1. Bootstrap 5 (`css/bootstrap.min.css`)
-2. Inline `<style>`-Block (jede HTML-Seite)
-3. `css/custom.css`
-
-Das führt zu Konflikten durch `!important`-Kaskaden und erschwert Debugging.
-
-**`!important` extensiv im Inline-CSS** (`index.html`, bfsg-Seite)  
-`border-radius: 0 !important` auf `*, *::before, *::after` überschreibt alle Bootstrap-Elemente. Buttons, Inputs, Accordions verlieren ihre Bootstrap-Radii, was mit spezifischeren Regeln wieder mühsam zurückgesetzt werden muss.
-
-**Inline-Styles für Layout-Entscheidungen**
-
-| Datei | Zeile | Inline-Style |
-|-------|-------|--------------|
-| `index.html` | 498 | `style="max-width: 900px;"` |
-| `index.html` | 739 | `style="background-image: linear-gradient(...)"` (komplexer Gradient) |
-| `index.html` | 785 | `style="font-size: 1.25rem;"` |
-| `bfsg-...html` | 1030 | `style="background:var(--primary); color:white;"` |
-| Footer (alle) | multiple | `style="font-size: 0.9rem;"`, `style="border-color: rgba(...)"` |
-
-### 🟡 Mittel
-
-**`header-tagline`-Klasse in inline `<style>` der bfsg-Seite definiert** (Zeile 299–308), fehlt aber im Critical-CSS von index.html, obwohl der Header auf index.html semantisch gleich sein sollte.
-
-**`font-size: 18px` in HTML statt `rem`-Basis** — `html { font-size: 18px }` sollte `font-size: 112.5%` (18/16) sein, damit Nutzer-Browser-Schriftgröße respektiert wird.
-
-**`border: 0 !important` auf `.visually-hidden` / `.screen-reader`** — korrekt, aber `clip` ist deprecated zugunsten von `clip-path: inset(50%)`.
+Die Logo-Links trugen `aria-label="agentur dk – design & kommunikation – Zur
+Startseite"`, während der sichtbare Text anders lautete. Sprachsteuerung findet
+ein Element dann nicht über das, was daraufsteht. Das `aria-label` ist entfernt,
+der Zielhinweis steht als visuell verborgener Text im Link.
 
 ---
 
-## 6. JavaScript-Qualität
+## 3. Performance
 
-### 🟢 Gut
-- `textContent` statt `innerHTML` in Typewriter-Effekt (kein XSS) ✅
-- `prefers-reduced-motion` check vor Animationen ✅
-- `IntersectionObserver` für Scroll-Animationen (modern, effizient) ✅
-- BFSG-Check-Logik in IIFE gekapselt ✅
-- `defer` auf allen Script-Tags ✅
+### 3.1 Render-blockierendes CSS — behoben
 
-### 🔴 Kritisch
+Jede Seite lud ein 49-kB-Stylesheet als eigenen Request. Lighthouse wies dafür
+rund 600–870 ms Verzögerung aus; mobil lag die Startseite bei 92.
 
-**`skel.min.js` ohne Funktion geladen** (alle Seiten, 8,9 KB)  
-Diese Library eines alten HTML5 UP-Templates wird auf keiner Seite aufgerufen. Sie belastet den JavaScript-Parse-Tree unnötig.
+`build.inlineStylesheets: 'always'` bettet das CSS ein — der Roundtrip entfällt
+vollständig. Gzip-komprimiert sind es 18–27 kB pro Seite.
 
-**`util.js` ohne Funktion** (alle Seiten, 6,3 KB)  
-Stellt jQuery-Extensions bereit (`$.fn.navList`, `$.fn.panel`, `$.fn.placeholder`), die im aktuellen HTML-Markup nirgendwo aufgerufen werden.
+### 3.2 Layout-Shift durch Schriftwechsel — behoben
 
-### 🟠 Hoch
+Nach dem CSS-Fix blieb CLS 0,096 bis 0,172, vollständig verursacht durch den
+Font-Swap. Die vorhandenen Metric-Overrides waren geschätzt.
 
-**`main.js` referenziert nicht-existente DOM-Elemente** (alle Seiten)  
-```js
-$('.thumbnails a')  // kein .thumbnails im HTML
-$('#navPanel')      // kein #navPanel im HTML
-```
-Beide Queries geben leere jQuery-Objekte zurück — kein Fehler, aber toter Code der zur Verwirrung führt.
+Der Versuch, sie zu messen, war aufschlussreich: Das Breitenverhältnis zwischen
+Webfont und Arial **hängt vom konkreten Text ab**. Über 30 000 Zeichen echten
+Seitentexts ergab sich für Manrope 400 ein size-adjust von 104,6 %, für einen
+synthetischen Prüfstring mit Ziffern und Geviertstrich dagegen 100,1 % — ein
+Unterschied von 4,5 %, der genau den beobachteten Umbruch erklärt. Ein einzelner
+Wert je Familie kann zudem nur ein Gewicht treffen.
 
-**`document.write(new Date().getFullYear())` im Footer** (alle Seiten)  
-`document.write()` nach dem Parsen des Dokuments blockiert den Renderer in bestimmten Szenarien. Moderne Alternative: ein Element mit ID und `textContent`-Zuweisung.
+Deshalb wurde nicht weiter kalibriert, sondern die Fehlerquelle beseitigt:
+**`font-display: optional`**. Der Browser räumt dem Font ein kurzes Zeitfenster
+ein und verzichtet danach für diesen Seitenaufruf auf den Tausch. Entweder ist
+der Webfont von Anfang an da, oder es bleibt beim Fallback — ein Sprung entsteht
+in keinem Fall. Die Schriften liegen lokal, sind rund 24 kB groß und die
+kritischen Schnitte werden vorgeladen, also greift praktisch immer der erste Fall.
 
-**BFSG-Check-Script außerhalb von `DOMContentLoaded`** (`bfsg-wordpress-website-agentur.html`, Zeile 1183)  
-Das BFSG-Check-IIFE läuft unmittelbar beim Script-Parsing. Da `defer` gesetzt ist, ist das DOM verfügbar — kein Fehler, aber inkonsistent mit dem `DOMContentLoaded`-Muster auf derselben Seite.
+**CLS liegt seitdem auf allen 16 Seiten bei 0.** Die gemessenen Fallback-Metriken
+bleiben als Sicherheitsnetz erhalten (`npm run fonts:metrics`).
 
-### 🟡 Mittel
+### 3.3 Geprüft und verworfen: CSS je Seite reduzieren
 
-**Duplizierter Typewriter-Code** (`index.html` Zeile 891–942, Wiederholung in bfsg, impressum, datenschutz)  
-Identischer `twObserver`-Block zur Animation von "Kontakt"-Headings ist in mindestens 4 HTML-Dateien inline kopiert. Gehört in die externe `main.js`.
+Da das CSS eingebettet ist, trägt jede Seite das komplette Stylesheet. Ein
+Werkzeug, das je Seite nur die tatsächlich passenden Regeln behält, erreichte
+−37 % (Impressum 49 → 23 kB).
 
-**`typeform-embed.js` lokal** (`index.html`, Zeile 759) — Typeform kann API-Änderungen einführen, die die lokale Datei veralten lassen.
+**Nicht übernommen.** Ein Pixelvergleich vorher/nachher zeigte, dass Bausteine,
+die erst JavaScript erzeugt — etwa der Leistungs-Check auf der Startseite — ihr
+Styling verloren: 44 px hohe Schaltflächen schrumpften auf 26 px. Ein Schutz für
+Inline-Skripte behob das nicht, weil der betreffende Code als gebündeltes Modul
+ausgeliefert wird. Für einen Lighthouse-Punkt in zwei von 32 Läufen ist das
+Risiko einer stillen Layout-Regression in Produktion die falsche Abwägung.
 
----
+Der saubere Weg wäre, das CSS an der Quelle zu verkleinern: `global.css` umfasst
+rund 1 900 Zeilen und trägt Regeln für Komponenten, die es nicht mehr gibt.
+Das ist eine eigene, gut abgrenzbare Aufgabe.
 
-## 7. Security
+### 3.4 Messumgebung
 
-### 🟢 Gut
-- Alle externen Links mit `https://` ✅
-- Externe Links mit `rel="noopener"` ✅
-- Social-Links mit `rel="me noopener"` ✅
-- Alle Fonts selbst-gehostet (kein Third-Party GDPR-Risiko durch Google Fonts) ✅
-- Kein Google Maps, kein YouTube-Embed ✅
-- `textContent` statt `innerHTML` in allen JS-Manipulationen ✅
-
-### 🔴 Kritisch
-
-**Datenschutz nennt Google Analytics — kein GA-Code** (`datenschutz.html`, Zeile 416–419)  
-Die Datenschutzerklärung beschreibt den Einsatz von Google Analytics mit IP-Anonymisierung (`_gat._anonymizeIp`), aber in keiner der 5 HTML-Dateien findet sich ein GA-Tracking-Code (gtag.js, analytics.js, ga()). 
-
-Zwei mögliche Szenarien:
-- **GA wurde entfernt, Datenschutz nicht aktualisiert** → Datenschutzerklärung ist falsch (nennt nicht vorhandene Tools)
-- **GA soll noch eingebunden werden** → darf ohne Cookie-Consent-Banner nicht geschehen
-
-In beiden Fällen: sofortiger Handlungsbedarf.
-
-**Kein Cookie-Consent-Banner / Consent-Management**  
-Die Datenschutzerklärung nennt Cookies und Logfiles. Typeform setzt beim Popup ebenfalls Cookies. Nach DSGVO und dem Urteil des BGH (Cookie-II, 2020) ist für nicht-technisch-notwendige Cookies eine informierte Einwilligung erforderlich. Kein Consent-Banner vorhanden.
-
-### 🟠 Hoch
-
-**Impressum unvollständig** (`impressum.html`)  
-Fehlende Pflichtangaben nach deutschem Recht:
-
-| Angabe | Status | Rechtsgrundlage |
-|--------|--------|-----------------|
-| ODR-Plattform-Link (OS-Streitbeilegung) | ❌ fehlt | EU-Verordnung 524/2013, § 36 VSBG |
-| Hinweis zur Streitbeilegung (§ 36 VSBG) | ❌ fehlt | § 36 VSBG |
-| USt-IdNr. oder Hinweis auf Befreiung | ❌ fehlt | § 5 Abs. 1 Nr. 6 TMG |
-| Berufshaftpflicht (falls anwendbar) | ❓ unklar | Branchenabhängig |
-
-Der Link auf die OS-Plattform (`https://ec.europa.eu/consumers/odr/`) ist für B2C-Anbieter Pflicht.
-
-### 🟡 Mittel
-
-**Typeform-Privacy-Link zeigt auf Admin-URL** (`datenschutz.html`, Zeile 424)  
-`https://admin.typeform.com/to/dwk6gt` ist ein Typeform-Admin-Link, keine öffentliche Datenschutzseite. Der korrekte Link wäre die öffentliche Typeform-Datenschutzrichtlinie.
-
-**Soziale Links als Platzhalter** — alle Social-Links führen zu Plattform-Homepages. Damit können Nutzer die Agentur auf diesen Plattformen nicht finden, obwohl die Links Vertrauen suggerieren.
+`astro preview` liefert unkomprimiert aus, GitHub Pages sendet gzip. Lighthouse
+maß dadurch eine FCP, die es in Produktion nie gibt. `tools/serve.mjs` bildet die
+Auslieferung nach; alle Zahlen unten stammen daraus.
 
 ---
 
-## 8. Responsive / Mobile
+## 4. Inhalt
 
-### 🟢 Gut
-- Viewport-Meta auf allen Seiten ✅
-- `max-width: 100%; overflow-x: hidden` gegen horizontales Scrollen ✅
-- Responsive Breakpoints 768px und 576px definiert ✅
-- BFSG-Check-Buttons: `min-height: 120px` (gute Touch-Targets) ✅
-- `flex-wrap` auf Button-Gruppen ✅
-- Schriftgröße auf Mobile reduziert (16px bei ≤768px, 15px in custom.css) ✅
+### 4.1 Behoben
 
-### 🟠 Hoch
+| Befund | Seite |
+|---|---|
+| Tippfehler „Was wir für Sie **tust**" in einer Überschrift | social-recruiting |
+| Platzhaltertext „Kundenlogo 1–5" in der Kundenleiste, live sichtbar | Startseite |
+| H1 „Sichtbarkeit, die wirkt." — kein einziges Keyword | Startseite |
+| Zwei H2 mit identischem Text „Was wir für Sie tun" | Startseite |
+| Zwei H2 mit identischem Text „Projekt anfragen" | Startseite |
+| „Kleine Agentur.Klarer Fokus." — fehlendes Leerzeichen im H1 | ueber-uns |
+| H1 nur „Leistungen" | leistungen |
 
-**Social-Icons im Footer — zu kleine Touch-Targets**  
-Die Footer-Social-Icons sind nur FontAwesome `14px`-Icons ohne ausreichende Padding-Area. WCAG 2.2 SC 2.5.8 fordert ≥24×24 px effektive Touch-Target-Größe. Das betrifft alle 5 Seiten.
+Die Kundenleiste zeigt jetzt die Namen, die ohnehin in den Referenzen stehen —
+TARGOBANK, BMBFSJ, Berufsförderungswerke, DU BIST GRIECHE, aposocial.
 
-**Hero-Section auf index.html ohne Hauptnavigation**  
-Auf Mobile gibt es keine Hamburger-Menu-Navigation. Die einzigen Aktions-Links sind die beiden CTA-Buttons im Hero. Nutzer können direkt zu keiner anderen Seite navigieren (außer über Footer-Links, die auf Mobile weit unten liegen).
+Die Startseiten-H1 lautet jetzt „Digitalagentur aus Köln für barrierefreie
+WordPress-Websites". Der animierte Claim bleibt erhalten, rückt aber unter die
+Überschrift — die H1 ist damit ein stabiles, keywordtragendes Element statt
+eines wechselnden Textes.
 
-### 🟡 Mittel
+### 4.2 Dünne Seiten
 
-**`min-vh-100` auf About-Section** (`index.html`, Zeile 740) — erzwingt 100vh Mindesthöhe für den About-Bereich. Auf Mobile kann das zu einer leeren, unübersichtlichen Sektion führen.
+`leistungen.html` hatte als Einstiegsseite für alle acht Leistungen nur 358
+Wörter. Ergänzt wurden die Orientierungstabelle (acht Ausgangslagen → passende
+Leistung, jeweils verlinkt) und fünf übergreifende FAQ-Einträge: **358 → 618 Wörter**,
+bei deutlich besserer interner Verlinkung.
 
-**`p-md-5`-Inline-Style** (`index.html`, Zeile 498): `style="max-width: 900px;"` auf dem Hero-Content-Div wird auf Mobile nicht überschrieben. Das funktioniert nur weil `overflow-x: hidden` greift.
+**Offen** — hier fehlen Fakten, die nur die Agentur liefern kann, weshalb sie
+bewusst nicht erfunden wurden:
 
----
+| Seite | Wörter | Empfehlung |
+|---|---|---|
+| projekte | 490 | Pro Projekt Ausgangslage, Maßnahme und ein belegbares Ergebnis. Ein Fallbeispiel mit Zahl wird von KI-Systemen deutlich häufiger zitiert als eine Aufzählung. |
+| ueber-uns | 496 | Gründungsjahr, Werdegang, konkrete Arbeitsweise. `foundingDate` steht derzeit auf 2005 — bitte prüfen. |
+| 404 | 36 | Die drei meistgesuchten Ziele verlinken. |
 
-## 9. Content
+Weitere Empfehlungen ohne Umsetzung:
 
-### 🟢 Gut
-- Klare Hauptbotschaft und BFSG-Fokus ✅
-- FAQ-Sektion auf BFSG-Seite mit korrekten JSON-LD-Antworten ✅
-- Prozess-Darstellung (5 Schritte) übersichtlich ✅
-- Kontaktdaten konsistent in Header, Footer, Impressum, Datenschutz ✅
-- llms.txt vorhanden mit relevanten Informationen ✅
-- BFSG-Check mit sinnvoller Logik (Kleinstunternehmen-Ausnahme korrekt) ✅
-
-### 🔴 Kritisch
-
-**Alle Social-Media-Links sind generische Platzhalter** (`index.html` Zeilen 789–812, bfsg, impressum, datenschutz, barrierefreiheit)
-
-| Icon | Href |
-|------|------|
-| Facebook | `https://www.facebook.com/` |
-| Instagram | `https://www.instagram.com/` |
-| Twitter | `https://twitter.com/` |
-| Xing | `https://www.xing.com/` |
-| Pinterest | `https://www.pinterest.de/` |
-| LinkedIn | `https://www.linkedin.com/` |
-| YouTube | `https://www.youtube.com/` |
-| Spotify | `https://open.spotify.com/` |
-
-Das JSON-LD in `index.html` (Zeile 44) enthält hingegen den korrekten LinkedIn-Link: `https://www.linkedin.com/in/daniel-kontelis/`. Die 8 Footer-Social-Links führen alle auf die generischen Plattform-Homepages — ein erheblicher Vertrauens- und Credibility-Schaden auf einer Live-Site.
-
-**Kein 404.html vorhanden**  
-Bei fehlerhaften URLs gibt der Webserver eine generische Fehlerseite aus. Eine gebrandete 404-Seite mit Navigation verhindert Nutzerfrustration und erhält SEO-Kontext.
-
-### 🟠 Hoch
-
-**Header auf index.html komplett leer**  
-Kein Logo, kein Name der Agentur, keine Navigation. Erstbesucher sehen sofort den Hero, aber keinen Kontext, wer die Agentur ist. Die anderen Seiten (bfsg, impressum etc.) haben Logos im Header — `index.html` nicht.
-
-**Kein primäres Navigationsmenü** auf keiner Seite  
-Nutzer können nur über Footer-Links oder explizite CTAs zwischen Seiten navigieren. Für SEO fehlen interne Verlinkungen von Header-Nav.
-
-### 🟡 Mittel
-
-**Widerspruch WCAG 2.1 vs. WCAG 2.2** (`barrierefreiheit.html`, Zeile 37)  
-"WCAG 2.1 Level A/AA" vs. `custom.css`-Kommentar "WCAG 2.2 AA" vs. `bfsg-wordpress-website-agentur.html` "WCAG 2.2". Die Barrierefreiheitserklärung sollte den tatsächlich angestrebten Standard korrekt benennen.
-
-**Service-Card "WordPress Agentur Köln"** enthält Sub-Items "Print on Demand", "Automatisierungen", "Beteiligungsmodelle möglich" (`index.html`, Zeilen 672–676) — inhaltlich unpassend unter "WordPress Agentur Köln". Verwirrender Nutzen-Kommunikation.
-
-**`impressum.html`: Referenz zu § 55 Abs. 2 RStV** (Zeile 107)  
-Der RStV wurde 2020 durch den MStV (Medienstaatsvertrag) abgelöst. Die korrekte Referenz wäre § 18 Abs. 2 MStV.
-
-**Datenschutz: Accordion-Abschnitt 4 beschreibt Google Analytics-Implementierung aus ~2018**  
-`_gat._anonymizeIp` ist ein veraltetes GA-Universal-Analytics-Feature (UA wurde 2023 abgeschaltet). Der aktuelle GA4-Standard funktioniert anders. Falls GA wieder eingebunden werden soll, muss die Datenschutzerklärung GA4-konform aktualisiert werden.
-
-**llms.txt: Social Recruiting nicht erwähnt**  
-Das Social-Recruiting-Angebot wird prominent auf der Startseite beworben, fehlt aber komplett in `llms.txt`.
+- **Preisangaben konkretisieren.** „ab ca. 2.500 €" steht in der FAQ, auf
+  `website-leasing.html` fehlt jede Zahl. Preisspannen sind der am häufigsten
+  aus Agenturseiten zitierte Inhalt.
+- **Ein Blog oder Wissensbereich zum BFSG.** Die Kernkompetenz hat genau eine
+  Landingpage. Für ein Thema mit laufender Rechtsentwicklung ist das wenig
+  Substanz gegenüber Wettbewerbern mit fortlaufenden Beiträgen.
+- **`sameAs` erweitern.** Derzeit nur LinkedIn. Jedes weitere verifizierte Profil
+  (Google Business, Xing, Branchenverzeichnisse) stärkt die Entitätserkennung.
+- **Google Business Profile verknüpfen**, sobald vorhanden — für lokales SEO in
+  Köln der wirksamste einzelne Hebel.
 
 ---
 
-## 10. Technische Standards
+## 5. Technischer Unterbau
 
-### 🟢 Gut
-- `robots.txt` korrekt formatiert mit Sitemap-Verweis ✅
-- sitemap.xml valide XML-Struktur ✅
-- HTTPS-Links durchgängig ✅
-- `llms.txt` vorhanden — zukunftsorientierter Standard für KI-Crawler ✅
-- `.noscript`-Fallbacks für CSS-Loading ✅
-- Relative interne Verlinkung (funktioniert unabhängig von Domain) ✅
+### 5.1 Toter Code entfernt
 
-### 🔴 Kritisch
+16 Komponenten aus Commit `efd601b` („Starter-Architektur") waren **nirgends
+eingebunden**: elf UI-Primitives (`Button`, `Input`, `Card`, `Badge`, `Alert`,
+`Container`, `Section`, `Icon`, `Select`, `Checkbox`, `Textarea`) sowie
+`TabNav`, `ReferenceCard`, `ServiceCard`, `LogoStrip` und `JsonLd`.
 
-**Kein Favicon vorhanden** (alle 5 Seiten)  
-`index.html` Zeile 66–67 enthält nur einen Kommentar:
-```html
-<!-- Favicon (Assuming standard location if exists, otherwise placeholder) -->
-```
-Weder `favicon.ico`, noch `favicon.png`, noch `apple-touch-icon.png` existieren im Projekt. Browser-Tabs zeigen das Standard-Browser-Icon. Kein `<link rel="icon">` Tag auf keiner Seite.
+Es sind dünne Hüllen um bestehende CSS-Klassen. Das tatsächlich genutzte
+Designsystem ist die Token-Ebene plus BEM-Klassen. Eine nie eingebundene
+Parallelstruktur veraltet und führt in die Irre — entfernt.
+`git revert` holt sie zurück, falls die Ebene doch ausgebaut werden soll.
 
-**Kein 404.html** im Projekt vorhanden.
+### 5.2 Nicht reproduzierbare Builds — behoben
 
-### 🟠 Hoch
+`FaqAccordion.astro` erzeugte Element-IDs über `Math.random()`. Jeder Build
+lieferte damit anderes HTML. Jetzt aus dem Slug abgeleitet.
 
-**sitemap.xml enthält nur 3 von 5 Seiten**  
-Impressum und Datenschutz sind korrekt ausgeschlossen (noindex). Aber `barrierefreiheit.html` steht auf `index, follow` — in sitemap korrekt aufgeführt. Kein Fehler, aber zur Vollständigkeit: Falls neue Seiten hinzukommen, muss Sitemap manuell gepflegt werden (kein CMS-Auto-Update).
+### 5.3 Typsicherheit
 
-**Alle `lastmod`-Dates in sitemap.xml auf 2026-01-28 festgeschrieben**  
-Keine der Seiten hat ihr `lastmod` seit dem Relaunch aktualisiert. Das kann Googles Crawl-Budget-Planung negativ beeinflussen.
+`astro check` war nicht eingerichtet und meldete beim ersten Lauf 12 Fehler und
+3 Warnungen — durchweg Stellen, an denen TypeScript eine Null-Prüfung nicht mehr
+nachvollziehen kann, weil gehoistete Funktionsdeklarationen vor der Prüfung
+stehen. Alle behoben, indem die geprüfte Referenz an eine nicht-nullable
+Konstante gebunden wird; keine Unterdrückung per `!` oder `any`.
+Eine dieser Warnungen war der nie aufgerufene `lockScroll` aus 2.6.
 
-### 🟡 Mittel
+### 5.4 Prüfungen statt Snapshots
 
-**`document.write()` für Copyright-Jahr** (Footer aller Seiten)  
-```html
-&copy; <script>document.write(new Date().getFullYear())</script> agentur dk
-```
-Veraltetes Anti-Pattern. Modern: `<span id="year"></span>` + `document.getElementById('year').textContent = new Date().getFullYear()`.
+`check-meta.mjs` verglich Titel und Beschreibungen gegen einen eingefrorenen
+Snapshot der Alt-Site — und konservierte damit deren Fehler, unter anderem die
+acht zu langen Titel. Ersetzt durch `check-seo.mjs`, das gegen Regeln prüft.
 
-**Robots.txt disallowt nicht-existente Pfade**  
-`Disallow: /kunden/`, `/downloads/`, `/agenturvorstellung/`, `/letter/` — diese Verzeichnisse existieren im aktuellen Projekt nicht. Auf dem Live-Server möglicherweise vorhanden, aber nicht im geprüften Stand ersichtlich.
+`check-css.mjs` las nur externe Stylesheets und lief nach dem CSS-Inlining ins
+Leere; es pflegte daneben eine über hundert Zeilen lange Allowlist, die bereits
+gelöschte Komponenten enthielt. Neu geschrieben: liest externes **und** eingebettetes
+CSS, die Allowlist ist auf neun begründete Einträge geschrumpft.
 
-**Kein `<meta name="theme-color">` für mobile Browser**  
-Moderne mobile Browser nutzen `theme-color` für die Browser-Chrome-Farbe. Eine schwarze oder primärblau Chrome passend zur CI wäre möglich.
+### 5.5 Neue Werkzeuge
 
-**`<meta name="color-scheme" content="light dark">` nur auf bfsg-Seite** (Zeile 11) — inkonsistent, entweder auf alle Seiten oder keine.
+| Werkzeug | Zweck |
+|---|---|
+| `tools/a11y.mjs` | axe-core, WCAG 2.2 A/AA, 16 Seiten × 3 Zustände (auch Menü und Accordion geöffnet) |
+| `tools/wcag-manual.mjs` | Reflow, Textabstand, Fokus-Verdeckung, Zielgrößen |
+| `tools/lighthouse.mjs` | 16 Seiten × mobil/desktop, Schwelle 100, mit begründeten Ausnahmen |
+| `tools/check-seo.mjs` | Titel, Beschreibungen, Canonicals, Überschriften, JSON-LD, Sitemap |
+| `tools/serve.mjs` | gzip-Auslieferung wie GitHub Pages |
+| `tools/verify-live.mjs` | startet den Server und fährt die drei browserbasierten Gates |
+| `tools/og-image.mjs` | OG-Bild aus den Design-Tokens rendern |
+| `tools/font-metrics.mjs` | Fallback-Metriken gegen echten Seitentext messen |
 
----
+`npm run verify` fährt alles. In CI trennt sich das: `deploy.yml` prüft bei jedem
+Push die schnellen Gates, `quality.yml` fährt die browserbasierten bei Pull
+Requests, wöchentlich und auf Zuruf.
 
-## Priorisierte Empfehlungs-Liste
+### 5.6 Tests
 
-### Quick Wins (1–2 Stunden, sofortiger Impact)
-
-| Priorität | Maßnahme | Aufwand | Impact |
-|-----------|----------|---------|--------|
-| 1 | **Favicon erstellen und verlinken** — `favicon.ico` + `favicon.png` 32×32 + `apple-touch-icon.png` 180×180 + `<link rel="icon">` in allen 5 Seiten | 30 min | Hoch (Professionaliät, Branding) |
-| 2 | **Social-Media-Links korrigieren** — Entweder auf echte Profile verlinken oder Icons aus Footer entfernen | 15 min | Kritisch (Credibility) |
-| 3 | **Canonical-URLs auf absolut umstellen** — Alle 5 Seiten, `href="https://dk-dk.de/..."` | 15 min | Hoch (SEO) |
-| 4 | **Skip-Link-Href auf Fragment ändern** — `href="#main-content"` statt `href="page.html#main-content"` in allen 5 Seiten | 15 min | Kritisch (Accessibility) |
-| 5 | **sitemap.xml lastmod-Dates aktualisieren** | 5 min | Mittel (SEO) |
-| 6 | **§ 55 Abs. 2 RStV → § 18 Abs. 2 MStV** in impressum.html | 2 min | Mittel (Recht) |
-
-### Kurzfristig (1–3 Tage, kritische Compliance)
-
-| Priorität | Maßnahme | Aufwand | Impact |
-|-----------|----------|---------|--------|
-| 7 | **Cookie-Consent-Banner implementieren** (z.B. Klaro.js, Cookiebot) — vor allem wenn GA reaktiviert wird | 1–2 Tage | Kritisch (DSGVO) |
-| 8 | **Datenschutzerklärung bereinigen** — GA-Abschnitt entfernen oder GA4-konform aktualisieren; Typeform-Link korrigieren | 2 Std. | Kritisch (Recht) |
-| 9 | **Impressum-Pflichtangaben ergänzen** — ODR-Link, § 36 VSBG Hinweis, USt-IdNr.-Klärung | 1 Std. | Hoch (Recht) |
-| 10 | **BFSG-Check-Formular barrierefrei machen** — `<fieldset>` + `<legend>` für jede Frage, Fokus-Management nach Step-Wechsel, Legend nicht CSS-verstecken | 4–8 Std. | Kritisch (Reputiation/BFSG) |
-| 11 | **Primäre Navigation erstellen** — `<nav>` im Header mit Links zu allen Hauptseiten | 2–4 Std. | Hoch (UX/Accessibility) |
-| 12 | **Header auf index.html sichtbar machen** — Logo + Agenturname + Navigation einfügen | 1–2 Std. | Hoch (UX/Branding) |
-
-### Mittelfristig (1–2 Wochen, Performance & Qualität)
-
-| Priorität | Maßnahme | Aufwand | Impact |
-|-----------|----------|---------|--------|
-| 13 | **jQuery-Stack entfernen** — `jquery.min.js`, `skel.min.js`, `util.js`, `jquery.scrollex.min.js`, `jquery.scrolly.min.js` entfernen oder durch Native JS ersetzen (~176 KB Einsparung) | 1 Tag | Hoch (Performance) |
-| 14 | **main.js aufräumen** — Toten Code (Gallery, navPanel, IE-Fixes) entfernen, Typewriter in separate Funktion | 2–4 Std. | Mittel (Wartbarkeit) |
-| 15 | **Dupliziertes Critical CSS konsolidieren** — Gemeinsame Basis-Styles in eine externe Datei extrahieren (kein `media="print"`-Trick nötig wenn HTTP/2 push oder preload genutzt wird) | 1 Tag | Mittel (Wartbarkeit) |
-| 16 | **FontAwesome ersetzen** — 12 genutzte Icons als Inline SVG oder Bootstrap Icons; Einsparung: ~690 KB Serverspace, ~80 KB Netzwerkübertragung | 3–4 Std. | Mittel (Performance) |
-| 17 | **404.html erstellen** — Gebrandete Fehlerseite mit Navigation und CTA | 1–2 Std. | Mittel (UX/SEO) |
-| 18 | **`document.write()` ersetzen** — Modernes JS in allen Fußzeilen | 30 min | Gering |
-
-### Strategisch (Relaunch-Scope)
-
-| Priorität | Maßnahme | Aufwand | Impact |
-|-----------|----------|---------|--------|
-| 19 | **LocalBusiness JSON-LD** mit vollständiger Adresse, Öffnungszeiten, Geo-Koordinaten | 1 Std. | Hoch (Local SEO) |
-| 20 | **Bootstrap durch leichtgewichtiges CSS-System ersetzen** (Custom Grid + Accordion ≈ 15–20 KB statt 227 KB) | 2–3 Tage | Mittel (Performance, Kontrolle) |
-| 21 | **WCAG 2.2 vollständiger Audit** mit Screenreader-Testing (NVDA/VoiceOver), Tastatur-Navigation durch alle Interaktionspunkte | 1–2 Tage | Kritisch (BFSG-Konformität beweisbar machen) |
-| 22 | **og-image.png als WebP** (Einsparung ~50%) und dedizierten Logo-Asset für JSON-LD `Organization.logo` erstellen | 1–2 Std. | Mittel (Performance/SEO) |
-| 23 | **Terminbuchung (Calendly) DSGVO-konform einbinden** — Calendly setzt Tracking-Cookies; DSGVO-konformer Embed oder Consent-Gate notwendig | 1 Tag | Hoch (DSGVO) |
-| 24 | **barrierefreiheit.html inhaltlich erweitern** — WCAG 2.2 statt 2.1, bekannte Einschränkungen auflisten, Datum aktualisieren | 2 Std. | Mittel (Glaubwürdigkeit) |
-| 25 | **llms.txt erweitern** — Social-Recruiting-Angebot, GEO-Services, KI-Telefon-Agenten ergänzen | 30 min | Gering (GEO-Zukunftsfähigkeit) |
+74 → **91 Tests**. Die 17 neuen decken die Schema-Erzeugung ab, unter anderem
+lückenlose Breadcrumb-Positionen, eindeutige `@id`-Werte und die Zusicherung,
+dass keine `@id`-Referenz auf einen Knoten außerhalb des Graphen zeigt.
 
 ---
 
-## Zusammenfassung nach Schweregrad
+## Messwerte
 
-| 🔴 Kritisch (12 Findings) | 🟠 Hoch (14 Findings) | 🟡 Mittel (16 Findings) | 🟢 Gut (20+ Aspekte) |
-|---|---|---|---|
-| Favicon fehlt | JS-Bloat 176 KB | WCAG 2.1 vs 2.2 Inkonsistenz | DOCTYPE/lang/charset |
-| Canonicals relativ | FontAwesome Bloat | `document.write()` | Viewport korrekt |
-| Social-Links Platzhalter | Kein LocalBusiness-Schema | OG:locale fehlt | One h1 pro Seite |
-| Kein Cookie-Consent | Touch-Targets Social-Icons | Service-Card Inhalt | font-display swap |
-| GA in Datenschutz ohne Code | Kein 404.html | Sitemap lastmod veraltet | Fonts selbst-gehostet |
-| Skip-Link-JS defekt | Leerer Header index.html | llms.txt Social Recruiting | aria-hidden Icons |
-| Kein nav Landmark | ODR-Link im Impressum fehlt | RStV → MStV | aria-label Social-Links |
-| BFSG-Check Formular | Cookie-Consent DSGVO | Typeform CDN vs. lokal | prefers-reduced-motion |
-| | | | CSP-freundliches Setup |
+Alle Zahlen aus `npm run verify` gegen `tools/serve.mjs` (gzip, wie GitHub Pages).
+
+### Lighthouse — 16 Seiten × mobil und desktop
+
+| | Performance | Barrierefreiheit | Best Practices | SEO |
+|---|---|---|---|---|
+| **Desktop**, alle 16 Seiten | **100** | **100** | **100** | **100** (404: 66, siehe unten) |
+| **Mobil**, 14 von 16 Seiten | **100** | **100** | **100** | **100** (404: 66) |
+| **Mobil**, Startseite und Referenzen | 99 | 100 | 100 | 100 |
+
+**30 von 32 Läufen erreichen 100 in allen vier Kategorien.**
+
+Zum Vergleich der Ausgangsstand: mobil 92 (Startseite), 97 (zehn Seiten);
+`website-leasing` mit SEO 63; `projekte` mit Barrierefreiheit 96.
+
+**Zu den beiden 99ern.** Beide verlieren den Punkt am First Contentful Paint
+(1,5 s, Teilwertung 0,96) unter der von Lighthouse simulierten Mobilverbindung.
+CLS liegt bei 0, Total Blocking Time bei 0 ms. Die Startseite schwankt über
+wiederholte Läufe zwischen 99 und 100, `projekte` liegt stabil bei 99.
+
+Ursache ist die Zahl der Schriftschnitte: sechs Dateien konkurrieren beim
+Seitenaufbau mit dem HTML. Die Nutzung ist dabei stark ungleich verteilt —
+gemessen über alle 16 Seiten:
+
+| Schnitt | Zeichen auf der gesamten Site | Dateigröße |
+|---|---|---|
+| Manrope 400 | 191 744 | 21,9 kB |
+| Space Grotesk 700 | 7 659 | 18,5 kB |
+| Manrope 600 | 5 672 | 21,9 kB |
+| Manrope 500 | 4 661 | 21,9 kB |
+| Manrope 700 | 4 138 | 21,9 kB |
+| Space Grotesk 400 | 726 | 18,5 kB |
+| Space Grotesk 500 | 248 | 18,5 kB |
+
+Zwei Schnitte tragen zusammen 974 Zeichen und kosten 37 kB. Sie
+zusammenzulegen — Space Grotesk 400 und 500 auf 700, Manrope 500 und 600 auf
+einen Wert — würde drei Requests sparen und den letzten Punkt mit hoher
+Wahrscheinlichkeit schließen. **Das ist eine Gestaltungsentscheidung und wurde
+deshalb nicht eigenmächtig getroffen**; die Schriftstärken sind sichtbar.
+
+Umgesetzt wurde stattdessen, was ohne gestalterische Wirkung bleibt:
+
+- **Roboto Mono entfernt.** Es stand ausschließlich auf der 404-Seite und deckte
+  80 Zeichen der gesamten Site ab — dafür lagen drei Dateien im Repository.
+  Ersetzt durch den System-Monospace-Stack.
+- **Schriften auf den genutzten Zeichenvorrat verkleinert** (`npm run fonts:subset`):
+  199 → 175 kB über alle Schnitte. Der Vorrat umfasst 211 Zeichen inklusive
+  Reserve für künftige Texte, damit nicht ein neu eingefügtes Sonderzeichen im
+  Fallback landet.
+
+**Zur SEO-Wertung 66 auf der 404-Seite.** Lighthouse bemängelt `is-crawlable` —
+die Seite trägt bewusst `noindex`. Das ist korrektes Verhalten für eine
+Fehlerseite, kein Mangel; `tools/lighthouse.mjs` führt es als begründete Ausnahme.
+
+### Barrierefreiheit
+
+| Prüfung | Umfang | Ergebnis |
+|---|---|---|
+| axe-core (WCAG 2.0/2.1/2.2 A + AA, Best Practices) | 16 Seiten × 3 Zustände | **0 Verstöße** |
+| Reflow 320 px, Textabstand, Fokus-Verdeckung, Zielgrößen | 16 Seiten | **0 Befunde** |
+| Lighthouse Accessibility | 32 Läufe | **100** |
+
+Die drei Zustände je Seite sind Ausgangszustand, geöffnetes Mobilmenü und
+geöffnetes Accordion — ein rein statischer Scan übersieht sonst genau die
+Komponenten, die per JavaScript eingeblendet werden.
+
+### Build
+
+| | vorher | jetzt |
+|---|---|---|
+| Unit-Tests | 74 | **91** |
+| Typfehler (`astro check`) | nicht eingerichtet, 12 Fehler beim ersten Lauf | **0** |
+| Interne Links | OK | OK |
+| SEO-Regeln | Snapshot-Vergleich | **16/16 regelkonform** |
+| CSS-Klassen ohne Regel | Prüfung lief ins Leere | **0** |
+| CLS (alle Seiten) | 0,096–0,172 | **0** |
+| Render-blockierende Requests | 1 (49 kB) | **0** |
+| OG-Bild | 1536 × 1024, 209 kB | **1200 × 630, 31 kB** |
+
 
 ---
 
-*Audit-Stand: 2026-08-16 | Methodik: Vollständige Datei-Inspektion, Cross-Referenz zwischen Seiten, Sitemap-Abgleich, WCAG 2.2-Prüfung ohne Browser-Testing*
+## Was als Nächstes ansteht
+
+**Vor dem Domainumzug**
+
+1. DNS-Einträge für `dk-dk.de` auf GitHub Pages setzen und in den
+   Repository-Einstellungen „Enforce HTTPS" aktivieren.
+2. Nach dem Umzug in der Google Search Console die Property `dk-dk.de` anlegen
+   und die Sitemap einreichen.
+3. Prüfen, ob von der alten Domain 301-Weiterleitungen nötig sind.
+
+**Inhaltlich**
+
+4. Referenzseite um belegbare Ergebnisse ergänzen (Abschnitt 4.2).
+5. Preisspannen auf `website-leasing.html` benennen.
+6. Wissensbereich zum BFSG aufbauen.
+7. `foundingDate` in `site.config.ts` verifizieren (steht auf 2005).
+
+**Technisch**
+
+8. `global.css` verschlanken — rund 1 900 Zeilen mit Regeln für entfernte
+   Komponenten. Danach lohnt ein erneuter Blick auf Abschnitt 3.3.
+9. Echte Kundenlogos statt der Namensschilder in der Vertrauensleiste.
+10. Über die Zusammenlegung der Schriftschnitte entscheiden (Zahlen unter
+    [Messwerte](#messwerte)) — drei Requests weniger, dafür sichtbar veränderte
+    Schriftstärken an einzelnen Stellen.

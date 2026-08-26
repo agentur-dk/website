@@ -9,67 +9,16 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="Online-Marketing Agentur Köln – Ads, Content & Social Media – agentur dk"
-  description="Online-Marketing aus Köln: Google Ads, Meta & LinkedIn Kampagnen, Content-Marketing und E-Mail-Marketing mit messbarem ROAS. Jetzt Kampagne starten."
+  slug="online-marketing"
+  title="Online-Marketing Agentur Köln – Ads & Content | agentur dk"
+  description="Google Ads, Meta- und LinkedIn-Kampagnen, Content- und E-Mail-Marketing aus Köln. Budget nach messbarem ROAS gesteuert statt nach Bauchgefühl."
+    service={{
+      name:        'Online-Marketing',
+      description: 'Google Ads, Meta- und LinkedIn-Kampagnen, Content-Marketing und E-Mail-Marketing mit messbarer Steuerung über ROAS.',
+      serviceType: 'Online Marketing',
+      offers: ['Google Ads', 'Meta & Instagram Ads', 'LinkedIn Kampagnen', 'Content-Marketing', 'E-Mail-Marketing', 'Social Recruiting'],
+    }}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Online-Marketing",
-      "provider": {
-        "@type": "Organization",
-        "name": "agentur dk – design & kommunikation",
-        "url": "https://dk-dk.de"
-      },
-      "description": "Social-Media-Kampagnen (LinkedIn, Meta, Google Ads), Content-Marketing und E-Mail-Marketing – zielgruppengenau und mit messbarem Ergebnis.",
-      "areaServed": { "@type": "Country", "name": "DE" },
-      "serviceType": "Digital Agency",
-      "url": "https://dk-dk.de/online-marketing"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Welche Plattformen betreust Sie?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Wir planen und steuern Kampagnen auf Google Ads, Meta (Facebook/Instagram) und LinkedIn – abgestimmt auf Ihre Zielgruppe, Ihr Budget und Ihre Conversion-Ziele."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Wie misst Sie den Erfolg von Kampagnen?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Wir arbeiten mit klaren KPIs: ROAS, CAC, Conversion-Rate und Cost per Lead. Sie erhalten regelmäßige Reportings in verständlicher Sprache – keine Zahlenfriedhöfe."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Was kostet Online-Marketing?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Das hängt von Kampagnenziel und Umfang ab. Wir erstellen nach einem kostenlosen Erstgespräch ein transparentes Angebot – inklusive Budgetempfehlung für die Ads-Ausgaben."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Kannst Sie auch nur einzelne Maßnahmen umsetzen?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja. Ob nur Google Ads, nur Content oder nur E-Mail-Marketing – wir übernehmen einzelne Bausteine oder den kompletten Marketing-Mix. Sie entscheiden."
-          }
-        }
-      ]
-    }
-    </script>
-  </Fragment>
 
   <Header />
 
@@ -207,27 +156,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: FAQ -->
-    <FaqAccordion
-      heading="Häufige Fragen"
-      items={[
-        {
-          question: "Welche Plattformen betreust Sie?",
-          answer: "Wir planen und steuern Kampagnen auf Google Ads, Meta (Facebook/Instagram) und LinkedIn – abgestimmt auf Ihre Zielgruppe, Ihr Budget und Ihre Conversion-Ziele.",
-        },
-        {
-          question: "Wie misst Sie den Erfolg von Kampagnen?",
-          answer: "Wir arbeiten mit klaren KPIs: ROAS, CAC, Conversion-Rate und Cost per Lead. Sie erhalten regelmäßige Reportings in verständlicher Sprache – keine Zahlenfriedhöfe.",
-        },
-        {
-          question: "Was kostet Online-Marketing?",
-          answer: "Das hängt von Kampagnenziel und Umfang ab. Wir erstellen nach einem kostenlosen Erstgespräch ein transparentes Angebot – inklusive Budgetempfehlung für die Ads-Ausgaben.",
-        },
-        {
-          question: "Kannst Sie auch nur einzelne Maßnahmen umsetzen?",
-          answer: "Ja. Ob nur Google Ads, nur Content oder nur E-Mail-Marketing – wir übernehmen einzelne Bausteine oder den kompletten Marketing-Mix. Sie entscheiden.",
-        },
-      ]}
-    />
+    <FaqAccordion slug="online-marketing" />
 
     <!-- SECTION: Kontakt -->
     <LeadForm page="Online-Marketing" heading="Jetzt unverbindlich anfragen" />

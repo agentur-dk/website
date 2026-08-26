@@ -1,0 +1,47 @@
+---
+/**
+ * Schriftdefinitionen.
+ *
+ * Liegt bewusst hier und nicht in global.css: die @font-face-URLs waren
+ * dort als `/website/…` hartkodiert und wären beim Wechsel auf die
+ * Custom Domain (base `/`) sämtlich ins Leere gelaufen. Über
+ * `import.meta.env.BASE_URL` folgen sie jetzt automatisch dem Deploy-Ziel.
+ *
+ * Preload nur für die zwei Schnitte, die above the fold gebraucht werden —
+ * mehr Preloads konkurrieren mit dem LCP-Request.
+ *
+ * font-display: optional statt swap. Mit `swap` tauscht der Browser die
+ * Ersatzschrift gegen den Webfont aus, sobald dieser eintrifft — jeder
+ * Tausch, bei dem sich der Zeilenumbruch ändert, erzeugt Layout-Shift.
+ * Genau daraus bestand der gesamte verbleibende CLS (0,096–0,17), und
+ * Metric-Overrides bekamen ihn nicht zuverlässig auf null, weil das
+ * Breitenverhältnis zwischen Webfont und Arial vom konkreten Text abhängt.
+ * `optional` räumt dem Font ein kurzes Zeitfenster ein und verzichtet
+ * danach für diesen Seitenaufruf auf den Tausch: entweder der Webfont ist
+ * von Anfang an da, oder es bleibt beim Fallback — ein Sprung entsteht in
+ * keinem Fall. Die Schriften liegen lokal, sind ~24 kB groß und die
+ * kritischen Schnitte werden vorgeladen, also greift praktisch immer der
+ * erste Fall; ab dem zweiten Seitenaufruf ohnehin aus dem Cache.
+ */
+const base = import.meta.env.BASE_URL;
+
+const FACES = [
+  { family: 'Space Grotesk', weight: 400, file: 'space-grotesk-v3-latin-400' },
+  { family: 'Space Grotesk', weight: 500, file: 'space-grotesk-v3-latin-500' },
+  { family: 'Space Grotesk', weight: 700, file: 'space-grotesk-v3-latin-700', preload: true },
+  { family: 'Manrope',       weight: 400, file: 'manrope-v20-latin-400', preload: true },
+  { family: 'Manrope',       weight: 500, file: 'manrope-v20-latin-500' },
+  { family: 'Manrope',       weight: 600, file: 'manrope-v20-latin-600' },
+  { family: 'Manrope',       weight: 700, file: 'manrope-v20-latin-700' },
+] as const;
+
+const url = (file: string) => `${base}fonts/${file}.woff2`;
+
+const css = FACES.map((f) => `@font-face{font-family:'${f.family}';src:url('${url(f.file)}') format('woff2');font-weight:${f.weight};font-style:normal;font-display:optional}`).join('');
+---
+
+{FACES.filter((f) => 'preload' in f && f.preload).map((f) => (
+  <link rel="preload" href={url(f.file)} as="font" type="font/woff2" crossorigin />
+))}
+
+<style is:inline set:html={css}></style>

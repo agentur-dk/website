@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://agentur-dk.github.io/website/sitemap.xml

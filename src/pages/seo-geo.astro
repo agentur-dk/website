@@ -9,75 +9,16 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="SEO & GEO Agentur Köln – Sichtbarkeit bei Google & KI – agentur dk"
-  description="SEO und GEO aus Köln: Technisches SEO, Content-Optimierung und Generative Engine Optimization (GEO) für ChatGPT, Claude & Co. Jetzt Platzierungen sichern."
+  slug="seo-geo"
+  title="SEO & GEO Agentur Köln – Google und KI | agentur dk"
+  description="Technisches SEO, Content und Generative Engine Optimization aus Köln – damit Sie bei Google und in ChatGPT, Claude und Perplexity auftauchen."
+    service={{
+      name:        'SEO & GEO Optimierung',
+      description: 'Technisches und inhaltliches SEO sowie Generative Engine Optimization für KI-Systeme – strukturierte Daten, llms.txt und lokales SEO.',
+      serviceType: 'Search Engine Optimization',
+      offers: ['Technisches SEO', 'Content-Optimierung', 'Generative Engine Optimization', 'Strukturierte Daten', 'llms.txt & KI-Readiness', 'Lokales SEO'],
+    }}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "SEO & GEO Optimierung",
-      "provider": {
-        "@type": "Organization",
-        "name": "agentur dk – design & kommunikation",
-        "url": "https://dk-dk.de"
-      },
-      "description": "Technisches und inhaltliches SEO sowie Generative Engine Optimization (GEO) für KI-Systeme – strukturierte Daten, llms.txt und lokales SEO für Köln, NRW und Deutschland.",
-      "areaServed": { "@type": "Country", "name": "DE" },
-      "serviceType": "Digital Agency",
-      "url": "https://dk-dk.de/seo-geo"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Was ist GEO – Generative Engine Optimization?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "GEO optimiert Inhalte so, dass sie von KI-Systemen wie ChatGPT, Claude, Gemini oder Perplexity in Antworten zitiert werden. Dazu gehören klare Struktur, Zitate, Fakten und maschinenlesbare Auszeichnung."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Brauche ich SEO und GEO oder reicht eines davon?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Beides ergänzt sich: SEO sichert klassische Google-Sichtbarkeit, GEO die Präsenz in KI-Antworten. Wer in beiden Kanälen erscheint, besetzt die relevante Aufmerksamkeit – heute und in Zukunft."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Wie lange dauert es, bis SEO wirkt?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Erste Verbesserungen sind oft nach 4–6 Wochen messbar, spürbare Rankings nach 3–6 Monaten. Entscheidend sind saubere Technik, relevante Inhalte und kontinuierliche Optimierung."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Bieten Sie auch lokales SEO für Köln an?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja. Wir optimieren Google Business Profile, lokale Strukturdaten und regionale Inhalte, damit Sie bei Suchanfragen wie 'Agentur Köln' oder 'WordPress Köln' gefunden werden."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Was ist llms.txt?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "llms.txt ist eine maschinenlesbare Datei, die KI-Systemen die wichtigsten Informationen über Ihre Website bereitstellt – vergleichbar mit robots.txt, aber für Large Language Models. Wir implementieren und pflegen sie."
-          }
-        }
-      ]
-    }
-    </script>
-  </Fragment>
 
   <Header />
 
@@ -215,31 +156,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: FAQ -->
-    <FaqAccordion
-      heading="Häufige Fragen"
-      items={[
-        {
-          question: "Was ist GEO – Generative Engine Optimization?",
-          answer: "GEO optimiert Inhalte so, dass sie von KI-Systemen wie ChatGPT, Claude, Gemini oder Perplexity in Antworten zitiert werden. Dazu gehören klare Struktur, Zitate, Fakten und maschinenlesbare Auszeichnung.",
-        },
-        {
-          question: "Brauche ich SEO und GEO oder reicht eines davon?",
-          answer: "Beides ergänzt sich: SEO sichert klassische Google-Sichtbarkeit, GEO die Präsenz in KI-Antworten. Wer in beiden Kanälen erscheint, besetzt die relevante Aufmerksamkeit – heute und in Zukunft.",
-        },
-        {
-          question: "Wie lange dauert es, bis SEO wirkt?",
-          answer: "Erste Verbesserungen sind oft nach 4–6 Wochen messbar, spürbare Rankings nach 3–6 Monaten. Entscheidend sind saubere Technik, relevante Inhalte und kontinuierliche Optimierung.",
-        },
-        {
-          question: "Bieten Sie auch lokales SEO für Köln an?",
-          answer: "Ja. Wir optimieren Google Business Profile, lokale Strukturdaten und regionale Inhalte, damit Sie bei Suchanfragen wie 'Agentur Köln' oder 'WordPress Köln' gefunden werden.",
-        },
-        {
-          question: "Was ist llms.txt?",
-          answer: "llms.txt ist eine maschinenlesbare Datei, die KI-Systemen die wichtigsten Informationen über Ihre Website bereitstellt – vergleichbar mit robots.txt, aber für Large Language Models. Wir implementieren und pflegen sie.",
-        },
-      ]}
-    />
+    <FaqAccordion slug="seo-geo" />
 
     <!-- SECTION: Kontakt -->
     <LeadForm page="SEO & GEO" heading="Jetzt unverbindlich anfragen" />

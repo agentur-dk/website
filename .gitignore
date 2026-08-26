@@ -10,3 +10,4 @@ node_modules/
 
 # Stray scaffold dir (can be deleted manually)
 second-shepherd/
+.lighthouse/

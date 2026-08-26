@@ -9,31 +9,11 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="Über uns | agentur dk – Design, Technik & Kommunikation Köln"
-  description="agentur dk ist eine inhabergeführte Agentur aus Köln für Websites, Design, Marketing und Branding. Kunden wie TARGOBANK und Bundesministerien vertrauen auf unsere ganzheitliche Beratung."
+  slug="ueber-uns"
+  title="Über uns – inhabergeführte Agentur Köln | agentur dk"
+  description="Inhabergeführte Agentur aus Köln: ein Ansprechpartner, kurze Wege, 20 Jahre Erfahrung. So arbeiten wir – und warum Konzerne uns beauftragen."
+  pageType={'AboutPage'}
 >
-  <Fragment slot="head">
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "name": "Über uns – agentur dk",
-  "url": "https://dk-dk.de/ueber-uns",
-  "inLanguage": "de-DE",
-  "description": "Wer steckt hinter agentur dk? Inhabergeführte Agentur für Websites, Design, Marketing und Branding aus Köln.",
-  "isPartOf": {
-    "@type": "WebSite",
-    "url": "https://dk-dk.de",
-    "name": "agentur dk"
-  },
-  "about": {
-    "@type": "Organization",
-    "@id": "https://dk-dk.de/#organization",
-    "name": "agentur dk – design & kommunikation"
-  }
-}
-    </script>
-  </Fragment>
 
   <Header />
 
@@ -44,7 +24,7 @@ const base = import.meta.env.BASE_URL;
       <div class="container">
         <span class="section__label">Über uns</span>
         <h1 id="ueber-hero-heading" class="section__headline">
-          Kleine Agentur.<br />Klarer Fokus.
+          Kleine Agentur aus Köln.<br />Klarer Fokus.
         </h1>
         <p class="section__lead">
           agentur dk steht für design & kommunikation – und genau das machen wir: Websites, Branding, Marketing und technische Umsetzung aus einer Hand. Inhabergeführt, direkt, verbindlich.

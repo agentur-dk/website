@@ -2,37 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
-  title="Leistungen | agentur dk – Website-Leasing, WordPress & Digital-Agentur Köln"
-  description="Alle Leistungen der agentur dk: Website-Leasing, WordPress-Websites (barrierefrei nach BFSG), SEO/GEO, Online-Marketing, Social Recruiting, Corporate Design und KI-Services."
+  slug="leistungen"
+  title="Leistungen – Web, BFSG, SEO & Marketing | agentur dk"
+  description="Website-Leasing, barrierefreie WordPress-Entwicklung, SEO/GEO, Online-Marketing, Social Recruiting, Corporate Design und KI-Services aus Köln."
 >
-  <Fragment slot="head">
-    <!-- JSON-LD: WebPage -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Leistungen – agentur dk",
-  "url": "https://dk-dk.de/leistungen",
-  "inLanguage": "de-DE",
-  "description": "Alle Leistungen der agentur dk: BFSG-barrierefreie WordPress-Websites, SEO, GEO, Online-Marketing, Social Recruiting, Corporate Design und KI-Services.",
-  "isPartOf": {
-    "@type": "WebSite",
-    "url": "https://dk-dk.de",
-    "name": "agentur dk"
-  },
-  "provider": {
-    "@type": "Organization",
-    "@id": "https://dk-dk.de/#organization",
-    "name": "agentur dk – design & kommunikation"
-  }
-}
-    </script>
-  </Fragment>
 
   <Header />
 
@@ -46,7 +25,7 @@ const base = import.meta.env.BASE_URL;
           <li><span aria-current="page">Leistungen</span></li>
         </ol>
       </nav>
-      <h1 class="page-header__title">Leistungen</h1>
+      <h1 class="page-header__title">Leistungen für Website, Sichtbarkeit und Marke</h1>
       <p class="page-header__lead">Von BFSG-barrierefreien WordPress-Websites über SEO &amp; GEO bis zu KI-Services: Alle Leistungen der agentur dk im Überblick.</p>
     </div>
 
@@ -80,6 +59,84 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}bfsg-wordpress-website-agentur.html#bfsg-check`} class="btn btn--outline schwerpunkt-card__link">BFSG-Check starten</a>
           </article>
         </div>
+      </div>
+    </section>
+
+
+    <!-- Orientierung: Ausgangslage → passende Leistung -->
+    <section class="section" aria-labelledby="orientation-heading">
+      <div class="container">
+        <h2 class="section-title" id="orientation-heading">Welche Leistung passt zu Ihrer Situation?</h2>
+        <p class="orientation__lead">
+          Die meisten Anfragen lassen sich einer von sieben Ausgangslagen zuordnen.
+          Wenn Sie sich in einer davon wiederfinden, führt der Link direkt zur passenden Seite.
+        </p>
+        <dl class="orientation__list">
+          <div class="orientation__row">
+            <dt class="orientation__case">„Wir sind unsicher, ob uns das BFSG betrifft."</dt>
+            <dd class="orientation__answer">
+              Der kostenlose Selbstcheck klärt in vier Fragen, ob Ihr Angebot unter das
+              Barrierefreiheitsstärkungsgesetz fällt.
+              <a href={`${base}bfsg-wordpress-website-agentur.html#bfsg-check`} class="text-link">Zum BFSG-Check</a>
+            </dd>
+          </div>
+          <div class="orientation__row">
+            <dt class="orientation__case">„Unsere Website ist alt, langsam oder schwer zu pflegen."</dt>
+            <dd class="orientation__answer">
+              Relaunch auf WordPress mit sauberem Code, Core-Web-Vitals-Optimierung und einer
+              Redaktion, die Ihr Team ohne technisches Vorwissen bedient.
+              <a href={`${base}wordpress-entwicklung.html`} class="text-link">Zur WordPress-Entwicklung</a>
+            </dd>
+          </div>
+          <div class="orientation__row">
+            <dt class="orientation__case">„Wir brauchen eine gute Website, aber nicht die Einmalkosten."</dt>
+            <dd class="orientation__answer">
+              Website-Leasing verteilt die Investition auf eine feste Monatsrate — Wartung,
+              Hosting und Support auf Wunsch inklusive.
+              <a href={`${base}website-leasing.html`} class="text-link">Zum Website-Leasing</a>
+            </dd>
+          </div>
+          <div class="orientation__row">
+            <dt class="orientation__case">„Wir werden bei Google und in KI-Antworten nicht gefunden."</dt>
+            <dd class="orientation__answer">
+              Technisches SEO für klassische Suche, GEO für ChatGPT, Claude, Gemini und
+              Perplexity — inklusive strukturierter Daten und llms.txt.
+              <a href={`${base}seo-geo.html`} class="text-link">Zu SEO &amp; GEO</a>
+            </dd>
+          </div>
+          <div class="orientation__row">
+            <dt class="orientation__case">„Wir geben Budget für Werbung aus, ohne zu wissen, was zurückkommt."</dt>
+            <dd class="orientation__answer">
+              Kampagnen auf Google, Meta und LinkedIn mit Messung entlang des ROAS statt
+              entlang von Reichweitenzahlen.
+              <a href={`${base}online-marketing.html`} class="text-link">Zum Online-Marketing</a>
+            </dd>
+          </div>
+          <div class="orientation__row">
+            <dt class="orientation__case">„Wir finden keine Mitarbeitenden mehr."</dt>
+            <dd class="orientation__answer">
+              Social Recruiting spricht Fachkräfte dort an, wo sie sind — statt auf
+              Bewerbungen auf ausgeschriebene Stellen zu warten.
+              <a href={`${base}social-recruiting.html`} class="text-link">Zum Social Recruiting</a>
+            </dd>
+          </div>
+          <div class="orientation__row">
+            <dt class="orientation__case">„Unser Auftritt wirkt uneinheitlich und beliebig."</dt>
+            <dd class="orientation__answer">
+              Logo, Farbwelt, Typografie und Anwendungsregeln in einem Manual, das über alle
+              Kanäle hinweg trägt.
+              <a href={`${base}corporate-design.html`} class="text-link">Zum Corporate Design</a>
+            </dd>
+          </div>
+          <div class="orientation__row">
+            <dt class="orientation__case">„Anrufe bleiben liegen, Routineaufgaben fressen Zeit."</dt>
+            <dd class="orientation__answer">
+              KI-Telefon-Agenten nehmen rund um die Uhr an und buchen Termine; KI-gestützte
+              Textarbeit entlastet die Redaktion.
+              <a href={`${base}ki-services.html`} class="text-link">Zu den KI-Services</a>
+            </dd>
+          </div>
+        </dl>
       </div>
     </section>
 
@@ -213,4 +270,49 @@ const base = import.meta.env.BASE_URL;
   </main>
 
   <Footer />
-</BaseLayout>
+</BaseLayout>    <FaqAccordion slug="leistungen" />
+
+  <style>
+    /* Orientierungsabschnitt: Ausgangslage links, Antwort rechts.
+       Als <dl> ausgezeichnet, weil genau das die Struktur ist —
+       Begriff und zugehörige Erläuterung. Screenreader kündigen die
+       Paare dadurch als Liste an, und Parser lesen die Zuordnung
+       verlässlich, was der Zitierfähigkeit in KI-Antworten zugutekommt. */
+    .orientation__lead {
+      max-width: 62ch;
+      margin: 0 auto var(--space-10, 2.5rem);
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      text-align: center;
+    }
+    .orientation__list {
+      max-width: var(--container-narrow, 720px);
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .orientation__row {
+      display: grid;
+      gap: 0.375rem 2rem;
+      padding-block: 1.25rem;
+      border-top: 1px solid var(--color-border);
+    }
+    .orientation__row:last-child { border-bottom: 1px solid var(--color-border); }
+    .orientation__case {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+    .orientation__answer {
+      margin: 0;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+    .orientation__answer .text-link { white-space: nowrap; }
+
+    @media (min-width: 48rem) {
+      .orientation__row { grid-template-columns: 15rem 1fr; align-items: start; }
+    }
+  </style>

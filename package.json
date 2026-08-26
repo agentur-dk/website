@@ -9,12 +9,20 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "serve": "node tools/serve.mjs",
     "astro": "astro",
     "test": "vitest run",
+    "check:types": "astro check",
     "check:links": "node tools/check-links.mjs",
-    "check:meta": "node tools/check-meta.mjs",
+    "check:seo": "node tools/check-seo.mjs",
     "check:css": "node tools/check-css.mjs",
-    "validate": "npm run build && npm run check:links && npm run check:meta && npm run check:css"
+    "check:a11y": "node tools/a11y.mjs",
+    "check:wcag": "node tools/wcag-manual.mjs",
+    "check:lighthouse": "node tools/lighthouse.mjs",
+    "verify": "npm run build && npm run check:types && npm test && npm run check:links && npm run check:seo && npm run check:css && node tools/verify-live.mjs",
+    "og:image": "node tools/og-image.mjs",
+    "fonts:metrics": "node tools/font-metrics.mjs --write",
+    "fonts:subset": "node tools/subset-fonts.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",
@@ -22,7 +30,13 @@
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "axe-core": "^4.13.0",
+    "lighthouse": "^13.4.1",
     "playwright": "^1.62.1",
+    "subset-font": "^2.5.0",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   }
 }
