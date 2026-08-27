@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CtaSection from '../components/CtaSection.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 
 const base = import.meta.env.BASE_URL;
@@ -255,17 +256,12 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Closing CTA -->
-    <section class="closing-cta section" aria-label="Jetzt starten">
-      <div class="closing-cta__inner">
-        <span class="closing-cta__label">Kontakt aufnehmen</span>
-        <h2 class="closing-cta__title">Bereit, Ihr Projekt zu starten?</h2>
-        <p class="closing-cta__sub">Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden.</p>
-        <div class="closing-cta__actions">
-          <a href={`${base}#contact`} class="btn btn--primary btn--lg">Projekt anfragen</a>
-          <a href="tel:+4922198655229" class="closing-cta__phone">oder rufen Sie uns an: +49&nbsp;221&nbsp;986&nbsp;55&nbsp;229</a>
-        </div>
-      </div>
-    </section>
+    <CtaSection
+      title="Bereit, Ihr Projekt zu starten?"
+      text="Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden."
+      buttonLabel="Projekt anfragen"
+      buttonHref={`${base}#contact`}
+    />
 
   </main>
 

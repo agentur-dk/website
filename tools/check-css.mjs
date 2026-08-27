@@ -42,9 +42,9 @@ const NO_STYLE_BY_DESIGN = new Map([
   ['lf-form',            'Strukturhaken neben #lf-form'],
   ['bfsg-check-section', 'Abschnittshaken, Optik kommt von .section'],
   ['bfsg-step__options', 'Layout kommt von .bfsg-yn-grid auf demselben Element'],
-  ['cta-content',        'Layout kommt von .cta-inner'],
-  ['cta-actions',        'Layout kommt von .cta-inner'],
   ['ueber-grid__text',   'Layout kommt von .ueber-grid'],
+  ['cta-section__text',   'Rasterzelle, Optik kommt von .cta-section__grid'],
+  ['cta-section__direct', 'Gruppiert die drei Telefonzeilen, Optik kommt von deren Regeln'],
 ]);
 
 /** Tailwind-Varianten, die vor dem Vergleich abgetrennt werden. */

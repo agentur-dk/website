@@ -687,66 +687,14 @@ a:not([class]):focus-visible {
   }
 
   /* ----------------------------------------------------------
-     Closing CTA / Hero / Section patterns
+     Abschluss-CTA
+     Die Regeln .closing-cta* standen frueher hier und trugen
+     --gradient-footer. Sie lagen auf index, leistungen und projekte
+     unmittelbar ueber dem Footer, der denselben Verlauf traegt --
+     zwei Verlaeufe auf Stoss, mit sichtbarer Naht dazwischen.
+     Ersetzt durch components/CtaSection.astro. Der Verlauf gehoert
+     jetzt allein dem Footer; tools/check-cta.mjs haelt das fest.
      ---------------------------------------------------------- */
-  .closing-cta {
-    background: var(--gradient-footer);
-    padding-block: 5rem;
-    text-align: center;
-  }
-  .closing-cta__inner {
-    max-width: var(--container-max);
-    margin-inline: auto;
-    padding-inline: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-  .closing-cta__label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.65);
-  }
-  .closing-cta__title {
-    font-family: var(--font-display);
-    font-size: clamp(1.9375rem, 4vw, 2.4375rem);
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    margin: 0;
-  }
-  .closing-cta__sub {
-    font-size: 1.0625rem;
-    color: #d4d4d4;
-    max-width: 520px;
-    margin: 0;
-    line-height: 1.6;
-  }
-  .closing-cta__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
-    margin-top: 0.5rem;
-  }
-  .closing-cta__phone {
-    color: #d4d4d4;
-    font-size: 0.9375rem;
-    text-decoration: none;
-  }
-  .closing-cta__phone:hover {
-    color: #ffffff;
-  }
-
-  /* Footer gradient utility */
-  .gradient-footer {
-    background: var(--gradient-footer);
-  }
 
   /* ----------------------------------------------------------
      Hero Section (page-level)

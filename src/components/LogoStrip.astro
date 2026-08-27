@@ -1,0 +1,176 @@
+---
+/**
+ * Vertrauensleiste: Kundenlogos bzw. Kundennamen in einer Endlosschleife.
+ *
+ * Bildmarken werden weiß dargestellt: `brightness(0)` färbt alles Sichtbare
+ * schwarz und lässt die Transparenz stehen, `invert(1)` dreht das auf Weiß.
+ * Aus jedem mehrfarbigen Logo wird damit eine saubere Silhouette — der
+ * übliche Weg für eine Logowand auf dunklem Grund, und der einzige, der
+ * ohne eine eigens gelieferte Weißversion je Marke auskommt.
+ *
+ * Fehlt die Datei, setzt die Leiste den Namen. Beides ist so abgestimmt,
+ * dass eine gemischte Reihe nicht wie ein Fehler aussieht.
+ */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { kunden } from '../data/kunden';
+
+const base = import.meta.env.BASE_URL;
+
+/* Beim Build prüfen, ob jede eingetragene Datei wirklich unter public/logos/
+   liegt. Ohne die Prüfung fiele ein Tippfehler im Dateinamen nur dadurch auf,
+   dass in der Leiste eine Lücke klafft — und das sieht man leicht nicht. */
+const eintraege = kunden.map((k) => {
+  if (!k.logo) return { ...k, datei: null };
+  const pfad = join('public', 'logos', k.logo);
+  if (!existsSync(pfad)) {
+    throw new Error(
+      `LogoStrip: "${k.logo}" ist für ${k.name} eingetragen, liegt aber nicht ` +
+      `unter public/logos/. Datei ablegen oder den Eintrag in ` +
+      `src/data/kunden.ts entfernen.`
+    );
+  }
+  return { ...k, datei: `${base}logos/${k.logo}` };
+});
+
+/* Zweiter Durchlauf nur für die nahtlose Schleife. Für Screenreader
+   ausgeblendet, damit die Namen nicht doppelt vorgelesen werden. */
+const durchlaeufe = [
+  { liste: eintraege, versteckt: false },
+  { liste: eintraege, versteckt: true },
+];
+---
+
+<section class="logo-strip" aria-labelledby="logo-strip-heading">
+  <div class="container">
+    <h2 class="logo-strip__label" id="logo-strip-heading">Vertrauen von</h2>
+
+    <div class="logo-strip__track-wrap">
+      <ul class="logo-strip__track" role="list">
+        {durchlaeufe.map(({ liste, versteckt }) =>
+          liste.map((k) => (
+            <li class="logo-strip__item" {...versteckt ? { 'aria-hidden': 'true' } : {}}>
+              {k.datei ? (
+                <img
+                  class="logo-strip__logo"
+                  src={k.datei}
+                  alt={versteckt ? '' : k.name}
+                  loading="lazy"
+                  decoding="async"
+                  style={`--logo-hoehe: ${k.hoehe ?? 1.75}rem`}
+                />
+              ) : (
+                <span class="logo-strip__name">{k.name}</span>
+              )}
+            </li>
+          ))
+        )}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .logo-strip {
+    padding-block: 2.5rem 3rem;
+    overflow: hidden;
+  }
+
+  .logo-strip__label {
+    text-align: center;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-bottom: 2rem;
+  }
+
+  .logo-strip__track-wrap {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    mask-image: linear-gradient(
+      to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+
+  .logo-strip__track {
+    display: flex;
+    align-items: center;
+    gap: 4.5rem;
+    width: max-content;
+    animation: logo-scroll 40s linear infinite;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .logo-strip__item {
+    display: flex;
+    align-items: center;
+    /* Gleiche Zeilenhöhe für Bild- und Wortmarken, damit eine gemischte
+       Reihe eine gemeinsame Grundlinie behält. */
+    height: 2.5rem;
+  }
+
+  /* Aus jeder Bildmarke wird eine weiße Silhouette. */
+  .logo-strip__logo {
+    height: var(--logo-hoehe, 1.75rem);
+    width: auto;
+    max-width: 11rem;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    /* Nicht ganz deckend: die Logos sollen die Überschriften der Seite
+       nicht überstrahlen. Auf Weiß über #121212 bleibt der Kontrast
+       auch bei 0,75 weit über der Schwelle für Grafikobjekte. */
+    opacity: 0.75;
+  }
+
+  /* Wortmarke als Rückfall. Bewusst ohne Rahmen und Kästchen: gerahmte
+     Namen sehen aus wie Platzhalter, nicht wie Referenzen. */
+  .logo-strip__name {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: 0.015em;
+    color: var(--color-text);
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+
+  @keyframes logo-scroll {
+    from { transform: translateX(0); }
+    /* Die Hälfte, weil die Liste zweimal dasselbe enthält —
+       an dieser Stelle sieht der Sprung an den Anfang nahtlos aus. */
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-strip__track {
+      animation: none;
+      /* Ohne Lauf würde die zweite Hälfte rechts abgeschnitten
+         herumstehen; zentriert wirkt die Reihe wie gesetzt. */
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 2rem 3rem;
+    }
+    .logo-strip__track-wrap {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .logo-strip__item[aria-hidden="true"] {
+      display: none;
+    }
+  }
+
+  html[data-motion="paused"] .logo-strip__track {
+    animation-play-state: paused;
+  }
+
+  @media (max-width: 640px) {
+    .logo-strip__track { gap: 3rem; }
+    .logo-strip__name  { font-size: 0.9375rem; }
+  }
+</style>
