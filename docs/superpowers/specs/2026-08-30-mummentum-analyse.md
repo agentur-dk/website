@@ -238,10 +238,20 @@ Vier Einsatzarten auf der Startseite, wie besprochen:
 
 ### 3.2 Typografie
 
-Ein Schnitt (400) für alle Überschriften, die Laufweiten- und
-Durchschusskurve als Tokens in `tokens/typography.css`, Zeilenlänge in
-`ch`, Mono nur für Etiketten und Zähler. Die H1 setzt den zweiten
-Halbsatz in `--color-text-muted` — Headline und Subheadline in einem Satz.
+Die Schriftfamilien bleiben: Space Grotesk für Überschriften, Manrope für
+Text. Keine neue Datei, kein Tausch.
+
+Übernommen sind die Regeln: ein Schnitt (400) für alle Überschriften, die
+Laufweiten- und Durchschusskurve als Tokens in `tokens/typography.css`,
+Zeilenlänge in `ch`. Die H1 setzt den zweiten Halbsatz in
+`--color-text-muted` — Headline und Subheadline in einem Satz.
+
+Monospace ist auf Etiketten beschränkt: Rubriken, Zähler,
+Footer-Überschriften, CTA-Labels. **Navigation und Knöpfe bleiben
+ausdrücklich außen vor.** Sie hatten kurzzeitig Monospace, Versalien und
+Pillenform; das ging über die Absprache hinaus ("Mono nur für
+Mikro-Labels"), und die Pillenform widersprach zusätzlich der Vorgabe im
+`@theme`-Block, dass UI-Elemente eckig bleiben.
 
 ### 3.3 Drei Fallen, alle im gebauten HTML nachgemessen
 

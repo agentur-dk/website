@@ -182,23 +182,14 @@
   color: var(--color-text-muted);
 }
 
-/* --- Knöpfe und Navigation ---------------------------------- */
-.theme-mono .btn {
-  font-family: var(--font-mono);
-  font-size: 0.78125rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  border-radius: 999px;
-}
-.theme-mono .nav-link,
-.theme-mono .nav-dropdown__link {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
+/* Knöpfe und Navigation bleiben bewusst unangetastet.
+   Sie hatten hier kurzzeitig Monospace, Versalien und Pillenform — das
+   ging über das hinaus, was für die Bildsprache verabredet war ("Mono nur
+   für Mikro-Labels"), und die Pillenform widersprach zusätzlich der
+   Vorgabe im @theme-Block, dass UI-Elemente eckig bleiben. Die Knöpfe
+   setzen also weiter in Manrope 700 mit --radius-md, die Navigation in
+   Manrope 500 gemischt. Monospace bleibt den Etiketten vorbehalten:
+   Rubriken, Zählern, Footer-Überschriften und den CTA-Labels. */
 
 /* --- Flächen ------------------------------------------------ */
 
