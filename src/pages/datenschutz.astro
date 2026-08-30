@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -12,9 +13,12 @@ const base = import.meta.env.BASE_URL;
   title="Datenschutzerklärung | agentur dk"
   description="Datenschutzerklärung von agentur dk Köln: Hosting, Kontaktformular, Consent-Management. Keine Tracking-Tools ohne Einwilligung."
   noConsent={true}
+  mono
 >
   <Header />
   <main id="main-content" tabindex="-1">
+
+    <DitherBand field="scan" label="Datenschutz" cell={4} />
 
     <div class="page-header container">
       <nav aria-label="Breadcrumb" class="breadcrumb">
@@ -117,5 +121,5 @@ const base = import.meta.env.BASE_URL;
 
     </div>
   </main>
-  <Footer />
+  <Footer mono />
 </BaseLayout>

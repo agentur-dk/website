@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -11,10 +12,13 @@ const base = import.meta.env.BASE_URL;
   title="Seite nicht gefunden (404) | agentur dk"
   description="Die gesuchte Seite konnte leider nicht gefunden werden. Besuchen Sie unsere Startseite oder entdecken Sie unsere Leistungen."
   noindex={true}
+  mono
 >
   <Header />
 
   <main id="main-content">
+
+    <DitherBand field="orbit" label="Fehler 404" cell={4} />
     <div class="error-page">
       <div class="error-page__inner">
         <p class="error-page__code" aria-label="Fehler 404">404</p>
@@ -39,7 +43,7 @@ const base = import.meta.env.BASE_URL;
     </div>
   </main>
 
-  <Footer />
+  <Footer mono />
 </BaseLayout>
 
 <style>

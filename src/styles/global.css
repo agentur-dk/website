@@ -328,32 +328,6 @@ a:not([class]):focus-visible {
   .section--lg {
     padding-block: var(--spacing-32);
   }
-  .section--light {
-    background-color: var(--color-bg-light);
-    color: var(--color-text-on-light);
-    --color-text: var(--color-text-on-light);
-    --color-text-muted: var(--color-text-muted-on-light);
-    --color-text-faint: var(--color-text-faint-on-light);
-    --color-decor: var(--dk-color-decor-on-light);
-    --color-surface: var(--color-surface-light);
-    --color-surface-alt: var(--color-surface-alt-light);
-    --color-border: var(--color-border-light);
-    --color-border-strong: var(--color-border-strong-light);
-    --color-primary-light: var(--color-primary-on-light);
-    --color-accent: var(--color-primary-on-light);
-    --color-focus: var(--color-focus-on-light);
-  }
-  .section--light h2,
-  .section--light h3,
-  .section--light h4 {
-    color: var(--color-text-on-light);
-  }
-  .section--light a:not([class]) {
-    color: var(--color-primary-on-light);
-  }
-  .section--light a:not([class]):hover {
-    color: var(--color-text-on-light);
-  }
 
   /* ----------------------------------------------------------
      Buttons
@@ -773,12 +747,6 @@ a:not([class]):focus-visible {
     line-height: 1.2;
     margin: 0 0 1.5rem;
   }
-  .section--light .section-label {
-    color: var(--color-primary-on-light);
-  }
-  .section--light .section-title {
-    color: var(--color-text-on-light);
-  }
 
   /* Schwerpunkte section */
   .schwerpunkte-section__eyebrow {
@@ -968,9 +936,6 @@ a:not([class]):focus-visible {
     cursor: pointer;
     transition: color 150ms ease;
   }
-  .section--light .accordion__trigger {
-    color: var(--color-text-on-light);
-  }
   .accordion__trigger:hover {
     color: var(--color-primary-on-light);
   }
@@ -1015,11 +980,9 @@ a:not([class]):focus-visible {
   .text-link:hover {
     color: var(--color-text);
   }
-  .section--light .text-link,
   .bg-light .text-link {
     color: var(--color-primary-on-light); /* 5,84:1 auf --color-bg-light */
   }
-  .section--light .text-link:hover,
   .bg-light .text-link:hover {
     color: var(--color-text-on-light);
   }
@@ -1390,33 +1353,6 @@ a:not([class]):focus-visible {
     margin: 0 0 0.5rem;
   }
 
-  /* Light section card overrides */
-  .section--light .card {
-    background-color: var(--color-surface-light);
-    border-color: var(--color-border-light);
-  }
-  .section--light .card:hover {
-    border-color: var(--color-primary-on-light);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  .section--light .card__heading {
-    color: var(--color-text-on-light);
-  }
-  .section--light .card__body {
-    color: var(--color-text-muted-on-light);
-  }
-  .section--light .section__heading {
-    color: var(--color-text-on-light);
-  }
-  .section--light .section__subheading {
-    color: var(--color-text-on-light);
-  }
-  .section--light .section__label {
-    color: var(--color-primary-on-light);
-  }
-  .section--light .section__lead {
-    color: var(--color-text-muted-on-light);
-  }
 
   /* ----------------------------------------------------------
      Checklist (problem/benefit sections)
@@ -1681,7 +1617,7 @@ a:not([class]):focus-visible {
   .faq,
   .contact,
   .referenzen-section {
-    /* semantic wrapper — visual styles come from .section and .section--light/.section--dark */
+    /* semantic wrapper — visual styles come from .section und .section--dark */
     display: block;
   }
   .contact__form-wrapper {

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -10,11 +11,14 @@ const base = import.meta.env.BASE_URL;
   slug="barrierefreiheit"
   title="Erklärung zur Barrierefreiheit | agentur dk"
   description="Barrierefreiheitserklärung der agentur dk nach BFSG/BGG: Konformitätsstatus WCAG 2.2 AA, Kontakt für Barrieremeldungen und Durchsetzungsstelle."
+  mono
 >
 
   <Header />
 
   <main id="main-content">
+
+    <DitherBand field="pulse" label="Barrierefreiheit" cell={4} />
 
     <!-- Page Header -->
     <div class="page-header container">
@@ -154,5 +158,5 @@ const base = import.meta.env.BASE_URL;
     </div>
   </main>
 
-  <Footer />
+  <Footer mono />
 </BaseLayout>

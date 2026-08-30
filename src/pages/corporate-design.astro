@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
@@ -19,6 +21,7 @@ const base = import.meta.env.BASE_URL;
       serviceType: 'Graphic Design',
       offers: ['Logo-Entwicklung', 'Brand Identity', 'Corporate Design Manual', 'Gestaltungsvorlagen', 'Digital-Design', 'Marken-Relaunch'],
     }}
+  mono
 >
 
   <Header />
@@ -35,6 +38,7 @@ const base = import.meta.env.BASE_URL;
     </nav>
 
     <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="mesh" cell={3} fps={16} /></div>
       <div class="container">
         <p class="section__label">Corporate Design</p>
         <h1 id="hero-heading" class="section__headline">Eine Marke, die man wiedererkennt</h1>
@@ -45,6 +49,9 @@ const base = import.meta.env.BASE_URL;
         </div>
       </div>
     </section>
+
+    <DitherBand field="dunes" label="Markenbild" cell={4} />
+
 
     <section class="section section--dark" aria-labelledby="cd-problem">
       <div class="container">
@@ -68,7 +75,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <section class="section section--light" aria-labelledby="cd-leistungen">
+    <section class="section" aria-labelledby="cd-leistungen">
       <div class="container">
         <p class="section__label">Leistungen</p>
         <div class="card-grid card-grid--3col">
@@ -100,7 +107,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <section class="section section--light" aria-labelledby="cd-prozess">
+    <section class="section" aria-labelledby="cd-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
         <h2 id="cd-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
@@ -137,6 +144,9 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <DitherBand field="weave" label="Weitere Leistungen" cell={4} />
+
+
     <section class="section section--sm" aria-label="Passende Leistungen">
       <div class="container">
         <h2 class="section__subheading">Passende Leistungen</h2>
@@ -153,5 +163,5 @@ const base = import.meta.env.BASE_URL;
     <LeadForm page="Corporate Design" heading="Jetzt unverbindlich anfragen" />
 
   </main>
-  <Footer />
+  <Footer mono />
 </BaseLayout>

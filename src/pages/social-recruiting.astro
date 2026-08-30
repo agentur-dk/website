@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
@@ -19,6 +21,7 @@ const base = import.meta.env.BASE_URL;
       serviceType: 'Recruitment Marketing',
       offers: ['Kampagnen auf LinkedIn', 'Meta & Instagram Recruiting', 'KI-gestützte Zielgruppen', 'Employer Branding', 'Kreative & Texte', 'Reporting & Optimierung'],
     }}
+  mono
 >
 
   <Header />
@@ -35,6 +38,7 @@ const base = import.meta.env.BASE_URL;
     </nav>
 
     <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="hero-flaeche hero-flaeche--band" aria-hidden="true"><Dither field="drift" cell={4} fps={16} /></div>
       <div class="container">
         <p class="section__label">Social Recruiting</p>
         <h1 id="hero-heading" class="section__headline">Die richtigen Leute finden – nicht auf sie warten</h1>
@@ -45,6 +49,9 @@ const base = import.meta.env.BASE_URL;
         </div>
       </div>
     </section>
+
+    <DitherBand field="orbit" label="Fachkräfte" cell={4} />
+
 
     <section class="section section--dark" aria-labelledby="sr-problem">
       <div class="container">
@@ -68,7 +75,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <section class="section section--light" aria-labelledby="sr-leistungen">
+    <section class="section" aria-labelledby="sr-leistungen">
       <div class="container">
         <p class="section__label">Leistungen</p>
         <div class="card-grid card-grid--3col">
@@ -100,7 +107,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <section class="section section--light" aria-labelledby="sr-prozess">
+    <section class="section" aria-labelledby="sr-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
         <h2 id="sr-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
@@ -137,6 +144,9 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <DitherBand field="rain" label="Weitere Leistungen" cell={4} />
+
+
     <section class="section section--sm" aria-label="Passende Leistungen">
       <div class="container">
         <h2 class="section__subheading">Passende Leistungen</h2>
@@ -153,5 +163,5 @@ const base = import.meta.env.BASE_URL;
     <LeadForm page="Social Recruiting" heading="Jetzt unverbindlich anfragen" />
 
   </main>
-  <Footer />
+  <Footer mono />
 </BaseLayout>

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StatsStrip from '../components/StatsStrip.astro';
@@ -14,6 +16,7 @@ const base = import.meta.env.BASE_URL;
   title="Über uns – inhabergeführte Agentur Köln | agentur dk"
   description="Inhabergeführte Agentur aus Köln: ein Ansprechpartner, kurze Wege, 20 Jahre Erfahrung. So arbeiten wir – und warum Konzerne uns beauftragen."
   pageType={'AboutPage'}
+  mono
 >
 
   <Header />
@@ -22,6 +25,7 @@ const base = import.meta.env.BASE_URL;
 
     <!-- Hero -->
     <section class="section section--hero" aria-labelledby="ueber-hero-heading">
+      <div class="hero-flaeche hero-flaeche--sockel" aria-hidden="true"><Dither field="fade" cell={4} fps={16} /></div>
       <div class="container">
         <span class="section__label">Über uns</span>
         <h1 id="ueber-hero-heading" class="section__headline">
@@ -38,6 +42,8 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Wer wir sind (dark) -->
+    <DitherBand field="drift" label="Wer wir sind" cell={4} />
+
     <section class="section section--dark" aria-labelledby="wer-wir-sind-heading" data-reveal>
       <div class="container">
         <div class="ueber-grid">
@@ -73,7 +79,7 @@ const base = import.meta.env.BASE_URL;
     ]} />
 
     <!-- Werte (light) -->
-    <section class="section section--light" aria-labelledby="werte-heading">
+    <section class="section" aria-labelledby="werte-heading">
       <div class="container">
         <span class="section__label">Arbeitsweise</span>
         <h2 id="werte-heading" class="section__heading">Was uns antreibt</h2>
@@ -154,7 +160,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Referenzen-Auszug (light) -->
-    <section class="section section--light" aria-labelledby="referenzen-auszug-heading">
+    <section class="section" aria-labelledby="referenzen-auszug-heading">
       <div class="container">
         <span class="section__label">Referenzen</span>
         <h2 id="referenzen-auszug-heading" class="section__heading">Ausgewählte Kunden</h2>
@@ -236,7 +242,7 @@ const base = import.meta.env.BASE_URL;
 
   </main>
 
-  <Footer />
+  <Footer mono />
 </BaseLayout>
 
 <style>

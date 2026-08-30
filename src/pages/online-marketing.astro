@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
@@ -18,6 +20,7 @@ const base = import.meta.env.BASE_URL;
       serviceType: 'Online Marketing',
       offers: ['Google Ads', 'Meta & Instagram Ads', 'LinkedIn Kampagnen', 'Content-Marketing', 'E-Mail-Marketing', 'Social Recruiting'],
     }}
+  mono
 >
 
   <Header />
@@ -37,6 +40,7 @@ const base = import.meta.env.BASE_URL;
 
     <!-- SECTION: Hero -->
     <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="weave" cell={3} fps={16} /></div>
       <div class="container">
         <p class="section__label">Online-Marketing</p>
         <h1 id="hero-heading" class="section__headline">Marketing, das sich rechnet</h1>
@@ -49,6 +53,8 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Problem / Benefits -->
+    <DitherBand field="pulse" label="Reichweite" cell={4} />
+
     <section class="section section--dark" aria-labelledby="om-problem">
       <div class="container">
         <div class="section__grid section__grid--2col">
@@ -72,7 +78,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Leistungen -->
-    <section class="section section--light" aria-labelledby="om-leistungen">
+    <section class="section" aria-labelledby="om-leistungen">
       <div class="container">
         <p class="section__label">Leistungen</p>
         <div class="card-grid card-grid--3col">
@@ -105,7 +111,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Prozess -->
-    <section class="section section--light" aria-labelledby="om-prozess">
+    <section class="section" aria-labelledby="om-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
         <h2 id="om-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
@@ -143,6 +149,8 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Weitere Leistungen -->
+    <DitherBand field="scan" label="Weitere Leistungen" cell={4} />
+
     <section class="section section--sm" aria-label="Passende Leistungen">
       <div class="container">
         <h2 class="section__subheading">Passende Leistungen</h2>
@@ -163,5 +171,5 @@ const base = import.meta.env.BASE_URL;
 
   </main>
 
-  <Footer />
+  <Footer mono />
 </BaseLayout>

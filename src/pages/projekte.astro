@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CtaSection from '../components/CtaSection.astro';
@@ -12,11 +13,14 @@ const base = import.meta.env.BASE_URL;
   title="Referenzen & Projekte | agentur dk Köln"
   description="Projekte für Bundesministerium, TARGOBANK und Berufsförderungswerke: barrierefreie Portale, WordPress-Relaunches und Recruiting-Kampagnen."
   pageType={'CollectionPage'}
+  mono
 >
 
   <Header />
 
   <main id="main-content">
+
+    <DitherBand field="dunes" label="Referenzen" cell={4} />
 
     <!-- Page Header -->
     <div class="page-header container">
@@ -281,7 +285,7 @@ const base = import.meta.env.BASE_URL;
 
   </main>
 
-  <Footer />
+  <Footer mono />
 
   <!-- Project filter script -->
   <script>

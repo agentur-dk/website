@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BfsgCheck from '../components/BfsgCheck.astro';
@@ -19,6 +21,7 @@ const base = import.meta.env.BASE_URL;
       serviceType: 'Web Accessibility Consulting',
       offers: ['Accessibility-Audit', 'WCAG 2.2 AA Umsetzung', 'Barrierefreiheits-Erklärung', 'Tastaturbedienbarkeit', 'Screenreader-Optimierung', 'Laufende Überwachung'],
     }}
+  mono
 >
 
   <Header />
@@ -38,6 +41,7 @@ const base = import.meta.env.BASE_URL;
 
     <!-- SECTION: Page Hero -->
     <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="hero-flaeche hero-flaeche--band" aria-hidden="true"><Dither field="pulse" cell={4} fps={16} /></div>
       <div class="container">
         <p class="section__label">BFSG &amp; WordPress</p>
         <h1 id="hero-heading" class="section__headline">Barrierefreie WordPress-Websites nach BFSG</h1>
@@ -50,6 +54,8 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Das BFSG -->
+    <DitherBand field="mesh" label="Das BFSG" cell={4} />
+
     <section class="section section--dark" aria-labelledby="bfsg-was-heading">
       <div class="container">
         <div class="section__grid section__grid--2col">
@@ -74,7 +80,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Leistungsumfang -->
-    <section class="section section--light" aria-labelledby="leistungen-heading">
+    <section class="section" aria-labelledby="leistungen-heading">
       <div class="container">
         <p class="section__label">Was wir liefern</p>
         <h2 id="leistungen-heading" class="section__heading">Unser BFSG-Leistungsumfang</h2>
@@ -118,7 +124,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Ablauf -->
-    <section class="section section--light" aria-labelledby="ablauf-heading">
+    <section class="section" aria-labelledby="ablauf-heading">
       <div class="container">
         <h2 id="ablauf-heading" class="section__heading">So läuft Ihr BFSG-Projekt ab</h2>
         <ol class="process-list">
@@ -158,6 +164,8 @@ const base = import.meta.env.BASE_URL;
     <FaqAccordion slug="bfsg-wordpress-website-agentur" />
 
     <!-- SECTION: Weitere Leistungen -->
+    <DitherBand field="rain" label="Weitere Leistungen" cell={4} />
+
     <section class="section section--sm" aria-label="Weitere Leistungen">
       <div class="container">
         <h2 class="section__subheading">Weitere Leistungen der agentur dk</h2>
@@ -177,5 +185,5 @@ const base = import.meta.env.BASE_URL;
 
   </main>
 
-  <Footer />
+  <Footer mono />
 </BaseLayout>

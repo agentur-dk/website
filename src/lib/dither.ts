@@ -92,53 +92,70 @@ export function valueNoise(x: number, y: number, seed = 0): number {
 /**
  * Denkender Kern — die Fläche im Kopf der Startseite.
  *
- * Eine beleuchtete Kugel, auf deren Oberfläche ein Adergeflecht liegt. Das
- * Geflecht entsteht aus Rauschen in Kugelkoordinaten: Weil die Länge mit
- * der Zeit wächst, dreht sich das Muster um die Achse, während die Kugel
- * stehen bleibt — wie ein Globus, nicht wie ein rotierender Ball.
+ * Drei Bewegungen, alle langsam und mit teilerfremden Perioden, damit sich
+ * der Gesamteindruck erst nach Minuten wiederholt und man keine Schleife
+ * sieht:
  *
- * Dazu zwei Atemzüge in unterschiedlichem Takt: Der Radius weitet sich um
- * zwei Prozent, die Helligkeit der Adern schwillt an und ab. Weil beide
- * Perioden teilerfremd sind, wiederholt sich der Gesamteindruck erst nach
- * gut zwei Minuten — man sieht keine Schleife.
+ *  1. Der Kern dreht sich. Nicht die Kugel — das Adergeflecht auf ihrer
+ *     Oberfläche wandert in Kugelkoordinaten, wie die Landmassen auf einem
+ *     Globus. Eine Umdrehung dauert rund 78 Sekunden.
+ *  2. Der Kern atmet: Radius ±2,5 % in 18 s, Helligkeit der Adern in 21 s.
+ *  3. Ein Hof aus Punkten weitet sich vom Rand nach außen und zieht sich
+ *     wieder zusammen — 30 s hin, 30 s zurück. Die Punkte sitzen auf
+ *     Ringen, die beim Ausatmen auseinanderrücken; gleichzeitig dreht der
+ *     ganze Hof gegenläufig zum Kern, sehr langsam.
+ *
+ * Der Hof ist nicht als Partikelliste gerechnet, sondern als Feld: Statt
+ * die Punkte zu bewegen, wird der Abstand vor der Prüfung durch den
+ * Atemfaktor geteilt. Für jeden Bildpunkt bleibt es damit bei etwas
+ * Trigonometrie — eine Liste mit tausend Partikeln müsste pro Frame
+ * durchlaufen werden.
  */
 const brain: Field = (x, y, w, h, t) => {
-  const puls = Math.sin(t * 0.00042);
-  const r = Math.min(w, h) * 0.44 * (1 + 0.02 * puls);
+  const atem = Math.sin(t * 0.00035);          // Kern, ~18 s
+  const weite = Math.sin(t * 0.00021);         // Hof, ~30 s
+  const radius = Math.min(w, h) * 0.4 * (1 + 0.025 * atem);
   const dx = x - w * 0.5;
   const dy = y - h * 0.5;
   const dist = Math.sqrt(dx * dx + dy * dy);
+  const winkel = Math.atan2(dy, dx) / (Math.PI * 2);
 
-  if (dist > r) {
-    // Streulicht, quadratisch abfallend — der Rand soll ausfransen, nicht abreißen.
-    const abfall = Math.max(0, 1 - (dist - r) / (r * 0.42));
-    return 0.02 + abfall * abfall * 0.06;
+  if (dist > radius) {
+    const aussen = (dist - radius) / radius;
+    if (aussen > 1.3) return 0.012;
+    // Den Abstand zurückrechnen, statt die Punkte zu verschieben.
+    const r0 = aussen / (0.55 + 0.45 * (0.5 + 0.5 * weite));
+    if (r0 > 1) return 0.012;
+    // Weniger, dafür breitere Ringe und mehr Punkte je Ring: Das liest
+    // sich als geordneter Hof. Mit dünnen Ringen und wenigen Punkten
+    // sahen die Treffer aus wie verstreute Sprenkel.
+    const ringe = linie(r0 * 4, 6);
+    const punkte = linie(winkel * 34 - t * 0.00005, 5);
+    return 0.012 + 0.9 * ringe * punkte * (1 - r0);
   }
 
-  const u = dx / r;
-  const v = dy / r;
+  const u = dx / radius;
+  const v = dy / radius;
   const z = Math.sqrt(Math.max(0, 1 - u * u - v * v));
 
-  // Kugelkoordinaten. Die Länge wandert mit der Zeit: das Muster dreht sich.
-  const laenge = Math.atan2(u, z) + t * 0.00011;
+  // Kugelkoordinaten; die Länge wandert mit der Zeit.
+  const laenge = Math.atan2(u, z) + t * 0.00008;
   const breite = Math.asin(Math.max(-1, Math.min(1, v)));
 
-  // Zwei Oktaven Rauschen auf der Oberfläche, die zweite gegenläufig
-  // verschoben, damit die Adern nicht in Reihen stehen.
   const n =
     0.62 * valueNoise(laenge * 3.1, breite * 3.1, 11) +
     0.38 * valueNoise(laenge * 7.3 + 4.2, breite * 6.7 - 1.8, 29);
 
-  // Grate statt Flächen: Der Betrag um 0,5 herum invertiert das Rauschen zu
-  // einem Netz aus Linien — das ist es, was wie ein Geflecht aussieht.
+  // Grate statt Flächen: Der Betrag um 0,5 herum macht aus dem Rauschen
+  // ein Netz aus Linien — das ist es, was wie ein Geflecht aussieht.
   const adern = Math.pow(1 - Math.min(1, Math.abs(n - 0.5) * 2.9), 1.6);
 
-  // Beleuchtung von links oben, feststehend. Bewegung kommt aus dem Muster,
-  // nicht aus dem Licht — ein wanderndes Licht läse sich als Scheinwerfer.
+  // Feststehendes Licht von links oben. Bewegung kommt aus dem Muster;
+  // ein wanderndes Licht läse sich als Scheinwerfer.
   const lambert = Math.max(0, u * -0.42 + v * -0.46 + z * 0.78);
 
-  const atem = 0.86 + 0.14 * Math.sin(t * 0.00068 + 1.1);
-  return Math.min(0.97, (0.14 + 0.7 * lambert) * (0.34 + 0.92 * adern) * atem);
+  const puls = 0.86 + 0.14 * Math.sin(t * 0.0003 + 1.1);
+  return Math.min(0.97, (0.14 + 0.7 * lambert) * (0.34 + 0.92 * adern) * puls);
 };
 
 /**
@@ -223,11 +240,62 @@ const mesh: Field = (x, y, w, h) => {
   return 0.03 + 0.82 * Math.max(quer, laengs) * (0.25 + 0.75 * (y / h));
 };
 
+/**
+ * Höhenlinien einer Landschaft. Drei Kämme in unterschiedlicher Höhe und
+ * Phase, jeder nur als dünne Linie sichtbar — nicht als gefüllte Fläche,
+ * sonst stünde die halbe Höhe des Bandes im Weiß.
+ */
+const dunes: Field = (x, y, w, h, t) => {
+  const u = x / w;
+  const v = y / h;
+  let hell = 0.03;
+  for (let i = 0; i < 3; i++) {
+    const kamm =
+      0.3 + i * 0.19 +
+      0.07 * Math.sin(u * (3.1 + i * 2.3) + t * 0.00013 * (1 + i * 0.6) + i * 1.7) +
+      0.02 * Math.sin(u * (9.4 + i * 3.1) - t * 0.00008);
+    const linienbreite = 26 - i * 5;
+    hell = Math.max(hell, 0.92 * Math.pow(Math.max(0, 1 - Math.abs(v - kamm) * linienbreite), 2));
+  }
+  return hell;
+};
+
+/**
+ * Ein Balken, der von links nach rechts über die Fläche läuft, mit
+ * waagerechter Zeilenstruktur darin — die Bewegung eines Abtastvorgangs.
+ */
+const scan: Field = (x, y, w, _h, t) => {
+  const pos = (t * 0.00016) % 1;
+  const abstand = Math.abs(x / w - pos);
+  const balken = Math.pow(Math.max(0, 1 - abstand * 9), 3);
+  const grund = 0.05 + 0.14 * valueNoise(x / 30, y / 12, 61);
+  return grund + 0.8 * balken * (0.45 + 0.55 * Math.sin(y * 0.42));
+};
+
+/**
+ * Punkte auf konzentrischen Ringen, die abwechselnd vor- und rückwärts
+ * laufen. Die inneren Ringe drehen langsamer als die äußeren.
+ */
+const orbit: Field = (x, y, w, h, t) => {
+  const radius = Math.min(w, h) * 0.46;
+  const dx = (x - w * 0.5) / radius;
+  const dy = (y - h * 0.5) / radius;
+  const r = Math.sqrt(dx * dx + dy * dy);
+  if (r > 1.06) return 0.02;
+
+  const ring = linie(r * 4.2, 14);
+  const nummer = Math.floor(r * 4.2);
+  const tempo = 0.00045 * (1 + nummer * 0.7) * (nummer % 2 === 0 ? 1 : -1);
+  const winkel = Math.atan2(dy, dx) / (Math.PI * 2);
+  const punkte = linie(winkel * (6 + nummer * 4) + t * tempo, 6);
+  return 0.03 + 0.92 * ring * (0.2 + 0.9 * punkte);
+};
+
 /** Verlauf über die Diagonale. Bewusst ohne Zeitanteil: bleibt statisch. */
 const fade: Field = (x, y, w, h) =>
   0.04 + 0.66 * (0.62 * (x / (w - 1 || 1)) + 0.38 * (1 - y / (h - 1 || 1)));
 
-export const FIELDS = { brain, drift, fade, mesh, pulse, rain, weave } as const;
+export const FIELDS = { brain, drift, dunes, fade, mesh, orbit, pulse, rain, scan, weave } as const;
 
 /** Erlaubte Werte für `<Dither field="…" />`. */
 export type FieldName = keyof typeof FIELDS;

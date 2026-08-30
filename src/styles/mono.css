@@ -1,9 +1,9 @@
 /* ============================================================
    Monochrome Bildsprache
-   Wird nur von den Seiten geladen, die sie benutzen (Import im
-   Frontmatter). In global.css stünde sie sonst in allen 16
-   Dokumenten — die Stylesheets liegen inline im HTML, also zahlt
-   jede Seite jedes Byte, auch die, die davon nichts hat.
+   Liegt getrennt von global.css, obwohl inzwischen alle 16 Seiten
+   sie laden. Der Grund ist nicht mehr die Dateigröße, sondern die
+   Lesbarkeit: Hier steht, was diese Bildsprache ausmacht, und nur
+   das. Der Import sitzt in BaseLayout.astro.
 
    Analyse dahinter:
    docs/superpowers/specs/2026-08-30-mummentum-analyse.md
@@ -123,12 +123,6 @@
   max-width: var(--dk-measure-display);
   text-wrap: balance;
   margin: 1.75rem 0 1.5rem;
-  /* global.css setzt hyphens: auto auf alle Überschriften. Bei 14 px hält
-     das eine Zeile zusammen, bei 68 px zerlegt es „Online-Marketing" zu
-     „Online-Mar-keting" — mitten im Wort, quer über eine Zeile, die man
-     aus zehn Metern liest. Im Displaygrad wird an Wortgrenzen gebrochen. */
-  hyphens: none;
-  overflow-wrap: normal;
 }
 /* Der zweite Halbsatz derselben Zeile, nur heller: Headline und
    Subheadline in einem Satz statt in zwei Elementen. */
@@ -160,9 +154,83 @@
   max-width: 22ch;
 }
 
+/* Die Unterseiten setzen ihre Überschriften mit eigenen Klassen. Ohne
+   diesen Block liefen sie weiter in 700 und mit der alten Laufweite —
+   die Bildsprache hätte nur auf der Startseite gegriffen. Die Zeilenlänge
+   in ch hält den Satz außerdem aus der rechten Spalte heraus, in der die
+   Kopf-Fläche steht; ohne sie lag die Überschrift auf zwei Seiten über
+   dem Raster. */
+.theme-mono .page-header__title,
+.theme-mono .section__headline {
+  font-size: clamp(2rem, 4.8vw, 3.25rem);
+  font-weight: 400;
+  letter-spacing: var(--dk-tracking-2xl);
+  line-height: var(--dk-leading-title);
+  max-width: var(--dk-measure-title);
+  text-wrap: balance;
+}
+
+.theme-mono .section__heading {
+  font-size: clamp(1.75rem, 3.6vw, 2.4375rem);
+  font-weight: 400;
+  letter-spacing: var(--dk-tracking-xl);
+  line-height: var(--dk-leading-title);
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.theme-mono .section__subheading {
+  font-size: 1.1875rem;
+  font-weight: 400;
+  letter-spacing: var(--dk-tracking-md);
+  line-height: var(--dk-leading-tight);
+}
+
+/* Rubriken der Unterseiten: dieselbe Behandlung wie .section-label. */
+.theme-mono .section__label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.theme-mono .section__label::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: var(--color-border-strong);
+  flex-shrink: 0;
+}
+
+/* Silbentrennung im Displaygrad.
+   global.css setzt `hyphens: auto` auf alle Überschriften. Bei 14 px hält
+   das eine Zeile zusammen, bei 68 px zerlegt es „Online-Marketing" zu
+   „Online-Mar-keting" — mitten im Wort, quer über eine Zeile, die man aus
+   zehn Metern liest.
+   Abgeschaltet wird es aber erst ab 640 px: Auf einem 320-px-Schirm passt
+   „Datenschutzerklärung" ohne Trennung nicht in den Viewport, und die
+   Reflow-Prüfung meldet zu Recht eine waagerechte Bildlaufleiste. */
+@media (min-width: 640px) {
+  .theme-mono .hero__headline,
+  .theme-mono .section-title,
+  .theme-mono .schwerpunkte-section__heading,
+  .theme-mono .page-header__title,
+  .theme-mono .section__headline,
+  .theme-mono .section__heading {
+    hyphens: none;
+    overflow-wrap: normal;
+  }
+}
+
 /* --- Fließtext ---------------------------------------------- */
 .theme-mono .hero__subline,
 .theme-mono .section-lead,
+.theme-mono .section__lead,
+.theme-mono .page-header__lead,
 .theme-mono .schwerpunkte-section__lead {
   font-size: 1.0625rem;
   line-height: var(--dk-leading-body);
@@ -255,6 +323,66 @@
   .theme-mono .hero__flaeche {
     display: none;
   }
+}
+
+/* --- Flächen im Seitenkopf ---------------------------------- */
+/* Drei Anordnungen, damit nicht jede Unterseite gleich aussieht. Alle drei
+   halten sich von den Textspalten fern — ein Raster unter einer Zeile
+   bleibt ein Raster unter einer Zeile, egal wie schwach.
+   tools/wcag-manual.mjs prüft das auf jeder Seite in zwei Breiten. */
+.theme-mono .section--hero,
+.theme-mono .hero {
+  position: relative;
+  overflow: hidden;
+}
+.theme-mono .section--hero > .container {
+  position: relative;
+  z-index: 1;
+}
+.theme-mono .hero-flaeche {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Neben dem Satz. Fällt weg, sobald keine zweite Spalte mehr da ist. */
+.theme-mono .hero-flaeche--rechts {
+  top: 3rem;
+  right: 0;
+  width: min(30vw, 380px);
+  aspect-ratio: 1;
+  opacity: 0.5;
+  mask-image: radial-gradient(70% 70% at 50% 50%, black 44%, transparent 86%);
+}
+@media (max-width: 1023px) {
+  .theme-mono .hero-flaeche--rechts {
+    display: none;
+  }
+}
+
+/* Streifen über der Rubrik. */
+.theme-mono .hero-flaeche--band {
+  inset: 0 0 auto 0;
+  height: 6rem;
+  opacity: 0.42;
+  mask-image: linear-gradient(to bottom, black 35%, transparent),
+              linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  mask-composite: intersect;
+}
+.theme-mono .section--hero:has(.hero-flaeche--band) {
+  padding-top: 8.5rem;
+}
+
+/* Sockel unter den Knöpfen. */
+.theme-mono .hero-flaeche--sockel {
+  inset: auto 0 0 0;
+  height: 7rem;
+  opacity: 0.4;
+  mask-image: linear-gradient(to top, black 30%, transparent),
+              linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  mask-composite: intersect;
+}
+.theme-mono .section--hero:has(.hero-flaeche--sockel) {
+  padding-bottom: 9rem;
 }
 
 /* Footer-Fläche: ein Streifen an der Oberkante, über dem kein Text steht.
