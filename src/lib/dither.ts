@@ -14,6 +14,15 @@
  *
  * Die Felder sind reine Funktionen (x, y, Breite, Höhe, Zeit) → 0…1 und
  * damit ohne Browser prüfbar; src/lib/dither.test.ts tut das.
+ *
+ * Zur Herkunft: Die Bayer-Matrix ist ein Standard aus der Drucktechnik —
+ * dieselben 16 bzw. 64 Zahlen stehen in jeder Implementierung geordneten
+ * Ditherings. Die Felder darunter sind dagegen eigene Konstruktionen. Eine
+ * erste Fassung hatte die Formeln der Seite nachgebaut, an der wir uns
+ * gestalterisch orientiert haben; das war zu nah. Was hier steht, bewegt
+ * sich anders: Moiré aus gedrehten Gittern statt überlagerter Sinusbänder,
+ * zwei interferierende Ringquellen statt einer, fallende Spalten statt
+ * waagerechter Fäden.
  */
 
 /** Grauwert an einer Rasterstelle. Rückgabe außerhalb 0…1 wird geklemmt. */
@@ -53,6 +62,17 @@ function hash(x: number, y: number, seed: number): number {
   return (n >>> 0) / 4294967296;
 }
 
+/** Nachkommaanteil, auch für negative Zahlen in [0,1) — JS' % liefert dort
+ *  ein negatives Ergebnis und macht aus einem Gittermuster eine Asymmetrie. */
+function frac(v: number): number {
+  return ((v % 1) + 1) % 1;
+}
+
+/** Abstand zur Gittermitte als Linie: 1 auf der Linie, 0 dazwischen. */
+function linie(v: number, schaerfe: number): number {
+  return Math.pow(1 - Math.min(1, Math.abs(frac(v) - 0.5) * 2), schaerfe);
+}
+
 /** Bilinear geglättetes Gitterrauschen mit Smoothstep-Kante. */
 export function valueNoise(x: number, y: number, seed = 0): number {
   const xi = Math.floor(x);
@@ -70,79 +90,150 @@ export function valueNoise(x: number, y: number, seed = 0): number {
 }
 
 /**
- * Lambert-beleuchtete Kugel. Der Lichtvektor kreist langsam, dadurch
- * wandert die Lichtkante über die Kugel, statt dass sich das Bild dreht.
+ * Denkender Kern — die Fläche im Kopf der Startseite.
+ *
+ * Eine beleuchtete Kugel, auf deren Oberfläche ein Adergeflecht liegt. Das
+ * Geflecht entsteht aus Rauschen in Kugelkoordinaten: Weil die Länge mit
+ * der Zeit wächst, dreht sich das Muster um die Achse, während die Kugel
+ * stehen bleibt — wie ein Globus, nicht wie ein rotierender Ball.
+ *
+ * Dazu zwei Atemzüge in unterschiedlichem Takt: Der Radius weitet sich um
+ * zwei Prozent, die Helligkeit der Adern schwillt an und ab. Weil beide
+ * Perioden teilerfremd sind, wiederholt sich der Gesamteindruck erst nach
+ * gut zwei Minuten — man sieht keine Schleife.
  */
-const sphere: Field = (x, y, w, h, t) => {
-  const r = Math.min(w, h) * 0.42;
+const brain: Field = (x, y, w, h, t) => {
+  const puls = Math.sin(t * 0.00042);
+  const r = Math.min(w, h) * 0.44 * (1 + 0.02 * puls);
   const dx = x - w * 0.5;
-  const dy = y - h * 0.48;
+  const dy = y - h * 0.5;
   const dist = Math.sqrt(dx * dx + dy * dy);
 
   if (dist > r) {
-    // Halo: quadratischer Abfall, damit der Rand nicht hart abreißt.
-    const falloff = Math.max(0, 1 - (dist - r) / (r * 0.55));
-    return 0.03 + falloff * falloff * 0.05;
+    // Streulicht, quadratisch abfallend — der Rand soll ausfransen, nicht abreißen.
+    const abfall = Math.max(0, 1 - (dist - r) / (r * 0.42));
+    return 0.02 + abfall * abfall * 0.06;
   }
+
   const u = dx / r;
   const v = dy / r;
   const z = Math.sqrt(Math.max(0, 1 - u * u - v * v));
-  const lx = 0.55 * Math.cos(t * 0.00035);
-  const len = Math.sqrt(lx * lx + 0.25 + 0.5184);
-  const lambert = (u * lx + v * -0.5 + z * 0.72) / len;
-  return Math.min(0.05 + 0.94 * Math.pow(Math.max(0, lambert), 1.15), 0.97);
+
+  // Kugelkoordinaten. Die Länge wandert mit der Zeit: das Muster dreht sich.
+  const laenge = Math.atan2(u, z) + t * 0.00011;
+  const breite = Math.asin(Math.max(-1, Math.min(1, v)));
+
+  // Zwei Oktaven Rauschen auf der Oberfläche, die zweite gegenläufig
+  // verschoben, damit die Adern nicht in Reihen stehen.
+  const n =
+    0.62 * valueNoise(laenge * 3.1, breite * 3.1, 11) +
+    0.38 * valueNoise(laenge * 7.3 + 4.2, breite * 6.7 - 1.8, 29);
+
+  // Grate statt Flächen: Der Betrag um 0,5 herum invertiert das Rauschen zu
+  // einem Netz aus Linien — das ist es, was wie ein Geflecht aussieht.
+  const adern = Math.pow(1 - Math.min(1, Math.abs(n - 0.5) * 2.9), 1.6);
+
+  // Beleuchtung von links oben, feststehend. Bewegung kommt aus dem Muster,
+  // nicht aus dem Licht — ein wanderndes Licht läse sich als Scheinwerfer.
+  const lambert = Math.max(0, u * -0.42 + v * -0.46 + z * 0.78);
+
+  const atem = 0.86 + 0.14 * Math.sin(t * 0.00068 + 1.1);
+  return Math.min(0.97, (0.14 + 0.7 * lambert) * (0.34 + 0.92 * adern) * atem);
 };
 
-/** Zwei überlagerte Sinusbänder — ruhiges Fließen, für breite Trenner. */
-const wave: Field = (x, y, _w, h, t) => {
-  const rel = y / h;
-  const a = 0.5 + 0.26 * Math.sin(x * 0.05 - t * 0.0022) * Math.sin(x * 0.011 + t * 0.0009);
-  const b = 0.5 + 0.14 * Math.sin(x * 0.09 + t * 0.0016);
-  return Math.max(1 - 7 * Math.abs(rel - a), (1 - 10 * Math.abs(rel - b)) * 0.7);
+/**
+ * Moiré aus zwei gedrehten Gittern. Der Winkel des zweiten Gitters wandert
+ * langsam, dadurch laufen die Schwebungsstreifen über die Fläche.
+ */
+const weave: Field = (x, y, _w, _h, t) => {
+  const a1 = 0.42;
+  const a2 = 0.42 + 0.34 * Math.sin(t * 0.00023);
+  const g1 = Math.sin((x * Math.cos(a1) + y * Math.sin(a1)) * 0.62);
+  const g2 = Math.sin((x * Math.cos(a2) + y * Math.sin(a2)) * 0.58 + t * 0.0009);
+  // Das Produkt zweier Sinus liegt im Mittel bei null; ohne die Potenz
+  // stünde die halbe Fläche bei 0,5 und die Schwelle machte daraus ein
+  // gleichmäßiges Schachbrett — sichtbar als Flimmern, nicht als Muster.
+  // Die Potenz drückt alles Mittlere ins Dunkle; hell bleiben die Stellen,
+  // an denen beide Gitter zugleich im Maximum stehen.
+  return 0.05 + 0.9 * Math.pow(0.5 + 0.5 * g1 * g2, 3.2);
 };
 
-/** Zwei Oktaven Rauschen, gegenläufig driftend; nach rechts heller. */
-const noise: Field = (x, y, w, _h, t) => {
-  const u = x / 22;
-  const v = y / 22;
-  const drift = t * 0.00018;
-  return (
-    (0.6 * valueNoise(u + drift, v, 7) + 0.4 * valueNoise(2 * u - drift, 2 * v + drift, 19)) *
-    (0.5 + (x / w) * 0.55)
-  );
-};
-
-/** Konzentrische Ringe, die nach außen laufen. */
-const ripple: Field = (x, y, w, h, t) => {
-  const dx = x - w / 2;
-  const dy = (y - h / 2) * 2.4;
-  return 0.5 + 0.46 * Math.sin(Math.sqrt(dx * dx + dy * dy) * 0.14 - t * 0.0026);
-};
-
-/** Waagerechte Fäden — Zeilen aus Rauschen, langsam nach links ziehend. */
-const stream: Field = (x, y, _w, _h, t) => {
-  return (0.5 * Math.sin(y * 0.55) + 0.5) * (0.35 + 0.75 * valueNoise(x / 40 - t * 0.0011, y / 6, 5));
-};
-
-/** Landschaftskante mit drei Sinus-Oktaven; darüber heller Himmel. */
-const horizon: Field = (x, y, w, h, _t) => {
-  const u = x / w;
+/**
+ * Wolken, die einer gekrümmten Strömung folgen: Die Abtaststelle wird vor
+ * dem Rauschen entlang einer Sinuskurve verschoben, statt das Rauschen nur
+ * zu verschieben. Das gibt der Bewegung einen Drall.
+ */
+const drift: Field = (x, y, _w, h, t) => {
   const v = y / h;
-  const kante =
-    0.4 + 0.09 * Math.sin(u * 4.6 + 1.4) + 0.035 * Math.sin(u * 11.3) + 0.015 * Math.sin(u * 23.1 + 0.7);
-  return v < kante ? Math.max(0, 0.04 - (kante - v) * 0.3) : Math.min(0.12 + (v - kante) * 0.7, 0.5);
+  const strom = x / 26 + 2.4 * Math.sin(v * 2.7 + t * 0.00034);
+  const quer = v * 5.2 + 0.6 * Math.sin(x / 90 - t * 0.00021);
+  // Nur die oberen Rauschwerte werden zu Schwaden. Ohne diese Schwelle
+  // liegt das Feld im Mittel bei 0,5, und ein Feld bei 0,5 ist nach dem
+  // Dithering eine geschlossene helle Fläche, kein Muster.
+  const roh = valueNoise(strom, quer, 43);
+  const schwaden = Math.pow(Math.max(0, roh - 0.44) / 0.56, 1.7);
+  return 0.04 + 0.84 * schwaden * (0.45 + 0.62 * (1 - Math.abs(v - 0.5) * 2));
 };
 
-/** Reiner Verlauf links → rechts. Bewusst ohne Zeitanteil: bleibt statisch. */
-const gradient: Field = (x, _y, w) => x / (w - 1 || 1);
+/**
+ * Zwei Ringquellen, die sich überlagern. Eine steht, die andere wandert
+ * waagerecht; wo sich die Wellen treffen, entstehen Knoten.
+ */
+const pulse: Field = (x, y, w, h, t) => {
+  const y2 = (y - h * 0.5) * 2.2;
+  const q1x = x - w * 0.32;
+  const q2x = x - w * (0.68 + 0.12 * Math.sin(t * 0.00019));
+  const d1 = Math.sqrt(q1x * q1x + y2 * y2);
+  const d2 = Math.sqrt(q2x * q2x + y2 * y2);
+  // Nur die gemeinsamen Wellenberge leuchten. Die Summe zweier Sinus
+  // liegt im Mittel bei null; wer sie auf 0,5 schiebt, bekommt eine zur
+  // Hälfte weiße Fläche statt Ringe.
+  const berg = (Math.sin(d1 * 0.11 - t * 0.0017) + Math.sin(d2 * 0.13 - t * 0.0021)) * 0.5;
+  return 0.04 + 0.86 * Math.pow(Math.max(0, berg), 2.4);
+};
 
-export const FIELDS = { gradient, horizon, noise, ripple, sphere, stream, wave } as const;
+/**
+ * Fallende Spalten. Jede Spalte bekommt aus ihrem Index eine eigene
+ * Geschwindigkeit und einen eigenen Startpunkt, dadurch fällt nichts im
+ * Gleichschritt. Innerhalb einer Spalte verläuft die Helligkeit als Schweif.
+ */
+const rain: Field = (x, y, _w, h, t) => {
+  const spalte = Math.floor(x / 2);
+  const tempo = 0.018 + 0.042 * ((spalte * 2654435761) % 997) / 997;
+  const versatz = ((spalte * 40503) % 1009) / 1009;
+  const laenge = 0.35 + 0.4 * (((spalte * 22695477) % 733) / 733);
+  const kopf = (versatz + t * 0.001 * tempo * 60) % 1;
+  let d = kopf - y / h;
+  if (d < 0) d += 1;
+  return d < laenge ? 0.12 + 0.85 * Math.pow(1 - d / laenge, 2.4) : 0.05;
+};
+
+/**
+ * Perspektivisches Gitter. Die Querlinien rücken nach unten zusammen, die
+ * Längslinien laufen auf einen Fluchtpunkt zu. Ohne Zeitanteil.
+ */
+const mesh: Field = (x, y, w, h) => {
+  // Tiefe wächst nach unten; der Horizont liegt knapp über der Oberkante.
+  const tiefe = 0.1 + 0.9 * (y / h);
+  // Querlinien stehen in Weltkoordinaten gleichmäßig — perspektivisch
+  // rücken sie zum Horizont hin zusammen.
+  const quer = linie((1 / tiefe) * 1.35, 10);
+  // Längslinien laufen auf den Fluchtpunkt in der Mitte zu.
+  const laengs = linie(((x / w - 0.5) / tiefe) * 2.4, 10);
+  return 0.03 + 0.82 * Math.max(quer, laengs) * (0.25 + 0.75 * (y / h));
+};
+
+/** Verlauf über die Diagonale. Bewusst ohne Zeitanteil: bleibt statisch. */
+const fade: Field = (x, y, w, h) =>
+  0.04 + 0.66 * (0.62 * (x / (w - 1 || 1)) + 0.38 * (1 - y / (h - 1 || 1)));
+
+export const FIELDS = { brain, drift, fade, mesh, pulse, rain, weave } as const;
 
 /** Erlaubte Werte für `<Dither field="…" />`. */
 export type FieldName = keyof typeof FIELDS;
 
 /** Felder ohne Zeitanteil — für sie lohnt keine Animationsschleife. */
-export const STATIC_FIELDS: readonly FieldName[] = ['gradient', 'horizon'];
+export const STATIC_FIELDS: readonly FieldName[] = ['fade', 'mesh'];
 
 export interface PaintOptions {
   /** Kantenlänge einer Rasterzelle in CSS-Pixeln. Größer = grober = billiger. */

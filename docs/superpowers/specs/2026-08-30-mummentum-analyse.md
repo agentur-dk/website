@@ -229,12 +229,33 @@ Muster. Die übrigen 15 Seiten bleiben unverändert.
 
 Vier Einsatzarten auf der Startseite, wie besprochen:
 
-- **Hero** — `sphere`, Raster 4, radial ausmaskiert, rechts neben dem Satz
-- **Kartenköpfe** — `ripple` und `noise` auf den beiden Schwerpunkt-Karten,
-  Deckkraft 0,45 → 0,7 im Hover, darüber ein Verlauf zur Kartenfarbe
-- **Trenner** — sechs Bänder mit `wave`, `noise`, `stream`, `ripple`,
-  `horizon`, `gradient`, jedes mit eigenem Mono-Etikett
-- **Footer** — `stream`, in der unteren Hälfte, nach oben ausgeblendet
+- **Hero** — `brain`: eine beleuchtete Kugel mit Adergeflecht, das sich in
+  Kugelkoordinaten dreht (eine Umdrehung in gut 57 s), dazu zwei Atemzüge
+  in teilerfremdem Takt. Ab 1024 px rechts neben dem Satz; darunter
+  ausgeblendet, weil sie sonst hinter der Überschrift läge.
+- **Kartenköpfe** — `pulse` und `drift`, Deckkraft 0,45 → 0,7 im Hover,
+  darüber ein Verlauf zur Kartenfarbe
+- **Trenner** — sechs Bänder mit `weave`, `drift`, `pulse`, `rain`,
+  `mesh`, `fade`, jedes mit eigenem Mono-Etikett
+- **Footer** — `weave` als Streifen an der Oberkante
+
+### 3.1.1 Die Felder sind eigene
+
+Eine erste Fassung hatte die Formeln der Vorlage übernommen, teils mit
+deren Konstanten. Das war zu nah und ist ersetzt. Die Bayer-Matrix bleibt —
+sie ist ein Standard aus der Drucktechnik, dieselben Zahlen stehen in jeder
+Implementierung geordneten Ditherings. Die Felder darunter bewegen sich
+jetzt anders: Moiré aus zwei gegeneinander gedrehten Gittern statt
+überlagerter Sinusbänder, zwei interferierende Ringquellen statt einer
+konzentrischen, fallende Spalten mit eigener Geschwindigkeit statt
+waagerechter Fäden, ein perspektivisches Gitter, und die Kugel trägt ein
+Geflecht statt nur einer Lichtkante.
+
+Beim Abstimmen der Felder war die wichtigste Einsicht, dass ein Feld,
+das im Mittel bei 0,5 liegt, nach dem Dithering keine Struktur ergibt,
+sondern ein geschlossenes Schachbrett — sichtbar als Flimmern. Drei
+Felder mussten deshalb mit einer Potenz ins Dunkle gedrückt werden, damit
+hell nur bleibt, wo tatsächlich ein Wellenberg steht.
 
 ### 3.2 Typografie
 
@@ -252,6 +273,28 @@ ausdrücklich außen vor.** Sie hatten kurzzeitig Monospace, Versalien und
 Pillenform; das ging über die Absprache hinaus ("Mono nur für
 Mikro-Labels"), und die Pillenform widersprach zusätzlich der Vorgabe im
 `@theme`-Block, dass UI-Elemente eckig bleiben.
+
+### 3.2.1 Lesbarkeit über den Flächen
+
+Die Fläche lag zuerst über der unteren Footer-Hälfte und damit unter 17
+Textelementen. Rechnerisch bestand das sogar — #d4d4d4 auf den hellen
+Rasterpixeln kommt auf 5,35:1 —, aber das Kontrastverhältnis unterstellt
+einen gleichmäßigen Grund. Ein 1-Bit-Raster direkt unter der Zeile
+zerstört die Lesbarkeit trotzdem.
+
+axe-core kann das strukturell nicht finden: Es liest die
+CSS-Hintergrundfarbe, und die ist unter einem `<canvas>` unverändert
+dunkel. Was das Canvas dorthin malt, sieht es nicht — es meldete null
+Verstöße.
+
+`tools/wcag-manual.mjs` prüft die Überlappung deshalb selbst, in zwei
+Breiten (1440 und 390), und rechnet nicht, sondern untersagt sie. Zwei
+Details waren nötig, bis die Gegenprobe griff: Die Abschirmung durch einen
+Vorfahren mit eigener Fläche darf nur bis zum gemeinsamen Vorfahren von
+Text und Canvas gelten — sonst schirmt `<body>` alles ab. Und
+`scroll-behavior: smooth` muss aus, sonst kommt die Scroll-Schleife über
+die ersten 200 px nicht hinaus und die meisten Flächen werden nie
+gezeichnet.
 
 ### 3.3 Drei Fallen, alle im gebauten HTML nachgemessen
 

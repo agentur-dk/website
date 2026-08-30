@@ -43,7 +43,7 @@ const durchlaeufe = [
 
 <section class="logo-strip" aria-labelledby="logo-strip-heading">
   <div class="container">
-    <h2 class="logo-strip__label" id="logo-strip-heading">Vertrauen von</h2>
+    <h2 class="logo-strip__label" id="logo-strip-heading">Zusammenarbeit mit</h2>
 
     <div class="logo-strip__track-wrap">
       <ul class="logo-strip__track" role="list">
@@ -74,6 +74,18 @@ const durchlaeufe = [
   .logo-strip {
     padding-block: 2.5rem 3rem;
     overflow: hidden;
+  }
+
+  /* Die Laufschrift soll über die volle Fensterbreite laufen, nicht im
+     Satzspiegel stehen: Sonst reißt sie an der Containerkante ab, obwohl
+     die Maske ein Auslaufen andeutet. Nur hier — .container behält seine
+     Breite überall sonst. Der :global()-Zusatz ist nötig, weil .container
+     aus global.css kommt und Astros Scope-Attribut nicht trägt. */
+  .logo-strip :global(.container) {
+    max-width: none;
+    width: 100%;
+    margin-inline: 0;
+    padding-inline: 0;
   }
 
   .logo-strip__label {

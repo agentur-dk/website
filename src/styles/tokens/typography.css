@@ -47,7 +47,7 @@
   --dk-leading-body:    1.65;
 
   /* Zeilenlänge in Zeichen statt in Pixeln: bleibt beim Zoomen richtig. */
-  --dk-measure-display: 16ch;
+  --dk-measure-display: 20ch;
   --dk-measure-title:   20ch;
   --dk-measure-lead:    56ch;
   --dk-measure-body:    38ch;

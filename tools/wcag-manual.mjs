@@ -10,6 +10,7 @@
  *   1.4.12 Textabstand      — kein Inhaltsverlust bei erhöhten Abständen
  *   2.4.11 Fokus nicht verdeckt — sticky Header verdeckt kein fokussiertes Element
  *   2.5.8  Zielgröße        — interaktive Elemente mindestens 24 × 24 px
+ *   1.4.3  Text über Raster  — kein Text über einer gerasterten Fläche
  *
  * Voraussetzung: `node tools/serve.mjs` oder `npm run preview` läuft.
  */
@@ -39,6 +40,98 @@ const browser = await chromium.launch();
 
 for (const name of pages) {
   const url = `${ORIGIN}${BASE}${name}.html`;
+
+  // ---- 1.4.3 Text über einer gerasterten Fläche ------------------------
+  // axe-core kann das nicht finden: Es liest die CSS-Hintergrundfarbe, und
+  // die ist unter einem <canvas> unverändert dunkel. Was das Canvas dorthin
+  // malt, sieht es nicht. Genau so ist es passiert — die Fläche im Footer
+  // lag unter 17 Textelementen, axe meldete null Verstöße.
+  //
+  // Das Kontrastverhältnis allein hilft hier auch nicht weiter: Es setzt
+  // einen gleichmäßigen Grund voraus. Ein 1-Bit-Raster erreicht als
+  // Mittelwert brauchbare Zahlen und ist trotzdem unlesbar, weil zwischen
+  // den Buchstaben Pixel aufblitzen. Deshalb wird nicht gerechnet, sondern
+  // die Überlappung selbst untersagt.
+  // Zwei Breiten, weil die Flächen umbrechen: Die Kugel im Kopf steht am
+  // Desktop neben dem Satz und rutscht darunter, sobald die Zweispaltigkeit
+  // fällt. Ein Durchlauf bei 1440 allein hätte das nie gesehen.
+  for (const breite of [1440, 390]) {
+    const ctx = await browser.newContext({ viewport: { width: breite, height: 900 } });
+    const page = await ctx.newPage();
+    await page.goto(url, { waitUntil: 'networkidle' });
+    // Bis ans Seitenende scrollen, damit jede Fläche gezeichnet wurde —
+    // gezeichnet wird erst beim Sichtbarwerden. `scroll-behavior: smooth`
+    // muss dafür aus: Sonst animiert jeder Sprung, 60 ms reichen nicht, und
+    // die Schleife kommt über die ersten 200 px nicht hinaus.
+    await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' });
+    await page.evaluate(async () => {
+      const schritt = window.innerHeight * 0.8;
+      for (let y = 0; y <= document.documentElement.scrollHeight; y += schritt) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 80));
+      }
+    });
+    const ueberdeckt = await page.evaluate(() => {
+      const flaechen = [...document.querySelectorAll('canvas[data-dither]')]
+        .map((c) => ({ el: c, r: c.getBoundingClientRect() }))
+        .filter((f) => f.r.width > 2 && f.r.height > 2);
+      if (!flaechen.length) return [];
+
+      /**
+       * Deckt ein Element zwischen Text und Fläche den Text ab?
+       *
+       * Nur Vorfahren *unterhalb* des gemeinsamen Vorfahren können das:
+       * Alles ab dem gemeinsamen Vorfahren aufwärts malt hinter dem
+       * Canvas, weil das Canvas selbst darin liegt. Ohne diese Grenze
+       * schirmt <body> mit seiner Hintergrundfarbe jeden Text ab und die
+       * Prüfung findet nie etwas — genau so ist sie beim ersten Versuch
+       * an der Gegenprobe gescheitert.
+       */
+      const abgeschirmt = (el, canvas) => {
+        let gemeinsam = el;
+        while (gemeinsam && !gemeinsam.contains(canvas)) gemeinsam = gemeinsam.parentElement;
+        for (let n = el; n && n !== gemeinsam; n = n.parentElement) {
+          const m = getComputedStyle(n).backgroundColor.match(/rgba?\(([^)]+)\)/);
+          if (!m) continue;
+          const teile = m[1].split(',').map((v) => parseFloat(v));
+          if ((teile.length > 3 ? teile[3] : 1) >= 0.9) return true;
+        }
+        return false;
+      };
+
+      const treffer = new Set();
+      const laeuft = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      for (let n = laeuft.nextNode(); n; n = laeuft.nextNode()) {
+        if (!n.nodeValue || !n.nodeValue.trim()) continue;
+        const el = n.parentElement;
+        if (!el || el.closest('[aria-hidden="true"]')) continue;
+        const cs = getComputedStyle(el);
+        if (cs.visibility === 'hidden' || cs.display === 'none') continue;
+
+        const bereich = document.createRange();
+        bereich.selectNodeContents(n);
+        for (const kasten of bereich.getClientRects()) {
+          if (kasten.width < 2 || kasten.height < 2) continue;
+          for (const f of flaechen) {
+            if (kasten.left < f.r.right && kasten.right > f.r.left &&
+                kasten.top < f.r.bottom && kasten.bottom > f.r.top &&
+                // Der Header liegt als klebende Leiste über dem Hero, hat
+                // aber eine eigene deckende Fläche.
+                !abgeschirmt(el, f.el)) {
+              treffer.add(n.nodeValue.trim().slice(0, 32));
+            }
+          }
+        }
+      }
+      return [...treffer];
+    });
+    if (ueberdeckt.length) {
+      add('1.4.3 Text über Raster', name,
+          `bei ${breite}px liegen ${ueberdeckt.length} Textstelle(n) über einer ` +
+          `Dither-Fläche: ` + ueberdeckt.slice(0, 4).map((t) => `„${t}"`).join(', '));
+    }
+    await ctx.close();
+  }
 
   // ---- 1.4.10 Reflow bei 320 px ----------------------------------------
   {
@@ -158,7 +251,8 @@ await browser.close();
 
 if (!findings.length) {
   console.log(`✓ WCAG-Zusatzprüfung: keine Befunde auf ${pages.length} Seiten`);
-  console.log('  geprüft: 1.4.10 Reflow · 1.4.12 Textabstand · 2.4.11 Fokus · 2.5.8 Zielgröße');
+  console.log('  geprüft: 1.4.3 Text über Raster · 1.4.10 Reflow · 1.4.12 Textabstand ·');
+  console.log('           2.4.11 Fokus · 2.5.8 Zielgröße');
   process.exit(0);
 }
 

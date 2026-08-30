@@ -28,30 +28,28 @@ const base = import.meta.env.BASE_URL;
 
     <!-- Hero Section -->
     <section class="hero section" aria-labelledby="hero-headline">
-      <div class="hero__flaeche" aria-hidden="true"><Dither field="sphere" cell={4} fps={12} /></div>
+      <div class="hero__flaeche" aria-hidden="true"><Dither field="brain" cell={3} fps={14} /></div>
       <div class="container hero__inner">
         <div class="hero__content">
           {/*
-            Die Rubrik trug vorher „Digitalagentur Köln" — dieselben Wörter wie
-            die H1 direkt darunter und wie der Title. Dreimal dieselbe Phrase
-            bringt in der Suche nichts: Google wertet die H1, nicht ihre
-            Wiederholung. Für generative Suche zählt Anderes — abrufbare,
-            datierte, überprüfbare Angaben. Deshalb steht hier jetzt der
-            Rechtsrahmen mit Stichtag statt einer Ortsangabe, die zwei Zeilen
-            weiter ohnehin steht. Das Datum ist dieselbe Angabe wie in
-            src/data/faq.ts und src/lib/bfsg-logic.ts.
+            Aufteilung über der Falz: Die Rubrik trägt das Hauptkeyword
+            („Digitalagentur aus Köln"), die H1 die Breite des Angebots.
+            Vorher stand beides in der H1 und zusätzlich in der Rubrik —
+            dieselbe Phrase dreimal, dazu ein viertes Mal im Title.
+            Wiederholung bringt in der Suche nichts; eine zweite, andere
+            Aussage schon.
 
-            Kein aria-hidden mehr: Die Zeile war dekorativ, solange sie die H1
-            wiederholte. Jetzt trägt sie eine eigene Aussage — Text, den nur
-            Suchmaschinen zu sehen bekommen, wäre genau das falsche Muster.
+            Kein aria-hidden: Die Zeile steht so nirgends sonst auf der
+            Seite. Text, den nur Suchmaschinen zu sehen bekommen, wäre
+            genau das falsche Muster.
           */}
-          <p class="section-label">BFSG-Pflicht seit 28. Juni 2025</p>
-          <h1 id="hero-headline" class="hero__headline">Digitalagentur aus Köln für barrierefreie WordPress-Websites,<span class="hero__headline-soft"> die im Alltag tragen.</span></h1>
+          <p class="section-label">Digitalagentur aus Köln</p>
+          <h1 id="hero-headline" class="hero__headline">Websites, Online-Marketing und KI-Lösungen<span class="hero__headline-soft"> — drei Bausteine, ein Ansprechpartner.</span></h1>
           <p class="hero__claim" aria-hidden="true">
             <span id="typewriter-text" data-texts='["Sichtbarkeit, die wirkt.", "Barrierefreiheit, die überzeugt.", "WordPress, das performt.", "Marketing, das konvertiert."]'>Sichtbarkeit, die wirkt.</span><span class="typewriter-caret"></span>
           </p>
           <p class="hero__subline">
-            agentur dk macht Ihr Unternehmen digital sichtbar — mit Website-Leasing, professioneller WordPress-Entwicklung (barrierefrei nach BFSG), strategischem SEO/GEO und zielgruppengenauem Online-Marketing.
+            agentur dk macht Ihr Unternehmen digital sichtbar — ob mit Websites, Online-Marketing oder KI-Implementierungen und individuellen Lösungen.
           </p>
           <div class="hero__actions">
             <a href="#contact" class="btn btn--accent btn--lg">Projekt anfragen</a>
@@ -68,7 +66,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="wave" label="Kunden" />
+    <DitherBand field="weave" label="Kunden" />
 
     <!-- Kundenlogo-Leiste -->
     <LogoStrip />
@@ -83,7 +81,7 @@ const base = import.meta.env.BASE_URL;
           <!-- Karte A -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="card-head" aria-hidden="true">
-              <Dither field="ripple" cell={3} class="card-head__flaeche" />
+              <Dither field="pulse" cell={3} class="card-head__flaeche" />
             </div>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
               <Icon name="briefcase-plus" size={48} strokeWidth={1.5} />
@@ -95,7 +93,7 @@ const base = import.meta.env.BASE_URL;
           <!-- Karte B -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="card-head" aria-hidden="true">
-              <Dither field="noise" cell={3} class="card-head__flaeche" />
+              <Dither field="drift" cell={3} class="card-head__flaeche" />
             </div>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
               <Icon name="accessibility" size={48} strokeWidth={1.5} />
@@ -108,7 +106,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="noise" label="Leistungen" />
+    <DitherBand field="drift" label="Leistungen" />
 
     <!-- Services Section -->
     <section id="services" class="services section">
@@ -225,7 +223,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="stream" label="Warum wir" />
+    <DitherBand field="pulse" label="Warum wir" />
 
     <!-- Why agentur dk -->
     <section class="why-us section" aria-label="Warum agentur dk">
@@ -264,7 +262,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="ripple" label="Vorgehen" />
+    <DitherBand field="rain" label="Vorgehen" />
 
     <!-- Process Section -->
     <section class="process section" aria-label="Unser Vorgehen">
@@ -304,7 +302,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="horizon" label="Fragen" />
+    <DitherBand field="mesh" label="Fragen" />
 
     <!-- FAQ Section -->
     <section id="faq" class="faq section">
@@ -329,7 +327,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="gradient" label="Kontakt" />
+    <DitherBand field="fade" label="Kontakt" />
 
     <!-- Contact Section -->
     <section class="contact section" aria-label="Kontakt">

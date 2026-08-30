@@ -123,6 +123,12 @@
   max-width: var(--dk-measure-display);
   text-wrap: balance;
   margin: 1.75rem 0 1.5rem;
+  /* global.css setzt hyphens: auto auf alle Überschriften. Bei 14 px hält
+     das eine Zeile zusammen, bei 68 px zerlegt es „Online-Marketing" zu
+     „Online-Mar-keting" — mitten im Wort, quer über eine Zeile, die man
+     aus zehn Metern liest. Im Displaygrad wird an Wortgrenzen gebrochen. */
+  hyphens: none;
+  overflow-wrap: normal;
 }
 /* Der zweite Halbsatz derselben Zeile, nur heller: Headline und
    Subheadline in einem Satz statt in zwei Elementen. */
@@ -139,6 +145,8 @@
   max-width: var(--dk-measure-title);
   text-wrap: balance;
   margin: 1.75rem 0 1.25rem;
+  hyphens: none;
+  overflow-wrap: normal;
 }
 
 .theme-mono .card__title,
@@ -230,7 +238,7 @@
   right: 0;
   bottom: auto;
   left: auto;
-  width: min(42vw, 560px);
+  width: min(30vw, 400px);
   aspect-ratio: 1;
   height: auto;
   opacity: 0.55;
@@ -238,23 +246,39 @@
   mask-image: radial-gradient(70% 70% at 50% 50%, black 44%, transparent 86%);
 }
 @media (max-width: 1023px) {
-  /* Unter der Zweispaltigkeit läge die Kugel hinter dem Text. Sie bleibt
-     als schwacher Grund stehen, statt zu verschwinden. */
+  /* Unter der Zweispaltigkeit gibt es keine Spalte mehr, in der die Kugel
+     stehen könnte — sie läge hinter der Überschrift. Auch schwach
+     abgedunkelt bleibt ein 1-Bit-Raster unter einer Zeile ein Raster unter
+     einer Zeile; tools/wcag-manual.mjs meldet die Überlappung bei 390 px.
+     Auf dem Telefon trägt die Bildsprache also über die Trennerbänder, die
+     Kartenköpfe und den Footer — dort steht kein Text darüber. */
   .theme-mono .hero__flaeche {
-    width: min(88vw, 620px);
-    right: -12%;
-    opacity: 0.2;
+    display: none;
   }
 }
 
-/* Footer-Fläche: liegt hinter dem Text, nach oben ausgeblendet. */
+/* Footer-Fläche: ein Streifen an der Oberkante, über dem kein Text steht.
+   Vorher lag sie über der unteren Footer-Hälfte und damit unter 17
+   Textelementen. Rechnerisch bestand das sogar — #d4d4d4 auf den hellen
+   Rasterpixeln kommt auf 5,35:1 —, aber das Kontrastverhältnis unterstellt
+   einen gleichmäßigen Grund. Ein 1-Bit-Raster direkt unter der Zeile
+   zerstört die Lesbarkeit trotzdem, und axe-core kann das nicht sehen: Es
+   liest die CSS-Hintergrundfarbe, nicht das, was ein Canvas dorthin malt.
+   tools/wcag-manual.mjs prüft seither die Überlappung selbst. */
 .theme-mono .footer__flaeche {
   position: absolute;
-  inset: auto 0 0 0;
-  height: 62%;
-  opacity: 0.3;
+  inset: 0 0 auto 0;
+  height: 7rem;
+  opacity: 0.5;
   pointer-events: none;
-  mask-image: linear-gradient(to top, black, transparent);
+  mask-image: linear-gradient(to bottom, black 30%, transparent);
+}
+/* Platz für den Streifen: Der Footer-Inhalt beginnt sonst mittendrin.
+   Doppelte Klasse, weil die scoped Regel in Footer.astro dieselbe
+   Spezifität hat — mit einfacher Klasse blieb das Polster bei 4rem und
+   der Streifen lag wieder über der Logozeile. */
+.theme-mono.theme-mono .site-footer__inner {
+  padding-top: 9.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
