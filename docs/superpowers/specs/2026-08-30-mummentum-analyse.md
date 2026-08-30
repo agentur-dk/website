@@ -272,11 +272,24 @@ Abschluss-CTA blieben in 700 stehen. Die doppelt notierte Klasse
 - CLS 0. Die Kugel hing zuerst an `top: 50%` und damit an der Höhe des
   Hero; beim Schriftwechsel rutschte sie um gut 60 px (CLS 0,061). Sie
   steht jetzt vom oberen Rand aus.
-- Lighthouse mobil: **Startseite 98**, alle übrigen 31 Läufe 100.
+- Lighthouse mobil: alle Seiten 100, die **Startseite schwankt zwischen
+  98 und 100** — siehe 3.5.
 
-### 3.5 Warum die Startseite bei 98 steht
+### 3.5 Warum die Startseite an der Schwelle liegt
 
-FCP 1,7 s statt 1,1 s. Nicht die Flächen: Ein Testbau ganz ohne Dither
+Nachtrag, wichtig für die Einordnung: Die ersten Messreihen liefen auf
+einer Maschine, auf der parallel ein zweiter Server und ein
+Vergleichsbau beschäftigt waren, und meldeten fünfmal hintereinander 98.
+Auf ruhiger Maschine sind es 100, 100, 98, 100 bei FCP 1,4 s. Die Seite
+liegt also nicht unter der Schwelle, sondern **auf** ihr: FCP pendelt um
+den Punkt, an dem Lighthouse von 1,0 auf 0,9 abwertet. Für das Gate
+heißt das, dass ein Lauf durchfallen kann, ohne dass sich am Code etwas
+geändert hat.
+
+Die Ursachenanalyse darunter bleibt gültig — sie erklärt, warum die
+Seite überhaupt so nah an die Kante gerückt ist.
+
+FCP 1,7 s statt 1,1 s (unter Last gemessen). Nicht die Flächen: Ein Testbau ganz ohne Dither
 misst dieselben 1,7 s. Es sind die Bytes im Dokument — das Stylesheet
 liegt inline (`inlineStylesheets: 'always'`), und die Startseite trägt
 jetzt **beide** Bildsprachen.
