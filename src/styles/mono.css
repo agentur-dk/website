@@ -1,0 +1,324 @@
+/* ============================================================
+   Monochrome Bildsprache
+   Wird nur von den Seiten geladen, die sie benutzen (Import im
+   Frontmatter). In global.css stünde sie sonst in allen 16
+   Dokumenten — die Stylesheets liegen inline im HTML, also zahlt
+   jede Seite jedes Byte, auch die, die davon nichts hat.
+
+   Analyse dahinter:
+   docs/superpowers/specs/2026-08-30-mummentum-analyse.md
+   ============================================================ */
+
+/* ============================================================
+   Monochrome Bildsprache (.theme-mono)
+
+   Überschrieben werden die --color-*-Namen, nicht die --dk-*.
+   Grund: Ein Custom Property wird dort aufgelöst, wo es
+   *deklariert* ist. `--color-bg-light: var(--dk-color-bg-light)`
+   steht im @theme-Block auf :root — die Substitution passiert
+   also an :root, und ein --dk-Wert weiter unten im Baum kommt
+   nie an. Nachgemessen: mit --dk-Override blieb .section--light
+   auf rgb(245,246,248) stehen.
+
+   Hierarchie entsteht aus Grad, Helligkeit und Laufweite, nicht
+   aus Farbe. Blau bleibt als einziger Akzent für Knöpfe, Links
+   und Fokus — sonst verlöre die Marke ihre Farbe.
+   Kontraste gegen #101010 nachgerechnet:
+     #f3f3f3 17,3:1 · #9c9c9c 6,97:1 · #5090d0 5,69:1
+   Weiß auf #1C60AD: 6,31:1.
+   ============================================================ */
+.theme-mono {
+  --color-bg:            #101010;
+  --color-surface:       #0b0b0b;
+  --color-surface-alt:   #141414;
+  --color-border:        #212121;
+  --color-border-strong: #3a3a3a;
+  --color-text:          #f3f3f3;
+  --color-text-muted:    #9c9c9c;
+  --color-text-faint:    #8a8a8a;
+  --color-decor:         #3a3a3a;
+  --color-accent:        #5090d0;
+  --color-primary-light: #5090d0;
+
+  /* Die -on-light-Tokens bleiben, obwohl auf einer monochromen Seite keine
+     Sektion mehr .section--light trägt: Mehrere Regeln greifen direkt auf
+     sie zu, etwa .schwerpunkte-section__heading mit
+     `color: var(--color-text-on-light)`. Ohne diese Zeilen stand dort
+     #14171c auf #101010 — 1,05:1, von axe-core prompt gemeldet. */
+  --color-bg-light:            #0b0b0b;
+  --color-surface-light:       #141414;
+  --color-surface-alt-light:   #191919;
+  --color-border-light:        #212121;
+  --color-border-strong-light: #3a3a3a;
+  --color-text-on-light:       #f3f3f3;
+  --color-text-muted-on-light: #9c9c9c;
+  --color-text-faint-on-light: #8a8a8a;
+  --color-primary-on-light:    #5090d0;
+  --color-focus-on-light:      #6db3f2;
+  --color-success-on-light:    #6dbf78;
+  --dk-color-decor-on-light:   #3a3a3a;
+
+
+  /* Kein Verlauf mehr: Der Footer trägt eine gerasterte Fläche.
+     Die Deklaration bleibt, damit tools/check-cta.mjs weiter
+     greift — die Prüfung liest die Regel, nicht den Farbwert. */
+  --gradient-footer:        linear-gradient(to bottom, #0b0b0b, #0b0b0b);
+  --color-on-gradient:      #f3f3f3;
+  --color-text-on-gradient: #9c9c9c;
+}
+
+/* ============================================================
+   Monochrome Bildsprache — Typografie
+   Bewusst außerhalb von @layer components: unlayered Regeln
+   schlagen layered, unabhängig von der Spezifität. Ohne das
+   müsste hier jede Regel doppelt verschachtelt werden.
+
+   Drei Mittel tragen die Hierarchie, keine Farbe:
+     Grad      10px Etikett … 49px Headline
+     Helligkeit  text → text-muted → text-faint
+     Laufweite  -0.04em Headline … +0.18em Mono-Etikett
+   Deshalb steht hier überall font-weight 400. Fett erzeugt
+   Lärm; ein großer, eng laufender Regular erzeugt Gewicht.
+   ============================================================ */
+
+.theme-mono h1,
+.theme-mono h2,
+.theme-mono h3,
+.theme-mono h4,
+.theme-mono h5,
+.theme-mono h6 {
+  font-weight: 400;
+}
+
+/* --- Rubrik über der Überschrift ---------------------------- */
+.theme-mono .section-label,
+.theme-mono .schwerpunkte-section__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+/* Der kurze Strich davor bindet das Etikett an den linken Satzrand. */
+.theme-mono .section-label::before,
+.theme-mono .schwerpunkte-section__eyebrow::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: var(--color-border-strong);
+  flex-shrink: 0;
+}
+
+/* --- Überschriften ------------------------------------------ */
+.theme-mono .hero__headline {
+  font-size: clamp(2.4375rem, 6.4vw, 4.25rem);
+  font-weight: 400;
+  letter-spacing: var(--dk-tracking-display);
+  line-height: var(--dk-leading-display);
+  max-width: var(--dk-measure-display);
+  text-wrap: balance;
+  margin: 1.75rem 0 1.5rem;
+}
+/* Der zweite Halbsatz derselben Zeile, nur heller: Headline und
+   Subheadline in einem Satz statt in zwei Elementen. */
+.theme-mono .hero__headline-soft {
+  color: var(--color-text-muted);
+}
+
+.theme-mono .section-title,
+.theme-mono .schwerpunkte-section__heading {
+  font-size: clamp(2rem, 4.6vw, 3.0625rem);
+  font-weight: 400;
+  letter-spacing: var(--dk-tracking-2xl);
+  line-height: var(--dk-leading-title);
+  max-width: var(--dk-measure-title);
+  text-wrap: balance;
+  margin: 1.75rem 0 1.25rem;
+}
+
+.theme-mono .card__title,
+.theme-mono .usp-card__title,
+.theme-mono .schwerpunkt-card__title,
+.theme-mono .wert-card__title {
+  font-size: 1.375rem;
+  font-weight: 400;
+  letter-spacing: var(--dk-tracking-lg);
+  line-height: var(--dk-leading-tight);
+  max-width: 22ch;
+}
+
+/* --- Fließtext ---------------------------------------------- */
+.theme-mono .hero__subline,
+.theme-mono .section-lead,
+.theme-mono .schwerpunkte-section__lead {
+  font-size: 1.0625rem;
+  line-height: var(--dk-leading-body);
+  letter-spacing: var(--dk-tracking-base);
+  max-width: var(--dk-measure-lead);
+  color: var(--color-text-muted);
+}
+
+.theme-mono .card__body,
+.theme-mono .usp-card__body,
+.theme-mono .schwerpunkt-card__text,
+.theme-mono .wert-card__body {
+  font-size: 0.90625rem;
+  line-height: var(--dk-leading-body);
+  max-width: var(--dk-measure-body);
+  color: var(--color-text-muted);
+}
+
+/* --- Zähler und Etiketten ----------------------------------- */
+.theme-mono .service-card__number {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: var(--dk-tracking-mono);
+  color: var(--color-text-muted);
+}
+
+/* --- Knöpfe und Navigation ---------------------------------- */
+.theme-mono .btn {
+  font-family: var(--font-mono);
+  font-size: 0.78125rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+.theme-mono .nav-link,
+.theme-mono .nav-dropdown__link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* --- Flächen ------------------------------------------------ */
+
+/* Kopfbild einer Karte: die gerasterte Fläche liegt unter einem
+   Verlauf, damit die Kartenfarbe nach unten hin übernimmt. */
+.theme-mono .card-head {
+  position: relative;
+  height: 8rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+}
+.theme-mono .card-head__flaeche {
+  opacity: 0.45;
+  transition: opacity 500ms ease;
+}
+.theme-mono .schwerpunkt-card:hover .card-head__flaeche {
+  opacity: 0.7;
+}
+.theme-mono .card-head::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--color-surface), transparent 70%);
+  pointer-events: none;
+}
+
+/* Hero-Fläche: eine Kugel rechts neben dem Satz, radial ausmaskiert.
+   Feste Quadratform statt „volle Höhe der Sektion" — sonst wächst sie
+   mit der Textmenge mit und liegt irgendwann hinter der Überschrift. */
+.theme-mono .hero__flaeche {
+  position: absolute;
+  /* Vom oberen Rand aus gesetzt, nicht mittig. Mittig hieße top: 50% —
+     und damit hinge die Position an der Höhe des Hero. Die ändert sich,
+     sobald die Webfonts einspringen und die Überschrift anders umbricht;
+     die Kugel rutschte dabei um gut 60 px. Lighthouse maß dafür
+     CLS 0,061 und zog die Startseite von 100 auf 98. */
+  top: 6rem;
+  right: 0;
+  bottom: auto;
+  left: auto;
+  width: min(42vw, 560px);
+  aspect-ratio: 1;
+  height: auto;
+  opacity: 0.55;
+  pointer-events: none;
+  mask-image: radial-gradient(70% 70% at 50% 50%, black 44%, transparent 86%);
+}
+@media (max-width: 1023px) {
+  /* Unter der Zweispaltigkeit läge die Kugel hinter dem Text. Sie bleibt
+     als schwacher Grund stehen, statt zu verschwinden. */
+  .theme-mono .hero__flaeche {
+    width: min(88vw, 620px);
+    right: -12%;
+    opacity: 0.2;
+  }
+}
+
+/* Footer-Fläche: liegt hinter dem Text, nach oben ausgeblendet. */
+.theme-mono .footer__flaeche {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 62%;
+  opacity: 0.3;
+  pointer-events: none;
+  mask-image: linear-gradient(to top, black, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-mono .card-head__flaeche {
+    transition: none;
+  }
+}
+
+/* --- Verankerung der Flächen -------------------------------- */
+/* .hero und .schwerpunkt-card sind im Grundzustand statisch; die
+   absolut gesetzten Flächen brauchen einen Bezugsrahmen, sonst
+   hängen sie am Viewport. */
+.theme-mono .hero {
+  position: relative;
+}
+.theme-mono .hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.theme-mono .schwerpunkt-card {
+  position: relative;
+  overflow: hidden;
+}
+/* Das Kopfbild läuft über die Kartenpolsterung hinaus bis an den Rand. */
+.theme-mono .card-head {
+  margin: -2rem -2rem 0.5rem;
+}
+
+/* --- Reichweite gegen Komponenten-Styles -------------------- */
+/* Astro kapselt Komponenten-Styles mit einem Attribut-Selektor; eine
+   Regel wie `.cta-section__title[data-astro-cid-…]` erreicht (0,2,0)
+   und schlägt `.theme-mono h2` mit (0,1,1). Die doppelt notierte
+   Klasse hebt die Regel hier auf (0,2,1) — dasselbe Ergebnis wie
+   !important, aber überschreibbar und ohne Kettenreaktion.
+   Nachgemessen: ohne diese Zeile blieben Footer-Überschriften und
+   der Abschluss-CTA in 700 stehen. */
+.theme-mono.theme-mono :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 400;
+}
+
+.theme-mono.theme-mono .cta-section__title {
+  font-size: clamp(2rem, 4.6vw, 3.0625rem);
+  letter-spacing: var(--dk-tracking-2xl);
+  line-height: var(--dk-leading-title);
+  max-width: var(--dk-measure-title);
+  text-wrap: balance;
+}
+.theme-mono.theme-mono .cta-section__label,
+.theme-mono.theme-mono .cta-section__direct-label,
+.theme-mono.theme-mono .footer-heading {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}

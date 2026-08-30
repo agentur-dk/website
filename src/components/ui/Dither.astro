@@ -1,0 +1,188 @@
+---
+/**
+ * Dither.astro — eine gerasterte Fläche.
+ *
+ * Rendert nur das <canvas>; gezeichnet wird im Browser aus einer Formel
+ * (src/lib/dither.ts). Es lädt kein Bild und liegt keins im Repository:
+ * Eine Fläche kostet den Pfad zur Formel, nicht 200 kB PNG.
+ *
+ * Die Fläche ist ausnahmslos dekorativ und trägt `aria-hidden="true"`.
+ * Wo sie inhaltlich etwas zeigt, beschriftet der umgebende Container.
+ *
+ * Bewegung: Die Schleife hält an, sobald die Fläche aus dem Bild läuft,
+ * und sie hält an, wenn der Bewegungs-Schalter im Footer auf „pausiert"
+ * steht oder das Betriebssystem `prefers-reduced-motion` meldet. Dann
+ * bleibt ein Standbild stehen — WCAG 2.2.2 verlangt genau das, und ein
+ * Schalter, der eine Animation stehen lässt, wäre eine Lüge.
+ */
+import type { FieldName } from '../../lib/dither';
+
+interface Props {
+  /** Welche Formel gezeichnet wird. */
+  readonly field: FieldName;
+  /** Kantenlänge einer Rasterzelle in CSS-Pixeln; größer = grober = billiger. */
+  readonly cell?: number;
+  /** Bilder pro Sekunde. Diese Bewegungen sind langsam; 16 genügt, und
+   *  jedes Bild kostet einen kompletten Rasterdurchlauf auf dem
+   *  Hauptthread. Gemessen: 24 fps auf der Hero-Kugel ließen die
+   *  Skriptzeit auf gedrosseltem Mobilgerät von 24 ms auf 362 ms steigen
+   *  und drückten den Lighthouse-Wert von 100 auf 98. */
+  readonly fps?: number;
+  /** 'fein' nimmt die 8×8-Matrix — weichere Verläufe, weniger Struktur. */
+  readonly raster?: 'kraeftig' | 'fein';
+  /** Zusätzliche Klassen (Maske, Deckkraft, Positionierung). */
+  readonly class?: string;
+}
+
+const { field, cell = 3, fps = 16, raster = 'kraeftig', class: className } = Astro.props;
+---
+
+<canvas
+  class:list={['dither', className]}
+  data-dither
+  data-field={field}
+  data-cell={cell}
+  data-fps={fps}
+  data-raster={raster}
+  aria-hidden="true"></canvas>
+
+<script>
+  import { BAYER4, BAYER8, FIELDS, STATIC_FIELDS, paintDither, type FieldName } from '../../lib/dither';
+
+  interface Flaeche {
+    field: FieldName;
+    cell: number;
+    matrix: readonly (readonly number[])[];
+    /** Feste Bildrate: ohne Drossel liefe die Schleife mit 120 Hz für nichts. */
+    interval: number;
+    animiert: boolean;
+    sichtbar: boolean;
+    /** Erst beim Sichtbarwerden zeichnen — siehe Kommentar am Beobachter. */
+    gezeichnet: boolean;
+    zuletzt: number;
+  }
+
+  const STANDBILD = 1600; // Zeitpunkt des Standbilds — ein Moment mit Struktur.
+
+  const flaechen = new Map<HTMLCanvasElement, Flaeche>();
+  for (const canvas of document.querySelectorAll<HTMLCanvasElement>('[data-dither]')) {
+    const field = (canvas.dataset.field ?? 'wave') as FieldName;
+    flaechen.set(canvas, {
+      field,
+      cell: Number(canvas.dataset.cell) || 3,
+      matrix: canvas.dataset.raster === 'fein' ? BAYER8 : BAYER4,
+      interval: 1000 / (Number(canvas.dataset.fps) || 16),
+      animiert: !STATIC_FIELDS.includes(field),
+      sichtbar: false,
+      gezeichnet: false,
+      zuletzt: -1,
+    });
+  }
+
+  if (flaechen.size > 0) {
+    const reduziert = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let handle = 0;
+    let start = 0;
+
+    function zeichne(canvas: HTMLCanvasElement, f: Flaeche, t: number): void {
+      paintDither(canvas, FIELDS[f.field], t, { cell: f.cell, matrix: f.matrix, transparent: true });
+      f.gezeichnet = true;
+    }
+
+    /** Steht die Bewegung? Schalter im Footer oder Systemeinstellung. */
+    function angehalten(): boolean {
+      return reduziert.matches || document.documentElement.dataset.motion === 'paused';
+    }
+
+    function schleife(t: number): void {
+      if (!start) start = t;
+      for (const [canvas, f] of flaechen) {
+        if (!f.animiert || !f.sichtbar) continue;
+        if (f.zuletzt >= 0 && t - f.zuletzt < f.interval) continue;
+        zeichne(canvas, f, t - start);
+        f.zuletzt = t;
+      }
+      handle = requestAnimationFrame(schleife);
+    }
+
+    function starte(): void {
+      if (handle || angehalten()) return;
+      handle = requestAnimationFrame(schleife);
+    }
+
+    function stoppe(): void {
+      if (!handle) return;
+      cancelAnimationFrame(handle);
+      handle = 0;
+    }
+
+    // Gezeichnet wird erst, wenn eine Fläche in Sichtweite kommt — nicht
+    // beim Laden. Alle neun Flächen der Startseite auf einmal zu rastern
+    // kostete auf gedrosseltem Mobilgerät genug Hauptthread, um den
+    // Lighthouse-Wert von 100 auf 98 zu drücken. 120 px Vorlauf, damit
+    // eine Fläche beim Hereinscrollen nicht sichtbar anspringt.
+    const sicht = new IntersectionObserver(
+      (eintraege) => {
+        for (const e of eintraege) {
+          const canvas = e.target as HTMLCanvasElement;
+          const f = flaechen.get(canvas);
+          if (!f) continue;
+          f.sichtbar = e.isIntersecting;
+          if (e.isIntersecting && (!f.gezeichnet || !f.animiert || angehalten())) {
+            zeichne(canvas, f, STANDBILD);
+          }
+        }
+      },
+      { rootMargin: '120px' }
+    );
+    for (const canvas of flaechen.keys()) sicht.observe(canvas);
+
+    // Neu messen, wenn sich die Fläche ändert — das Raster hängt an der
+    // Pixelbreite, nicht am Layout. Entprellt, weil ResizeObserver bei einer
+    // laufenden Größenänderung pro Frame feuert.
+    let messTimer = 0;
+    const groesse = new ResizeObserver(() => {
+      clearTimeout(messTimer);
+      messTimer = window.setTimeout(() => {
+        const still = angehalten();
+        for (const [canvas, f] of flaechen) {
+          f.zuletzt = -1;
+          if (f.sichtbar && (still || !f.animiert)) zeichne(canvas, f, STANDBILD);
+        }
+      }, 120);
+    });
+    for (const canvas of flaechen.keys()) groesse.observe(canvas);
+
+    function neuBewerten(): void {
+      if (angehalten()) {
+        stoppe();
+        for (const [canvas, f] of flaechen) if (f.sichtbar) zeichne(canvas, f, STANDBILD);
+      } else {
+        starte();
+      }
+    }
+
+    document.addEventListener('dk:motionchange', neuBewerten);
+    reduziert.addEventListener('change', neuBewerten);
+
+    // Die Schleife startet erst nach `load`. Bis dahin steht das Standbild,
+    // das der Beobachter beim Sichtbarwerden gezeichnet hat — sichtbar ist
+    // also von der ersten Sekunde an dasselbe Bild. Ohne diese Bremse fällt
+    // jeder Rasterdurchlauf in das Fenster, in dem der Browser den ersten
+    // Inhalt zeichnet, und verschiebt ihn nach hinten.
+    if (document.readyState === 'complete') neuBewerten();
+    else window.addEventListener('load', neuBewerten, { once: true });
+  }
+</script>
+
+<style>
+  .dither {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* Der ganze Trick: Das Canvas ist absichtlich winzig und wird hart
+       hochskaliert. Ohne diese Zeile glättet der Browser die Kanten weg
+       und aus dem Raster wird Matsch. */
+    image-rendering: pixelated;
+  }
+</style>

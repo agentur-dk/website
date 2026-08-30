@@ -23,3 +23,32 @@
   --dk-font-size-2xl:  2.4375rem;  /* 39px */
   --dk-font-size-3xl:  3.0625rem;  /* 49px */
 }
+
+/* ============================================================
+   Laufweite, Durchschuss, Zeilenlänge
+   Zwei gegenläufige Kurven: Große Grade laufen enger und
+   stehen dichter, kleine laufen weiter und stehen luftiger.
+   Mono-Etiketten sind die einzige Sperrung ins Positive —
+   ohne sie zerfällt ein Versalsatz bei 10px.
+   Analyse dahinter: docs/superpowers/specs/2026-08-30-mummentum-analyse.md
+   ============================================================ */
+:root {
+  --dk-tracking-display: -0.04em;   /* ab 49px */
+  --dk-tracking-2xl:     -0.035em;  /* 39px    */
+  --dk-tracking-xl:      -0.03em;   /* 31px    */
+  --dk-tracking-lg:      -0.02em;   /* 25px    */
+  --dk-tracking-md:      -0.015em;  /* 20px    */
+  --dk-tracking-base:     0;        /* ab 16px */
+  --dk-tracking-mono:     0.18em;   /* 10–12px Versalien */
+
+  --dk-leading-display: 1.02;
+  --dk-leading-title:   1.08;
+  --dk-leading-tight:   1.25;
+  --dk-leading-body:    1.65;
+
+  /* Zeilenlänge in Zeichen statt in Pixeln: bleibt beim Zoomen richtig. */
+  --dk-measure-display: 16ch;
+  --dk-measure-title:   20ch;
+  --dk-measure-lead:    56ch;
+  --dk-measure-body:    38ch;
+}

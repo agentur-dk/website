@@ -1,4 +1,5 @@
 ---
+import '../styles/mono.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -8,6 +9,8 @@ import StatsStrip from '../components/StatsStrip.astro';
 import LogoStrip from '../components/LogoStrip.astro';
 import { faqs } from '../data/faq';
 import Icon from '../components/ui/Icon.astro';
+import Dither from '../components/ui/Dither.astro';
+import DitherBand from '../components/DitherBand.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -16,6 +19,7 @@ const base = import.meta.env.BASE_URL;
   slug=""
   title="Digitalagentur Köln – WordPress, BFSG & SEO | agentur dk"
   description="Digitalagentur aus Köln für barrierefreie WordPress-Websites (BFSG), Website-Leasing, SEO/GEO und Online-Marketing. Direkt beim Inhaber."
+  mono
 >
 
   <Header />
@@ -24,9 +28,11 @@ const base = import.meta.env.BASE_URL;
 
     <!-- Hero Section -->
     <section class="hero section" aria-label="Online-Agentur Köln">
+      <div class="hero__flaeche" aria-hidden="true"><Dither field="sphere" cell={4} fps={12} /></div>
       <div class="container hero__inner">
         <div class="hero__content">
-          <h1 class="hero__headline">Digitalagentur aus Köln für barrierefreie WordPress-Websites</h1>
+          <p class="section-label" aria-hidden="true">Digitalagentur Köln</p>
+          <h1 class="hero__headline">Digitalagentur aus Köln für barrierefreie WordPress-Websites,<span class="hero__headline-soft"> die im Alltag tragen.</span></h1>
           <p class="hero__claim" aria-hidden="true">
             <span id="typewriter-text" data-texts='["Sichtbarkeit, die wirkt.", "Barrierefreiheit, die überzeugt.", "WordPress, das performt.", "Marketing, das konvertiert."]'>Sichtbarkeit, die wirkt.</span><span class="typewriter-caret"></span>
           </p>
@@ -48,11 +54,13 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <DitherBand field="wave" label="Kunden" />
+
     <!-- Kundenlogo-Leiste -->
     <LogoStrip />
 
     <!-- Unsere Schwerpunkte -->
-    <section class="schwerpunkte-section section section--light" aria-labelledby="schwerpunkte-heading">
+    <section class="schwerpunkte-section section" aria-labelledby="schwerpunkte-heading">
       <div class="container">
         <p class="schwerpunkte-section__eyebrow">Unsere Schwerpunkte</p>
         <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Unsere zwei Schwerpunkte</h2>
@@ -60,6 +68,9 @@ const base = import.meta.env.BASE_URL;
         <div class="schwerpunkte-grid">
           <!-- Karte A -->
           <article class="schwerpunkt-card" data-reveal>
+            <div class="card-head" aria-hidden="true">
+              <Dither field="ripple" cell={3} class="card-head__flaeche" />
+            </div>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
               <Icon name="briefcase-plus" size={48} strokeWidth={1.5} />
             </div>
@@ -69,6 +80,9 @@ const base = import.meta.env.BASE_URL;
           </article>
           <!-- Karte B -->
           <article class="schwerpunkt-card" data-reveal>
+            <div class="card-head" aria-hidden="true">
+              <Dither field="noise" cell={3} class="card-head__flaeche" />
+            </div>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
               <Icon name="accessibility" size={48} strokeWidth={1.5} />
             </div>
@@ -80,8 +94,10 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <DitherBand field="noise" label="Leistungen" />
+
     <!-- Services Section -->
-    <section id="services" class="services section section--light">
+    <section id="services" class="services section">
       <div class="container">
         <p class="section-label" aria-hidden="true">Leistungen</p>
         <h2 class="section-title">Alle Leistungen im Überblick</h2>
@@ -195,8 +211,10 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <DitherBand field="stream" label="Warum wir" />
+
     <!-- Why agentur dk -->
-    <section class="why-us section section--light" aria-label="Warum agentur dk">
+    <section class="why-us section" aria-label="Warum agentur dk">
       <div class="container">
         <p class="section-label" aria-hidden="true">Warum wir</p>
         <h2 class="section-title">Direkt, persönlich, effizient</h2>
@@ -232,8 +250,10 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <DitherBand field="ripple" label="Vorgehen" />
+
     <!-- Process Section -->
-    <section class="process section section--light" aria-label="Unser Vorgehen">
+    <section class="process section" aria-label="Unser Vorgehen">
       <div class="container">
         <p class="section-label" aria-hidden="true">Unser Vorgehen</p>
         <h2 class="section-title">So arbeiten wir zusammen</h2>
@@ -270,8 +290,10 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <DitherBand field="horizon" label="Fragen" />
+
     <!-- FAQ Section -->
-    <section id="faq" class="faq section section--light">
+    <section id="faq" class="faq section">
       <div class="container">
         <p class="section-label" aria-hidden="true">FAQ</p>
         <h2 class="section-title">Häufige Fragen</h2>
@@ -292,6 +314,8 @@ const base = import.meta.env.BASE_URL;
         </div>
       </div>
     </section>
+
+    <DitherBand field="gradient" label="Kontakt" />
 
     <!-- Contact Section -->
     <section class="contact section" aria-label="Kontakt">
@@ -336,7 +360,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Referenzen -->
-    <section class="referenzen-section section section--light" aria-labelledby="referenzen-heading">
+    <section class="referenzen-section section" aria-labelledby="referenzen-heading">
       <div class="container">
         <p class="schwerpunkte-section__eyebrow">Ausgewählte Projekte</p>
         <h2 class="schwerpunkte-section__heading" id="referenzen-heading">Was wir geleistet haben</h2>
@@ -399,7 +423,7 @@ const base = import.meta.env.BASE_URL;
 
   </main>
 
-  <Footer />
+  <Footer mono />
 
   <!-- Inline styles carried from legacy (logo strip + service featured card) -->
   <style is:global>

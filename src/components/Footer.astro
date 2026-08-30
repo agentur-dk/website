@@ -1,5 +1,6 @@
 ---
 import MotionToggle from './MotionToggle.astro';
+import Dither from './ui/Dither.astro';
 import {
   siteConfig,
   footerLeistungenNav,
@@ -7,10 +8,20 @@ import {
   footerLegalNav,
 } from '../config/site.config';
 
+interface Props {
+  /** Monochrome Seiten tragen im Footer eine gerasterte Fläche statt des
+   *  Verlaufs. Auf allen anderen Seiten wird sie gar nicht erst gerendert —
+   *  ein unsichtbares Canvas würde sonst 16 Seiten lang für nichts rechnen. */
+  readonly mono?: boolean;
+}
+
+const { mono = false } = Astro.props;
+
 const base = import.meta.env.BASE_URL;
 ---
 
 <footer aria-label="Seiten-Footer" class="site-footer">
+  {mono && <div class="footer__flaeche" aria-hidden="true"><Dither field="stream" cell={4} raster="fein" /></div>}
   <div class="site-footer__inner">
     <div class="site-footer__grid">
       <!-- Col 1: Agentur -->
@@ -100,6 +111,14 @@ const base = import.meta.env.BASE_URL;
 <style>
   .site-footer {
     background: var(--gradient-footer);
+    position: relative;
+    overflow: hidden;
+  }
+  /* Der Inhalt muss über der Fläche liegen. */
+  .site-footer__inner,
+  .site-footer__bottom {
+    position: relative;
+    z-index: 1;
   }
 
   .site-footer__inner {

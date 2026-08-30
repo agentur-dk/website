@@ -1,0 +1,90 @@
+---
+/**
+ * DitherBand.astro — der waagerechte Trenner zwischen zwei Sektionen.
+ *
+ * Ersetzt den leeren Abstand durch eine gerasterte Fläche mit einem
+ * Mono-Etikett unten links. Acht solcher Bänder tragen die Seite: jedes
+ * mit einer anderen Formel, jedes mit einem anderen Wort — dadurch merkt
+ * man beim Scrollen, dass ein Abschnitt zu Ende ist, ohne dass eine Linie
+ * oder eine Überschrift das sagen müsste.
+ *
+ * Die Maske links und rechts lässt das Raster auslaufen, statt es an der
+ * Fensterkante abzuschneiden.
+ */
+import Dither from './ui/Dither.astro';
+import type { FieldName } from '../lib/dither';
+
+interface Props {
+  /** Formel für dieses Band. Jedes Band auf einer Seite bekommt eine eigene. */
+  readonly field: FieldName;
+  /** Etikett unten links; bleibt weg, wenn nichts zu sagen ist. */
+  readonly label?: string;
+  /** Rasterfeinheit in CSS-Pixeln. */
+  readonly cell?: number;
+}
+
+const { field, label, cell = 4 } = Astro.props;
+---
+
+<div class="dither-band" aria-hidden="true">
+  <!-- Die Fläche steckt in einem eigenen Element: Astros Scope-Attribut
+       landet nicht auf dem <canvas>, das Dither.astro rendert. Eine
+       Klasse allein greift hier also nicht — Deckkraft und Maske blieben
+       wirkungslos, das Raster lief ungedämpft bis an die Fensterkante. -->
+  <div class="dither-band__flaeche">
+    <Dither field={field} cell={cell} raster="fein" />
+  </div>
+  {label && <span class="dither-band__label">{label}</span>}
+</div>
+
+<style>
+  .dither-band {
+    position: relative;
+    height: 7rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+  @media (min-width: 640px) {
+    .dither-band {
+      height: 8rem;
+    }
+  }
+
+  .dither-band__flaeche {
+    position: absolute;
+    inset: 0;
+    /* 0.38 statt voller Deckkraft: Bei 1 liest sich das Raster als
+       Bildrauschen und zieht mehr Aufmerksamkeit als die Überschrift
+       darunter. Es soll eine Grenze markieren, keine Fläche behaupten. */
+    opacity: 0.38;
+    /* Eine einzige elliptische Maske statt zweier gekreuzter Verläufe:
+       `mask-composite: intersect` wird nicht überall gleich ausgewertet,
+       und im Chromium-Build lief das Raster trotz Maske bis an die
+       Fensterkante. Ein Radialverlauf blendet ohne Komposition nach allen
+       Seiten aus. */
+    mask-image: radial-gradient(120% 130% at 50% 50%, black 34%, transparent 92%);
+  }
+
+  .dither-band__label {
+    position: absolute;
+    bottom: 0.875rem;
+    left: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.625rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm, 4px);
+    background: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  @media (min-width: 640px) {
+    .dither-band__label {
+      left: 2rem;
+    }
+  }
+</style>

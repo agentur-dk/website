@@ -8,7 +8,13 @@
  * `import.meta.env.BASE_URL` folgen sie jetzt automatisch dem Deploy-Ziel.
  *
  * Preload nur für die zwei Schnitte, die above the fold gebraucht werden —
- * mehr Preloads konkurrieren mit dem LCP-Request.
+ * mehr Preloads konkurrieren mit dem LCP-Request. Welche das sind, hängt
+ * von der Bildsprache ab: Im Regelfall setzt die Überschrift in Space
+ * Grotesk 700, auf monochromen Seiten in 400. Wird der falsche Schnitt
+ * vorgeladen, kostet das doppelt — 19 kB Bandbreite für eine Datei, die
+ * niemand braucht, und der gebrauchte Schnitt trifft womöglich nicht
+ * mehr rechtzeitig ein. Bei `font-display: optional` heißt das: die
+ * Überschrift bleibt für diesen Seitenaufruf in der Ersatzschrift.
  *
  * font-display: optional statt swap. Mit `swap` tauscht der Browser die
  * Ersatzschrift gegen den Webfont aus, sobald dieser eintrifft — jeder
@@ -23,13 +29,20 @@
  * kritischen Schnitte werden vorgeladen, also greift praktisch immer der
  * erste Fall; ab dem zweiten Seitenaufruf ohnehin aus dem Cache.
  */
+interface Props {
+  /** Monochrome Seiten setzen Überschriften in 400 statt 700. */
+  readonly mono?: boolean;
+}
+
+const { mono = false } = Astro.props;
+
 const base = import.meta.env.BASE_URL;
 
 const FACES = [
   { family: 'Space Grotesk', weight: 400, file: 'space-grotesk-v3-latin-400' },
   { family: 'Space Grotesk', weight: 500, file: 'space-grotesk-v3-latin-500' },
-  { family: 'Space Grotesk', weight: 700, file: 'space-grotesk-v3-latin-700', preload: true },
-  { family: 'Manrope',       weight: 400, file: 'manrope-v20-latin-400', preload: true },
+  { family: 'Space Grotesk', weight: 700, file: 'space-grotesk-v3-latin-700' },
+  { family: 'Manrope',       weight: 400, file: 'manrope-v20-latin-400' },
   { family: 'Manrope',       weight: 500, file: 'manrope-v20-latin-500' },
   { family: 'Manrope',       weight: 600, file: 'manrope-v20-latin-600' },
   { family: 'Manrope',       weight: 700, file: 'manrope-v20-latin-700' },
@@ -37,11 +50,17 @@ const FACES = [
 
 const url = (file: string) => `${base}fonts/${file}.woff2`;
 
+/** Der Schnitt der ersten Überschrift plus die Grundschrift des Fließtexts. */
+const preload = [
+  mono ? 'space-grotesk-v3-latin-400' : 'space-grotesk-v3-latin-700',
+  'manrope-v20-latin-400',
+];
+
 const css = FACES.map((f) => `@font-face{font-family:'${f.family}';src:url('${url(f.file)}') format('woff2');font-weight:${f.weight};font-style:normal;font-display:optional}`).join('');
 ---
 
-{FACES.filter((f) => 'preload' in f && f.preload).map((f) => (
-  <link rel="preload" href={url(f.file)} as="font" type="font/woff2" crossorigin />
+{preload.map((file) => (
+  <link rel="preload" href={url(file)} as="font" type="font/woff2" crossorigin />
 ))}
 
 <style is:inline set:html={css}></style>
