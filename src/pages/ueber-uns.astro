@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import CtaSection from '../components/CtaSection.astro';
+import Icon from '../components/ui/Icon.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -82,10 +83,7 @@ const base = import.meta.env.BASE_URL;
         <ul class="werte-grid" role="list">
           <li class="wert-card" data-reveal>
             <div class="wert-card__icon" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 6v6l4 2"/>
-              </svg>
+              <Icon name="clock" size={32} strokeWidth={1.5} />
             </div>
             <h3 class="wert-card__title">Ganzheitlich denken</h3>
             <p class="wert-card__body">
@@ -94,9 +92,7 @@ const base = import.meta.env.BASE_URL;
           </li>
           <li class="wert-card" data-reveal>
             <div class="wert-card__icon" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-              </svg>
+              <Icon name="activity" size={32} strokeWidth={1.5} />
             </div>
             <h3 class="wert-card__title">Direkt umsetzen</h3>
             <p class="wert-card__body">
@@ -105,11 +101,7 @@ const base = import.meta.env.BASE_URL;
           </li>
           <li class="wert-card" data-reveal>
             <div class="wert-card__icon" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
+              <Icon name="layers" size={32} strokeWidth={1.5} />
             </div>
             <h3 class="wert-card__title">Nachhaltig aufbauen</h3>
             <p class="wert-card__body">

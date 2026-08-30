@@ -7,6 +7,7 @@ import LeadForm from '../components/LeadForm.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import LogoStrip from '../components/LogoStrip.astro';
 import { faqs } from '../data/faq';
+import Icon from '../components/ui/Icon.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -40,6 +41,8 @@ const base = import.meta.env.BASE_URL;
           <div class="leistungs-check" data-quiz data-base={base} role="region" aria-label="Leistungs-Check">
             <div class="quiz-widget__live u-sr-only" aria-live="polite" aria-atomic="true"></div>
             <div data-quiz-inner></div>
+            <!-- Vorlage für den Zurück-Pfeil: hält das Icon im Markup statt im Skript. -->
+            <template data-quiz-icon="arrow-left"><Icon name="arrow-left" size={16} /></template>
           </div>
         </div>
       </div>
@@ -58,9 +61,7 @@ const base = import.meta.env.BASE_URL;
           <!-- Karte A -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9" y1="14.5" x2="15" y2="14.5"/>
-              </svg>
+              <Icon name="briefcase-plus" size={48} strokeWidth={1.5} />
             </div>
             <h3 class="schwerpunkt-card__title">Website-Leasing &amp; digitale Sichtbarkeit</h3>
             <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
@@ -69,9 +70,7 @@ const base = import.meta.env.BASE_URL;
           <!-- Karte B -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
-              </svg>
+              <Icon name="accessibility" size={48} strokeWidth={1.5} />
             </div>
             <h3 class="schwerpunkt-card__title">BFSG &amp; digitale Barrierefreiheit</h3>
             <p class="schwerpunkt-card__text">Seit Juni 2025 gilt das BFSG. Wir machen Ihre Website barrierearm nach EN 301 549 / WCAG 2.2 AA – rechtssicher und im echten Code, ohne Overlay-Plugins.</p>
@@ -92,9 +91,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card service-card--featured" data-reveal>
             <span class="service-card__number" aria-hidden="true">Neu</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9" y1="14.5" x2="15" y2="14.5"/>
-              </svg>
+              <Icon name="briefcase-plus" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Website-Leasing</h3>
             <p class="card__body">
@@ -107,9 +104,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">01</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
-              </svg>
+              <Icon name="accessibility" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Barrierefreie Websites (BFSG)</h3>
             <p class="card__body">
@@ -122,9 +117,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">02</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-              </svg>
+              <Icon name="code" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">WordPress-Entwicklung</h3>
             <p class="card__body">
@@ -137,9 +130,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">03</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><polyline points="8 13 10 11 12 13 14 9"/>
-              </svg>
+              <Icon name="search-chart" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">SEO &amp; GEO</h3>
             <p class="card__body">
@@ -152,9 +143,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">04</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 11v2h4l5 5V6L7 11H3z"/><path d="M19 6a6 6 0 010 12"/><path d="M15.54 8.46a3 3 0 010 7.07"/>
-              </svg>
+              <Icon name="volume-2" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Online-Marketing</h3>
             <p class="card__body">
@@ -167,9 +156,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">05</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="7" cy="7" r="1.5"/>
-              </svg>
+              <Icon name="pen-tool" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Corporate Design</h3>
             <p class="card__body">
@@ -182,9 +169,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">06</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="7" y="7" width="10" height="10" rx="1"/><line x1="9" y1="3" x2="9" y2="7"/><line x1="15" y1="3" x2="15" y2="7"/><line x1="9" y1="17" x2="9" y2="21"/><line x1="15" y1="17" x2="15" y2="21"/><line x1="3" y1="9" x2="7" y2="9"/><line x1="3" y1="15" x2="7" y2="15"/><line x1="17" y1="9" x2="21" y2="9"/><line x1="17" y1="15" x2="21" y2="15"/>
-              </svg>
+              <Icon name="cpu" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">KI-Services</h3>
             <p class="card__body">
@@ -197,9 +182,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">07</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><circle cx="18" cy="7" r="2.5"/><path d="M22 21v-2a3.5 3.5 0 00-2.5-3.35"/>
-              </svg>
+              <Icon name="users" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Social Recruiting</h3>
             <p class="card__body">
@@ -220,9 +203,7 @@ const base = import.meta.env.BASE_URL;
         <ul class="usp-list" role="list">
           <li class="usp-card" data-reveal>
             <div class="usp-card__check" aria-hidden="true">
-              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
-              </svg>
+              <Icon name="check" size={20} />
             </div>
             <div class="usp-card__content">
               <h3 class="usp-card__title">1-Personen-Entscheidung</h3>
@@ -231,9 +212,7 @@ const base = import.meta.env.BASE_URL;
           </li>
           <li class="usp-card" data-reveal>
             <div class="usp-card__check" aria-hidden="true">
-              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
-              </svg>
+              <Icon name="check" size={20} />
             </div>
             <div class="usp-card__content">
               <h3 class="usp-card__title">BFSG-Konformität aus einer Hand</h3>
@@ -242,9 +221,7 @@ const base = import.meta.env.BASE_URL;
           </li>
           <li class="usp-card" data-reveal>
             <div class="usp-card__check" aria-hidden="true">
-              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
-              </svg>
+              <Icon name="check" size={20} />
             </div>
             <div class="usp-card__content">
               <h3 class="usp-card__title">Köln &amp; deutschlandweit</h3>
@@ -304,9 +281,7 @@ const base = import.meta.env.BASE_URL;
               <h3 class="accordion__heading">
                 <button type="button" class="accordion__trigger" id={`faq-trigger-${i + 1}`} aria-expanded="false" aria-controls={`faq-panel-${i + 1}`}>
                   <span>{item.question}</span>
-                  <svg class="accordion__icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                    <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" fill="currentColor"/>
-                  </svg>
+                  <Icon name="plus" size={20} class="accordion__icon" />
                 </button>
               </h3>
               <div id={`faq-panel-${i + 1}`} class="accordion__panel" role="region" aria-labelledby={`faq-trigger-${i + 1}`} hidden>
@@ -334,25 +309,19 @@ const base = import.meta.env.BASE_URL;
             </p>
             <p>
               <a href="tel:+4922198655229" class="contact__link">
-                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24">
-                  <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.42 11.42 0 0 0 3.58.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.42 11.42 0 0 0 .57 3.58 1 1 0 0 1-.24 1.01l-2.21 2.2z" fill="currentColor"/>
-                </svg>
+                <Icon name="phone" size={16} />
                 +49 221 986 55 229
               </a>
             </p>
             <p>
               <a href="mailto:mail@dk-dk.de" class="contact__link">
-                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24">
-                  <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/>
-                </svg>
+                <Icon name="mail" size={16} />
                 mail@dk-dk.de
               </a>
             </p>
             <p>
               <a href="https://www.linkedin.com/in/daniel-kontelis/" class="contact__link" rel="noopener noreferrer" target="_blank">
-                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zm2-6a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" fill="currentColor"/>
-                </svg>
+                <Icon name="linkedin" size={16} />
                 LinkedIn<span class="u-sr-only"> (öffnet in neuem Tab)</span>
               </a>
             </p>
@@ -490,8 +459,10 @@ const base = import.meta.env.BASE_URL;
       return btn;
     }
 
-    function backArrowSVG() {
-      return '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/></svg>';
+    /** Zurück-Pfeil aus der <template>-Vorlage im Markup (Quelle: src/lib/icons.ts). */
+    function backArrowNode(): Node | null {
+      const tpl = document.querySelector('template[data-quiz-icon="arrow-left"]');
+      return tpl instanceof HTMLTemplateElement ? tpl.content.cloneNode(true) : null;
     }
 
     function renderStep1(fromRestart: boolean) {
@@ -557,7 +528,9 @@ const base = import.meta.env.BASE_URL;
       const backBtn = document.createElement('button');
       backBtn.type = 'button';
       backBtn.className = 'lc-back';
-      backBtn.innerHTML = backArrowSVG() + ' Zurück';
+      const pfeil = backArrowNode();
+      if (pfeil) backBtn.appendChild(pfeil);
+      backBtn.appendChild(document.createTextNode(' Zurück'));
       backBtn.addEventListener('click', function () { renderStep1(true); });
       step.appendChild(backBtn);
 

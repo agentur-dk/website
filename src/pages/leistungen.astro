@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CtaSection from '../components/CtaSection.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
+import Icon from '../components/ui/Icon.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -40,9 +41,7 @@ const base = import.meta.env.BASE_URL;
           <!-- Karte A -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9" y1="14.5" x2="15" y2="14.5"/>
-              </svg>
+              <Icon name="briefcase-plus" size={48} strokeWidth={1.5} />
             </div>
             <h3 class="schwerpunkt-card__title">Website-Leasing &amp; digitale Sichtbarkeit</h3>
             <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
@@ -51,9 +50,7 @@ const base = import.meta.env.BASE_URL;
           <!-- Karte B -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
-              </svg>
+              <Icon name="accessibility" size={48} strokeWidth={1.5} />
             </div>
             <h3 class="schwerpunkt-card__title">BFSG &amp; digitale Barrierefreiheit</h3>
             <p class="schwerpunkt-card__text">Seit Juni 2025 gilt das BFSG. Wir machen Ihre Website barrierearm nach EN 301 549 / WCAG 2.2 AA – rechtssicher und im echten Code, ohne Overlay-Plugins.</p>
@@ -150,9 +147,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">01</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="5" r="2"/><path d="M8 11l-3 2v3h2v5h2v-3h2v3h2v-5h2v-3l-3-2"/><path d="M5 17a7 7 0 0114 0"/>
-              </svg>
+              <Icon name="accessibility" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Barrierefreie Websites (BFSG)</h3>
             <p class="card__body">
@@ -165,9 +160,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">02</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-              </svg>
+              <Icon name="code" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">WordPress-Entwicklung</h3>
             <p class="card__body">
@@ -180,9 +173,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">03</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><polyline points="8 13 10 11 12 13 14 9"/>
-              </svg>
+              <Icon name="search-chart" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">SEO &amp; GEO</h3>
             <p class="card__body">
@@ -195,9 +186,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">04</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 11v2h4l5 5V6L7 11H3z"/><path d="M19 6a6 6 0 010 12"/><path d="M15.54 8.46a3 3 0 010 7.07"/>
-              </svg>
+              <Icon name="volume-2" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Online-Marketing</h3>
             <p class="card__body">
@@ -210,9 +199,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">05</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="7" cy="7" r="1.5"/>
-              </svg>
+              <Icon name="pen-tool" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Corporate Design</h3>
             <p class="card__body">
@@ -225,9 +212,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">06</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="7" y="7" width="10" height="10" rx="1"/><line x1="9" y1="3" x2="9" y2="7"/><line x1="15" y1="3" x2="15" y2="7"/><line x1="9" y1="17" x2="9" y2="21"/><line x1="15" y1="17" x2="15" y2="21"/><line x1="3" y1="9" x2="7" y2="9"/><line x1="3" y1="15" x2="7" y2="15"/><line x1="17" y1="9" x2="21" y2="9"/><line x1="17" y1="15" x2="21" y2="15"/>
-              </svg>
+              <Icon name="cpu" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">KI-Services</h3>
             <p class="card__body">
@@ -240,9 +225,7 @@ const base = import.meta.env.BASE_URL;
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">07</span>
             <div class="card__icon">
-              <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><circle cx="18" cy="7" r="2.5"/><path d="M22 21v-2a3.5 3.5 0 00-2.5-3.35"/>
-              </svg>
+              <Icon name="users" size={32} strokeWidth={1.8} />
             </div>
             <h3 class="card__title">Social Recruiting</h3>
             <p class="card__body">

@@ -9,6 +9,7 @@
  * Richtlinien für strukturierte Daten.
  */
 import { faqFor, type FaqItem } from '../data/faq';
+import Icon from './ui/Icon.astro';
 
 interface Props {
   /** Seiten-Slug; lädt Überschrift und Einträge aus den zentralen FAQ-Daten. */
@@ -50,9 +51,7 @@ const baseId = `faq-${(slug ?? 'default').replace(/[^a-z0-9]+/gi, '-')}`;
               >
                 <span class="faq-btn__text">{item.question}</span>
                 <span class="faq-btn__icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 9l6 6 6-6"/>
-                  </svg>
+                  <Icon name="chevron-down" size={20} />
                 </span>
               </button>
             </dt>

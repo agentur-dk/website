@@ -23,6 +23,7 @@ const topics = [
   'KI-Services',
   'Sonstiges',
 ];
+import Icon from './ui/Icon.astro';
 ---
 
 <section class="lf-section" id="contact" aria-labelledby="lf-heading">
@@ -80,9 +81,7 @@ const topics = [
                   class="lf-topic__input"
                 />
                 <span class="lf-topic__box" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
-                  </svg>
+                  <Icon name="check" size={14} />
                 </span>
                 <span class="lf-topic__label">{topic}</span>
               </label>
