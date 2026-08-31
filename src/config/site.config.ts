@@ -11,18 +11,17 @@
  * Adresse des Formular-Endpunkts.
  *
  * Nicht dk-dk.de: Die Website liegt auf GitHub Pages und liefert nur
- * Dateien aus, dort kann nichts geprüft und nichts versendet werden. Der
- * Endpunkt läuft als Cloudflare Worker unter einer Adresse, die
- * Cloudflare stellt — kein DNS-Eintrag, keine Unterdomain, kein
- * Zertifikat nötig.
+ * Dateien aus, dort kann nichts geprüft und nichts versendet werden.
  *
- * ZU ÄNDERN NACH DEM ERSTEN DEPLOY: `wrangler deploy` gibt die fertige
- * Adresse aus. Der Teil vor `.workers.dev` hängt am Cloudflare-Konto und
- * lässt sich hier nicht vorhersagen.
+ * `vorschau.dk-dk.de` gibt es auf dem goneo-Webspace bereits — mit
+ * gültigem Zertifikat, mit Apache, und dort liegen ohnehin schon die
+ * Vorschau-Projekte. Ein Endpunkt für alle: Ein neues Projekt braucht
+ * nur einen Eintrag in `erlaubte_herkunft` der config.php, keinen
+ * eigenen Token.
  *
- * Code und Anleitung: formular/worker/
+ * Code und Anleitung: formular/
  */
-export const FORM_ENDPOINT = 'https://dk-formular.NOCH-EINTRAGEN.workers.dev/';
+export const FORM_ENDPOINT = 'https://vorschau.dk-dk.de/formular/send.php';
 
 /** Absolute Basis-URL ohne Slash am Ende — kommt aus astro.config.mjs. */
 export const SITE_URL = (import.meta.env.SITE ?? 'https://dk-dk.de').replace(/\/$/, '');

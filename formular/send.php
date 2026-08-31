@@ -15,8 +15,13 @@
  * API-Aufruf.
  *
  * Die Website liegt auf GitHub Pages und liefert nur Dateien aus; das
- * Skript läuft deshalb getrennt davon auf dem goneo-Webspace, erreichbar
- * unter einer eigenen Unterdomain.
+ * Skript läuft deshalb getrennt davon auf dem goneo-Webspace unter
+ * `vorschau.dk-dk.de` — einer Adresse, die es dort ohnehin schon gibt.
+ *
+ * Ein Endpunkt für alle Projekte. Welches Projekt gesendet hat, steht in
+ * `page_url` und landet im Betreff; welche Adressen senden dürfen, steht
+ * in `erlaubte_herkunft`. Ein neues Vorschau-Projekt braucht damit nur
+ * einen Eintrag in dieser Liste und keinen eigenen Token.
  *
  * Zwei Wege:
  *   GET  ?challenge=1   gibt einen signierten Zeitstempel aus
@@ -266,7 +271,35 @@ if ($punkte >= 3) {
  *  Zustellung über MailerSend
  * ---------------------------------------------------------------- */
 
+/**
+ * Aus welchem Projekt kam die Anfrage?
+ *
+ * Wird aus `page_url` abgeleitet: Host plus erster Pfadabschnitt, denn
+ * die Vorschau-Projekte liegen als Unterverzeichnisse nebeneinander
+ * (`vorschau.dk-dk.de/agora/…`). Das Formular muss dafür nichts
+ * mitschicken, und ein neues Projekt taucht von selbst richtig auf.
+ */
+function projektName(string $url): string
+{
+    $teile = parse_url($url);
+    $host = $teile['host'] ?? '';
+    if ($host === '') {
+        return '';
+    }
+    $pfad = trim($teile['path'] ?? '', '/');
+    $erster = $pfad === '' ? '' : explode('/', $pfad)[0];
+    // Auf einer Projektwurzel ist der erste Abschnitt schon die Seite
+    // selbst („index.html"); dann sagt der Host genug.
+    if ($erster === '' || str_contains($erster, '.')) {
+        return $host;
+    }
+    return $host . '/' . $erster;
+}
+
+$projekt = projektName(feld($d, 'page_url', 400));
+
 $zeilen = [
+    'Projekt'     => $projekt,
     'Seite'       => feld($d, 'page', 120),
     'Adresse'     => feld($d, 'page_url', 400),
     'Anliegen'    => feld($d, 'interesse[]', 400),
@@ -289,7 +322,8 @@ $nutzlast = [
     'from'     => ['email' => $k['von_adresse'], 'name' => $k['von_name']],
     'to'       => [['email' => $k['an_adresse'], 'name' => $k['an_name']]],
     'reply_to' => ['email' => $email, 'name' => "{$vorname} {$nachname}"],
-    'subject'  => 'Anfrage über dk-dk.de' . ($zeilen['Seite'] !== '' ? ' — ' . $zeilen['Seite'] : ''),
+    'subject'  => 'Anfrage: ' . ($projekt !== '' ? $projekt : 'unbekanntes Projekt')
+                  . ($zeilen['Seite'] !== '' ? ' — ' . $zeilen['Seite'] : ''),
     'text'     => $text,
 ];
 

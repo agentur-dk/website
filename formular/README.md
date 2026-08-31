@@ -1,120 +1,105 @@
 # Formular-Endpunkt
 
-Es gibt ihn zweimal — derselbe Ablauf, dieselbe Schnittstelle, zwei
-Laufzeiten. Das Formular auf der Website merkt keinen Unterschied.
+Nimmt die Anfragen der Formulare entgegen und schickt sie über die
+**MailerSend-API** raus. Kein Mailer, kein SMTP — der Versand ist ein
+einziger HTTPS-Aufruf an `api.mailersend.com`.
 
-| | wo | braucht |
-|---|---|---|
-| **`worker/`** — im Einsatz | Cloudflare, Adresse von dort | nichts: kein DNS, keine Unterdomain, kein Zertifikat |
-| `send.php` — Reserve | klassischer Webspace | eine Adresse, die dorthin zeigt |
+**Ein Endpunkt für alle Projekte.** Die Websites liegen statisch auf
+GitHub Pages oder unter `vorschau.dk-dk.de` und können nichts versenden;
+dieses Skript ist der eine Ort, an dem der Token liegt. Ein neues Projekt
+braucht nur einen Eintrag in `erlaubte_herkunft` — keinen eigenen Token,
+keinen eigenen Endpunkt.
 
-**Drei Befehle, dann läuft es:**
+## Wo er läuft
 
-```
-cd formular/worker
-npx wrangler login
-npx wrangler secret put MAILERSEND_TOKEN   ← hier kommt der Key hin
-npx wrangler deploy
-```
+`https://vorschau.dk-dk.de/formular/send.php`
 
-Der Key landet in keiner Datei, sondern verschlüsselt bei Cloudflare.
-Keine Datenbank, kein zweites Geheimnis. Einzelheiten in
-[worker/README.md](worker/README.md).
-
----
-
-## Die PHP-Reserve
-
-Nimmt die Anfragen des Formulars von dk-dk.de entgegen und schickt sie
-über die **MailerSend-API** raus. Kein eigener Mailer, kein PHPMailer,
-kein SMTP — der Versand ist ein einziger HTTPS-Aufruf an
-`api.mailersend.com`.
-
-Diese Datei existiert aus genau einem Grund: Der API-Aufruf braucht
-`Authorization: Bearer <Token>`. Stünde er im JavaScript der Website,
-stünde der Token im Quelltext jeder Seite.
-
-Die Website selbst liegt auf GitHub Pages und liefert nur Dateien aus.
-Dieses Skript läuft deshalb getrennt davon auf dem goneo-Webspace.
+`vorschau.dk-dk.de` gibt es auf dem goneo-Webspace bereits: eigene
+Adresse, gültiges Zertifikat, Apache. Es muss also **keine Unterdomain
+angelegt und kein DNS-Eintrag geändert** werden.
 
 ## Einrichten
 
-1. **Unterdomain anlegen.** Im goneo-Kundenbereich `formular.dk-dk.de`
-   auf ein Verzeichnis zeigen lassen, das auf diesem Webspace liegt.
-   Wichtig: Der A-Record dieser Unterdomain bleibt bei goneo, während
-   `dk-dk.de` selbst auf GitHub Pages umgestellt wird.
-
-2. **Dateien hochladen.** `send.php` und `.htaccess` in das Verzeichnis
-   der Unterdomain.
-
-3. **Konfiguration anlegen.** Am einfachsten mit dem Skript:
+1. **Konfiguration anlegen.**
 
    ```
    bash formular/einrichten.sh
    ```
 
-   Es fragt den Token verdeckt ab — er erscheint nicht auf dem
-   Bildschirm, nicht in der Shell-History und in keinem Log —, erzeugt
-   das Signatur-Geheimnis selbst und schreibt `formular/config.php` mit
-   Rechten 600. Am Ende prüft es nach, dass git die Datei ignoriert.
-   Danach die Datei mit auf den Webspace laden.
+   Fragt den MailerSend-Token verdeckt ab — er erscheint nicht auf dem
+   Bildschirm, nicht in der Shell-History, in keinem Log —, erzeugt das
+   Signatur-Geheimnis selbst und schreibt `formular/config.php` mit
+   Rechten 600. Zum Schluss prüft es nach, dass git die Datei ignoriert.
 
-   Wer es von Hand machen will: `config.example.php` als `config.php`
-   danebenlegen und ausfüllen:
+   Von Hand geht auch: `config.example.php` kopieren und ausfüllen.
 
-   - `mailersend_token` — MailerSend → Integrations → API tokens.
-     Das Recht „Email send" genügt.
-   - `signatur_geheimnis` — einmal erzeugen mit
-     `php -r "echo bin2hex(random_bytes(32));"`
-   - `von_adresse` — muss zur verifizierten Sendedomain gehören.
+2. **Drei Dateien hochladen** nach `vorschau.dk-dk.de/formular/`:
+   `send.php`, `.htaccess`, `config.php`.
 
-   `config.php` steht in der `.gitignore` und darf dort auch bleiben.
-   Der Schlüssel gehört auf den Server, nicht ins Repository und schon
-   gar nicht ins JavaScript der Website.
-
-4. **Prüfen.**
+3. **Prüfen.**
 
    ```
-   bash formular/pruefen.sh https://formular.dk-dk.de/send.php
+   bash formular/pruefen.sh https://vorschau.dk-dk.de/formular/send.php
    ```
 
-   Acht Prüfungen von außen: Herkunft, Vorabanfrage, Zeitstempel,
-   POST-Weg und ob `config.php` gesperrt ist. Es wird **keine Mail**
-   ausgelöst — der POST läuft mit gefülltem Honigtopf und endet im
-   gespielten Erfolg, bevor irgendetwas versendet wird.
+   Acht Prüfungen von außen. Es wird dabei **keine Mail** ausgelöst — der
+   POST läuft mit gefülltem Honigtopf und endet im gespielten Erfolg.
 
-5. **Adresse im Formular eintragen.** In `src/config/site.config.ts`
-   steht `FORM_ENDPOINT`.
+Fertig. `FORM_ENDPOINT` in `src/config/site.config.ts` zeigt bereits
+dorthin.
 
-## Zur Testdomain
+## Ein neues Projekt anschließen
 
-`test-…​.mlsender.net` ist die Sendedomain aus dem MailerSend-Testkonto.
-Dort gilt in der Regel: Empfänger darf nur die Adresse des Kontoinhabers
-sein. Für ein Kontaktformular, dessen Anfragen ohnehin an die Agentur
-gehen, reicht das zum Testen — vor dem Livegang aber die eigene Domain in
-MailerSend verifizieren (SPF, DKIM), sonst landen die Mails im Spam und
-die Empfängerbeschränkung bleibt bestehen.
+Dessen Adresse in `config.php` bei `erlaubte_herkunft` ergänzen, Datei
+hochladen. Das war es. Welches Projekt gesendet hat, leitet das Skript
+aus `page_url` ab und schreibt es in den Betreff:
+
+```
+Anfrage: dk-dk.de — SEO & GEO
+Anfrage: vorschau.dk-dk.de/bnm-immobilien — Kontakt
+Anfrage: vorschau.dk-dk.de/agora — Startseite
+```
 
 ## Was geprüft wird
 
 Der Reihe nach, siehe Kommentare in `send.php`:
 
-1. Herkunft (`Origin`) — alles außerhalb der Liste bekommt 403
-2. Honigtöpfe `hp_email` und `_gotcha` — gefüllt heißt gespielter Erfolg
-3. Zeit — signierter Zeitstempel vom `?challenge=1`-Weg, mindestens
-   3 Sekunden, höchstens 2 Stunden alt
-4. Bedienungsnachweis — ohne `interaktion=1` kein Versand
-5. Rate Limit — fünf Anfragen pro IP und Stunde, gespeichert wird nur
-   ein Hash und nur für die Dauer des Fensters
-6. Inhalt — Links, fremde Schriftsysteme und BBCode geben Punkte, ab
+1. **Herkunft** (`Origin`) — alles außerhalb der Liste bekommt 403
+2. **Zwei Honigtöpfe** `hp_email` und `_gotcha` — gefüllt heißt
+   gespielter Erfolg
+3. **Zeit** — signierter Zeitstempel vom `?challenge=1`-Weg, mindestens
+   3 Sekunden und höchstens 2 Stunden alt. Fehlen beide Zeitfelder, wird
+   verworfen: Ein echter Browser setzt `form_started` beim Laden.
+4. **Bedienungsnachweis** — ohne `interaktion=1` kein Versand
+5. **Rate Limit** — fünf pro IP und Stunde. Gespeichert wird nur ein Hash
+   der IP und nur für diese Stunde. Hochgezählt wird erst kurz vor dem
+   Versand, damit ein Tippfehler in der Adresse keinen Versuch kostet.
+6. **Inhalt** — Links, fremde Schriftsysteme und BBCode geben Punkte, ab
    drei wird verworfen
 
 Verworfen wird mit `200 OK`. Wer erfährt, woran er gescheitert ist, baut
 es beim nächsten Versuch nach.
 
-## Was noch fehlt
+## Zur MailerSend-Testdomain
 
-ALTCHA. Der Rechenaufgaben-Beweis braucht zusätzlich einen Weg, der
-Aufgaben ausgibt und Lösungen prüft — beides ließe sich hier ergänzen,
-sobald der Grundweg steht. Solange läuft im Browser die einfache
-Rechenaufgabe.
+`test-….mlsender.net` ist die Sendedomain des Testkontos. Dort gilt in
+der Regel: Empfänger darf nur die Adresse des Kontoinhabers sein. Für
+Anfragen, die ohnehin an die Agentur gehen, reicht das — vor dem Livegang
+aber `dk-dk.de` in MailerSend verifizieren (SPF, DKIM), sonst landen die
+Mails im Spam.
+
+## Datenschutz
+
+MailerSend ist Auftragsverarbeiter: AV-Vertrag, Eintrag ins
+Verarbeitungsverzeichnis, eine Zeile in der Datenschutzerklärung. Keine
+Cookies, keine Verhaltensanalyse, kein reCAPTCHA. Vom Rate Limit bleibt
+ein Hash der IP, und der für eine Stunde.
+
+## Die Cloudflare-Variante
+
+In `worker/` liegt derselbe Ablauf als Cloudflare Worker — entstanden,
+als noch unklar war, ob es überhaupt einen Server gibt. Sie wird nicht
+gebraucht, solange `vorschau.dk-dk.de` läuft, und bleibt als Reserve
+liegen: Beide Fassungen prüfen dasselbe und sprechen dieselbe
+Schnittstelle, ein Wechsel wäre eine geänderte Adresse in
+`site.config.ts`.

@@ -28,12 +28,14 @@ return [
     'an_adresse' => 'd.kontelis@dk-dk.de',
     'an_name'    => 'agentur dk',
 
-    // Von welchen Adressen darf das Formular senden? Alles andere wird
-    // abgewiesen. Die zweite Zeile ist die Vorschau auf GitHub Pages.
+    // Von welchen Adressen darf gesendet werden? Alles andere wird
+    // abgewiesen. Ein neues Vorschau-Projekt braucht hier nur einen
+    // Eintrag — keinen eigenen Token, keinen eigenen Endpunkt.
     'erlaubte_herkunft' => [
         'https://dk-dk.de',
         'https://www.dk-dk.de',
-        'https://agentur-dk.github.io',
+        'https://agentur-dk.github.io',   // Vorschau der neuen Seite
+        'https://vorschau.dk-dk.de',      // alle Projekte dort
     ],
 
     // Geheimnis für die Signatur des Zeitstempels. Einmal erzeugen mit:

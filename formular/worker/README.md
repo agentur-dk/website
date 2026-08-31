@@ -1,4 +1,10 @@
-# Formular-Endpunkt als Cloudflare Worker
+# Formular-Endpunkt als Cloudflare Worker (Reserve)
+
+> **Wird derzeit nicht gebraucht.** Im Einsatz ist `../send.php` auf
+> `vorschau.dk-dk.de` — die Adresse gibt es auf dem goneo-Webspace
+> bereits, damit entfällt der Umweg über einen weiteren Anbieter. Diese
+> Fassung ist entstanden, als noch unklar war, ob es überhaupt einen
+> Server gibt, und bleibt als Reserve liegen.
 
 Nimmt die Anfragen des Formulars entgegen und schickt sie über die
 **MailerSend-API** raus. Kein Mailer, kein SMTP — der Versand ist ein
