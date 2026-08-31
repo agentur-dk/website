@@ -554,6 +554,13 @@ const schritte = [
      * als ein Formular, das sich nicht absenden lässt.
      */
     let zeitstempelGeholt = false;
+    /** Trennt die erreichte Grenze vom echten Fehler — die Meldungen unterscheiden sich. */
+    class FormularFehler extends Error {
+      constructor(readonly art: 'zu_viele' | 'allgemein') {
+        super(art);
+      }
+    }
+
     async function holeZeitstempel(): Promise<void> {
       if (zeitstempelGeholt) return;
       zeitstempelGeholt = true;
@@ -671,17 +678,30 @@ const schritte = [
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(daten),
         });
-        if (!res.ok) throw new Error('Server-Fehler');
+        if (!res.ok) {
+          // „Es ist ein Fehler aufgetreten" ist bei einer erreichten
+          // Grenze schlicht falsch: Es ist kein Fehler, und ein erneuter
+          // Versuch hilft sofort auch nicht. Der Text muss sagen, was
+          // los ist und was zu tun ist.
+          const grund = await res
+            .json()
+            .then((a: { fehler?: string }) => a.fehler ?? '')
+            .catch(() => '');
+          throw new FormularFehler(grund === 'zu_viele' ? 'zu_viele' : 'allgemein');
+        }
 
         if (statusEl) {
           statusEl.textContent = 'Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.';
           statusEl.className = 'lf-status sr-only';
         }
         zeigeDanke();
-      } catch {
+      } catch (fehler) {
         if (statusEl) {
           statusEl.textContent =
-            'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an mail@dk-dk.de.';
+            fehler instanceof FormularFehler && fehler.art === 'zu_viele'
+              ? 'Von diesem Anschluss wurden in der letzten Stunde bereits mehrere Anfragen gesendet. '
+                + 'Bitte warten Sie einen Moment oder schreiben Sie uns direkt an mail@dk-dk.de.'
+              : 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an mail@dk-dk.de.';
           statusEl.className = 'lf-status lf-status--error';
           // Sonst steht die Meldung am Kopf des Formulars, während der
           // Nutzer unten auf dem Absenden-Knopf steht. Auf dem Telefon

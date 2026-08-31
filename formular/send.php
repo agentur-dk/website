@@ -413,9 +413,9 @@ if (isset($zaehlerDatei)) {
 $rumpf = json_encode($nutzlast, JSON_UNESCAPED_UNICODE);
 $ziel  = $k['api_url'] ?? 'https://api.mailersend.com/v1/email';
 
-$status  = 0;
-$antwort = '';
-foreach ($schluessel as $nr => $token) {
+/** Ein Anlauf gegen die API. Gibt [Statuscode, Antworttext] zurück. */
+function rufe(string $ziel, string $token, string $rumpf): array
+{
     $ch = curl_init($ziel);
     curl_setopt_array($ch, [
         CURLOPT_POST           => true,
@@ -431,6 +431,28 @@ foreach ($schluessel as $nr => $token) {
     $antwort = curl_exec($ch);
     $status  = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     curl_close($ch);
+    return [$status, is_string($antwort) ? $antwort : ''];
+}
+
+$status  = 0;
+$antwort = '';
+foreach ($schluessel as $nr => $token) {
+    [$status, $antwort] = rufe($ziel, $token, $rumpf);
+
+    // MailerSend begrenzt die Anfragen pro Minute. Zwei Absendungen kurz
+    // hintereinander — etwa ein Test und eine echte Anfrage — reichen auf
+    // einem Testkonto schon aus, und der zweite bekam bisher einen
+    // Fehler, obwohl mit ihm alles in Ordnung war. Einmal kurz warten und
+    // nachfassen löst das.
+    //
+    // Nur bei 429 wird nachgefasst, nicht bei 5xx: Ein 429 heißt
+    // eindeutig »nicht angenommen«, ein Serverfehler dagegen kann die
+    // Mail bereits ausgelöst haben. Dort wäre ein zweiter Versuch das
+    // Risiko einer doppelten Zustellung.
+    if ($status === 429) {
+        usleep(2000000);
+        [$status, $antwort] = rufe($ziel, $token, $rumpf);
+    }
 
     // Nur bei abgelehntem Schlüssel weiterprobieren. Bei jedem anderen
     // Fehler hilft ein zweiter Versuch nicht und könnte die Mail doppeln.
@@ -443,42 +465,24 @@ foreach ($schluessel as $nr => $token) {
     }
 }
 
-/**
- * Fehlerprotokoll.
- *
- * `error_log()` landet auf diesem Webspace in einem Protokoll, an das
- * man ohne Shell nicht herankommt — ein abgelehnter Versand war damit
- * praktisch unsichtbar. Deshalb zusätzlich eine eigene Datei.
- *
- * Sie liegt in `_intern/daten/`, und dieser Ordner ist serverseitig für
- * Anfragen aus dem Web gesperrt. Sie wächst nicht unbegrenzt: Ab 20 kB
- * wird die vordere Hälfte abgeschnitten. Der Antworttext wird auf 600
- * Zeichen gekürzt — für die Fehlermeldung von MailerSend reicht das,
- * und die Anfragedaten selbst stehen ohnehin nicht darin.
- */
-function protokolliere(string $verzeichnis, string $zeile): void
-{
-    if (!is_dir($verzeichnis) || !is_writable($verzeichnis)) {
-        return;
-    }
-    $datei = $verzeichnis . '/fehler.log';
-    if (is_file($datei) && filesize($datei) > 20000) {
-        $inhalt = (string) file_get_contents($datei);
-        @file_put_contents($datei, substr($inhalt, (int) (strlen($inhalt) / 2)));
-    }
-    @file_put_contents(
-        $datei,
-        gmdate('Y-m-d H:i:s') . ' UTC  ' . $zeile . "\n",
-        FILE_APPEND
-    );
-}
-
 // MailerSend antwortet mit 202 Accepted.
 if ($status < 200 || $status >= 300) {
     $meldung = 'MailerSend HTTP ' . $status . ' — '
              . mb_substr(is_string($antwort) ? $antwort : '(keine Antwort)', 0, 600);
     error_log($meldung);
     protokolliere($verzeichnis, $meldung);
+
+    // Der Versuch wurde vor dem Absenden hochgezählt. Lag der Fehler
+    // nicht am Absender, sondern an der Gegenstelle, darf er ihn nichts
+    // kosten — sonst sperrt ihn ausgerechnet unser eigener Ausfall aus.
+    // Genau das ist passiert: Nach drei fehlgeschlagenen Versänden war
+    // das Stundenkontingent aufgebraucht, ohne dass je eine Mail
+    // rausging. Bei 4xx bleibt die Zählung stehen; dort liegt es an der
+    // Anfrage selbst, und dann soll sie auch begrenzt sein.
+    if (isset($zaehlerDatei) && ($status === 429 || $status >= 500 || $status === 0)) {
+        @file_put_contents($zaehlerDatei, (string) $zaehlerStand);
+    }
+
     antworte(502, ['ok' => false, 'fehler' => 'versand']);
 }
 
