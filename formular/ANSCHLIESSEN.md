@@ -18,6 +18,61 @@ und keinen Eintrag — es sendet einfach.
 Nur ein Projekt auf einer **anderen Domain** braucht eine Zeile in
 `_intern/formular-config.php`.
 
+## Der empfohlene Weg: ein `action`, kein JavaScript
+
+Das Formular sendet klassisch. Es funktioniert damit auch, wenn kein
+Skript läuft — und das ist keine Kleinigkeit: Ein Formular, das ohne
+JavaScript nicht absendet, ist für einen Teil der Besucher schlicht
+kaputt, und man merkt es nie, weil sich niemand beschwert, der gar
+nicht senden konnte.
+
+```html
+<form method="post" action="https://vorschau.dk-dk.de/formular/send.php"
+      enctype="multipart/form-data">
+  <input type="hidden" name="weiter"        value="/mein-projekt/danke/">
+  <input type="hidden" name="weiter_fehler" value="/mein-projekt/kontakt/">
+
+  <!-- Honigtopf: für Menschen unsichtbar, für Skripte verlockend -->
+  <input type="text" name="hp_email" tabindex="-1" autocomplete="off"
+         aria-hidden="true" style="display:none">
+
+  <input name="vorname"  required>
+  <input name="nachname" required>
+  <input name="email" type="email" required>
+  <textarea name="message" required></textarea>
+
+  <!-- Beliebige weitere Felder: sie landen von selbst in der Mail -->
+  <input name="immobilientyp">
+  <input type="file" name="unterlagen">
+
+  <button>Absenden</button>
+</form>
+```
+
+Was dabei von selbst passiert:
+
+- **Beliebige Feldnamen.** Alles, was nicht zur Technik gehört, wird als
+  eigene Zeile in die Mail übernommen — `immobilientyp` wird zu
+  „Immobilientyp". Am Endpunkt ist dafür nichts einzutragen.
+- **Dateianhänge.** Bis zu fünf Dateien, zusammen 8 MB, als PDF, JPEG,
+  PNG, WebP oder Text. Der Typ wird am Inhalt geprüft, nicht an dem, was
+  der Absender behauptet. Ein abgelehnter Anhang verwirft nicht die
+  Anfrage — sie kommt an, mit einem Hinweis.
+- **Weiterleitung mit 303** auf `weiter`. Nur seiteneigene Pfade werden
+  angenommen; ein fremdes Ziel fällt auf die Vorgabe zurück, sonst wäre
+  das Formular eine offene Weiterleitung.
+- **Herkunft** wird über `Origin` geprüft, ersatzweise über den
+  `Referer` — den `Origin` schickt ein klassisches Formular nicht in
+  jedem Browser mit.
+
+Eine Einschränkung, die dazugehört: Ohne Skript gibt es weder einen
+signierten Zeitstempel noch `form_started`, die Zeitschranke entfällt
+also. Es tragen dann die beiden Honigtöpfe, die Inhaltsheuristik und die
+Sperre pro Stunde. Wer `client.js` einbindet, bekommt die Zeitprüfung
+zusätzlich — und das Absenden ohne Seitenwechsel.
+
+## Der JSON-Weg (client.js)
+
 ## Was das Projekt schicken muss
 
 `POST` mit `Content-Type: application/json` an

@@ -45,6 +45,12 @@ return [
     // Wie viele Anfragen pro IP und Stunde durchgehen.
     'limit_pro_stunde' => 5,
 
+    // Wohin ein klassisches Formular nach dem Absenden geht. Nur nötig,
+    // wenn das Formular nicht selbst `weiter` und `weiter_fehler`
+    // mitschickt — die gewinnen, solange sie seiteneigene Pfade sind.
+    'weiter_gut'    => '/danke/',
+    'weiter_fehler' => '/',
+
     // Nur für Tests umstellen: Adresse der Versand-API.
     'api_url' => 'https://api.mailersend.com/v1/email',
 

@@ -50,13 +50,24 @@ for (const name of readdirSync(ORDNER).filter((f) => f.endsWith('.php'))) {
     [...quelle.matchAll(/\bfunction\s+([A-Za-z_]\w*)\s*\(/g)].map((m) => m[1].toLowerCase())
   );
 
-  const zeilen = quelle.split('\n');
+  // Zeichenketten leeren, aber die Zeilenstruktur erhalten. Ohne das
+  // meldete der Prüfer deutschen Fließtext: »übernommen (Grenze« sieht
+  // nach einem Aufruf von bernommen() aus, weil das ü kein \w ist.
+  const entschaerft = quelle.replace(
+    /'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/gs,
+    (treffer) => treffer.replace(/[^\n]/g, ' ')
+  );
+
+  const zeilen = entschaerft.split('\n');
   zeilen.forEach((zeile, i) => {
     // Kommentarzeilen überspringen, dort stehen Funktionsnamen als Prosa.
     if (/^\s*(\*|\/\/|#)/.test(zeile)) return;
     for (const treffer of zeile.matchAll(/(^|[^\w$>:])([A-Za-z_]\w*)\s*\(/g)) {
       const ruf = treffer[2].toLowerCase();
       if (SCHLUESSELWORT.has(ruf) || eingebaut.has(ruf) || definiert.has(ruf)) continue;
+      // `new finfo(…)` ist ein Konstruktor, keine Funktion.
+      const davor = zeile.slice(0, treffer.index + treffer[1].length);
+      if (/\bnew\s+$/.test(davor)) continue;
       console.error(`${pfad}:${i + 1}  Aufruf von ${treffer[2]}() — nirgends definiert`);
       fehler++;
     }

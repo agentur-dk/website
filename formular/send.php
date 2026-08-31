@@ -189,10 +189,38 @@ register_shutdown_function(static function () use ($k): void {
     );
 });
 
+/**
+ * Woher kommt die Anfrage?
+ *
+ * `Origin` ist der verlässliche Wert und wird bevorzugt. Ein klassisches
+ * Formular schickt ihn aber nicht in jedem Browser mit — die Kopfzeile
+ * ist bei gleicher Herkunft nicht vorgeschrieben. Dann tritt der
+ * `Referer` an ihre Stelle, auf Schema und Rechnername gekürzt; der Pfad
+ * spielt keine Rolle, denn alle Vorschau-Projekte teilen sich eine
+ * Adresse.
+ *
+ * Der Ersatz gilt nur für Formularsendungen. Eine JSON-Anfrage kommt aus
+ * JavaScript, und dort setzt der Browser `Origin` immer — dort wäre der
+ * Referer eine unnötige Lockerung.
+ */
 $herkunft = $_SERVER['HTTP_ORIGIN'] ?? '';
-$erlaubt  = in_array($herkunft, $k['erlaubte_herkunft'], true);
+$echteHerkunft = $herkunft !== '';
 
-if ($erlaubt) {
+if (!$echteHerkunft
+    && !str_contains(strtolower($_SERVER['CONTENT_TYPE'] ?? ''), 'application/json')) {
+    $teile = parse_url($_SERVER['HTTP_REFERER'] ?? '');
+    if (isset($teile['scheme'], $teile['host'])) {
+        $herkunft = $teile['scheme'] . '://' . $teile['host']
+                  . (isset($teile['port']) ? ':' . $teile['port'] : '');
+    }
+}
+
+$erlaubt = in_array($herkunft, $k['erlaubte_herkunft'], true);
+
+// Der Freigabe-Kopf gehört nur zu einer echten Origin. Ihn für einen aus
+// dem Referer erschlossenen Wert zu setzen, hieße dem Browser etwas über
+// eine Anfrage zu sagen, die er gar nicht so gestellt hat.
+if ($erlaubt && $echteHerkunft) {
     header('Access-Control-Allow-Origin: ' . $herkunft);
     header('Vary: Origin');
 }
@@ -222,11 +250,47 @@ function signiere(int $zeit, string $geheimnis): string
     return hash_hmac('sha256', (string) $zeit, $geheimnis);
 }
 
-/** Antwort und Ende. */
+/**
+ * Wohin nach dem Absenden?
+ *
+ * Nur seiteneigene Pfade sind zulässig — beginnend mit einem einzelnen
+ * Schrägstrich. Ohne diese Prüfung wäre das Formular eine offene
+ * Weiterleitung: Wer `weiter=https://…` mitschickt, könnte über die
+ * eigene Adresse auf eine fremde Seite lenken und damit Vertrauen
+ * borgen, das ihm nicht gehört.
+ */
+function zielPfad(array $d, string $name, string $vorgabe): string
+{
+    $wert = isset($d[$name]) && is_scalar($d[$name]) ? trim((string) $d[$name]) : '';
+    if ($wert === '' || $wert[0] !== '/' || str_starts_with($wert, '//')) {
+        return $vorgabe;
+    }
+    return $wert;
+}
+
+/**
+ * Antwort und Ende.
+ *
+ * Für JSON-Anfragen das gewohnte Objekt. Für ein klassisches Formular
+ * eine Weiterleitung mit 303: Danach steht im Browser die Dankeseite,
+ * nicht der Endpunkt — ein Neuladen schickt die Anfrage also nicht
+ * ein zweites Mal ab.
+ */
 function antworte(int $code, array $daten): void
 {
-    http_response_code($code);
-    echo json_encode($daten);
+    global $istJson, $weiterGut, $weiterSchlecht;
+
+    if ($istJson ?? true) {
+        http_response_code($code);
+        echo json_encode($daten);
+        exit;
+    }
+
+    $ziel = ($daten['ok'] ?? false) ? ($weiterGut ?? '/') : ($weiterSchlecht ?? '/');
+    if (!($daten['ok'] ?? false) && ($daten['fehler'] ?? '') !== '') {
+        $ziel .= (str_contains($ziel, '?') ? '&' : '?') . 'fehler=' . rawurlencode((string) $daten['fehler']);
+    }
+    header('Location: ' . $ziel, true, 303);
     exit;
 }
 
@@ -265,14 +329,43 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
  *  Eingang lesen
  * ---------------------------------------------------------------- */
 
-$roh = file_get_contents('php://input');
-if ($roh === false || strlen($roh) > 20000) {
-    antworte(413, ['ok' => false]);
+/**
+ * Zwei Wege hinein, und der Unterschied zieht sich durch die ganze Datei.
+ *
+ * JSON kommt von `client.js` und setzt JavaScript voraus. Ein klassisches
+ * Formular — `method="post" action="…"` — kommt ohne aus, kann Dateien
+ * mitschicken und erwartet keine JSON-Antwort, sondern eine
+ * Weiterleitung. Beides muss gehen: Ein Formular, das ohne JavaScript
+ * nicht absendet, ist ein Formular, das für einen Teil der Besucher
+ * einfach nicht funktioniert.
+ */
+$istJson = str_contains(strtolower($_SERVER['CONTENT_TYPE'] ?? ''), 'application/json');
+
+if ($istJson) {
+    $roh = file_get_contents('php://input');
+    if ($roh === false || strlen($roh) > 20000) {
+        antworte(413, ['ok' => false]);
+    }
+    $d = json_decode($roh, true);
+    if (!is_array($d)) {
+        antworte(400, ['ok' => false]);
+    }
+} else {
+    // Mehrfach belegte Namen (Ankreuzfelder) fasst PHP nur zusammen, wenn
+    // der Name auf [] endet. Beides zu einem Text vereinen, weil der
+    // Mailer an dieser Stelle immer eine Zeichenkette bekommen hat.
+    $d = [];
+    foreach ($_POST as $name => $wert) {
+        $d[$name] = is_array($wert)
+            ? implode(', ', array_map(static fn ($v) => (string) $v, $wert))
+            : (string) $wert;
+    }
 }
-$d = json_decode($roh, true);
-if (!is_array($d)) {
-    antworte(400, ['ok' => false]);
-}
+
+// Weiterleitungsziele: was das Formular mitschickt, sonst die Vorgabe
+// aus der Konfiguration. Nur seiteneigene Pfade, siehe zielPfad().
+$weiterGut      = zielPfad($d, 'weiter',        $k['weiter_gut']     ?? '/danke/');
+$weiterSchlecht = zielPfad($d, 'weiter_fehler', $k['weiter_fehler']  ?? '/');
 
 /** Feld als getrimmter Text, höchstens $max Zeichen. */
 function feld(array $d, string $name, int $max = 500): string
@@ -322,9 +415,22 @@ if ($ts > 0 && $sig !== '') {
     // setzt `form_started` beim Laden — wer es weglässt, ist keiner.
     $start = (int) feld($d, 'form_started');
     if ($start <= 0) {
-        stillVerwerfen();
+        // Ohne JavaScript gibt es weder einen signierten Zeitstempel noch
+        // `form_started` — beide setzt erst ein Skript. Ein klassisches
+        // Formular deshalb zu verwerfen hieße, es für genau die Besucher
+        // abzuschalten, für die es ohne JavaScript gebaut wurde.
+        //
+        // Für sie tragen die übrigen Stufen: zwei Honigtöpfe, die
+        // Inhaltsheuristik und die Sperre pro Stunde. Das ist schwächer
+        // als mit Zeitprüfung, und das soll hier auch so dastehen. Eine
+        // JSON-Anfrage kommt dagegen immer von client.js, und das setzt
+        // die Felder — dort bleibt es beim Verwerfen.
+        if ($istJson) {
+            stillVerwerfen();
+        }
+        $start = 0;
     }
-    if ((int) (microtime(true) * 1000) - $start < 3000) {
+    if ($start > 0 && (int) (microtime(true) * 1000) - $start < 3000) {
         stillVerwerfen();
     }
 }
@@ -438,6 +544,26 @@ function projektName(string $url): string
 
 $projekt = projektName(feld($d, 'page_url', 400));
 
+/**
+ * Felder, die zur Technik gehören und in keiner Mail etwas zu suchen
+ * haben — Honigtöpfe, Zeitstempel, Weiterleitungsziele — sowie die, die
+ * weiter oben schon eine eigene Zeile bekommen.
+ */
+const INTERN = [
+    'hp_email', '_gotcha', 'ts_server', 'ts_sig', 'form_started',
+    'interaktion', 'weiter', 'weiter_fehler',
+    'vorname', 'nachname', 'name', 'email', 'message',
+    'page', 'page_url', 'interesse[]', 'anliegen_text', 'firma', 'website_url',
+];
+
+/** Aus `website_url` wird »Website Url«: lesbar, ohne Wörterbuch. */
+function bezeichnung(string $name): string
+{
+    $text = str_replace(['_', '-', '[]'], [' ', ' ', ''], $name);
+    $text = trim(preg_replace('~(?<!^)[A-Z]~u', ' $0', $text) ?? $text);
+    return mb_convert_case($text, MB_CASE_TITLE, 'UTF-8');
+}
+
 $zeilen = [
     'Projekt'     => $projekt,
     'Seite'       => feld($d, 'page', 120),
@@ -448,15 +574,105 @@ $zeilen = [
     'Website'     => feld($d, 'website_url', 300),
 ];
 
+// Alles Weitere, was das Formular mitgeschickt hat. Ein Projekt mit ganz
+// anderen Feldern — `immobilientyp`, `baujahr`, `subjectProduct` — muss
+// dafür am Endpunkt nichts eintragen; sonst wäre es wieder eine
+// Einrichtung pro Projekt, und genau die soll wegfallen.
+foreach ($d as $name => $wert) {
+    if (in_array($name, INTERN, true) || !is_scalar($wert)) {
+        continue;
+    }
+    $text = feld($d, $name, 1000);
+    if ($text !== '') {
+        $zeilen[bezeichnung($name)] = $text;
+    }
+}
+
 $text = "Neue Anfrage über das Website-Formular\n\n"
       . str_pad('Name:', 10) . "{$vorname} {$nachname}\n"
       . str_pad('E-Mail:', 10) . "{$email}\n";
+$breite = 10;
+foreach (array_keys($zeilen) as $b) {
+    $breite = max($breite, mb_strlen($b) + 2);
+}
 foreach ($zeilen as $bezeichnung => $wert) {
     if ($wert !== '') {
-        $text .= str_pad($bezeichnung . ':', 10) . $wert . "\n";
+        $text .= str_pad($bezeichnung . ':', $breite) . $wert . "\n";
     }
 }
 $text .= "\nNachricht:\n{$nachricht}\n";
+
+/**
+ * Dateianhänge.
+ *
+ * Nur bei einem klassischen Formular mit `enctype="multipart/form-data"`;
+ * über JSON kommen keine Dateien. Die Grenzen sind bewusst eng: Der
+ * Endpunkt ist ein Kontaktformular, kein Dateiablage-Dienst, und
+ * MailerSend nimmt eine Nachricht nur bis 25 MB an — base64 bläht den
+ * Inhalt um etwa ein Drittel auf.
+ *
+ * Geprüft wird der Typ am tatsächlichen Inhalt (`finfo`), nicht am
+ * mitgeschickten Content-Type: Den bestimmt der Absender, und er kann
+ * ihn frei behaupten.
+ */
+const ANHANG_TYPEN = [
+    'application/pdf' => 'pdf',
+    'image/jpeg'      => 'jpg',
+    'image/png'       => 'png',
+    'image/webp'      => 'webp',
+    'text/plain'      => 'txt',
+];
+const ANHANG_ANZAHL = 5;
+const ANHANG_BYTES  = 8388608;   // 8 MB zusammen, roh
+
+$anhaenge = [];
+if (!$istJson && $_FILES !== []) {
+    $summe = 0;
+    $pruefer = class_exists('finfo') ? new finfo(FILEINFO_MIME_TYPE) : null;
+
+    foreach ($_FILES as $eingang) {
+        // Ein Feld kann mehrere Dateien tragen; PHP dreht die Struktur
+        // dabei um — statt einer Liste von Dateien eine Liste je Merkmal.
+        $viele = is_array($eingang['name'] ?? null);
+        $anzahl = $viele ? count($eingang['name']) : 1;
+
+        for ($i = 0; $i < $anzahl; $i++) {
+            $fehler = $viele ? $eingang['error'][$i] : $eingang['error'];
+            if ($fehler !== UPLOAD_ERR_OK) {
+                continue;
+            }
+            $pfad = $viele ? $eingang['tmp_name'][$i] : $eingang['tmp_name'];
+            $name = basename((string) ($viele ? $eingang['name'][$i] : $eingang['name']));
+            $groesse = (int) ($viele ? $eingang['size'][$i] : $eingang['size']);
+
+            if (!is_uploaded_file($pfad)) {
+                continue;
+            }
+            if (count($anhaenge) >= ANHANG_ANZAHL || $summe + $groesse > ANHANG_BYTES) {
+                $zeilen['Hinweis'] = 'Weitere Anhänge wurden nicht übernommen (Grenze erreicht).';
+                break 2;
+            }
+            $typ = $pruefer ? (string) $pruefer->file($pfad) : '';
+            if (!isset(ANHANG_TYPEN[$typ])) {
+                $zeilen['Hinweis'] = 'Ein Anhang wurde abgelehnt (Dateityp nicht zugelassen).';
+                continue;
+            }
+            $inhalt = file_get_contents($pfad);
+            if ($inhalt === false) {
+                continue;
+            }
+            $summe += $groesse;
+            $anhaenge[] = [
+                'filename'    => preg_replace('~[^\w.\- ]~u', '_', $name) ?: ('anhang.' . ANHANG_TYPEN[$typ]),
+                'content'     => base64_encode($inhalt),
+                'disposition' => 'attachment',
+            ];
+        }
+    }
+    if ($anhaenge !== []) {
+        $zeilen['Anhänge'] = count($anhaenge) . ' Datei(en)';
+    }
+}
 
 $nutzlast = [
     'from'     => ['email' => $k['von_adresse'], 'name' => $k['von_name']],
@@ -466,6 +682,9 @@ $nutzlast = [
                   . ($zeilen['Seite'] !== '' ? ' — ' . $zeilen['Seite'] : ''),
     'text'     => $text,
 ];
+if ($anhaenge !== []) {
+    $nutzlast['attachments'] = $anhaenge;
+}
 
 // Jetzt zählt der Versuch: alles ist geprüft, gleich geht die Mail raus.
 if (isset($zaehlerDatei)) {
