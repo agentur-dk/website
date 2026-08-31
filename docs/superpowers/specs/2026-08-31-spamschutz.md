@@ -68,9 +68,12 @@ B) Honigtopf gefüllt, sonst echte Bedienung      → verworfen
 C) Echte Eingabe                                 → durchgelassen
 ```
 
-## 4 · Was das PHP-Skript ergänzen sollte
+## 4 · Was ein Server ergänzen könnte — falls es einen gibt
 
-Nach Wirkung sortiert. Nichts davon braucht einen Drittanbieter.
+Dieser Abschnitt gilt **nur**, wenn der Endpunkt nach Abschnitt 6 auf
+einem Rechner landet, der Code ausführen kann. Auf GitHub Pages ist
+nichts davon möglich. Nach Wirkung sortiert; nichts davon braucht einen
+Drittanbieter.
 
 1. **Die Felder gegenprüfen, die das Formular mitschickt.**
    `_gotcha` und `homepage` müssen leer sein, `interaktion` muss `1`
@@ -113,3 +116,63 @@ interaktion   „1", wenn das Formular bedient wurde
 _gotcha       Honigtopf, muss leer sein
 homepage      Honigtopf, muss leer sein
 ```
+
+---
+
+## 6 · Wohin sendet das Formular? (offen)
+
+### Der Stand
+
+`public/CNAME` enthält `dk-dk.de`. Nach dem Umschalten der DNS liefert
+GitHub Pages unter diesem Namen aus. Gemessen am 31.08.2026:
+
+```
+dk-dk.de                          →  Server: Apache        (goneo, alte Seite)
+agentur-dk.github.io/website/     →  Server: GitHub.com    (neue Seite)
+dk-dk.de/formular/send.php        →  HTTP 404
+```
+
+Das Formular schickt an `https://dk-dk.de/formular/send.php`. Heute
+antwortet dort niemand, und nach dem Umzug liegt diese Adresse auf
+GitHub Pages — dort läuft kein PHP, dort läuft überhaupt nichts.
+**Ohne eine Entscheidung an dieser Stelle kommt keine Anfrage an.**
+
+### Die Möglichkeiten
+
+**a) Unterdomain, die bei goneo bleibt — empfohlen.**
+Ein A-Record für `formular.dk-dk.de` zeigt weiter auf goneo, während
+`dk-dk.de` auf GitHub Pages umgestellt wird. Das PHP-Skript liegt dort
+und wird von der statischen Seite aus angesprochen.
+
+Vorteile: Der Webspace ist bezahlt und läuft. Alles bleibt auf eigenen
+Servern, keine Datenverarbeitung durch Dritte. Und — der eigentliche
+Gewinn — mit einem Server sind die beiden Stufen wieder möglich, die
+ohne ihn wegfallen: ein **signierter Zeitstempel** und **ALTCHA**.
+
+Zu beachten: Der Aufruf geht dann über Domaingrenzen. Das Skript muss
+auf `OPTIONS` antworten und `Access-Control-Allow-Origin:
+https://dk-dk.de` setzen. Alternativ als
+`application/x-www-form-urlencoded` senden, dann entfällt die
+Vorabanfrage — das ist die kleinere Änderung im Formular.
+
+**b) Serverlose Funktion.**
+Cloudflare Workers oder ein vergleichbarer Dienst, kostenloses Kontingent
+reicht für ein Kontaktformular um Größenordnungen. Ebenfalls eigener
+Code, ebenfalls ALTCHA-fähig. Nachteil: ein weiterer Anbieter im Spiel,
+und der Versand der Mail braucht dort wieder einen SMTP-Dienst.
+
+**c) Formulardienst.**
+Ausgeschlossen — die Vorgabe im Projekt lautet ausdrücklich „kein
+Formspree", und jeder solche Dienst verarbeitet die Anfragedaten als
+Auftragsverarbeiter, was einen Vertrag nach Art. 28 DSGVO nötig macht.
+
+**d) `mailto:`.**
+Funktioniert ohne Server, öffnet aber das Mailprogramm des Besuchers.
+Auf dem Telefon oft gar keins eingerichtet, kein Spamschutz möglich, kein
+Absendebeleg. Als alleiniger Weg nicht tragfähig.
+
+### Empfehlung
+
+(a). Solange das nicht entschieden ist, sollte das Formular vor dem
+Livegang nicht in dem Zustand bleiben, in dem es jetzt ist: Es zeigt nach
+dem Absenden einen Dankeblock, obwohl die Anfrage ins Leere läuft.
