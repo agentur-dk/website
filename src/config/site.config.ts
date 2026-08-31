@@ -53,7 +53,7 @@ export const siteConfig = {
   tagline:     'design & kommunikation',
   founder:     'Daniel Kontelis',
   url:         SITE_URL,
-  description: 'Agentur aus Köln für barrierefreie WordPress-Websites nach BFSG, Website-Leasing, SEO/GEO und Online-Marketing. Direkt beim Inhaber, Antwort in 24 Stunden.',
+  description: 'Agentur aus Köln für barrierefreie WordPress-Websites nach BFSG, Website-Leasing, SEO/GEO und Online-Marketing. Kurze Wege, Antwort in 24 Stunden.',
   ogImage:     'images/og-image-website.png',
   foundingYear: 2005,
   contact: {
@@ -139,7 +139,7 @@ export const pages: PageEntry[] = [
     summary: 'Ausgewählte Projekte für Bundesministerium, TARGOBANK, Berufsförderungswerke und Mittelstand.' },
 
   { slug: 'ueber-uns', label: 'Über uns', priority: 0.8, changefreq: 'monthly',
-    summary: 'Inhabergeführte Agentur aus Köln — Arbeitsweise, Haltung und Team hinter agentur dk.' },
+    summary: 'Agentur aus Köln mit kurzen Wegen — Arbeitsweise, Haltung und Team hinter agentur dk.' },
 
   { slug: 'barrierefreiheit', label: 'Barrierefreiheitserklärung', priority: 0.5, changefreq: 'yearly',
     summary: 'Erklärung zur Barrierefreiheit nach BFSG/BGG inklusive Konformitätsstatus und Feedback-Kontakt.' },

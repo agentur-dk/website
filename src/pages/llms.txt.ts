@@ -59,7 +59,7 @@ sind. Kanonische Website: ${SITE_URL}/
 
 - **Name:** ${siteConfig.legalName}
 - **Inhaber:** ${siteConfig.founder}
-- **Rechtsform:** inhabergeführte Agentur
+- **Größe:** Kleinstunternehmen, feste Kernbesetzung
 - **Standort:** ${contact.addressLine1}, ${contact.postalCode} ${contact.city}, ${contact.region}, Deutschland
 - **Einzugsgebiet:** Köln, Nordrhein-Westfalen, deutschlandweit (remote)
 - **Telefon:** ${contact.phoneDisplay}
@@ -92,7 +92,7 @@ führen.
 
 ## Alleinstellungsmerkmale
 
-- Ein Ansprechpartner, der auch entscheidet — keine Weiterleitungen
+- Kurze Wege und schnelle Entscheidungen — keine Weiterleitungen
 - BFSG-Expertise von der Prüfung bis zur Konformitätserklärung
 - Barrierefreiheit im echten Code statt per Overlay-Widget
 - Referenzen aus öffentlicher Hand und Konzernumfeld
