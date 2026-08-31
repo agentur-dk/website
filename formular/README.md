@@ -33,7 +33,33 @@ angelegt und kein DNS-Eintrag geändert** werden.
 
    Von Hand geht auch: `config.example.php` kopieren und ausfüllen.
 
-2. **Hochladen.**
+2. **Hochladen** — entweder mit dem gewohnten FTP-Programm oder:
+
+   ```
+   bash formular/hochladen.sh liste     # nur ansehen
+   bash formular/hochladen.sh           # hochladen
+   ```
+
+   Die Zugangsdaten liest `curl` direkt aus `~/.netrc`; sie erscheinen
+   nie auf der Kommandozeile, nie in der Shell-History und in keiner
+   Ausgabe. Format:
+
+   ```
+   machine w4.goneo.de
+     login DEIN-FTP-BENUTZER
+     password DEIN-FTP-PASSWORT
+   ```
+
+   danach `chmod 600 ~/.netrc`.
+
+   Zur Verbindung: Der FTP-Dienst kann FTPS, hält aber ein Zertifikat auf
+   `*.test-my-website.de` statt auf `w4.goneo.de` — die Namensprüfung
+   schlägt fehl. Statt sie abzuschalten, heftet das Skript den
+   öffentlichen Schlüssel an: Die Gegenstelle muss genau diesen Schlüssel
+   vorweisen, sonst bricht die Verbindung ab. Das ist eine stärkere
+   Bindung als die Namensprüfung, nicht eine schwächere.
+
+   Wohin die Dateien gehen:
 
    - `send.php` und `.htaccess` nach `vorschau.dk-dk.de/formular/`
    - `config.php` nach `vorschau.dk-dk.de/_intern/`, dort umbenannt in
