@@ -709,23 +709,6 @@ a:not([class]):focus-visible {
     margin-bottom: 2.5rem;
   }
 
-  /* Typewriter caret */
-  .typewriter-caret {
-    display: inline-block;
-    width: 3px;
-    height: 0.85em;
-    background-color: var(--color-primary);
-    margin-left: 3px;
-    vertical-align: middle;
-    animation: caret-blink 1s step-end infinite;
-  }
-  @keyframes caret-blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-  html[data-motion='paused'] .typewriter-caret { animation-play-state: paused; }
-  @media (prefers-reduced-motion: reduce) { .typewriter-caret { animation: none; } }
-
   /* ----------------------------------------------------------
      Section label / title (generic page patterns)
      ---------------------------------------------------------- */

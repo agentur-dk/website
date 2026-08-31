@@ -64,7 +64,15 @@ const base = import.meta.env.BASE_URL;
       <section aria-labelledby="ds-cookies">
         <h2 id="ds-cookies">4. Cookies und lokale Speicherung</h2>
         <p>
-          Wir setzen keine Tracking-Cookies ohne Ihre Einwilligung. Unsere Website nutzt <strong>ausschließlich localStorage</strong> (kein HTTP-Cookie) zur Speicherung Ihrer Datenschutzeinstellungen (Schlüssel: <code>dk_consent_v1</code>). Diese Einstellung verbleibt in Ihrem Browser bis zur manuellen Löschung oder bis Sie Ihre Einwilligung widerrufen. Drittanbieter-Cookies werden auf dieser Website nicht gesetzt, sofern Sie keine entsprechende Einwilligung erteilt haben.
+          Wir setzen keine Tracking-Cookies ohne Ihre Einwilligung. Unsere Website nutzt <strong>ausschließlich localStorage und sessionStorage</strong> (kein HTTP-Cookie), und zwar für drei technisch notwendige Funktionen:
+        </p>
+        <ul>
+          <li><code>dk_consent_v1</code> (localStorage) — Ihre Datenschutzeinstellungen. Verbleibt im Browser bis zur manuellen Löschung oder bis Sie Ihre Einwilligung widerrufen.</li>
+          <li><code>dk-motion</code> (localStorage) — ob Sie die Animationen der Website angehalten haben. Verbleibt im Browser bis zur manuellen Löschung.</li>
+          <li><code>dk-flaeche-hero</code> (sessionStorage) — welche der fünf Darstellungen im Seitenkopf Ihnen gezeigt wird. Wird beim Schließen des Browser-Tabs automatisch gelöscht, damit die Darstellung beim nächsten Besuch wechselt.</li>
+        </ul>
+        <p>
+          Keiner dieser Werte verlässt Ihr Gerät, keiner erlaubt einen Rückschluss auf Ihre Person, und keiner wird an den Server übertragen. Drittanbieter-Cookies werden auf dieser Website nicht gesetzt, sofern Sie keine entsprechende Einwilligung erteilt haben.
         </p>
       </section>
 

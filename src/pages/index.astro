@@ -9,6 +9,7 @@ import LogoStrip from '../components/LogoStrip.astro';
 import { faqs } from '../data/faq';
 import Icon from '../components/ui/Icon.astro';
 import Dither from '../components/ui/Dither.astro';
+import { HERO_FIELDS } from '../lib/dither';
 import DitherBand from '../components/DitherBand.astro';
 
 const base = import.meta.env.BASE_URL;
@@ -27,7 +28,7 @@ const base = import.meta.env.BASE_URL;
 
     <!-- Hero Section -->
     <section class="hero section" aria-labelledby="hero-headline">
-      <div class="hero__flaeche" aria-hidden="true"><Dither field="brain" cell={4} fps={12} /></div>
+      <div class="hero__flaeche" aria-hidden="true"><Dither field="brain" pool={HERO_FIELDS} cell={4} fps={12} /></div>
       <div class="container hero__inner">
         <div class="hero__content">
           {/*
@@ -44,11 +45,8 @@ const base = import.meta.env.BASE_URL;
           */}
           <p class="section-label">Digitalagentur aus Köln</p>
           <h1 id="hero-headline" class="hero__headline">Websites, Online-Marketing und KI-Lösungen<span class="hero__headline-soft"> — drei Bausteine, ein Ansprechpartner.</span></h1>
-          <p class="hero__claim" aria-hidden="true">
-            <span id="typewriter-text" data-texts='["Sichtbarkeit, die wirkt.", "Barrierefreiheit, die überzeugt.", "WordPress, das performt.", "Marketing, das konvertiert."]'>Sichtbarkeit, die wirkt.</span><span class="typewriter-caret"></span>
-          </p>
           <p class="hero__subline">
-            agentur dk macht Ihr Unternehmen digital sichtbar — ob mit Websites, Online-Marketing oder KI-Implementierungen und individuellen Lösungen.
+            Wir planen, bauen und betreuen — barrierefrei nach BFSG, auffindbar in Suche und KI-Antworten, und Sie sprechen dabei immer mit dem Inhaber.
           </p>
           <div class="hero__actions">
             <a href="#contact" class="btn btn--accent btn--lg">Projekt anfragen</a>
@@ -436,7 +434,6 @@ const base = import.meta.env.BASE_URL;
     .service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
     .service-card--featured .card__link{color:var(--color-primary-light,#5090d0)}
     .referenzen-section__cta{text-align:center;margin-top:var(--space-10,2.5rem)}
-    .hero__claim{font-family:var(--font-display);font-size:clamp(1.25rem,3vw,1.75rem);font-weight:500;color:var(--color-text-muted);letter-spacing:-.01em;line-height:1.3;min-height:2.2em;margin:0 0 1.25rem}
   </style>
 
   <!-- Leistungs-Check quiz script -->
@@ -695,71 +692,6 @@ const base = import.meta.env.BASE_URL;
     }
 
     renderStep1(false);
-  })();
-  </script>
-
-  <!-- Typewriter script -->
-  <script>
-  (function initTypewriter() {
-    const found = document.getElementById('typewriter-text');
-    if (!found) return;
-    const el: HTMLElement = found;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
-
-    // WCAG 2.2.2: die Schleife muss anhaltbar sein. Der Schalter im Footer
-    // setzt data-motion am <html>; hier wird der Zustand bei jedem Tick
-    // geprüft und beim Fortsetzen wieder angestoßen.
-    const isPaused = () => document.documentElement.dataset.motion === 'paused';
-    let waking = false;
-    document.addEventListener('dk:motionchange', function (e) {
-      const paused = (e as CustomEvent).detail.paused;
-      if (!paused && !waking) { waking = true; setTimeout(function () { waking = false; tick(); }, PAUSE_START); }
-    });
-
-    let textsRaw: string | null = null;
-    try { textsRaw = el.dataset.texts ?? null; } catch { return; }
-    if (!textsRaw) return;
-
-    let texts: string[];
-    try { texts = JSON.parse(textsRaw); } catch { return; }
-    if (!texts.length) return;
-
-    let textIdx = 0;
-    let charIdx = 0;
-    let isDeleting = false;
-    const PAUSE_END = 2200;
-    const PAUSE_START = 400;
-    const TYPE_SPEED = 60;
-    const DEL_SPEED = 30;
-
-    function tick() {
-      if (isPaused()) return;
-      const current = texts[textIdx];
-      if (isDeleting) {
-        charIdx--;
-        el.textContent = current.slice(0, charIdx);
-        if (charIdx === 0) {
-          isDeleting = false;
-          textIdx = (textIdx + 1) % texts.length;
-          setTimeout(tick, PAUSE_START);
-          return;
-        }
-        setTimeout(tick, DEL_SPEED);
-      } else {
-        charIdx++;
-        el.textContent = current.slice(0, charIdx);
-        if (charIdx === current.length) {
-          isDeleting = true;
-          setTimeout(tick, PAUSE_END);
-          return;
-        }
-        setTimeout(tick, TYPE_SPEED);
-      }
-    }
-
-    // Start after initial pause
-    setTimeout(tick, PAUSE_END);
   })();
   </script>
 

@@ -20,6 +20,14 @@ import type { FieldName } from '../../lib/dither';
 interface Props {
   /** Welche Formel gezeichnet wird. */
   readonly field: FieldName;
+  /**
+   * Auswahl statt fester Formel: Aus dieser Liste wird beim ersten Aufruf
+   * eines Besuchs eine gezogen und für die Dauer der Sitzung behalten.
+   * `field` ist dann die Rückfallebene ohne JavaScript oder Speicher.
+   */
+  readonly pool?: readonly FieldName[];
+  /** Schlüssel, unter dem die Wahl in der Sitzung liegt. */
+  readonly poolKey?: string;
   /** Kantenlänge einer Rasterzelle in CSS-Pixeln; größer = grober = billiger. */
   readonly cell?: number;
   /** Bilder pro Sekunde. Diese Bewegungen sind langsam; 16 genügt, und
@@ -34,13 +42,15 @@ interface Props {
   readonly class?: string;
 }
 
-const { field, cell = 3, fps = 16, raster = 'kraeftig', class: className } = Astro.props;
+const { field, pool, poolKey = 'hero', cell = 3, fps = 16, raster = 'kraeftig', class: className } = Astro.props;
 ---
 
 <canvas
   class:list={['dither', className]}
   data-dither
   data-field={field}
+  data-pool={pool?.join(',')}
+  data-pool-key={pool ? poolKey : undefined}
   data-cell={cell}
   data-fps={fps}
   data-raster={raster}
@@ -64,9 +74,41 @@ const { field, cell = 3, fps = 16, raster = 'kraeftig', class: className } = Ast
 
   const STANDBILD = 1600; // Zeitpunkt des Standbilds — ein Moment mit Struktur.
 
+  /**
+   * Eine Formel je Besuch, nicht je Aufruf.
+   *
+   * sessionStorage überlebt Neuladen und Blättern innerhalb desselben
+   * Tabs, endet aber mit ihm — genau das ist „ein Besuch". localStorage
+   * hielte die Wahl monatelang fest, ein Cookie ginge an den Server.
+   *
+   * Math.random ist hier in Ordnung: Es läuft im Browser, nicht beim
+   * Bauen. Die ausgelieferte Datei bleibt für alle gleich.
+   *
+   * Ist der Speicher gesperrt (privater Modus, strenge Einstellungen),
+   * fällt die Wahl bei jedem Aufruf neu — dann wechselt das Bild eben
+   * beim Neuladen. Kein Grund, die Seite deshalb ohne Fläche zu zeigen.
+   */
+  function waehle(canvas: HTMLCanvasElement): FieldName {
+    const fest = (canvas.dataset.field ?? 'wave') as FieldName;
+    const auswahl = (canvas.dataset.pool ?? '').split(',').filter(Boolean) as FieldName[];
+    if (auswahl.length === 0) return fest;
+
+    const schluessel = `dk-flaeche-${canvas.dataset.poolKey ?? 'hero'}`;
+    try {
+      const gemerkt = sessionStorage.getItem(schluessel) as FieldName | null;
+      if (gemerkt !== null && auswahl.includes(gemerkt)) return gemerkt;
+    } catch (e) { /* Speicher gesperrt */ }
+
+    const gezogen = auswahl[Math.floor(Math.random() * auswahl.length)];
+    try {
+      sessionStorage.setItem(schluessel, gezogen);
+    } catch (e) { /* Speicher gesperrt */ }
+    return gezogen;
+  }
+
   const flaechen = new Map<HTMLCanvasElement, Flaeche>();
   for (const canvas of document.querySelectorAll<HTMLCanvasElement>('[data-dither]')) {
-    const field = (canvas.dataset.field ?? 'wave') as FieldName;
+    const field = waehle(canvas);
     flaechen.set(canvas, {
       field,
       cell: Number(canvas.dataset.cell) || 3,

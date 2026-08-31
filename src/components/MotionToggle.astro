@@ -2,10 +2,10 @@
 /**
  * Bewegungs-Schalter (WCAG 2.2.2 „Pause, Stop, Hide").
  *
- * Auf der Seite laufen zwei Animationen unbegrenzt weiter: die
- * Schreibmaschinen-Zeile im Hero und die Logo-Laufschrift. Beide starten
- * automatisch, dauern länger als fünf Sekunden und stehen neben anderen
- * Inhalten — damit verlangt 2.2.2 ein Bedienelement zum Anhalten.
+ * Auf der Seite laufen zwei Arten von Animation unbegrenzt weiter: die
+ * Logo-Laufschrift und die gerasterten Flächen (src/lib/dither.ts). Beide
+ * starten automatisch, dauern länger als fünf Sekunden und stehen neben
+ * anderen Inhalten — damit verlangt 2.2.2 ein Bedienelement zum Anhalten.
  * `prefers-reduced-motion` allein genügt nicht: es hilft nur Nutzern, die
  * die Einstellung im Betriebssystem gesetzt haben.
  *
@@ -52,8 +52,8 @@ import Icon from './ui/Icon.astro';
       btn.setAttribute('aria-pressed', String(paused));
       if (label) label.textContent = paused ? 'Animationen abspielen' : 'Animationen pausieren';
       try { localStorage.setItem('dk-motion', paused ? 'paused' : 'running'); } catch (e) { /* ignorieren */ }
-      // Die Schreibmaschine läuft in einer eigenen Timer-Schleife und
-      // fragt diesen Zustand bei jedem Tick ab.
+      // Die Flächen halten ihre Schleife an diesem Ereignis an und
+      // zeichnen dann ein Standbild.
       document.dispatchEvent(new CustomEvent('dk:motionchange', { detail: { paused } }));
     }
 

@@ -291,14 +291,94 @@ const orbit: Field = (x, y, w, h, t) => {
   return 0.03 + 0.92 * ring * (0.2 + 0.9 * punkte);
 };
 
+/**
+ * Drahtgitter-Globus. Meridiane und Breitenkreise auf einer Kugel; die
+ * Länge wandert mit der Zeit, also dreht sich das Gitter. Was nach hinten
+ * zeigt, wird dunkler — sonst läge das Gitter flach auf der Scheibe.
+ */
+const lattice: Field = (x, y, w, h, t) => {
+  const r = Math.min(w, h) * 0.44;
+  const u = (x - w * 0.5) / r;
+  const v = (y - h * 0.5) / r;
+  const q = u * u + v * v;
+  if (q > 1) return 0.014;
+  const z = Math.sqrt(1 - q);
+  const laenge = Math.atan2(u, z) / (Math.PI * 2) + t * 0.00007;
+  const breite = Math.asin(Math.max(-1, Math.min(1, v))) / Math.PI;
+  const gitter = Math.max(linie(laenge * 16, 5), linie(breite * 12, 5));
+  return 0.02 + 0.92 * gitter * (0.25 + 0.75 * Math.sqrt(z));
+};
+
+/**
+ * Atmender Schwarm. Punkte auf einem polaren Gitter, das mit Rauschen
+ * verzogen ist, damit es nicht als Gitter zu erkennen ist. Die ganze
+ * Wolke weitet sich und zieht sich wieder zusammen — 28 Sekunden hin,
+ * 28 zurück — und dreht dabei sehr langsam.
+ *
+ * Bewegt werden nicht die Punkte, sondern die Abfrage: Der Abstand wird
+ * vor der Prüfung durch den Atemfaktor geteilt. Damit kostet der Schwarm
+ * pro Bildpunkt dasselbe wie ein Verlauf, statt eine Partikelliste je
+ * Frame zu durchlaufen.
+ *
+ * Vorgänger an dieser Stelle war eine Doppelspirale. Sie las sich im
+ * 1-Bit-Raster nicht: Ein Strang wird dort waagerecht, wo die Windung
+ * umkehrt, und genau diese Kehren tragen im Raster am meisten Fläche —
+ * das Bild bestand aus liegenden Strichen statt aus einer Spirale.
+ */
+const swarm: Field = (x, y, w, h, t) => {
+  const aussen = Math.min(w, h) * 0.46;
+  const dx = (x - w * 0.5) / aussen;
+  const dy = (y - h * 0.5) / aussen;
+  const r = Math.sqrt(dx * dx + dy * dy);
+  if (r > 1.06) return 0.014;
+
+  const atem = 0.58 + 0.42 * (0.5 + 0.5 * Math.sin(t * 0.00022));
+  const r1 = r / atem;
+  if (r1 > 1) return 0.014;
+
+  const winkel = Math.atan2(dy, dx) / (Math.PI * 2) + t * 0.00004;
+  // Weichere Schwellen als beim ersten Versuch: Mit 8 und 6 blieben nur
+  // vereinzelte Pixel übrig, und neben `brain` oder `lattice` sah die
+  // Fläche leer aus.
+  const ringe = linie(r1 * 8.5 + 0.35 * valueNoise(winkel * 22, r1 * 6, 5), 5);
+  const speichen = linie(winkel * 52 + 0.6 * valueNoise(r1 * 9, winkel * 16, 17), 4);
+  const kern = 0.5 * Math.pow(Math.max(0, 1 - r1 * 3.4), 3);
+  return 0.014 + Math.max(kern, 0.94 * ringe * speichen * Math.pow(1 - r1, 0.5));
+};
+
+/**
+ * Strahlenkranz um einen atmenden Kern. Die Strahlen drehen sehr langsam,
+ * der Kern schwillt in einem anderen Takt an und ab.
+ */
+const nova: Field = (x, y, w, h, t) => {
+  const r0 = Math.min(w, h) * 0.46;
+  const dx = (x - w * 0.5) / r0;
+  const dy = (y - h * 0.5) / r0;
+  const r = Math.sqrt(dx * dx + dy * dy);
+  if (r > 1.04) return 0.014;
+  const winkel = Math.atan2(dy, dx) / (Math.PI * 2);
+  const strahlen = linie(winkel * 18 + t * 0.00006, 3);
+  const kern = Math.pow(Math.max(0, 1 - r * 2.8), 2);
+  const atem = 0.74 + 0.26 * Math.sin(t * 0.00027);
+  const abfall = Math.pow(Math.max(0, 1 - r), 1.4);
+  return 0.014 + 0.92 * Math.max(kern, strahlen * abfall * 0.85) * atem;
+};
+
 /** Verlauf über die Diagonale. Bewusst ohne Zeitanteil: bleibt statisch. */
 const fade: Field = (x, y, w, h) =>
   0.04 + 0.66 * (0.62 * (x / (w - 1 || 1)) + 0.38 * (1 - y / (h - 1 || 1)));
 
-export const FIELDS = { brain, drift, dunes, fade, mesh, orbit, pulse, rain, scan, weave } as const;
+export const FIELDS = { brain, drift, dunes, fade, lattice, mesh, nova, orbit, pulse, rain, scan, swarm, weave } as const;
 
 /** Erlaubte Werte für `<Dither field="…" />`. */
 export type FieldName = keyof typeof FIELDS;
+
+/**
+ * Die Formen, die als große Kugel im Kopf der Startseite funktionieren.
+ * Bandfelder wie `rain` oder `dunes` gehören nicht dazu: Sie sind auf ein
+ * breites, flaches Format gerechnet und ergeben im Quadrat kein Bild.
+ */
+export const HERO_FIELDS: readonly FieldName[] = ['brain', 'lattice', 'nova', 'orbit', 'swarm'];
 
 /** Felder ohne Zeitanteil — für sie lohnt keine Animationsschleife. */
 export const STATIC_FIELDS: readonly FieldName[] = ['fade', 'mesh'];
