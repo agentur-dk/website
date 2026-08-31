@@ -443,9 +443,42 @@ foreach ($schluessel as $nr => $token) {
     }
 }
 
+/**
+ * Fehlerprotokoll.
+ *
+ * `error_log()` landet auf diesem Webspace in einem Protokoll, an das
+ * man ohne Shell nicht herankommt — ein abgelehnter Versand war damit
+ * praktisch unsichtbar. Deshalb zusätzlich eine eigene Datei.
+ *
+ * Sie liegt in `_intern/daten/`, und dieser Ordner ist serverseitig für
+ * Anfragen aus dem Web gesperrt. Sie wächst nicht unbegrenzt: Ab 20 kB
+ * wird die vordere Hälfte abgeschnitten. Der Antworttext wird auf 600
+ * Zeichen gekürzt — für die Fehlermeldung von MailerSend reicht das,
+ * und die Anfragedaten selbst stehen ohnehin nicht darin.
+ */
+function protokolliere(string $verzeichnis, string $zeile): void
+{
+    if (!is_dir($verzeichnis) || !is_writable($verzeichnis)) {
+        return;
+    }
+    $datei = $verzeichnis . '/fehler.log';
+    if (is_file($datei) && filesize($datei) > 20000) {
+        $inhalt = (string) file_get_contents($datei);
+        @file_put_contents($datei, substr($inhalt, (int) (strlen($inhalt) / 2)));
+    }
+    @file_put_contents(
+        $datei,
+        gmdate('Y-m-d H:i:s') . ' UTC  ' . $zeile . "\n",
+        FILE_APPEND
+    );
+}
+
 // MailerSend antwortet mit 202 Accepted.
 if ($status < 200 || $status >= 300) {
-    error_log('MailerSend ' . $status . ': ' . (is_string($antwort) ? $antwort : ''));
+    $meldung = 'MailerSend HTTP ' . $status . ' — '
+             . mb_substr(is_string($antwort) ? $antwort : '(keine Antwort)', 0, 600);
+    error_log($meldung);
+    protokolliere($verzeichnis, $meldung);
     antworte(502, ['ok' => false, 'fehler' => 'versand']);
 }
 
