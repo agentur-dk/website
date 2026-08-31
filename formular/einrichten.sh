@@ -16,7 +16,11 @@ ziel="$verzeichnis/config.php"
 if [ -e "$ziel" ]; then
   printf 'Es gibt bereits %s.\n' "$ziel"
   read -r -p 'Überschreiben? [j/N] ' antwort
-  [ "${antwort,,}" = "j" ] || { echo 'Abgebrochen.'; exit 0; }
+  # Kein ${antwort,,}: Das gibt es erst ab bash 4, macOS liefert 3.2 aus.
+  case "$antwort" in
+    j|J|ja|Ja|JA) ;;
+    *) echo 'Abgebrochen.'; exit 0 ;;
+  esac
 fi
 
 frage() {  # $1 = Text, $2 = Vorgabe
