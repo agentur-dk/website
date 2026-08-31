@@ -7,6 +7,16 @@
    generiert — so können sie nicht mehr auseinanderlaufen.
    ============================================================ */
 
+/**
+ * Adresse des Formular-Endpunkts.
+ *
+ * Nicht dk-dk.de: Die Website liegt auf GitHub Pages und liefert nur
+ * Dateien aus. Der Endpunkt läuft getrennt davon auf dem goneo-Webspace
+ * unter einer eigenen Unterdomain, deren A-Record dort bleibt. Der Code
+ * dazu liegt in formular/, die Einrichtung in formular/README.md.
+ */
+export const FORM_ENDPOINT = 'https://formular.dk-dk.de/send.php';
+
 /** Absolute Basis-URL ohne Slash am Ende — kommt aus astro.config.mjs. */
 export const SITE_URL = (import.meta.env.SITE ?? 'https://dk-dk.de').replace(/\/$/, '');
 

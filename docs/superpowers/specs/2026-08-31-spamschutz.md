@@ -169,9 +169,10 @@ Vorabanfrage — das ist die kleinere Änderung im Formular.
 
 **b) Serverlose Funktion.**
 Cloudflare Workers oder ein vergleichbarer Dienst, kostenloses Kontingent
-reicht für ein Kontaktformular um Größenordnungen. Ebenfalls eigener
-Code, ebenfalls ALTCHA-fähig. Nachteil: ein weiterer Anbieter im Spiel,
-und der Versand der Mail braucht dort wieder einen SMTP-Dienst.
+reicht für ein Kontaktformular um Größenordnungen. Derselbe Ablauf, nur in
+JavaScript statt PHP — auch dort ist der Versand ein Aufruf der
+MailerSend-API mit dem Schlüssel im Kopf. Nachteil: ein weiterer Anbieter
+im Spiel und ein zweites System, das gepflegt werden will.
 
 **c) Formulardienst.**
 Ausgeschlossen — die Vorgabe im Projekt lautet ausdrücklich „kein

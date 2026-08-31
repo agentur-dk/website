@@ -1,0 +1,13 @@
+# Zugangsdaten und Laufzeitdaten sind nicht über das Web erreichbar.
+<FilesMatch "^(config\.php|config\.example\.php)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Verzeichnis der Rate-Limit-Zähler komplett sperren
+    RewriteRule ^\.zaehler/ - [F,L]
+</IfModule>
+
+# Kein Verzeichnislisting
+Options -Indexes

@@ -21,11 +21,8 @@
  */
 import Icon from './ui/Icon.astro';
 
-/**
- * Formular-Endpunkt – wird mit dem PHP-Skript auf dk-dk.de finalisiert.
- * Kein Formspree! Eigener PHP-Mailer (PHPMailer/SMTP).
- */
-const FORM_ENDPOINT = 'https://dk-dk.de/formular/send.php';
+import { FORM_ENDPOINT } from '../config/site.config';
+
 const base = import.meta.env.BASE_URL;
 
 interface Props {
@@ -70,6 +67,11 @@ const schritte = [
       <input type="hidden" name="name" id="lf-name-combined" value="" />
       <!-- Spam: Zeitstempel (wird per JS gesetzt) -->
       <input type="hidden" name="form_started" id="lf-started" value="" />
+      <!-- Signierter Zeitstempel vom Server. Er wird erst geholt, wenn
+           jemand den letzten Schritt erreicht — ein Aufruf je Anfrage
+           statt einer je Seitenaufruf. -->
+      <input type="hidden" name="ts_server" id="lf-ts" value="" />
+      <input type="hidden" name="ts_sig" id="lf-ts-sig" value="" />
       <!-- Zwei Honigtöpfe, absichtlich unterschiedlich versteckt: `hp_email`
            per `display: none`, `_gotcha` außerhalb des Bildschirms. Manche
            Bots erkennen `display: none` und lassen solche Felder aus,
@@ -542,9 +544,40 @@ const schritte = [
       });
     }
 
+    /**
+     * Signierten Zeitstempel beim Endpunkt abholen.
+     *
+     * Im Browser lässt sich jeder Zeitwert setzen; die Signatur entsteht
+     * mit einem Geheimnis, das nur auf dem Server liegt. Schlägt der Abruf
+     * fehl — Endpunkt nicht erreichbar, Netz weg —, bleibt es beim
+     * unsignierten Wert aus dem Formular. Lieber eine schwächere Schranke
+     * als ein Formular, das sich nicht absenden lässt.
+     */
+    let zeitstempelGeholt = false;
+    async function holeZeitstempel(): Promise<void> {
+      if (zeitstempelGeholt) return;
+      zeitstempelGeholt = true;
+      try {
+        const antwort = await fetch(`${form.dataset.endpoint}?challenge=1`, { method: 'GET' });
+        if (!antwort.ok) return;
+        const daten = (await antwort.json()) as { ts?: number; sig?: string };
+        const tsFeld = feld<HTMLInputElement>('lf-ts');
+        const sigFeld = feld<HTMLInputElement>('lf-ts-sig');
+        if (tsFeld && sigFeld && daten.ts && daten.sig) {
+          tsFeld.value = String(daten.ts);
+          sigFeld.value = daten.sig;
+        }
+      } catch (e) {
+        /* Endpunkt nicht erreichbar — ohne Signatur weiter. */
+      }
+    }
+
     for (const btn of form.querySelectorAll<HTMLButtonElement>('[data-next]')) {
       btn.addEventListener('click', () => {
-        if (pruefe(aktuell)) zeige(Number(btn.dataset.next));
+        if (!pruefe(aktuell)) return;
+        const ziel = Number(btn.dataset.next);
+        if (ziel === ANZAHL) void holeZeitstempel();
+        zeige(ziel);
       });
     }
     for (const btn of form.querySelectorAll<HTMLButtonElement>('[data-prev]')) {
