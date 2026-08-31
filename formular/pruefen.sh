@@ -2,18 +2,34 @@
 #
 # Prüft einen aufgesetzten Endpunkt von außen.
 #
-#   bash formular/pruefen.sh https://formular.dk-dk.de/send.php
+#   bash formular/pruefen.sh https://vorschau.dk-dk.de/formular/send.php
+#   bash formular/pruefen.sh <adresse> [herkunft] [--versand]
 #
-# Verschickt keine Mail: Der letzte Test hört bei der Zeitschranke auf.
+# Ohne --versand geht keine Mail raus. Mit --versand wird die
+# Zeitschranke abgewartet und wirklich zugestellt — das ist der einzige
+# Test, der über den Versand etwas aussagt.
+#
 # Der Token wird nie ausgegeben.
 #
 set -uo pipefail
 
-endpunkt="${1:-}"
-herkunft="${2:-https://dk-dk.de}"
+# Schalter dürfen an jeder Stelle stehen. Vorher wurde `--versand` als
+# zweites Argument gelesen — dort steht aber die Herkunft, und der
+# Endpunkt wies dann folgerichtig alles mit 403 ab.
+endpunkt=""
+herkunft=""
+versand=0
+for arg in "$@"; do
+  case "$arg" in
+    --versand) versand=1 ;;
+    -*)        echo "Unbekannter Schalter: $arg" >&2; exit 1 ;;
+    *)         if [ -z "$endpunkt" ]; then endpunkt="$arg"; else herkunft="$arg"; fi ;;
+  esac
+done
+herkunft="${herkunft:-https://dk-dk.de}"
 
 if [ -z "$endpunkt" ]; then
-  echo "Aufruf: bash formular/pruefen.sh <adresse> [herkunft]" >&2
+  echo "Aufruf: bash formular/pruefen.sh <adresse> [herkunft] [--versand]" >&2
   exit 1
 fi
 
@@ -69,7 +85,7 @@ pruefe 'Honigtopf endet im Scheinerfolg' 200 "$sofort"
 # Mail auslöst. Deshalb nur auf ausdrücklichen Wunsch. Die Wartezeit ist
 # nicht Bequemlichkeit, sondern Bedingung: Ohne sie greift die
 # Drei-Sekunden-Schranke und die Anfrage wird still verworfen.
-if [ "${2:-}" = "--versand" ]; then
+if [ "$versand" = "1" ]; then
   echo
   echo "Echter Versandtest — das löst eine Mail aus."
   paar=$(curl -s --max-time 15 -H "Origin: $herkunft" "$endpunkt?challenge=1")
