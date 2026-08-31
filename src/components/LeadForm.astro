@@ -179,7 +179,8 @@ const schritte = [
               <span class="sr-only">(Pflichtfeld)</span>
             </label>
             <input type="text" id="lf-vorname" name="vorname" class="lf-control"
-              autocomplete="given-name" required aria-required="true" aria-describedby="lf-vorname-error" />
+              autocomplete="given-name" autocapitalize="words" enterkeyhint="next"
+              required aria-required="true" aria-describedby="lf-vorname-error" />
             <span id="lf-vorname-error" class="lf-error" role="alert" hidden>
               Bitte geben Sie Ihren Vornamen ein.
             </span>
@@ -191,7 +192,8 @@ const schritte = [
               <span class="sr-only">(Pflichtfeld)</span>
             </label>
             <input type="text" id="lf-nachname" name="nachname" class="lf-control"
-              autocomplete="family-name" required aria-required="true" aria-describedby="lf-nachname-error" />
+              autocomplete="family-name" autocapitalize="words" enterkeyhint="next"
+              required aria-required="true" aria-describedby="lf-nachname-error" />
             <span id="lf-nachname-error" class="lf-error" role="alert" hidden>
               Bitte geben Sie Ihren Nachnamen ein.
             </span>
@@ -204,8 +206,11 @@ const schritte = [
             <span aria-hidden="true">*</span>
             <span class="sr-only">(Pflichtfeld)</span>
           </label>
+          <!-- autocapitalize und spellcheck aus: iOS schreibt sonst den
+               ersten Buchstaben der Adresse groß und unterringelt sie. -->
           <input type="email" id="lf-email" name="email" class="lf-control"
-            autocomplete="email" required aria-required="true" aria-describedby="lf-email-error" />
+            autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next"
+            required aria-required="true" aria-describedby="lf-email-error" />
           <span id="lf-email-error" class="lf-error" role="alert" hidden>
             Bitte geben Sie eine gültige E-Mail-Adresse ein.
           </span>
@@ -217,7 +222,8 @@ const schritte = [
               Firma
               <span class="lf-optional">(optional)</span>
             </label>
-            <input type="text" id="lf-firma" name="firma" class="lf-control" autocomplete="organization" />
+            <input type="text" id="lf-firma" name="firma" class="lf-control"
+              autocomplete="organization" autocapitalize="words" enterkeyhint="next" />
           </div>
           <div class="lf-group">
             <label for="lf-website" class="lf-label">
@@ -225,7 +231,9 @@ const schritte = [
               <span class="lf-optional">(optional)</span>
             </label>
             <input type="url" id="lf-website" name="website_url" class="lf-control"
-              placeholder="https://ihre-domain.de" autocomplete="url" aria-describedby="lf-website-error" />
+              placeholder="https://ihre-domain.de" autocomplete="url"
+              autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send"
+              aria-describedby="lf-website-error" />
             <span id="lf-website-error" class="lf-error" role="alert" hidden>
               Bitte geben Sie eine gültige Adresse ein (z.&nbsp;B. https://beispiel.de).
             </span>
@@ -283,6 +291,11 @@ const schritte = [
 
     const langsam = window.matchMedia('(prefers-reduced-motion: reduce)');
     let aktuell = 1;
+
+    /** Etwas in den Blick holen; der klebende Header bleibt frei. */
+    function hinScrollen(el: HTMLElement): void {
+      el.scrollIntoView({ block: 'start', behavior: langsam.matches ? 'auto' : 'smooth' });
+    }
 
     function feld<T extends HTMLElement>(id: string): T | null {
       return document.getElementById(id) as T | null;
@@ -393,6 +406,19 @@ const schritte = [
       if (titel && ansagen) {
         titel.setAttribute('tabindex', '-1');
         titel.focus({ preventScroll: true });
+
+        // Und dann sichtbar machen. Ohne das steht der Kopf des neuen
+        // Schritts auf dem Telefon außerhalb des Bildes: Der Knopf
+        // „Weiter" sitzt am Ende eines langen Schritts, der neue Schritt
+        // beginnt weit darüber. Gemessen bei 390 × 664: Der Zähler lag
+        // nach dem Wechsel bei y = −263, die Fortschrittsleiste bei
+        // −347. Man landete mitten im nächsten Schritt und sah nicht,
+        // dass sich überhaupt etwas geändert hat.
+        //
+        // Angesteuert wird die Leiste, nicht der Titel: Sie ist die
+        // Antwort auf „wo bin ich". `scroll-padding-top` am <html>
+        // hält den klebenden Header frei.
+        hinScrollen(fortschritt ?? titel);
       }
     }
 
@@ -423,6 +449,20 @@ const schritte = [
       // nicht erst eine Beanstandung wegklicken.
       btn.addEventListener('click', () => zeige(Number(btn.dataset.prev)));
     }
+
+    // Enter in einem Eingabefeld löst sonst das Absenden aus, weil der
+    // einzige Submit-Knopf in Schritt 3 sitzt — auf dem Telefon heißt die
+    // Taste dort oft „Los". In den Schritten davor führt sie jetzt weiter.
+    // In einem mehrzeiligen Feld bleibt Enter ein Zeilenumbruch.
+    form.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const ziel = e.target as HTMLElement | null;
+      if (ziel instanceof HTMLTextAreaElement) return;
+      if (ziel instanceof HTMLButtonElement) return;
+      if (aktuell >= ANZAHL) return;
+      e.preventDefault();
+      if (pruefe(aktuell)) zeige(aktuell + 1);
+    });
 
     zeige(1, false);
 
@@ -495,12 +535,20 @@ const schritte = [
           const dankeTitel = danke.querySelector<HTMLElement>('.lf-danke__title');
           dankeTitel?.setAttribute('tabindex', '-1');
           dankeTitel?.focus({ preventScroll: true });
+          hinScrollen(danke);
         }
       } catch {
         if (statusEl) {
           statusEl.textContent =
             'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an mail@dk-dk.de.';
           statusEl.className = 'lf-status lf-status--error';
+          // Sonst steht die Meldung am Kopf des Formulars, während der
+          // Nutzer unten auf dem Absenden-Knopf steht. Auf dem Telefon
+          // gemessen: 418 px oberhalb des Bildrands — für ihn ist einfach
+          // nichts passiert.
+          hinScrollen(statusEl);
+          statusEl.setAttribute('tabindex', '-1');
+          statusEl.focus({ preventScroll: true });
         }
       } finally {
         if (submitBtn) {
@@ -550,6 +598,7 @@ const schritte = [
   }
   .lf-status--error {
     position: static;
+    scroll-margin-top: 6rem;
     width: auto;
     height: auto;
     margin: 0 0 1.5rem;
@@ -916,6 +965,7 @@ const schritte = [
 
   /* ---- Bestätigung ------------------------------------------------ */
   .lf-danke {
+    scroll-margin-top: 6rem;
     padding: 2.5rem 2rem;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
@@ -955,16 +1005,31 @@ const schritte = [
   }
 
   @media (max-width: 560px) {
-    /* Auf schmalen Schirmen bleibt von den Schrittnamen nur die Ziffer —
-       drei Wörter nebeneinander werden dort zu drei Auslassungspunkten. */
+    /* Enger stellen statt weglassen: Bei 390 px bleiben je Spalte rund
+       90 px für den Text, „Nachricht" braucht bei 13 px etwa 62 px. Die
+       Namen sind die halbe Auskunft der Leiste. */
+    .lf-progress__item {
+      gap: 0.5rem;
+    }
+    .lf-progress__marke {
+      width: 1.5rem;
+      height: 1.5rem;
+      font-size: 0.6875rem;
+    }
+    .lf-progress__name {
+      font-size: 0.8125rem;
+    }
+    .lf-step__nav .lf-btn {
+      flex: 1 1 auto;
+    }
+  }
+  @media (max-width: 359px) {
+    /* Darunter reicht der Platz wirklich nicht mehr. */
     .lf-progress__name {
       display: none;
     }
     .lf-progress__list {
       justify-items: center;
-    }
-    .lf-step__nav .lf-btn {
-      flex: 1 1 auto;
     }
   }
 
