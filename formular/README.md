@@ -33,8 +33,20 @@ angelegt und kein DNS-Eintrag geändert** werden.
 
    Von Hand geht auch: `config.example.php` kopieren und ausfüllen.
 
-2. **Drei Dateien hochladen** nach `vorschau.dk-dk.de/formular/`:
-   `send.php`, `.htaccess`, `config.php`.
+2. **Hochladen.**
+
+   - `send.php` und `.htaccess` nach `vorschau.dk-dk.de/formular/`
+   - `config.php` nach `vorschau.dk-dk.de/_intern/`, dort umbenannt in
+     `formular-config.php`
+
+   `_intern` ist auf dem Server gesperrt — geprüft: 403 auf alles, auch
+   auf `config.php` und `.env`. Der Token liegt dort sicherer als neben
+   dem Skript, weil die Sperre nicht davon abhängt, dass eine `.htaccess`
+   gelesen wird. PHP kommt trotzdem heran: Die Sperre gilt für Anfragen
+   über das Web, nicht für den Dateizugriff.
+
+   Ohne `_intern` geht es auch — dann `config.php` neben `send.php`
+   legen, dafür ist die `.htaccess` da.
 
 3. **Prüfen.**
 
@@ -50,9 +62,17 @@ dorthin.
 
 ## Ein neues Projekt anschließen
 
-Dessen Adresse in `config.php` bei `erlaubte_herkunft` ergänzen, Datei
-hochladen. Das war es. Welches Projekt gesendet hat, leitet das Skript
-aus `page_url` ab und schreibt es in den Betreff:
+**Unter `vorschau.dk-dk.de`: gar nichts.** Der Browser schickt als
+`Origin` nur Schema und Host, nie den Pfad — alle Projekte dort teilen
+sich denselben Origin, und der eine Eintrag deckt sie alle ab. Ein neues
+Projekt sendet einfach.
+
+Nur ein Projekt auf einer anderen Domain braucht eine Zeile in
+`erlaubte_herkunft`.
+
+Wie ein Projekt anzubinden ist, steht in
+[ANSCHLIESSEN.md](ANSCHLIESSEN.md). Welches Projekt gesendet hat, leitet
+das Skript aus `page_url` ab und schreibt es in den Betreff:
 
 ```
 Anfrage: dk-dk.de — SEO & GEO

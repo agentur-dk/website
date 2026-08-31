@@ -38,12 +38,38 @@
 
 declare(strict_types=1);
 
-$konfigPfad = __DIR__ . '/config.php';
-if (!is_file($konfigPfad)) {
+/**
+ * Wo liegt die Konfiguration?
+ *
+ * Bevorzugt in `_intern/` — der Ordner ist auf dem Server per
+ * Serverkonfiguration gesperrt (geprüft: 403 auf alles, auch auf
+ * `config.php` und `.env`). Das ist sicherer als eine `.htaccess` neben
+ * dem Skript, weil es nicht davon abhängt, dass diese gelesen wird.
+ *
+ * PHP kommt trotzdem heran: Die Sperre gilt für Anfragen über das Web,
+ * nicht für den Dateizugriff.
+ *
+ * Fällt zurück auf die Datei neben dem Skript, damit die Einrichtung auch
+ * ohne `_intern` funktioniert.
+ */
+$kandidaten = [
+    getenv('DK_FORMULAR_CONFIG') ?: null,
+    dirname(__DIR__) . '/_intern/formular-config.php',
+    dirname(__DIR__) . '/_intern/config.php',
+    __DIR__ . '/config.php',
+];
+
+$k = null;
+foreach ($kandidaten as $pfad) {
+    if ($pfad !== null && is_file($pfad)) {
+        $k = require $pfad;
+        break;
+    }
+}
+if (!is_array($k)) {
     http_response_code(500);
     exit('Keine Konfiguration.');
 }
-$k = require $konfigPfad;
 
 /* ---------------------------------------------------------------- *
  *  Herkunft und Vorabanfrage

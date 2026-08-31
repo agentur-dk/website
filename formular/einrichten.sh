@@ -81,9 +81,13 @@ echo
 echo "Geschrieben: $ziel (nur für dich lesbar)"
 echo
 echo 'Nächste Schritte:'
-echo '  1. send.php, .htaccess und config.php hochladen nach'
-echo '     vorschau.dk-dk.de/formular/'
-echo '  2. Prüfen mit:'
+echo '  1. send.php und .htaccess hochladen nach  vorschau.dk-dk.de/formular/'
+echo '  2. config.php hochladen nach              vorschau.dk-dk.de/_intern/'
+echo '     und dort in  formular-config.php  umbenennen.'
+echo '     (Der Ordner _intern ist vom Web aus gesperrt — dort liegt der'
+echo '      Token sicherer als neben dem Skript. Geht auch ohne: dann'
+echo '      config.php einfach neben send.php legen.)'
+echo '  3. Prüfen mit:'
 echo '     bash formular/pruefen.sh https://vorschau.dk-dk.de/formular/send.php'
 echo
 git -C "$verzeichnis/.." check-ignore -q "$ziel" \
