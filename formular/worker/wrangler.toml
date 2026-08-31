@@ -20,14 +20,20 @@ AN_NAME    = "agentur dk"
 # Anfragen pro IP und Stunde.
 LIMIT_PRO_STUNDE = "5"
 
-# Zähler des Rate Limits. Anlegen mit:
-#   npx wrangler kv namespace create RATE_LIMIT
-# und die ausgegebene id hier eintragen.
-[[kv_namespaces]]
-binding = "RATE_LIMIT"
-id = "HIER_DIE_ID_AUS_WRANGLER_EINTRAGEN"
-
-# MAILERSEND_TOKEN und SIGNATUR_GEHEIMNIS stehen NICHT in dieser Datei.
-# Sie werden als Secrets gesetzt und liegen verschlüsselt bei Cloudflare:
+# Der Token steht NICHT in dieser Datei. Er wird als Secret gesetzt und
+# liegt verschlüsselt bei Cloudflare — das ist der einzige Schritt, bei
+# dem etwas Geheimes die Hand wechselt:
+#
 #   npx wrangler secret put MAILERSEND_TOKEN
-#   npx wrangler secret put SIGNATUR_GEHEIMNIS
+#
+# Optional: Rate Limit pro IP. Ohne diesen Block greifen die übrigen fünf
+# Stufen weiterhin, es entfällt nur die sechste. Wer ihn will:
+#
+#   npx wrangler kv namespace create RATE_LIMIT
+#
+# gibt eine id aus; dann die drei Zeilen einkommentieren und die id
+# eintragen.
+#
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "HIER_DIE_ID_EINTRAGEN"

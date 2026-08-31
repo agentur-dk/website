@@ -8,14 +8,18 @@ Laufzeiten. Das Formular auf der Website merkt keinen Unterschied.
 | **`worker/`** — im Einsatz | Cloudflare, Adresse von dort | nichts: kein DNS, keine Unterdomain, kein Zertifikat |
 | `send.php` — Reserve | klassischer Webspace | eine Adresse, die dorthin zeigt |
 
-**Der API-Key gehört bei der Cloudflare-Variante in keine Datei**, sondern
-in ein Secret:
+**Drei Befehle, dann läuft es:**
 
 ```
-cd formular/worker && npx wrangler secret put MAILERSEND_TOKEN
+cd formular/worker
+npx wrangler login
+npx wrangler secret put MAILERSEND_TOKEN   ← hier kommt der Key hin
+npx wrangler deploy
 ```
 
-Alles Weitere in [worker/README.md](worker/README.md).
+Der Key landet in keiner Datei, sondern verschlüsselt bei Cloudflare.
+Keine Datenbank, kein zweites Geheimnis. Einzelheiten in
+[worker/README.md](worker/README.md).
 
 ---
 

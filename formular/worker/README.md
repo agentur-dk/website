@@ -16,59 +16,49 @@ Adresse `https://dk-formular.<konto>.workers.dev/` stellt Cloudflare.
 
 ---
 
-## Wo der API-Key hingehört
-
-**In keine Datei.** Er wird als Secret gesetzt und liegt verschlüsselt
-bei Cloudflare:
-
-```
-cd formular/worker
-npx wrangler secret put MAILERSEND_TOKEN
-```
-
-Der Befehl fragt den Wert danach verdeckt ab. Er landet nicht in der
-`wrangler.toml`, nicht im Repository und nicht in der Shell-History.
-
-Dasselbe für das Geheimnis, mit dem die Zeitstempel signiert werden:
-
-```
-npx wrangler secret put SIGNATUR_GEHEIMNIS
-```
-
-Als Wert irgendetwas Langes und Zufälliges, etwa aus
-`openssl rand -hex 32`. Kennen muss diesen Wert niemand.
-
-Für Läufe auf dem eigenen Rechner (`npm run dev`) gibt es stattdessen
-`.dev.vars` — Vorlage liegt als `.dev.vars.example` daneben, die Datei
-selbst steht in der `.gitignore`.
-
----
-
-## Einrichten, der Reihe nach
+## Einrichten — drei Befehle
 
 ```
 cd formular/worker
 
-# 1. Anmelden (öffnet den Browser)
-npx wrangler login
+npx wrangler login                        # öffnet den Browser
+npx wrangler secret put MAILERSEND_TOKEN  # fragt den Token verdeckt ab
+npx wrangler deploy                       # gibt die fertige Adresse aus
+```
 
-# 2. Zähler für das Rate Limit anlegen
+Das war es. `wrangler deploy` nennt am Ende die Adresse, etwa
+`https://dk-formular.dein-konto.workers.dev` — die kommt in
+`src/config/site.config.ts` bei `FORM_ENDPOINT`, dann Website neu bauen.
+
+### Wo der API-Key liegt
+
+**In keiner Datei.** `wrangler secret put` legt ihn verschlüsselt bei
+Cloudflare ab: nicht in der `wrangler.toml`, nicht im Repository, nicht
+in der Shell-History.
+
+Für Läufe auf dem eigenen Rechner (`npm run dev`) gibt es `.dev.vars` —
+Vorlage daneben als `.dev.vars.example`, die Datei selbst steht in der
+`.gitignore`.
+
+### Was nicht eingerichtet werden muss
+
+- **Kein zweites Geheimnis.** Der Schlüssel für die Zeitstempel-Signatur
+  wird aus dem Token abgeleitet. Beide lägen ohnehin im selben
+  Secret-Speicher, also gewinnt ein eigener Wert nichts —
+  außer einem Einrichtungsschritt. Wer trotzdem einen will, setzt
+  `SIGNATUR_GEHEIMNIS`.
+- **Keine Datenbank.** Das Rate Limit ist optional. Ohne gebundenen
+  KV-Namensraum entfällt es, die übrigen fünf Stufen greifen weiter.
+
+### Optional: Rate Limit nachrüsten
+
+```
 npx wrangler kv namespace create RATE_LIMIT
-#    → gibt eine id aus. Diese id in wrangler.toml eintragen,
-#      dort wo HIER_DIE_ID_AUS_WRANGLER_EINTRAGEN steht.
-
-# 3. Die beiden Secrets setzen (siehe oben)
-npx wrangler secret put MAILERSEND_TOKEN
-npx wrangler secret put SIGNATUR_GEHEIMNIS
-
-# 4. Veröffentlichen
-npx wrangler deploy
-#    → gibt die Adresse aus, etwa
-#      https://dk-formular.dein-konto.workers.dev
 ```
 
-**Danach**: Diese Adresse in `src/config/site.config.ts` bei
-`FORM_ENDPOINT` eintragen, Website neu bauen, fertig.
+gibt eine id aus; die drei auskommentierten Zeilen in `wrangler.toml`
+einkommentieren, id eintragen, neu deployen. Fünf Anfragen pro IP und
+Stunde, gespeichert wird nur ein Hash und nur für diese Stunde.
 
 ## Prüfen
 
@@ -86,8 +76,9 @@ gewöhnliche `fetch`-Funktion ist und Node seit Version 18 `Request` und
 npm test
 ```
 
-Zwölf Tests: Herkunft, Vorabanfrage, Signatur, gültige Anfrage, jede
-einzelne Abwehrstufe und das Rate Limit.
+Vierzehn Tests: Herkunft, Vorabanfrage, Signatur, gültige Anfrage, jede
+einzelne Abwehrstufe, das Rate Limit — und die beiden Fälle ohne
+eigenes Geheimnis und ohne gebundenen Zähler.
 
 ## Was geprüft wird
 
@@ -99,10 +90,11 @@ Der Reihe nach:
    3 Sekunden und höchstens 2 Stunden alt. Fehlen beide Zeitfelder, wird
    verworfen: Ein echter Browser setzt `form_started` beim Laden.
 4. **Bedienungsnachweis** — ohne `interaktion=1` kein Versand
-5. **Rate Limit** — fünf pro IP und Stunde. Gespeichert wird nur ein Hash
-   der IP, und KV räumt ihn nach einer Stunde selbst weg. Hochgezählt
-   wird erst kurz vor dem Versand, damit ein Tippfehler in der Adresse
-   keinen Versuch kostet.
+5. **Rate Limit** *(optional)* — fünf pro IP und Stunde, sofern ein
+   KV-Namensraum gebunden ist. Gespeichert wird nur ein Hash der IP, und
+   KV räumt ihn nach einer Stunde selbst weg. Hochgezählt wird erst kurz
+   vor dem Versand, damit ein Tippfehler in der Adresse keinen Versuch
+   kostet.
 6. **Inhalt** — Links, fremde Schriftsysteme und BBCode geben Punkte, ab
    drei wird verworfen
 

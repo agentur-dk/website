@@ -140,3 +140,44 @@ test('Rate Limit greift ab dem sechsten Versand', async () => {
   assert.deepEqual(codes, [200, 200, 200, 200, 200, 429]);
   assert.equal(gesendet.length, 5);
 });
+
+test('läuft ohne eigenes Signatur-Geheimnis', async () => {
+  // Der Schlüssel wird dann aus dem Token abgeleitet. Der Zeitstempel vom
+  // GET-Weg muss trotzdem zum POST passen — sonst wäre die Ableitung
+  // zwischen den beiden Aufrufen nicht stabil.
+  const { env, gesendet } = umgebung();
+  delete env.SIGNATUR_GEHEIMNIS;
+
+  const g = await worker.fetch(new Request('https://w.example/?challenge=1', {
+    headers: { Origin: HERKUNFT },
+  }), env);
+  const { ts, sig } = await g.json();
+
+  const zurueck = fetchAbfangen(gesendet);
+  const r = await worker.fetch(new Request('https://w.example/', {
+    method: 'POST',
+    headers: { Origin: HERKUNFT, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      vorname: 'Maria', nachname: 'Musterfrau', email: 'maria@beispiel.de',
+      message: 'Ohne eigenes Signatur-Geheimnis.', interaktion: '1',
+      ts_server: String(ts - 10), ts_sig: sig,
+    }),
+  }), env);
+  zurueck();
+  // Der Zeitstempel wurde manipuliert (−10 s), die Signatur passt nicht mehr.
+  assert.equal(gesendet.length, 0, 'manipulierter Zeitstempel wird erkannt');
+  assert.equal(r.status, 200);
+});
+
+test('läuft ohne gebundenen Zähler', async () => {
+  // Ohne KV entfällt das Rate Limit; die übrigen Stufen greifen weiter.
+  const { env, gesendet } = umgebung();
+  delete env.RATE_LIMIT;
+  const zurueck = fetchAbfangen(gesendet);
+  const gut = await anfrage(env, await gueltig());
+  const bot = await anfrage(env, await gueltig({ hp_email: 'bot@spam.example' }));
+  zurueck();
+  assert.equal(gut.status, 200);
+  assert.equal(bot.status, 200);
+  assert.equal(gesendet.length, 1, 'nur die echte Anfrage geht raus');
+});

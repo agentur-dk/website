@@ -38,6 +38,19 @@ function antwort(daten, status, herkunft) {
 /** Gespielter Erfolg für alles, was als maschinell erkannt wurde. */
 const gespielterErfolg = (herkunft) => antwort({ ok: true }, 200, herkunft);
 
+/**
+ * Schlüssel für die Zeitstempel-Signatur.
+ *
+ * Wer ihn eigens setzen will, kann das (`SIGNATUR_GEHEIMNIS`). Sonst wird
+ * er aus dem MailerSend-Token abgeleitet. Das ist kein Kompromiss bei der
+ * Geheimhaltung — beide lägen ohnehin im selben Secret-Speicher —, spart
+ * aber einen Einrichtungsschritt. Das Präfix sorgt dafür, dass der
+ * abgeleitete Wert nie zufällig dem Token gleicht.
+ */
+function signaturSchluessel(env) {
+  return env.SIGNATUR_GEHEIMNIS || `zeitstempel:${env.MAILERSEND_TOKEN}`;
+}
+
 export default {
   async fetch(anfrage, env) {
     const herkunft = anfrage.headers.get('Origin') ?? '';
@@ -68,7 +81,7 @@ export default {
       const url = new URL(anfrage.url);
       if (!url.searchParams.has('challenge')) return antwort({ ok: false }, 400, herkunft);
       const ts = Math.floor(Date.now() / 1000);
-      return antwort({ ts, sig: await signiere(ts, env.SIGNATUR_GEHEIMNIS) }, 200, herkunft);
+      return antwort({ ts, sig: await signiere(ts, signaturSchluessel(env)) }, 200, herkunft);
     }
 
     if (anfrage.method !== 'POST') return antwort({ ok: false }, 405, herkunft);
@@ -93,15 +106,20 @@ export default {
 
     /* ---- Stufe 2: Zeit ---- */
 
-    if (!(await zeitInOrdnung(d, env.SIGNATUR_GEHEIMNIS))) return gespielterErfolg(herkunft);
+    if (!(await zeitInOrdnung(d, signaturSchluessel(env)))) return gespielterErfolg(herkunft);
 
     /* ---- Stufe 3: Bedienungsnachweis ---- */
 
     if (feld(d, 'interaktion') !== '1') return gespielterErfolg(herkunft);
 
-    /* ---- Stufe 4: Rate Limit ----
+    /* ---- Stufe 4: Rate Limit (nur wenn ein Zähler gebunden ist) ----
+     * Optional, damit die Einrichtung ohne Datenbank auskommt: Ist kein
+     * KV-Namensraum gebunden, entfällt diese Stufe und die übrigen fünf
+     * greifen weiter. Wer sie will, legt den Namensraum an und trägt ihn
+     * in die wrangler.toml ein — siehe README.
+     *
      * Gespeichert wird nur ein Hash der IP und nur für die Dauer des
-     * Zeitfensters — KV räumt den Eintrag danach selbst weg. Berechtigtes
+     * Zeitfensters; KV räumt den Eintrag danach selbst weg. Berechtigtes
      * Interesse an der Abwehr missbräuchlicher Nutzung, Art. 6 Abs. 1
      * lit. f DSGVO. Hochgezählt wird erst kurz vor dem Versand, sonst
      * verbraucht jeder Tippfehler in der Adresse einen Versuch.
@@ -111,7 +129,7 @@ export default {
     let stand = 0;
     if (env.RATE_LIMIT) {
       const ip = anfrage.headers.get('CF-Connecting-IP') ?? '0.0.0.0';
-      zaehlerSchluessel = 'ip:' + (await signiere(ip, env.SIGNATUR_GEHEIMNIS)).slice(0, 32);
+      zaehlerSchluessel = 'ip:' + (await signiere(ip, signaturSchluessel(env))).slice(0, 32);
       stand = Number((await env.RATE_LIMIT.get(zaehlerSchluessel)) ?? '0');
       if (stand >= grenze) return antwort({ ok: false, fehler: 'zu_viele' }, 429, herkunft);
     }
