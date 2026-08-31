@@ -50,7 +50,7 @@ unset passwort
 echo "  Geschrieben: $NETRC (Rechte 600)"
 echo
 echo "Verbindung wird geprüft …"
-if curl -s --netrc --ftp-ssl --ftp-ssl-control --insecure \
+if curl -s --netrc --ssl-reqd --insecure \
         --pinnedpubkey "sha256//BfcvgHz8B+FKx5PxEOz3n33TpWMjBxKt5eD1qtMbRvM=" \
         --connect-timeout 15 --max-time 45 -o /dev/null "ftp://$HOST/"; then
   echo "  ✓ Anmeldung erfolgreich, Verzeichnis lesbar."

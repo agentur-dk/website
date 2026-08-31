@@ -27,14 +27,14 @@ frage() {  # $1 = Text, $2 = Vorgabe
 
 echo
 echo 'MailerSend-Token'
-echo '  MailerSend → Integrations → API tokens → Token erzeugen.'
-echo '  Das Recht „Email send" genügt.'
-echo '  Die Eingabe bleibt unsichtbar.'
-read -r -s -p '  Token: ' token
+echo '  Liegt auf dem Server bereits eine _intern/mailersend.key, kann'
+echo '  dieses Feld leer bleiben — send.php liest sie von dort.'
+echo '  Sonst: MailerSend → Integrations → API tokens → Token erzeugen,'
+echo '  das Recht „Email send" genügt. Die Eingabe bleibt unsichtbar.'
+read -r -s -p '  Token (leer lassen, wenn auf dem Server vorhanden): ' token
 echo
 if [ -z "$token" ]; then
-  echo 'Kein Token eingegeben — abgebrochen.' >&2
-  exit 1
+  echo '  → kein Token eingetragen; send.php nimmt _intern/mailersend.key.'
 fi
 
 echo
@@ -58,7 +58,7 @@ cat > "$ziel" <<EOF
 <?php
 // Erzeugt von formular/einrichten.sh. Gehört nicht ins Repository.
 return [
-    'mailersend_token'    => '$token',
+    'mailersend_token'    => '$token',   // leer = _intern/mailersend.key gilt
     'von_adresse'         => '$von',
     'von_name'            => 'Website-Formular',
     'an_adresse'          => '$an',

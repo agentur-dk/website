@@ -15,7 +15,12 @@
 #
 #   chmod 600 ~/.netrc
 #
-# VERBINDUNG: FTPS (explizit, AUTH SSL). Der Server hält ein gültiges,
+# VERBINDUNG: FTPS (explizit, AUTH SSL), erzwungen mit --ssl-reqd.
+# Nicht --ftp-ssl: Das macht Verschlüsselung nur *optional* — lehnt der
+# Server sie ab, überträgt curl klaglos im Klartext, samt Passwort. curl
+# warnt davor, und die Warnung war berechtigt.
+#
+# Der Server hält ein gültiges,
 # von Certum ausgestelltes Zertifikat — allerdings auf
 # *.test-my-website.de statt auf w4.goneo.de. Die Namensprüfung schlägt
 # deshalb fehl. Statt sie einfach abzuschalten, wird der öffentliche
@@ -52,7 +57,7 @@ if [ "$rechte" != "600" ]; then
 fi
 
 ftp() {  # curl mit den immer gleichen Sicherheitsoptionen
-  curl --netrc --ftp-ssl --ftp-ssl-control --insecure --pinnedpubkey "$PIN" \
+  curl --netrc --ssl-reqd --insecure --pinnedpubkey "$PIN" \
        --connect-timeout 15 --max-time 120 "$@"
 }
 

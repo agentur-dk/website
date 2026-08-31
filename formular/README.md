@@ -18,6 +18,26 @@ keinen eigenen Endpunkt.
 Adresse, gültiges Zertifikat, Apache. Es muss also **keine Unterdomain
 angelegt und kein DNS-Eintrag geändert** werden.
 
+## Der Schlüssel liegt schon dort
+
+Auf diesem Webspace gibt es in `_intern/` bereits die Konvention der
+übrigen Projekte:
+
+```
+_intern/mailersend.key    der API-Token
+_intern/mailersend.from   die Absenderadresse
+```
+
+`send.php` liest beide von dort und hat damit Vorrang vor allem, was in
+der Konfiguration steht. So gibt es genau **eine** Stelle für den
+Schlüssel — ein zweites Exemplar wäre eine Stelle mehr zum Rotieren, zum
+Vergessen und zum versehentlichen Mitversionieren.
+
+Steht in der Konfiguration trotzdem ein Token, bleibt er als Rückfall:
+Lehnt MailerSend den Schlüssel aus `mailersend.key` mit 401 oder 403 ab,
+wird der zweite versucht und die Verwechslung ins Fehlerprotokoll
+geschrieben. Sobald feststeht, welcher stimmt, kann der andere weg.
+
 ## Einrichten
 
 1. **Konfiguration anlegen.**

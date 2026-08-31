@@ -71,6 +71,54 @@ if (!is_array($k)) {
     exit('Keine Konfiguration.');
 }
 
+/**
+ * Token und Absender aus den vorhandenen Dateien.
+ *
+ * In `_intern/` liegen auf diesem Webspace bereits `mailersend.key` und
+ * `mailersend.from` — die Konvention, nach der die übrigen Projekte
+ * arbeiten. Sie haben Vorrang vor allem, was in der Konfiguration steht.
+ *
+ * Damit gibt es genau eine Stelle für den Schlüssel. Ein zweites
+ * Exemplar in einer Projektdatei wäre eine Stelle mehr zum Rotieren, zum
+ * Vergessen und zum versehentlichen Mitversionieren.
+ */
+$ausDatei = static function (string $name): ?string {
+    foreach ([dirname(__DIR__) . '/_intern/' . $name, __DIR__ . '/' . $name] as $pfad) {
+        if (is_file($pfad) && is_readable($pfad)) {
+            $wert = trim((string) file_get_contents($pfad));
+            if ($wert !== '') {
+                return $wert;
+            }
+        }
+    }
+    return null;
+};
+
+$k['von_adresse'] = $ausDatei('mailersend.from') ?? ($k['von_adresse'] ?? '');
+
+/**
+ * Welche Schlüssel kommen in Frage?
+ *
+ * Zuerst der aus `_intern/mailersend.key`, weil das die vorhandene
+ * Konvention dieses Webspace ist. Steht in der Konfiguration ein anderer,
+ * bleibt er als Rückfall stehen: `mailersend.key` ist dem Namen nach der
+ * API-Token, nachgesehen habe ich aber nie — und ein Formular, das wegen
+ * einer Namensvermutung nicht sendet, wäre der schlechtere Fehler.
+ *
+ * Lehnt MailerSend den ersten Schlüssel mit 401 oder 403 ab, wird der
+ * zweite versucht und die Verwechslung ins Fehlerprotokoll geschrieben.
+ * Sobald klar ist, welcher stimmt, kann der andere weg.
+ */
+$schluessel = array_values(array_unique(array_filter([
+    $ausDatei('mailersend.key'),
+    $k['mailersend_token'] ?? '',
+])));
+
+if ($schluessel === [] || $k['von_adresse'] === '') {
+    http_response_code(500);
+    exit('Kein Zugang zur Versand-API.');
+}
+
 /* ---------------------------------------------------------------- *
  *  Herkunft und Vorabanfrage
  * ---------------------------------------------------------------- */
@@ -358,21 +406,38 @@ if (isset($zaehlerDatei)) {
     @file_put_contents($zaehlerDatei, (string) ($zaehlerStand + 1));
 }
 
-$ch = curl_init($k['api_url'] ?? 'https://api.mailersend.com/v1/email');
-curl_setopt_array($ch, [
-    CURLOPT_POST           => true,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT        => 15,
-    CURLOPT_HTTPHEADER     => [
-        'Authorization: Bearer ' . $k['mailersend_token'],
-        'Content-Type: application/json',
-        'X-Requested-With: XMLHttpRequest',
-    ],
-    CURLOPT_POSTFIELDS => json_encode($nutzlast, JSON_UNESCAPED_UNICODE),
-]);
-$antwort = curl_exec($ch);
-$status  = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-curl_close($ch);
+$rumpf = json_encode($nutzlast, JSON_UNESCAPED_UNICODE);
+$ziel  = $k['api_url'] ?? 'https://api.mailersend.com/v1/email';
+
+$status  = 0;
+$antwort = '';
+foreach ($schluessel as $nr => $token) {
+    $ch = curl_init($ziel);
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 15,
+        CURLOPT_HTTPHEADER     => [
+            'Authorization: Bearer ' . $token,
+            'Content-Type: application/json',
+            'X-Requested-With: XMLHttpRequest',
+        ],
+        CURLOPT_POSTFIELDS => $rumpf,
+    ]);
+    $antwort = curl_exec($ch);
+    $status  = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+
+    // Nur bei abgelehntem Schlüssel weiterprobieren. Bei jedem anderen
+    // Fehler hilft ein zweiter Versuch nicht und könnte die Mail doppeln.
+    if ($status !== 401 && $status !== 403) {
+        if ($nr > 0) {
+            error_log('Formular: _intern/mailersend.key wurde abgelehnt, '
+                    . 'der Schlüssel aus der Konfiguration hat funktioniert.');
+        }
+        break;
+    }
+}
 
 // MailerSend antwortet mit 202 Accepted.
 if ($status < 200 || $status >= 300) {
