@@ -1,5 +1,27 @@
 ---
 /**
+ * LeadForm.astro — das Anfrageformular, dreistufig.
+ *
+ * Vorher lagen Anliegen und alles andere in zwei Schritten, der zweite
+ * davon mit Name, E-Mail, Website und Nachricht auf einmal. Das ist der
+ * Punkt, an dem Formulare abgebrochen werden: sechs Felder gleichzeitig,
+ * bevor man weiß, wie lang es noch dauert.
+ *
+ * Jetzt sind es drei überschaubare Schritte mit einer Leiste darüber, die
+ * zeigt, wo man steht und was noch kommt:
+ *
+ *   1  Anliegen   — die Themen-Auswahl wie bisher
+ *   2  Nachricht  — nur das Textfeld, sonst nichts
+ *   3  Kontakt    — Vorname, Nachname, E-Mail, Firma, Website + Absenden
+ *
+ * Ohne JavaScript sind alle drei Schritte sichtbar und das Formular
+ * abschickbar; die Schritte entstehen erst im Skript. Ein Formular, das
+ * ohne JS gar nichts tut, wäre für den Blueprint („Progressive
+ * Enhancement") und für die Barrierefreiheit gleichermaßen falsch.
+ */
+import Icon from './ui/Icon.astro';
+
+/**
  * Formular-Endpunkt – wird mit dem PHP-Skript auf dk-dk.de finalisiert.
  * Kein Formspree! Eigener PHP-Mailer (PHPMailer/SMTP).
  */
@@ -7,8 +29,9 @@ const FORM_ENDPOINT = 'https://dk-dk.de/formular/send.php';
 const base = import.meta.env.BASE_URL;
 
 interface Props {
-  page?: string;
-  heading?: string;
+  /** Sprechender Name der Seite — landet als verstecktes Feld in der Mail. */
+  readonly page?: string;
+  readonly heading?: string;
 }
 
 const { page = 'Unbekannte Seite', heading = 'Projekt anfragen' } = Astro.props;
@@ -23,49 +46,57 @@ const topics = [
   'KI-Services',
   'Sonstiges',
 ];
-import Icon from './ui/Icon.astro';
+
+const schritte = [
+  { nr: 1, name: 'Anliegen'  },
+  { nr: 2, name: 'Nachricht' },
+  { nr: 3, name: 'Kontakt'   },
+];
 ---
 
 <section class="lf-section" id="contact" aria-labelledby="lf-heading">
   <div class="lf-inner">
     <h2 id="lf-heading" class="lf-heading">{heading}</h2>
 
-    <!-- Status-Region (aria-live) -->
+    <!-- Status-Region: Erfolg und Fehler werden hier angesagt. -->
     <div id="lf-status" role="status" aria-live="polite" aria-atomic="true" class="lf-status sr-only"></div>
 
-    <form
-      id="lf-form"
-      class="lf-form"
-      novalidate
-      data-endpoint={FORM_ENDPOINT}
-    >
-      <!-- Seiten-Tracking -->
+    <form id="lf-form" class="lf-form" novalidate data-endpoint={FORM_ENDPOINT}>
+      <!-- Auf welcher Seite wurde das Formular ausgefüllt? Der sprechende
+           Name kommt aus der Seite, die volle Adresse setzt das Skript. -->
       <input type="hidden" name="page" value={page} />
+      <input type="hidden" name="page_url" id="lf-page-url" value="" />
+      <!-- Zusammengesetzt aus Vor- und Nachname, damit der Mailer unverändert bleibt. -->
+      <input type="hidden" name="name" id="lf-name-combined" value="" />
       <!-- Spam: Zeitstempel (wird per JS gesetzt) -->
       <input type="hidden" name="form_started" id="lf-started" value="" />
       <!-- Honeypot: nur Bots füllen dieses Feld aus -->
-      <input
-        type="text"
-        name="_gotcha"
-        class="lf-honeypot"
-        tabindex="-1"
-        autocomplete="off"
-        aria-hidden="true"
-      />
+      <input type="text" name="_gotcha" class="lf-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-      <!-- Fortschrittsanzeige -->
-      <ol class="lf-steps" aria-label="Formular-Fortschritt">
-        <li class="lf-steps__item lf-steps__item--active" id="lf-step-ind-1">
-          <span class="lf-steps__num" aria-hidden="true">1</span> Anliegen
-        </li>
-        <li class="lf-steps__item" id="lf-step-ind-2">
-          <span class="lf-steps__num" aria-hidden="true">2</span> Kontakt
-        </li>
-      </ol>
+      <!-- Fortschritt. Ohne JS bleibt die Leiste verborgen: Sie würde einen
+           Schritt behaupten, den es dann nicht gibt. -->
+      <div class="lf-progress" id="lf-progress" hidden>
+        <ol class="lf-progress__list">
+          {schritte.map((s) => (
+            <li class="lf-progress__item" data-step-ind={s.nr}>
+              <span class="lf-progress__marke" aria-hidden="true">
+                <span class="lf-progress__nr">{s.nr}</span>
+                <span class="lf-progress__haken"><Icon name="check" size={14} /></span>
+              </span>
+              <span class="lf-progress__name">{s.name}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="lf-progress__schiene" aria-hidden="true">
+          <div class="lf-progress__balken" id="lf-progress-bar"></div>
+        </div>
+      </div>
 
-      <!-- Schritt 1: Themen -->
-      <div id="lf-step-1" class="lf-step">
+      <!-- Schritt 1: Anliegen -->
+      <div id="lf-step-1" class="lf-step" data-step="1">
+        <p class="lf-step__zaehler" data-step-count>Schritt 1 von 3</p>
         <h3 class="lf-step__title">Worum geht es?</h3>
+
         <fieldset class="lf-fieldset">
           <legend class="lf-legend">
             Ihr Anliegen
@@ -74,31 +105,21 @@ import Icon from './ui/Icon.astro';
           <div class="lf-topics">
             {topics.map((topic) => (
               <label class="lf-topic" data-topic={topic === 'Sonstiges' ? 'other-trigger' : undefined}>
-                <input
-                  type="checkbox"
-                  name="interesse[]"
-                  value={topic}
-                  class="lf-topic__input"
-                />
-                <span class="lf-topic__box" aria-hidden="true">
-                  <Icon name="check" size={14} />
-                </span>
+                <input type="checkbox" name="interesse[]" value={topic} class="lf-topic__input" />
+                <span class="lf-topic__box" aria-hidden="true"><Icon name="check" size={14} /></span>
                 <span class="lf-topic__label">{topic}</span>
               </label>
             ))}
           </div>
-          <!-- Sonstiges-Freitext (erscheint bei Auswahl "Sonstiges") -->
+          <span id="lf-topics-error" class="lf-error" role="alert" hidden>
+            Bitte wählen Sie mindestens ein Thema aus.
+          </span>
+
+          <!-- Sonstiges-Freitext (erscheint bei Auswahl „Sonstiges") -->
           <div id="lf-other-field" class="lf-other" hidden>
-            <label for="lf-other-text" class="lf-label">
-              Bitte beschreiben Sie Ihr Anliegen kurz
-            </label>
-            <textarea
-              id="lf-other-text"
-              name="anliegen_text"
-              class="lf-control lf-textarea"
-              rows="3"
-              aria-describedby="lf-other-error"
-            ></textarea>
+            <label for="lf-other-text" class="lf-label">Bitte beschreiben Sie Ihr Anliegen kurz</label>
+            <textarea id="lf-other-text" name="anliegen_text" class="lf-control lf-textarea" rows="3"
+              aria-describedby="lf-other-error"></textarea>
             <span id="lf-other-error" class="lf-error" role="alert" hidden>
               Bitte geben Sie Ihr Anliegen ein.
             </span>
@@ -106,97 +127,109 @@ import Icon from './ui/Icon.astro';
         </fieldset>
 
         <div class="lf-step__nav lf-step__nav--end">
-          <button type="button" class="lf-btn lf-btn--primary" id="lf-next">
+          <button type="button" class="lf-btn lf-btn--primary" data-next="2">
             Weiter
+            <Icon name="arrow-right" size={16} />
           </button>
         </div>
       </div>
 
-      <!-- Schritt 2: Kontaktdaten -->
-      <div id="lf-step-2" class="lf-step" hidden>
-        <h3 class="lf-step__title">Ihre Kontaktdaten</h3>
-
-        <div class="lf-row">
-          <div class="lf-group">
-            <label for="lf-name" class="lf-label">
-              Name
-              <span aria-hidden="true">*</span>
-              <span class="sr-only">(Pflichtfeld)</span>
-            </label>
-            <input
-              type="text"
-              id="lf-name"
-              name="name"
-              class="lf-control"
-              autocomplete="name"
-              required
-              aria-required="true"
-              aria-describedby="lf-name-error"
-            />
-            <span id="lf-name-error" class="lf-error" role="alert" hidden>
-              Bitte geben Sie Ihren Namen ein.
-            </span>
-          </div>
-          <div class="lf-group">
-            <label for="lf-email" class="lf-label">
-              E-Mail
-              <span aria-hidden="true">*</span>
-              <span class="sr-only">(Pflichtfeld)</span>
-            </label>
-            <input
-              type="email"
-              id="lf-email"
-              name="email"
-              class="lf-control"
-              autocomplete="email"
-              required
-              aria-required="true"
-              aria-describedby="lf-email-error"
-            />
-            <span id="lf-email-error" class="lf-error" role="alert" hidden>
-              Bitte geben Sie eine gültige E-Mail-Adresse ein.
-            </span>
-          </div>
-        </div>
-
-        <div class="lf-group">
-          <label for="lf-website" class="lf-label">
-            Ihre Website
-            <span class="lf-optional">(optional)</span>
-          </label>
-          <input
-            type="url"
-            id="lf-website"
-            name="website_url"
-            class="lf-control"
-            placeholder="https://ihre-domain.de"
-            autocomplete="url"
-            aria-describedby="lf-website-error"
-          />
-          <span id="lf-website-error" class="lf-error" role="alert" hidden>
-            Bitte geben Sie eine gültige URL ein (z.&nbsp;B. https://beispiel.de).
-          </span>
-        </div>
+      <!-- Schritt 2: Nachricht -->
+      <div id="lf-step-2" class="lf-step" data-step="2">
+        <p class="lf-step__zaehler" data-step-count>Schritt 2 von 3</p>
+        <h3 class="lf-step__title">Was sollen wir wissen?</h3>
+        <p class="lf-step__lead">
+          Je konkreter, desto genauer die Einschätzung — Zeitrahmen, Budgetvorstellung
+          oder ein Link auf die bestehende Seite helfen uns am meisten.
+        </p>
 
         <div class="lf-group">
           <label for="lf-message" class="lf-label">
-            Nachricht
+            Ihre Nachricht
             <span aria-hidden="true">*</span>
             <span class="sr-only">(Pflichtfeld)</span>
           </label>
-          <textarea
-            id="lf-message"
-            name="message"
-            class="lf-control lf-textarea"
-            rows="5"
-            required
-            minlength="10"
-            aria-required="true"
-            aria-describedby="lf-message-error"
-          ></textarea>
+          <textarea id="lf-message" name="message" class="lf-control lf-textarea lf-textarea--gross"
+            rows="7" required minlength="10" aria-required="true"
+            aria-describedby="lf-message-error"></textarea>
           <span id="lf-message-error" class="lf-error" role="alert" hidden>
             Bitte geben Sie Ihre Nachricht ein (mindestens 10 Zeichen).
           </span>
+        </div>
+
+        <div class="lf-step__nav">
+          <button type="button" class="lf-btn lf-btn--ghost" data-prev="1">Zurück</button>
+          <button type="button" class="lf-btn lf-btn--primary" data-next="3">
+            Weiter
+            <Icon name="arrow-right" size={16} />
+          </button>
+        </div>
+      </div>
+
+      <!-- Schritt 3: Kontaktdaten -->
+      <div id="lf-step-3" class="lf-step" data-step="3">
+        <p class="lf-step__zaehler" data-step-count>Schritt 3 von 3</p>
+        <h3 class="lf-step__title">Wohin dürfen wir antworten?</h3>
+
+        <div class="lf-row">
+          <div class="lf-group">
+            <label for="lf-vorname" class="lf-label">
+              Vorname
+              <span aria-hidden="true">*</span>
+              <span class="sr-only">(Pflichtfeld)</span>
+            </label>
+            <input type="text" id="lf-vorname" name="vorname" class="lf-control"
+              autocomplete="given-name" required aria-required="true" aria-describedby="lf-vorname-error" />
+            <span id="lf-vorname-error" class="lf-error" role="alert" hidden>
+              Bitte geben Sie Ihren Vornamen ein.
+            </span>
+          </div>
+          <div class="lf-group">
+            <label for="lf-nachname" class="lf-label">
+              Nachname
+              <span aria-hidden="true">*</span>
+              <span class="sr-only">(Pflichtfeld)</span>
+            </label>
+            <input type="text" id="lf-nachname" name="nachname" class="lf-control"
+              autocomplete="family-name" required aria-required="true" aria-describedby="lf-nachname-error" />
+            <span id="lf-nachname-error" class="lf-error" role="alert" hidden>
+              Bitte geben Sie Ihren Nachnamen ein.
+            </span>
+          </div>
+        </div>
+
+        <div class="lf-group">
+          <label for="lf-email" class="lf-label">
+            E-Mail
+            <span aria-hidden="true">*</span>
+            <span class="sr-only">(Pflichtfeld)</span>
+          </label>
+          <input type="email" id="lf-email" name="email" class="lf-control"
+            autocomplete="email" required aria-required="true" aria-describedby="lf-email-error" />
+          <span id="lf-email-error" class="lf-error" role="alert" hidden>
+            Bitte geben Sie eine gültige E-Mail-Adresse ein.
+          </span>
+        </div>
+
+        <div class="lf-row">
+          <div class="lf-group">
+            <label for="lf-firma" class="lf-label">
+              Firma
+              <span class="lf-optional">(optional)</span>
+            </label>
+            <input type="text" id="lf-firma" name="firma" class="lf-control" autocomplete="organization" />
+          </div>
+          <div class="lf-group">
+            <label for="lf-website" class="lf-label">
+              Ihre Website
+              <span class="lf-optional">(optional)</span>
+            </label>
+            <input type="url" id="lf-website" name="website_url" class="lf-control"
+              placeholder="https://ihre-domain.de" autocomplete="url" aria-describedby="lf-website-error" />
+            <span id="lf-website-error" class="lf-error" role="alert" hidden>
+              Bitte geben Sie eine gültige Adresse ein (z.&nbsp;B. https://beispiel.de).
+            </span>
+          </div>
         </div>
 
         <p class="lf-privacy">
@@ -205,375 +238,300 @@ import Icon from './ui/Icon.astro';
         </p>
 
         <div class="lf-step__nav">
-          <button type="button" class="lf-btn lf-btn--ghost" id="lf-prev">
-            Zurück
-          </button>
-          <button type="submit" class="lf-btn lf-btn--primary" id="lf-submit">
-            Anfrage senden
-          </button>
+          <button type="button" class="lf-btn lf-btn--ghost" data-prev="2">Zurück</button>
+          <button type="submit" class="lf-btn lf-btn--primary" id="lf-submit">Anfrage absenden</button>
         </div>
       </div>
     </form>
+
+    <!-- Bestätigung: ersetzt das Formular nach dem Absenden. -->
+    <div id="lf-danke" class="lf-danke" hidden>
+      <span class="lf-danke__marke" aria-hidden="true"><Icon name="check" size={28} /></span>
+      <h3 class="lf-danke__title">Anfrage ist raus.</h3>
+      <p class="lf-danke__text">
+        Vielen Dank — wir melden uns innerhalb von 24 Stunden bei Ihnen.
+        Falls es eilt: <a href="tel:+4922198655229" class="lf-privacy__link">+49 221 986 55 229</a>.
+      </p>
+    </div>
   </div>
 </section>
+
+<script>
+  import { validateEmail, validateName, validateMessage, isHoneypotFilled, isSpamSubmit } from '../lib/form-validation';
+
+  (function () {
+    const formEl = document.getElementById('lf-form') as HTMLFormElement | null;
+    if (!formEl) return;
+    const form: HTMLFormElement = formEl;
+
+    const ANZAHL = 3;
+    const schritte = [1, 2, 3].map((n) => document.getElementById(`lf-step-${n}`) as HTMLElement | null);
+    const fortschritt = document.getElementById('lf-progress');
+    const balken = document.getElementById('lf-progress-bar');
+    const statusEl = document.getElementById('lf-status');
+    const danke = document.getElementById('lf-danke');
+    const submitBtn = document.getElementById('lf-submit') as HTMLButtonElement | null;
+    const startedInput = document.getElementById('lf-started') as HTMLInputElement | null;
+
+    // Erst jetzt wird das Formular mehrseitig: Ohne Skript standen alle
+    // drei Blöcke untereinander und ließen sich in einem Rutsch ausfüllen.
+    if (fortschritt) fortschritt.hidden = false;
+
+    const seiteUrl = document.getElementById('lf-page-url') as HTMLInputElement | null;
+    if (seiteUrl) seiteUrl.value = window.location.href;
+    if (startedInput) startedInput.value = String(Date.now());
+
+    const langsam = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let aktuell = 1;
+
+    function feld<T extends HTMLElement>(id: string): T | null {
+      return document.getElementById(id) as T | null;
+    }
+
+    function zeigeFehler(el: HTMLElement | null, fehlerId: string, an: boolean): void {
+      const meldung = document.getElementById(fehlerId);
+      if (meldung) meldung.hidden = !an;
+      el?.setAttribute('aria-invalid', an ? 'true' : 'false');
+    }
+
+    /** Prüft einen Schritt und setzt den Fokus auf das erste beanstandete Feld. */
+    function pruefe(nr: number): boolean {
+      let ok = true;
+      const ersterFehler = (el: HTMLElement | null) => {
+        if (ok && el) el.focus();
+        ok = false;
+      };
+
+      if (nr === 1) {
+        const gewaehlt = form.querySelectorAll<HTMLInputElement>('input[name="interesse[]"]:checked');
+        const leer = gewaehlt.length === 0;
+        const meldung = document.getElementById('lf-topics-error');
+        if (meldung) meldung.hidden = !leer;
+        if (leer) ersterFehler(form.querySelector<HTMLInputElement>('input[name="interesse[]"]'));
+
+        const sonstiges = form.querySelector<HTMLInputElement>('[data-topic="other-trigger"] input');
+        const text = feld<HTMLTextAreaElement>('lf-other-text');
+        if (sonstiges?.checked && text && text.value.trim().length === 0) {
+          zeigeFehler(text, 'lf-other-error', true);
+          ersterFehler(text);
+        } else if (text) {
+          zeigeFehler(text, 'lf-other-error', false);
+        }
+      }
+
+      if (nr === 2) {
+        const nachricht = feld<HTMLTextAreaElement>('lf-message');
+        const gut = nachricht !== null && validateMessage(nachricht.value);
+        zeigeFehler(nachricht, 'lf-message-error', !gut);
+        if (!gut) ersterFehler(nachricht);
+      }
+
+      if (nr === 3) {
+        const vorname = feld<HTMLInputElement>('lf-vorname');
+        const nachname = feld<HTMLInputElement>('lf-nachname');
+        const email = feld<HTMLInputElement>('lf-email');
+        const website = feld<HTMLInputElement>('lf-website');
+
+        for (const [el, id] of [[vorname, 'lf-vorname-error'], [nachname, 'lf-nachname-error']] as const) {
+          const gut = el !== null && validateName(el.value);
+          zeigeFehler(el, id, !gut);
+          if (!gut) ersterFehler(el);
+        }
+
+        const mailOk = email !== null && validateEmail(email.value);
+        zeigeFehler(email, 'lf-email-error', !mailOk);
+        if (!mailOk) ersterFehler(email);
+
+        // Die Website ist freiwillig; wer sie einträgt, soll aber merken,
+        // wenn „meine-seite.de" ohne Schema nicht als Adresse durchgeht.
+        if (website && website.value.trim().length > 0) {
+          let gueltig = true;
+          try {
+            new URL(website.value.trim());
+          } catch {
+            gueltig = false;
+          }
+          zeigeFehler(website, 'lf-website-error', !gueltig);
+          if (!gueltig) ersterFehler(website);
+        } else if (website) {
+          zeigeFehler(website, 'lf-website-error', false);
+        }
+      }
+
+      return ok;
+    }
+
+    function zeichneFortschritt(): void {
+      if (balken) balken.style.width = `${((aktuell - 1) / (ANZAHL - 1)) * 100}%`;
+      for (const item of document.querySelectorAll<HTMLElement>('[data-step-ind]')) {
+        const nr = Number(item.dataset.stepInd);
+        item.classList.toggle('lf-progress__item--aktiv', nr === aktuell);
+        item.classList.toggle('lf-progress__item--fertig', nr < aktuell);
+        // aria-current sagt Screenreadern, wo sie stehen — die Farbe allein
+        // sagt es ihnen nicht.
+        if (nr === aktuell) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+      }
+    }
+
+    function zeige(nr: number, ansagen = true): void {
+      aktuell = nr;
+      schritte.forEach((el, i) => {
+        if (!el) return;
+        const dran = i + 1 === nr;
+        el.hidden = !dran;
+        if (dran && !langsam.matches) {
+          // Neu anstoßen, sonst spielt die Einblendung beim zweiten Mal nicht.
+          el.classList.remove('lf-step--ein');
+          void el.offsetWidth;
+          el.classList.add('lf-step--ein');
+        }
+      });
+      zeichneFortschritt();
+
+      const titel = schritte[nr - 1]?.querySelector<HTMLElement>('.lf-step__title');
+      if (titel && ansagen) {
+        titel.setAttribute('tabindex', '-1');
+        titel.focus({ preventScroll: true });
+      }
+    }
+
+    // „Sonstiges" blendet das Freitextfeld ein.
+    const sonstigesSchalter = form.querySelector<HTMLInputElement>('[data-topic="other-trigger"] input');
+    const sonstigesFeld = document.getElementById('lf-other-field');
+    sonstigesSchalter?.addEventListener('change', () => {
+      if (sonstigesFeld) sonstigesFeld.hidden = !sonstigesSchalter.checked;
+    });
+
+    // Sobald ein Thema angehakt wird, verschwindet die Beanstandung.
+    for (const box of form.querySelectorAll<HTMLInputElement>('input[name="interesse[]"]')) {
+      box.addEventListener('change', () => {
+        const meldung = document.getElementById('lf-topics-error');
+        if (meldung && form.querySelectorAll('input[name="interesse[]"]:checked').length > 0) {
+          meldung.hidden = true;
+        }
+      });
+    }
+
+    for (const btn of form.querySelectorAll<HTMLButtonElement>('[data-next]')) {
+      btn.addEventListener('click', () => {
+        if (pruefe(aktuell)) zeige(Number(btn.dataset.next));
+      });
+    }
+    for (const btn of form.querySelectorAll<HTMLButtonElement>('[data-prev]')) {
+      // Zurück prüft nicht: Wer einen Schritt zurückgeht, will korrigieren,
+      // nicht erst eine Beanstandung wegklicken.
+      btn.addEventListener('click', () => zeige(Number(btn.dataset.prev)));
+    }
+
+    zeige(1, false);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const gotcha = form.querySelector<HTMLInputElement>('[name="_gotcha"]');
+      if (gotcha && isHoneypotFilled(gotcha.value)) return; // Bot — stillschweigend verwerfen
+
+      const gestartet = Number(startedInput?.value ?? 0);
+      if (isSpamSubmit(gestartet, Date.now())) return;
+
+      // Jeden Schritt prüfen, nicht nur den letzten: Wer über die Tastatur
+      // direkt absendet, hätte sonst die ersten beiden übersprungen.
+      for (const nr of [1, 2, 3]) {
+        if (!pruefe(nr)) {
+          zeige(nr);
+          return;
+        }
+      }
+
+      // Der Mailer erwartet weiterhin ein Feld `name`; Vor- und Nachname
+      // gehen zusätzlich einzeln mit.
+      const zusammen = feld<HTMLInputElement>('lf-name-combined');
+      if (zusammen) {
+        const v = feld<HTMLInputElement>('lf-vorname')?.value.trim() ?? '';
+        const n = feld<HTMLInputElement>('lf-nachname')?.value.trim() ?? '';
+        zusammen.value = `${v} ${n}`.trim();
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wird gesendet…';
+      }
+      if (statusEl) {
+        statusEl.textContent = '';
+        statusEl.className = 'lf-status sr-only';
+      }
+
+      // Object.fromEntries behält bei mehrfach vorkommenden Namen nur den
+      // letzten Wert. Bei „interesse[]" ging damit alles außer dem zuletzt
+      // angehakten Thema verloren — wer drei Themen wählte, verschickte
+      // eines. Mehrfachwerte werden deshalb zusammengefasst statt
+      // überschrieben, und zwar als Text: Der Mailer bekam an dieser Stelle
+      // schon immer eine Zeichenkette, ein Array wäre eine Änderung an
+      // seinem Eingang.
+      const daten: Record<string, FormDataEntryValue | string> = {};
+      for (const [schluessel, wert] of new FormData(form)) {
+        const vorhanden = daten[schluessel];
+        daten[schluessel] = vorhanden === undefined || vorhanden === ''
+          ? wert
+          : `${String(vorhanden)}, ${String(wert)}`;
+      }
+
+      try {
+        const res = await fetch(form.dataset.endpoint ?? '', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(daten),
+        });
+        if (!res.ok) throw new Error('Server-Fehler');
+
+        if (statusEl) {
+          statusEl.textContent = 'Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.';
+          statusEl.className = 'lf-status sr-only';
+        }
+        form.hidden = true;
+        if (danke) {
+          danke.hidden = false;
+          const dankeTitel = danke.querySelector<HTMLElement>('.lf-danke__title');
+          dankeTitel?.setAttribute('tabindex', '-1');
+          dankeTitel?.focus({ preventScroll: true });
+        }
+      } catch {
+        if (statusEl) {
+          statusEl.textContent =
+            'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an mail@dk-dk.de.';
+          statusEl.className = 'lf-status lf-status--error';
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Anfrage absenden';
+        }
+      }
+    });
+  })();
+</script>
 
 <style>
   .lf-section {
     padding-block: 5rem;
   }
-
   .lf-inner {
     max-width: var(--container-narrow);
     margin-inline: auto;
     padding-inline: 1.5rem;
   }
-
   .lf-heading {
     font-family: var(--font-display);
     font-size: clamp(1.9375rem, 4vw, 2.4375rem);
-    font-weight: 700;
     color: var(--color-text);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
     margin: 0 0 2.5rem;
-    text-align: center;
+    text-wrap: balance;
   }
 
-  /* Honeypot: visuell unsichtbar, für AT versteckt */
-  .lf-honeypot {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  /* Fortschritt */
-  .lf-steps {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-    margin: 0 0 2rem;
-    padding: 0;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text-muted);
-    counter-reset: none;
-  }
-
-  .lf-steps__item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .lf-steps__item--active {
-    color: var(--color-primary-light);
-    font-weight: 700;
-  }
-
-  .lf-steps__num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-border);
-    color: var(--color-text-muted);
-    font-size: 0.8125rem;
-    font-weight: 700;
-  }
-
-  .lf-steps__item--active .lf-steps__num {
-    background-color: var(--color-primary);
-    color: var(--color-on-gradient);
-  }
-
-  /* Steps */
-  .lf-step__title {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0 0 1.5rem;
-  }
-
-  /* Topics */
-  .lf-fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .lf-legend {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-    margin-bottom: 1rem;
-  }
-
-  .lf-topics {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
-    gap: 0.625rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .lf-topic {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: border-color var(--transition-fast), background-color var(--transition-fast);
-    min-height: 44px;
-  }
-
-  .lf-topic:hover {
-    border-color: var(--color-primary);
-    background-color: var(--color-surface-alt);
-  }
-
-  .lf-topic:has(.lf-topic__input:checked) {
-    border-color: var(--color-primary);
-    background-color: var(--color-surface-alt);
-  }
-
-  .lf-topic__input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-  }
-
-  .lf-topic__box {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-sm);
-    background-color: var(--color-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: transparent;
-    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
-  }
-
-  .lf-topic:has(.lf-topic__input:checked) .lf-topic__box {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-on-gradient);
-  }
-
-  .lf-topic__input:focus-visible + .lf-topic__box {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 2px;
-  }
-
-  .lf-topic__label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text);
-    line-height: 1.4;
-  }
-
-  /* Sonstiges-Freitext */
-  .lf-other {
-    margin-top: 0.5rem;
-    padding: 1rem;
-    background-color: var(--color-surface-alt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-  }
-
-  /* Formularfelder */
-  .lf-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-    gap: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .lf-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .lf-row .lf-group {
-    margin-bottom: 0;
-  }
-
-  .lf-label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-  }
-
-  .lf-optional {
-    font-size: 0.8125rem;
-    font-weight: 400;
-    color: var(--color-text-faint);
-    margin-left: 0.25rem;
-  }
-
-  .lf-control {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 0.625rem 0.875rem;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    color: var(--color-text);
-    min-height: 44px;
-    width: 100%;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  }
-
-  .lf-control::placeholder {
-    color: var(--color-text-faint);
-  }
-
-  .lf-control:focus {
-    outline: none;
-    border-color: var(--color-focus);
-    box-shadow: 0 0 0 3px rgba(109, 179, 242, 0.2);
-  }
-
-  .lf-control[aria-invalid="true"] {
-    border-color: var(--color-error);
-  }
-
-  .lf-textarea {
-    min-height: 120px;
-    resize: vertical;
-  }
-
-  .lf-error {
-    font-size: 0.8125rem;
-    color: var(--color-error);
-    font-weight: 500;
-  }
-
-  /* Privacy */
-  .lf-privacy {
-    font-size: 0.8125rem;
-    color: var(--color-text-faint);
-    margin: 1rem 0 1.5rem;
-    line-height: 1.5;
-  }
-
-  .lf-privacy__link {
-    color: var(--color-primary-light);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .lf-privacy__link:focus-visible {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
-
-  /* Navigation */
-  .lf-step__nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .lf-step__nav--end {
-    justify-content: flex-end;
-  }
-
-  /* Buttons */
-  .lf-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1.5rem;
-    font-family: var(--font-body);
-    font-size: 0.9375rem;
-    font-weight: 700;
-    border-radius: var(--radius-md);
-    min-height: 44px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast);
-  }
-
-  .lf-btn:focus-visible {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 2px;
-  }
-
-  .lf-btn--primary {
-    background-color: var(--color-primary);
-    color: var(--color-on-gradient);
-    border-color: var(--color-primary);
-  }
-
-  .lf-btn--primary:hover:not(:disabled) {
-    background-color: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
-  }
-
-  .lf-btn--primary:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  .lf-btn--ghost {
-    background-color: transparent;
-    color: var(--color-text-muted);
-    border-color: var(--color-border);
-  }
-
-  .lf-btn--ghost:hover {
-    background-color: var(--color-surface-alt);
-    color: var(--color-text);
-  }
-
-  /* Status */
-  .lf-status {
-    padding: 0.875rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-  }
-
-  .lf-status:empty {
-    display: none;
-  }
-
-  .lf-status--success {
-    background-color: rgba(93, 191, 106, 0.12);
-    border: 1px solid var(--color-success);
-    color: var(--color-success);
-  }
-
-  .lf-status--error {
-    background-color: rgba(255, 107, 107, 0.1);
-    border: 1px solid var(--color-error);
-    color: var(--color-error-text);
-  }
-
-  /* Screenreader */
+  /* Nur für Screenreader — die sichtbare Rückmeldung übernimmt der Dankeblock. */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -585,158 +543,438 @@ import Icon from './ui/Icon.astro';
     white-space: nowrap;
     border: 0;
   }
+  /* Grundzustand der Statusmeldung: Sie ist nur für Screenreader da,
+     solange nichts schiefgeht. Erst .lf-status--error macht sie sichtbar. */
+  .lf-status {
+    font-size: 0.9375rem;
+  }
+  .lf-status--error {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 0 1.5rem;
+    padding: 0.875rem 1rem;
+    clip: auto;
+    overflow: visible;
+    white-space: normal;
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-md);
+    color: var(--color-error-text);
+    font-size: 0.9375rem;
+  }
+
+  /* Honeypot: visuell unsichtbar, für Hilfstechnik versteckt. */
+  .lf-honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* ---- Fortschritt ------------------------------------------------ */
+  .lf-progress {
+    margin-bottom: 2.5rem;
+  }
+  .lf-progress__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0 0 0.875rem;
+    padding: 0;
+  }
+  .lf-progress__item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+    color: var(--color-text-faint);
+    transition: color var(--transition-base);
+  }
+  .lf-progress__item--aktiv,
+  .lf-progress__item--fertig {
+    color: var(--color-text);
+  }
+
+  .lf-progress__marke {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    transition: border-color var(--transition-base), background-color var(--transition-base),
+      color var(--transition-base);
+  }
+  .lf-progress__item--aktiv .lf-progress__marke {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .lf-progress__item--fertig .lf-progress__marke {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+  }
+  /* Ziffer und Haken liegen übereinander; erledigt heißt Haken statt Ziffer. */
+  .lf-progress__nr,
+  .lf-progress__haken {
+    grid-area: 1 / 1;
+    display: inline-flex;
+    transition: opacity var(--transition-fast);
+  }
+  .lf-progress__haken {
+    opacity: 0;
+  }
+  .lf-progress__item--fertig .lf-progress__nr {
+    opacity: 0;
+  }
+  .lf-progress__item--fertig .lf-progress__haken {
+    opacity: 1;
+  }
+
+  .lf-progress__name {
+    font-size: 0.875rem;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .lf-progress__schiene {
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-border);
+    overflow: hidden;
+  }
+  .lf-progress__balken {
+    width: 0;
+    height: 100%;
+    background: var(--color-accent);
+    transition: width 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ---- Schritte --------------------------------------------------- */
+  .lf-step__zaehler {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+  }
+  .lf-step__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--color-text);
+    margin: 0 0 0.75rem;
+  }
+  .lf-step__title:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+  .lf-step__lead {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 52ch;
+    margin: 0 0 1.75rem;
+  }
+
+  /* Einblenden beim Schrittwechsel. Das Skript hängt die Klasse an und
+     entfernt sie vorher wieder, damit sie beim zweiten Mal erneut greift. */
+  .lf-step--ein {
+    animation: lf-ein 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes lf-ein {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .lf-step__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .lf-step__nav--end {
+    justify-content: flex-end;
+  }
+
+  /* ---- Felder ----------------------------------------------------- */
+  .lf-fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .lf-legend {
+    padding: 0;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+  .lf-optional {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-left: 0.375rem;
+  }
+
+  .lf-topics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: 0.625rem;
+  }
+  .lf-topic {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    /* 44px Zielhöhe — WCAG 2.5.8 fordert mindestens 24px. */
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: border-color var(--transition-base), background-color var(--transition-base),
+      color var(--transition-base);
+  }
+  .lf-topic:hover {
+    border-color: var(--color-border-strong);
+  }
+  .lf-topic:has(.lf-topic__input:checked) {
+    border-color: var(--color-accent);
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+  }
+  .lf-topic:has(.lf-topic__input:focus-visible) {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .lf-topic__input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  .lf-topic__box {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm, 4px);
+    color: var(--color-text-inverse);
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  }
+  .lf-topic__box > :global(svg) {
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  .lf-topic:has(.lf-topic__input:checked) .lf-topic__box {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+  }
+  .lf-topic:has(.lf-topic__input:checked) .lf-topic__box > :global(svg) {
+    opacity: 1;
+  }
+  .lf-topic__label {
+    font-size: 0.9375rem;
+    line-height: 1.3;
+  }
+
+  .lf-other {
+    margin-top: 1.25rem;
+  }
+  .lf-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+  }
+  .lf-group {
+    margin-bottom: 1.25rem;
+  }
+  .lf-row .lf-group {
+    margin-bottom: 0;
+  }
+  .lf-row + .lf-group,
+  .lf-row + .lf-row {
+    margin-top: 1.25rem;
+  }
+  .lf-label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+  .lf-control {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    font-size: 1rem;
+    transition: border-color var(--transition-base), background-color var(--transition-base);
+  }
+  .lf-control::placeholder {
+    color: var(--color-text-faint);
+  }
+  .lf-control:hover {
+    border-color: var(--color-border-strong);
+  }
+  .lf-control:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    border-color: var(--color-accent);
+  }
+  .lf-control[aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+  .lf-textarea {
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .lf-textarea--gross {
+    min-height: 11rem;
+  }
+
+  .lf-error {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-error-text);
+  }
+
+  .lf-privacy {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 1.5rem 0 0;
+  }
+  .lf-privacy__link {
+    color: var(--color-accent);
+  }
+
+  /* ---- Knöpfe ----------------------------------------------------- */
+  .lf-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font: inherit;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color var(--transition-base), border-color var(--transition-base),
+      color var(--transition-base);
+  }
+  .lf-btn:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .lf-btn--primary {
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+  .lf-btn--primary:hover {
+    background: var(--color-primary-hover);
+  }
+  .lf-btn--primary:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+  .lf-btn--ghost {
+    background: transparent;
+    border-color: var(--color-border-strong);
+    color: var(--color-text-muted);
+  }
+  .lf-btn--ghost:hover {
+    border-color: var(--color-text-muted);
+    color: var(--color-text);
+  }
+
+  /* ---- Bestätigung ------------------------------------------------ */
+  .lf-danke {
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-align: center;
+    animation: lf-ein 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .lf-danke__marke {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: 0 auto 1.25rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+  }
+  .lf-danke__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0 0 0.75rem;
+  }
+  .lf-danke__title:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+  .lf-danke__text {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    margin: 0;
+    max-width: 40ch;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 560px) {
+    /* Auf schmalen Schirmen bleibt von den Schrittnamen nur die Ziffer —
+       drei Wörter nebeneinander werden dort zu drei Auslassungspunkten. */
+    .lf-progress__name {
+      display: none;
+    }
+    .lf-progress__list {
+      justify-items: center;
+    }
+    .lf-step__nav .lf-btn {
+      flex: 1 1 auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lf-step--ein,
+    .lf-danke {
+      animation: none;
+    }
+    .lf-progress__balken {
+      transition: none;
+    }
+  }
 </style>
-
-<script>
-  import { validateEmail, validateName, validateMessage, isHoneypotFilled, isSpamSubmit } from '../lib/form-validation';
-
-  (function () {
-    const formEl = document.getElementById('lf-form') as HTMLFormElement | null;
-    if (!formEl) return;
-    const form: HTMLFormElement = formEl;
-
-    const startedInput = document.getElementById('lf-started') as HTMLInputElement | null;
-    const step1 = document.getElementById('lf-step-1') as HTMLElement | null;
-    const step2 = document.getElementById('lf-step-2') as HTMLElement | null;
-    const ind1 = document.getElementById('lf-step-ind-1');
-    const ind2 = document.getElementById('lf-step-ind-2');
-    const nextBtn = document.getElementById('lf-next') as HTMLButtonElement | null;
-    const prevBtn = document.getElementById('lf-prev') as HTMLButtonElement | null;
-    const submitBtn = document.getElementById('lf-submit') as HTMLButtonElement | null;
-    const statusEl = document.getElementById('lf-status') as HTMLElement | null;
-
-    // Set timestamp for spam detection
-    if (startedInput) startedInput.value = String(Date.now());
-
-    // Sonstiges toggle
-    const otherTrigger = form.querySelector<HTMLInputElement>('[data-topic="other-trigger"] input');
-    const otherField = document.getElementById('lf-other-field');
-    otherTrigger?.addEventListener('change', () => {
-      if (otherField) otherField.hidden = !otherTrigger.checked;
-    });
-
-    function showStep(num: 1 | 2) {
-      if (step1) step1.hidden = num !== 1;
-      if (step2) step2.hidden = num !== 2;
-      ind1?.classList.toggle('lf-steps__item--active', num === 1);
-      ind2?.classList.toggle('lf-steps__item--active', num === 2);
-      // Move focus to step heading
-      const heading = (num === 1 ? step1 : step2)?.querySelector<HTMLElement>('.lf-step__title');
-      heading?.setAttribute('tabindex', '-1');
-      heading?.focus();
-    }
-
-    function showError(inputEl: HTMLInputElement | HTMLTextAreaElement, errorId: string, show: boolean) {
-      const err = document.getElementById(errorId);
-      if (!err) return;
-      err.hidden = !show;
-      inputEl.setAttribute('aria-invalid', show ? 'true' : 'false');
-    }
-
-    function validateStep2(): boolean {
-      let valid = true;
-
-      const nameEl = form.querySelector<HTMLInputElement>('#lf-name');
-      const emailEl = form.querySelector<HTMLInputElement>('#lf-email');
-      const websiteEl = form.querySelector<HTMLInputElement>('#lf-website');
-      const messageEl = form.querySelector<HTMLTextAreaElement>('#lf-message');
-
-      if (nameEl && !validateName(nameEl.value)) {
-        showError(nameEl, 'lf-name-error', true);
-        if (valid) nameEl.focus();
-        valid = false;
-      } else if (nameEl) {
-        showError(nameEl, 'lf-name-error', false);
-      }
-
-      if (emailEl && !validateEmail(emailEl.value)) {
-        showError(emailEl, 'lf-email-error', true);
-        if (valid) emailEl.focus();
-        valid = false;
-      } else if (emailEl) {
-        showError(emailEl, 'lf-email-error', false);
-      }
-
-      if (websiteEl && websiteEl.value.trim()) {
-        try {
-          new URL(websiteEl.value.trim());
-          showError(websiteEl, 'lf-website-error', false);
-        } catch {
-          showError(websiteEl, 'lf-website-error', true);
-          if (valid) websiteEl.focus();
-          valid = false;
-        }
-      } else if (websiteEl) {
-        showError(websiteEl, 'lf-website-error', false);
-      }
-
-      if (messageEl && !validateMessage(messageEl.value)) {
-        showError(messageEl, 'lf-message-error', true);
-        if (valid) messageEl.focus();
-        valid = false;
-      } else if (messageEl) {
-        showError(messageEl, 'lf-message-error', false);
-      }
-
-      return valid;
-    }
-
-    nextBtn?.addEventListener('click', () => showStep(2));
-    prevBtn?.addEventListener('click', () => showStep(1));
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      // Honeypot check
-      const gotcha = form.querySelector<HTMLInputElement>('[name="_gotcha"]');
-      if (gotcha && isHoneypotFilled(gotcha.value)) return; // Bot — silently ignore
-
-      // Timing check (< 2.5s = likely bot)
-      const started = Number(startedInput?.value ?? 0);
-      if (isSpamSubmit(started, Date.now())) return; // Silently drop
-
-      if (!validateStep2()) return;
-
-      // Disable submit while sending
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Wird gesendet…';
-      }
-      if (statusEl) {
-        statusEl.textContent = '';
-        statusEl.className = 'lf-status sr-only';
-      }
-
-      const endpoint = form.dataset.endpoint ?? '';
-
-      try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(Object.fromEntries(new FormData(form))),
-        });
-
-        if (res.ok) {
-          if (statusEl) {
-            statusEl.textContent = 'Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.';
-            statusEl.className = 'lf-status lf-status--success';
-          }
-          form.reset();
-          showStep(1);
-        } else {
-          throw new Error('Server-Fehler');
-        }
-      } catch {
-        if (statusEl) {
-          statusEl.textContent = 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an mail@dk-dk.de.';
-          statusEl.className = 'lf-status lf-status--error';
-        }
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Anfrage senden';
-        }
-      }
-    });
-  })();
-</script>
