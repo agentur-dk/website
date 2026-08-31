@@ -109,8 +109,12 @@ $k['von_adresse'] = $ausDatei('mailersend.from') ?? ($k['von_adresse'] ?? '');
  * zweite versucht und die Verwechslung ins Fehlerprotokoll geschrieben.
  * Sobald klar ist, welcher stimmt, kann der andere weg.
  */
+// `mailersend.token` steht mit in der Liste, weil ein anderes Projekt auf
+// diesem Webspace danach sucht. Die Datei existiert dort nicht — genau
+// deshalb hier beide Namen: Wer sie eines Tages anlegt, wird gefunden.
 $schluessel = array_values(array_unique(array_filter([
     $ausDatei('mailersend.key'),
+    $ausDatei('mailersend.token'),
     $k['mailersend_token'] ?? '',
 ])));
 

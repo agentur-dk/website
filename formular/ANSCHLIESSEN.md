@@ -53,7 +53,39 @@ const { ts, sig } = await r.json();   // → als ts_server und ts_sig mitschicke
 Zwischen Abholen und Absenden müssen mindestens 3 Sekunden liegen,
 höchstens 2 Stunden.
 
-## Kleinstes vollständiges Beispiel
+## Der kürzeste Weg: ein Script-Tag
+
+Auf dem Server liegt `client.js` neben `send.php`. Ein Projekt bindet es
+ein und markiert sein Formular — mehr nicht:
+
+```html
+<script src="/formular/client.js" defer></script>
+
+<form data-dk-formular data-dk-danke="/danke/">
+  <input name="vorname"  required>
+  <input name="nachname" required>
+  <input name="email" type="email" required>
+  <textarea name="message" required></textarea>
+  <button type="submit">Anfrage senden</button>
+</form>
+```
+
+Das Skript legt den Honigtopf an, holt den signierten Zeitstempel beim
+ersten Anfassen, schreibt mit, ob das Formular bedient wurde, fasst
+Mehrfachauswahlen zusammen und sendet. `data-dk-danke` leitet nach
+Erfolg weiter; wer die Rückmeldung selbst gestalten will, hört auf das
+Ereignis:
+
+```js
+formular.addEventListener('dk:gesendet', (e) => {
+  e.detail.ok ? zeigeDanke() : zeigeFehler();
+});
+```
+
+Heißen die Felder im Projekt anders, hilft ein Attribut:
+`<input name="mail" data-dk-feld="email">`.
+
+## Kleinstes vollständiges Beispiel (ohne client.js)
 
 ```js
 const ENDPUNKT = 'https://vorschau.dk-dk.de/formular/send.php';
