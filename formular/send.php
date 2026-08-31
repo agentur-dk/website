@@ -127,6 +127,68 @@ if ($schluessel === [] || $k['von_adresse'] === '') {
  *  Herkunft und Vorabanfrage
  * ---------------------------------------------------------------- */
 
+/**
+ * Fehlerprotokoll.
+ *
+ * `error_log()` landet auf diesem Webspace in einem Protokoll, an das
+ * man ohne Shell nicht herankommt — ein abgelehnter Versand war damit
+ * praktisch unsichtbar. Deshalb zusätzlich eine eigene Datei.
+ *
+ * Sie liegt im Zählerverzeichnis (`_intern/.zaehler/`), und `_intern/`
+ * ist serverseitig für Anfragen aus dem Web gesperrt. Sie wächst nicht
+ * unbegrenzt: Ab 20 kB wird die vordere Hälfte abgeschnitten. Der
+ * Antworttext wird auf 600 Zeichen gekürzt — für die Fehlermeldung von
+ * MailerSend reicht das, und die Anfragedaten selbst stehen ohnehin
+ * nicht darin.
+ *
+ * Steht bewusst weit oben, vor jedem Aufruf: Als sie weiter unten
+ * zwischen zwei Anweisungen stand, hat ein Umbau sie mitgelöscht. Alle
+ * vier Aufrufe liefen danach ins Leere, PHP brach fatal ab — und weil
+ * auch der Haken für fatale Fehler sie aufruft, blieb das Protokoll
+ * still. Genau der Fehler, den es sichtbar machen soll.
+ */
+function protokolliere(string $verzeichnis, string $zeile): void
+{
+    if ($verzeichnis === '' || !is_dir($verzeichnis) || !is_writable($verzeichnis)) {
+        return;
+    }
+    $datei = $verzeichnis . '/fehler.log';
+    if (is_file($datei) && filesize($datei) > 20000) {
+        $inhalt = (string) file_get_contents($datei);
+        @file_put_contents($datei, substr($inhalt, (int) (strlen($inhalt) / 2)));
+    }
+    @file_put_contents(
+        $datei,
+        gmdate('Y-m-d H:i:s') . ' UTC  ' . $zeile . "\n",
+        FILE_APPEND
+    );
+}
+
+/**
+ * Fatale Fehler festhalten.
+ *
+ * Bricht PHP mit einem fatalen Fehler ab, geht die Antwort leer und mit
+ * HTTP 500 raus — im Browser steht dann nur »Es ist ein Fehler
+ * aufgetreten«, und woran es lag, ist von außen nicht zu erkennen.
+ * Genau dieser Fall hat hier zwei Runden gekostet.
+ *
+ * Der Haken schreibt die Meldung deshalb in dieselbe geschützte Datei
+ * wie ein abgelehnter Versand. Nach außen ändert sich nichts: Die
+ * Meldung wird nirgends ausgegeben.
+ */
+register_shutdown_function(static function () use ($k): void {
+    $fehler = error_get_last();
+    if ($fehler === null
+        || !in_array($fehler['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        return;
+    }
+    protokolliere(
+        $k['zaehler_verzeichnis'] ?? '',
+        'FATAL ' . $fehler['message'] . ' in ' . basename((string) $fehler['file'])
+        . ':' . $fehler['line']
+    );
+});
+
 $herkunft = $_SERVER['HTTP_ORIGIN'] ?? '';
 $erlaubt  = in_array($herkunft, $k['erlaubte_herkunft'], true);
 
@@ -436,6 +498,7 @@ function rufe(string $ziel, string $token, string $rumpf): array
 
 $status  = 0;
 $antwort = '';
+try {
 foreach ($schluessel as $nr => $token) {
     [$status, $antwort] = rufe($ziel, $token, $rumpf);
 
@@ -464,10 +527,19 @@ foreach ($schluessel as $nr => $token) {
         break;
     }
 }
+} catch (Throwable $e) {
+    protokolliere($verzeichnis, 'AUSNAHME ' . get_class($e) . ' — ' . $e->getMessage()
+        . ' in ' . basename($e->getFile()) . ':' . $e->getLine());
+    if (isset($zaehlerDatei)) {
+        @file_put_contents($zaehlerDatei, (string) $zaehlerStand);
+    }
+    antworte(502, ['ok' => false, 'fehler' => 'versand']);
+}
 
 // MailerSend antwortet mit 202 Accepted.
 if ($status < 200 || $status >= 300) {
-    $meldung = 'MailerSend HTTP ' . $status . ' — '
+    $meldung = 'MailerSend HTTP ' . $status . ' nach ' . count($schluessel)
+             . ' Schluessel — '
              . mb_substr(is_string($antwort) ? $antwort : '(keine Antwort)', 0, 600);
     error_log($meldung);
     protokolliere($verzeichnis, $meldung);

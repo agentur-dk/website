@@ -46,18 +46,50 @@ else
   printf '  \033[31m✗\033[0m %-42s %s\n' 'Antwort enthält ts und sig' "$antwort"; schlecht=$((schlecht+1))
 fi
 
-# Der POST-Weg mit gefülltem Honigtopf: Er läuft durch alle Kopfzeilen und
-# endet im gespielten Erfolg, bevor irgendetwas versendet wird. So lässt
-# sich prüfen, dass der Weg steht, ohne eine Mail auszulösen.
+# Der POST-Weg mit gefülltem Honigtopf endet im gespielten Erfolg, bevor
+# irgendetwas versendet wird — er zeigt, dass der Weg steht, löst aber
+# keine Mail aus.
+#
+# Er sagt allerdings NICHTS über den Versand. Das hieß hier lange „POST
+# wird angenommen: 200" und klang nach einer funktionierenden Kette,
+# während in Wahrheit gar nichts gesendet wurde: Der Endpunkt verwirft
+# still, wenn zwischen dem Abholen des Zeitstempels und dem Absenden
+# weniger als drei Sekunden liegen — und ein Prüfskript ist immer
+# schneller als das. Deshalb heißt die Zeile jetzt, was sie prüft.
 sofort=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
   -H "Origin: $herkunft" -H 'Content-Type: application/json' \
   -d '{"hp_email":"pruefung@beispiel.invalid","vorname":"Test","nachname":"Lauf","email":"test@beispiel.de","message":"Pruefung des Endpunkts, keine echte Anfrage.","interaktion":"1"}' \
   "$endpunkt")
-pruefe 'POST wird angenommen'        200 "$sofort"
+pruefe 'Honigtopf endet im Scheinerfolg' 200 "$sofort"
 
 # Konfigurationsdatei darf nicht abrufbar sein. Das leistet die .htaccess
 # und damit Apache — der eingebaute PHP-Server kennt sie nicht, dort
 # schlägt diese Zeile also erwartbar fehl.
+# Der einzige Test, der den Versand wirklich prüft — und der eine echte
+# Mail auslöst. Deshalb nur auf ausdrücklichen Wunsch. Die Wartezeit ist
+# nicht Bequemlichkeit, sondern Bedingung: Ohne sie greift die
+# Drei-Sekunden-Schranke und die Anfrage wird still verworfen.
+if [ "${2:-}" = "--versand" ]; then
+  echo
+  echo "Echter Versandtest — das löst eine Mail aus."
+  paar=$(curl -s --max-time 15 -H "Origin: $herkunft" "$endpunkt?challenge=1")
+  ts=$(printf '%s' "$paar" | sed -n 's/.*"ts":\([0-9]*\).*/\1/p')
+  sig=$(printf '%s' "$paar" | sed -n 's/.*"sig":"\([^"]*\)".*/\1/p')
+  echo "  warte vier Sekunden, sonst greift die Zeitschranke …"
+  perl -e 'select undef, undef, undef, 4'
+  start=$(( ($(date +%s) - 40) * 1000 ))
+  echt=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 \
+    -H "Origin: $herkunft" -H 'Content-Type: application/json' \
+    -d "{\"vorname\":\"Pruef\",\"nachname\":\"Lauf\",\"email\":\"pruefung@beispiel.de\",\"message\":\"Versandtest des Endpunkts.\",\"interaktion\":\"1\",\"form_started\":\"$start\",\"ts_server\":\"$ts\",\"ts_sig\":\"$sig\",\"hp_email\":\"\",\"_gotcha\":\"\"}" \
+    "$endpunkt")
+  case "$echt" in
+    200) printf '  \033[32m✓\033[0m %-42s %s\n' 'Mail wurde zugestellt' "$echt" ;;
+    502) printf '  \033[31m✗\033[0m %-42s %s\n' 'MailerSend lehnt ab — siehe fehler.log' "$echt" ;;
+    429) printf '  \033[33m!\033[0m %-42s %s\n' 'Stundenkontingent erreicht' "$echt" ;;
+    *)   printf '  \033[31m✗\033[0m %-42s %s\n' 'Unerwartete Antwort' "$echt" ;;
+  esac
+fi
+
 basis="${endpunkt%/*}"
 konfig=$(status "$basis/config.php")
 if [ "$konfig" = "403" ] || [ "$konfig" = "404" ]; then
