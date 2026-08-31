@@ -22,7 +22,19 @@ Dieses Skript läuft deshalb getrennt davon auf dem goneo-Webspace.
 2. **Dateien hochladen.** `send.php` und `.htaccess` in das Verzeichnis
    der Unterdomain.
 
-3. **Konfiguration anlegen.** `config.example.php` als `config.php`
+3. **Konfiguration anlegen.** Am einfachsten mit dem Skript:
+
+   ```
+   bash formular/einrichten.sh
+   ```
+
+   Es fragt den Token verdeckt ab — er erscheint nicht auf dem
+   Bildschirm, nicht in der Shell-History und in keinem Log —, erzeugt
+   das Signatur-Geheimnis selbst und schreibt `formular/config.php` mit
+   Rechten 600. Am Ende prüft es nach, dass git die Datei ignoriert.
+   Danach die Datei mit auf den Webspace laden.
+
+   Wer es von Hand machen will: `config.example.php` als `config.php`
    danebenlegen und ausfüllen:
 
    - `mailersend_token` — MailerSend → Integrations → API tokens.
@@ -38,12 +50,13 @@ Dieses Skript läuft deshalb getrennt davon auf dem goneo-Webspace.
 4. **Prüfen.**
 
    ```
-   curl -i "https://formular.dk-dk.de/send.php?challenge=1" \
-        -H "Origin: https://dk-dk.de"
+   bash formular/pruefen.sh https://formular.dk-dk.de/send.php
    ```
 
-   Erwartet: `200` mit `{"ts":…,"sig":"…"}`. Ohne passenden `Origin`
-   muss `403` kommen.
+   Acht Prüfungen von außen: Herkunft, Vorabanfrage, Zeitstempel,
+   POST-Weg und ob `config.php` gesperrt ist. Es wird **keine Mail**
+   ausgelöst — der POST läuft mit gefülltem Honigtopf und endet im
+   gespielten Erfolg, bevor irgendetwas versendet wird.
 
 5. **Adresse im Formular eintragen.** In `src/config/site.config.ts`
    steht `FORM_ENDPOINT`.

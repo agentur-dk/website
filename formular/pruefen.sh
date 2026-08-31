@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+#
+# Prüft einen aufgesetzten Endpunkt von außen.
+#
+#   bash formular/pruefen.sh https://formular.dk-dk.de/send.php
+#
+# Verschickt keine Mail: Der letzte Test hört bei der Zeitschranke auf.
+# Der Token wird nie ausgegeben.
+#
+set -uo pipefail
+
+endpunkt="${1:-}"
+herkunft="${2:-https://dk-dk.de}"
+
+if [ -z "$endpunkt" ]; then
+  echo "Aufruf: bash formular/pruefen.sh <adresse> [herkunft]" >&2
+  exit 1
+fi
+
+gut=0; schlecht=0
+pruefe() {  # $1 = Text, $2 = erwartet, $3 = tatsächlich
+  if [ "$2" = "$3" ]; then
+    printf '  \033[32m✓\033[0m %-42s %s\n' "$1" "$3"; gut=$((gut+1))
+  else
+    printf '  \033[31m✗\033[0m %-42s %s (erwartet %s)\n' "$1" "$3" "$2"; schlecht=$((schlecht+1))
+  fi
+}
+
+status() { curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$@"; }
+
+echo
+echo "Endpunkt: $endpunkt"
+echo "Herkunft: $herkunft"
+echo
+
+pruefe 'ohne Origin abgewiesen'      403 "$(status "$endpunkt?challenge=1")"
+pruefe 'fremde Origin abgewiesen'    403 "$(status -H 'Origin: https://boese.example' "$endpunkt?challenge=1")"
+pruefe 'Vorabanfrage beantwortet'    204 "$(status -X OPTIONS -H "Origin: $herkunft" "$endpunkt")"
+pruefe 'Zeitstempel wird ausgegeben' 200 "$(status -H "Origin: $herkunft" "$endpunkt?challenge=1")"
+pruefe 'GET ohne challenge abgelehnt' 400 "$(status -H "Origin: $herkunft" "$endpunkt")"
+
+antwort=$(curl -s --max-time 15 -H "Origin: $herkunft" "$endpunkt?challenge=1")
+if printf '%s' "$antwort" | grep -q '"sig"'; then
+  printf '  \033[32m✓\033[0m %-42s Signatur vorhanden\n' 'Antwort enthält ts und sig'; gut=$((gut+1))
+else
+  printf '  \033[31m✗\033[0m %-42s %s\n' 'Antwort enthält ts und sig' "$antwort"; schlecht=$((schlecht+1))
+fi
+
+# Der POST-Weg mit gefülltem Honigtopf: Er läuft durch alle Kopfzeilen und
+# endet im gespielten Erfolg, bevor irgendetwas versendet wird. So lässt
+# sich prüfen, dass der Weg steht, ohne eine Mail auszulösen.
+sofort=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
+  -H "Origin: $herkunft" -H 'Content-Type: application/json' \
+  -d '{"hp_email":"pruefung@beispiel.invalid","vorname":"Test","nachname":"Lauf","email":"test@beispiel.de","message":"Pruefung des Endpunkts, keine echte Anfrage.","interaktion":"1"}' \
+  "$endpunkt")
+pruefe 'POST wird angenommen'        200 "$sofort"
+
+# Konfigurationsdatei darf nicht abrufbar sein. Das leistet die .htaccess
+# und damit Apache — der eingebaute PHP-Server kennt sie nicht, dort
+# schlägt diese Zeile also erwartbar fehl.
+basis="${endpunkt%/*}"
+konfig=$(status "$basis/config.php")
+if [ "$konfig" = "403" ] || [ "$konfig" = "404" ]; then
+  printf '  \033[32m✓\033[0m %-42s %s\n' 'config.php nicht abrufbar' "$konfig"; gut=$((gut+1))
+else
+  printf '  \033[31m✗\033[0m %-42s %s (403 oder 404 erwartet)\n' 'config.php nicht abrufbar' "$konfig"; schlecht=$((schlecht+1))
+  echo '      → liegt die .htaccess neben send.php? Der eingebaute'
+  echo '        PHP-Server kennt sie nicht, Apache schon.'
+fi
+
+echo
+if [ "$schlecht" -eq 0 ]; then
+  printf '\033[32m%d von %d in Ordnung.\033[0m\n' "$gut" "$((gut+schlecht))"
+  echo 'Der Endpunkt steht. Jetzt einmal das Formular auf der Website ausfüllen.'
+else
+  printf '\033[31m%d Befund(e).\033[0m\n' "$schlecht"
+  echo 'Bei 403 auf allem: Herkunft in config.php prüfen.'
+  echo 'Bei 500: config.php fehlt oder ist fehlerhaft.'
+  echo 'Bei 404: Pfad oder Unterdomain stimmen nicht.'
+  exit 1
+fi

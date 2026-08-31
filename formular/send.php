@@ -169,8 +169,17 @@ if ($ts > 0 && $sig !== '') {
     // Kein signierter Zeitstempel: Der Browser konnte den GET-Weg nicht
     // erreichen. Dann gilt der unsignierte Wert aus dem Formular — er ist
     // fälschbar, also nur eine schwache Schranke.
+    //
+    // Fehlt auch der, wird verworfen. Vorher war die Prüfung an
+    // `$start > 0` geknüpft und damit wirkungslos für genau den Fall, der
+    // sie am nötigsten hat: ein Skript, das stumpf POSTet und keines der
+    // Zeitfelder mitschickt, kam ungebremst durch. Ein echter Browser
+    // setzt `form_started` beim Laden — wer es weglässt, ist keiner.
     $start = (int) feld($d, 'form_started');
-    if ($start > 0 && (int) (microtime(true) * 1000) - $start < 3000) {
+    if ($start <= 0) {
+        stillVerwerfen();
+    }
+    if ((int) (microtime(true) * 1000) - $start < 3000) {
         stillVerwerfen();
     }
 }
