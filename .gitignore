@@ -15,3 +15,6 @@ second-shepherd/
 # Formular-Endpunkt: Zugangsdaten und Laufzeitdaten
 formular/config.php
 formular/.zaehler/
+formular/worker/.dev.vars
+formular/worker/node_modules/
+formular/worker/.wrangler/

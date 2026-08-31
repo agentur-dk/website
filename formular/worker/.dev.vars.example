@@ -1,0 +1,5 @@
+# Nur für `npm run dev` auf dem eigenen Rechner.
+# Auf `.dev.vars` kopieren und ausfüllen — die Datei steht in .gitignore.
+# In der Cloud kommen diese Werte aus `wrangler secret put`, nicht von hier.
+MAILERSEND_TOKEN=
+SIGNATUR_GEHEIMNIS=

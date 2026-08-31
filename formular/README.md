@@ -1,5 +1,26 @@
 # Formular-Endpunkt
 
+Es gibt ihn zweimal — derselbe Ablauf, dieselbe Schnittstelle, zwei
+Laufzeiten. Das Formular auf der Website merkt keinen Unterschied.
+
+| | wo | braucht |
+|---|---|---|
+| **`worker/`** — im Einsatz | Cloudflare, Adresse von dort | nichts: kein DNS, keine Unterdomain, kein Zertifikat |
+| `send.php` — Reserve | klassischer Webspace | eine Adresse, die dorthin zeigt |
+
+**Der API-Key gehört bei der Cloudflare-Variante in keine Datei**, sondern
+in ein Secret:
+
+```
+cd formular/worker && npx wrangler secret put MAILERSEND_TOKEN
+```
+
+Alles Weitere in [worker/README.md](worker/README.md).
+
+---
+
+## Die PHP-Reserve
+
 Nimmt die Anfragen des Formulars von dk-dk.de entgegen und schickt sie
 über die **MailerSend-API** raus. Kein eigener Mailer, kein PHPMailer,
 kein SMTP — der Versand ist ein einziger HTTPS-Aufruf an

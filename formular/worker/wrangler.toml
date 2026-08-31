@@ -1,0 +1,33 @@
+name = "dk-formular"
+main = "src/worker.js"
+compatibility_date = "2026-08-31"
+
+# Kein Zugriff auf fremde Dienste außer MailerSend, keine Datenbank,
+# kein Zustand außer dem Zähler des Rate Limits.
+
+[vars]
+# Von welchen Adressen darf das Formular senden? Komma-getrennt.
+ERLAUBTE_HERKUNFT = "https://dk-dk.de,https://www.dk-dk.de,https://agentur-dk.github.io"
+
+# Absender. Muss zur in MailerSend verifizierten Sendedomain gehören.
+VON_ADRESSE = "formular@test-69oxl5e5802l785k.mlsender.net"
+VON_NAME    = "Website-Formular"
+
+# Empfänger der Anfragen.
+AN_ADRESSE = "d.kontelis@dk-dk.de"
+AN_NAME    = "agentur dk"
+
+# Anfragen pro IP und Stunde.
+LIMIT_PRO_STUNDE = "5"
+
+# Zähler des Rate Limits. Anlegen mit:
+#   npx wrangler kv namespace create RATE_LIMIT
+# und die ausgegebene id hier eintragen.
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "HIER_DIE_ID_AUS_WRANGLER_EINTRAGEN"
+
+# MAILERSEND_TOKEN und SIGNATUR_GEHEIMNIS stehen NICHT in dieser Datei.
+# Sie werden als Secrets gesetzt und liegen verschlüsselt bei Cloudflare:
+#   npx wrangler secret put MAILERSEND_TOKEN
+#   npx wrangler secret put SIGNATUR_GEHEIMNIS
