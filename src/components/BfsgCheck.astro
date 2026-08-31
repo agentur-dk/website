@@ -162,16 +162,18 @@
   }
 
   /* Tastatur-Fokus (via :focus-within auf dem label-wrapper) */
+  /* Auch hier: Der Rahmen markiert die Auswahl und den Fokus. Schwarz
+     auf einer farbigen Kachel vor dunklem Grund verschwindet halb. */
   .bfsg-option:focus-within .bfsg-option__label {
-    border-color: #000;
-    box-shadow: 0 0 0 4px rgba(0,0,0,0.1);
+    border-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.22);
   }
 
   /* Checked */
   .bfsg-option__radio:checked + .bfsg-option__label {
-    border-color: #000;
+    border-color: #ffffff;
     transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
   }
 
   /* Mobile: etwas kompaktere Buttons */
@@ -242,16 +244,24 @@
     color: var(--bfsg-cta);
   }
 
+  /* Weiß, nicht schwarz. Diese Regel stammt aus der Zeit, als das
+     Ergebnisfeld auf hellem Grund stand: `border: 3px solid #000` und
+     `color: #000` auf inzwischen #0b0b0b ergeben ein Kontrastverhältnis
+     von 1,03:1 — der Knopf war schlicht unsichtbar.
+
+     Aufgefallen ist das erst beim Draufschauen, nicht in der Prüfung:
+     axe-core überspringt Elemente mit `hidden`, und das Ergebnisfeld ist
+     bis zum Ende des Selbstchecks genau das. */
   .bfsg-result__actions .btn--outline {
     background-color: transparent;
-    border: 3px solid #000;
-    color: #000;
+    border: 3px solid var(--color-text);
+    color: var(--color-text);
     padding: 1rem 1.5rem;
     transition: background-color .2s ease, color .2s ease;
   }
   .bfsg-result__actions .btn--outline:hover {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--color-text);
+    color: var(--color-bg);
   }
 
   .bfsg-disclaimer {

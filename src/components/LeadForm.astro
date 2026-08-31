@@ -70,8 +70,14 @@ const schritte = [
       <input type="hidden" name="name" id="lf-name-combined" value="" />
       <!-- Spam: Zeitstempel (wird per JS gesetzt) -->
       <input type="hidden" name="form_started" id="lf-started" value="" />
-      <!-- Honeypot: nur Bots füllen dieses Feld aus -->
+      <!-- Zwei Honigtöpfe: `_gotcha` ist der klassische Name, `homepage`
+           der Köder, den Formular-Bots gern von sich aus ausfüllen. Beide
+           sind für Tastatur und Screenreader unerreichbar. -->
       <input type="text" name="_gotcha" class="lf-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <input type="text" name="homepage" class="lf-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <!-- Beleg, dass jemand das Formular wirklich bedient hat. Ein Bot,
+           der Werte per Skript setzt, löst keine Eingabe-Ereignisse aus. -->
+      <input type="hidden" name="interaktion" id="lf-interaktion" value="0" />
 
       <!-- Fortschritt. Ohne JS bleibt die Leiste verborgen: Sie würde einen
            Schritt behaupten, den es dann nicht gibt. -->
@@ -285,6 +291,18 @@ const schritte = [
     // drei Blöcke untereinander und ließen sich in einem Rutsch ausfüllen.
     if (fortschritt) fortschritt.hidden = false;
 
+    // Echte Bedienung mitschreiben. Kein Bewegungsprofil, keine
+    // Speicherung, keine Auswertung von Inhalten: Es zählt nur, ob
+    // überhaupt eine Eingabe stattgefunden hat.
+    const interaktion = document.getElementById('lf-interaktion') as HTMLInputElement | null;
+    let bedient = false;
+    for (const ereignis of ['pointerdown', 'keydown', 'input'] as const) {
+      form.addEventListener(ereignis, () => {
+        bedient = true;
+        if (interaktion) interaktion.value = '1';
+      }, { once: true, passive: true });
+    }
+
     const seiteUrl = document.getElementById('lf-page-url') as HTMLInputElement | null;
     if (seiteUrl) seiteUrl.value = window.location.href;
     if (startedInput) startedInput.value = String(Date.now());
@@ -469,11 +487,18 @@ const schritte = [
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const gotcha = form.querySelector<HTMLInputElement>('[name="_gotcha"]');
-      if (gotcha && isHoneypotFilled(gotcha.value)) return; // Bot — stillschweigend verwerfen
+      // Alle drei Prüfungen verwerfen stillschweigend: Wer erfährt, woran
+      // er gescheitert ist, baut es beim nächsten Versuch nach.
+      for (const name of ['_gotcha', 'homepage']) {
+        const topf = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
+        if (topf && isHoneypotFilled(topf.value)) return;
+      }
 
       const gestartet = Number(startedInput?.value ?? 0);
       if (isSpamSubmit(gestartet, Date.now())) return;
+
+      // Niemand füllt ein Formular aus, ohne es anzufassen.
+      if (!bedient) return;
 
       // Jeden Schritt prüfen, nicht nur den letzten: Wer über die Tastatur
       // direkt absendet, hätte sonst die ersten beiden übersprungen.
@@ -569,6 +594,26 @@ const schritte = [
     margin-inline: auto;
     padding-inline: 1.5rem;
   }
+  /* Das Formular steht als eigene Fläche auf dem Seitengrund. Vorher lief
+     es ohne Rahmen im Text mit und sah aus wie ein weiterer Abschnitt —
+     nichts sagte „hier passiert etwas". Der feine Anlauf an der Oberkante
+     nimmt die Akzentfarbe des Fortschrittsbalkens auf. */
+  .lf-form {
+    position: relative;
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+  .lf-form::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--color-accent), transparent 62%);
+  }
+
   .lf-heading {
     font-family: var(--font-display);
     font-size: clamp(1.9375rem, 4vw, 2.4375rem);
@@ -793,9 +838,9 @@ const schritte = [
     /* 44px Zielhöhe — WCAG 2.5.8 fordert mindestens 24px. */
     min-height: 44px;
     padding: 0.75rem 1rem;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-border-strong);
     border-radius: var(--radius-md);
-    background: var(--color-surface);
+    background: var(--color-bg);
     color: var(--color-text-muted);
     cursor: pointer;
     transition: border-color var(--transition-base), background-color var(--transition-base),
@@ -808,6 +853,9 @@ const schritte = [
     border-color: var(--color-accent);
     background: var(--color-surface-alt);
     color: var(--color-text);
+  }
+  .lf-topic:hover {
+    border-color: var(--color-text-faint);
   }
   .lf-topic:has(.lf-topic__input:focus-visible) {
     outline: 3px solid var(--color-focus);
@@ -875,9 +923,9 @@ const schritte = [
     width: 100%;
     min-height: 44px;
     padding: 0.75rem 1rem;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-border-strong);
     border-radius: var(--radius-md);
-    background: var(--color-surface);
+    background: var(--color-bg);
     color: var(--color-text);
     font: inherit;
     font-size: 1rem;
@@ -1005,6 +1053,9 @@ const schritte = [
   }
 
   @media (max-width: 560px) {
+    .lf-form {
+      padding: 1.25rem;
+    }
     /* Enger stellen statt weglassen: Bei 390 px bleiben je Spalte rund
        90 px für den Text, „Nachricht" braucht bei 13 px etwa 62 px. Die
        Namen sind die halbe Auskunft der Leiste. */
