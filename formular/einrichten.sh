@@ -66,7 +66,8 @@ return [
     'erlaubte_herkunft'   => [
         'https://dk-dk.de',
         'https://www.dk-dk.de',
-        'https://agentur-dk.github.io',
+        'https://agentur-dk.github.io',   // Vorschau der neuen Seite
+        'https://vorschau.dk-dk.de',      // alle Projekte dort
     ],
     'signatur_geheimnis'  => '$geheimnis',
     'limit_pro_stunde'    => $limit,
@@ -80,8 +81,10 @@ echo
 echo "Geschrieben: $ziel (nur für dich lesbar)"
 echo
 echo 'Nächste Schritte:'
-echo '  1. send.php, .htaccess und config.php auf den Webspace laden.'
-echo '  2. Prüfen mit:  bash formular/pruefen.sh https://DEINE-ADRESSE/send.php'
+echo '  1. send.php, .htaccess und config.php hochladen nach'
+echo '     vorschau.dk-dk.de/formular/'
+echo '  2. Prüfen mit:'
+echo '     bash formular/pruefen.sh https://vorschau.dk-dk.de/formular/send.php'
 echo
 git -C "$verzeichnis/.." check-ignore -q "$ziel" \
   && echo 'Gegenprobe: config.php wird von git ignoriert.' \
