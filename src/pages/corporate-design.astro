@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import RelatedServices from '../components/RelatedServices.astro';
 import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
@@ -144,19 +145,10 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="weave" label="Weitere Leistungen" cell={4} />
-
-
-    <section class="section section--sm" aria-label="Passende Leistungen">
-      <div class="container">
-        <h2 class="section__subheading">Passende Leistungen</h2>
-        <ul class="footer-col__list" role="list">
-          <li><a href={`${base}wordpress-entwicklung.html`} class="footer-col__link">WordPress-Entwicklung</a></li>
-          <li><a href={`${base}online-marketing.html`} class="footer-col__link">Online-Marketing</a></li>
-          <li><a href={`${base}seo-geo.html`} class="footer-col__link">SEO &amp; GEO</a></li>
-        </ul>
-      </div>
-    </section>
+    <DitherBand field="weave" label="Weiter im Thema" cell={4} />
+    <RelatedServices
+      slugs={['wordpress-entwicklung', 'online-marketing', 'seo-geo']}
+    />
 
     <FaqAccordion slug="corporate-design" />
 

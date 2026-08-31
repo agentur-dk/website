@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import RelatedServices from '../components/RelatedServices.astro';
 import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
@@ -149,19 +150,10 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Weitere Leistungen -->
-    <DitherBand field="scan" label="Weitere Leistungen" cell={4} />
-
-    <section class="section section--sm" aria-label="Passende Leistungen">
-      <div class="container">
-        <h2 class="section__subheading">Passende Leistungen</h2>
-        <ul class="footer-col__list" role="list">
-          <li><a href={`${base}social-recruiting.html`} class="footer-col__link">Social Recruiting</a></li>
-          <li><a href={`${base}seo-geo.html`} class="footer-col__link">SEO &amp; GEO</a></li>
-          <li><a href={`${base}corporate-design.html`} class="footer-col__link">Corporate Design</a></li>
-          <li><a href={`${base}ki-services.html`} class="footer-col__link">KI-Services</a></li>
-        </ul>
-      </div>
-    </section>
+    <DitherBand field="scan" label="Weiter im Thema" cell={4} />
+    <RelatedServices
+      slugs={['social-recruiting', 'seo-geo', 'corporate-design', 'ki-services']}
+    />
 
     <!-- SECTION: FAQ -->
     <FaqAccordion slug="online-marketing" />

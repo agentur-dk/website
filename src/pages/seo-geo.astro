@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import RelatedServices from '../components/RelatedServices.astro';
 import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
@@ -149,19 +150,10 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Weitere Leistungen -->
-    <DitherBand field="dunes" label="Weitere Leistungen" cell={4} />
-
-    <section class="section section--sm" aria-label="Passende Leistungen">
-      <div class="container">
-        <h2 class="section__subheading">Passende Leistungen</h2>
-        <ul class="footer-col__list" role="list">
-          <li><a href={`${base}wordpress-entwicklung.html`} class="footer-col__link">WordPress-Entwicklung</a></li>
-          <li><a href={`${base}online-marketing.html`} class="footer-col__link">Online-Marketing</a></li>
-          <li><a href={`${base}ki-services.html`} class="footer-col__link">KI-Services</a></li>
-          <li><a href={`${base}bfsg-wordpress-website-agentur.html`} class="footer-col__link">BFSG &amp; Barrierefreiheit</a></li>
-        </ul>
-      </div>
-    </section>
+    <DitherBand field="dunes" label="Weiter im Thema" cell={4} />
+    <RelatedServices
+      slugs={['wordpress-entwicklung', 'online-marketing', 'ki-services', 'bfsg-wordpress-website-agentur']}
+    />
 
     <!-- SECTION: FAQ -->
     <FaqAccordion slug="seo-geo" />

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import RelatedServices from '../components/RelatedServices.astro';
 import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
@@ -164,21 +165,11 @@ const base = import.meta.env.BASE_URL;
     <FaqAccordion slug="bfsg-wordpress-website-agentur" />
 
     <!-- SECTION: Weitere Leistungen -->
-    <DitherBand field="rain" label="Weitere Leistungen" cell={4} />
-
-    <section class="section section--sm" aria-label="Weitere Leistungen">
-      <div class="container">
-        <h2 class="section__subheading">Weitere Leistungen der agentur dk</h2>
-        <ul class="footer-col__list" role="list">
-          <li><a href={`${base}wordpress-entwicklung.html`} class="footer-col__link">WordPress-Entwicklung</a></li>
-          <li><a href={`${base}seo-geo.html`} class="footer-col__link">SEO &amp; GEO</a></li>
-          <li><a href={`${base}online-marketing.html`} class="footer-col__link">Online-Marketing</a></li>
-          <li><a href={`${base}social-recruiting.html`} class="footer-col__link">Social Recruiting</a></li>
-          <li><a href={`${base}corporate-design.html`} class="footer-col__link">Corporate Design</a></li>
-          <li><a href={`${base}ki-services.html`} class="footer-col__link">KI-Services</a></li>
-        </ul>
-      </div>
-    </section>
+    <DitherBand field="rain" label="Weiter im Thema" cell={4} />
+    <RelatedServices
+      slugs={['wordpress-entwicklung', 'seo-geo', 'online-marketing', 'social-recruiting', 'corporate-design', 'ki-services']}
+      heading="Weitere Leistungen der agentur dk"
+    />
 
     <!-- SECTION: Kontakt -->
     <LeadForm page="BFSG & Barrierefreiheit" heading="BFSG-Beratung anfragen" />
