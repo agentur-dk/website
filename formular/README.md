@@ -40,17 +40,20 @@ angelegt und kein DNS-Eintrag geändert** werden.
    bash formular/hochladen.sh           # hochladen
    ```
 
-   Die Zugangsdaten liest `curl` direkt aus `~/.netrc`; sie erscheinen
-   nie auf der Kommandozeile, nie in der Shell-History und in keiner
-   Ausgabe. Format:
+   Den Zugang einmalig ablegen:
 
    ```
-   machine w4.goneo.de
-     login DEIN-FTP-BENUTZER
-     password DEIN-FTP-PASSWORT
+   bash formular/zugang.sh
    ```
 
-   danach `chmod 600 ~/.netrc`.
+   Fragt Benutzer und Passwort ab (Passwort verdeckt), schreibt
+   `~/.netrc` mit Rechten 600 und prüft die Verbindung gleich mit. Eine
+   vorhandene `~/.netrc` mit anderen Einträgen bleibt erhalten und wird
+   vorher gesichert.
+
+   Die Zugangsdaten liest `curl` danach direkt aus dieser Datei; sie
+   erscheinen nie auf der Kommandozeile, nie in der Shell-History und in
+   keiner Ausgabe.
 
    Zur Verbindung: Der FTP-Dienst kann FTPS, hält aber ein Zertifikat auf
    `*.test-my-website.de` statt auf `w4.goneo.de` — die Namensprüfung

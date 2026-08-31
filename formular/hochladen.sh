@@ -36,13 +36,12 @@ if [ ! -f "$HOME/.netrc" ]; then
   cat >&2 <<'HINWEIS'
 Keine ~/.netrc gefunden.
 
-Anlegen mit (Werte eintragen, dann speichern):
+Anlegen mit:
 
-  machine w4.goneo.de
-    login DEIN-FTP-BENUTZER
-    password DEIN-FTP-PASSWORT
+  bash formular/zugang.sh
 
-Danach:  chmod 600 ~/.netrc
+Das Skript fragt Benutzer und Passwort ab (Passwort verdeckt), legt die
+Datei mit Rechten 600 an und prüft die Verbindung gleich mit.
 HINWEIS
   exit 1
 fi
