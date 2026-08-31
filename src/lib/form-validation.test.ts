@@ -5,6 +5,7 @@ import {
   validateMessage,
   isHoneypotFilled,
   isSpamSubmit,
+  validateMathAnswer,
   validateContactForm,
 } from './form-validation';
 
@@ -149,5 +150,32 @@ describe('validateContactForm', () => {
   it('gültige Website-URL → kein Fehler', () => {
     const errors = validateContactForm({ ...validData, website: 'https://example.de' });
     expect(errors.website).toBeUndefined();
+  });
+});
+
+describe('validateMathAnswer', () => {
+  it('nimmt die richtige Summe an', () => {
+    expect(validateMathAnswer(7, 4, '11')).toBe(true);
+  });
+
+  it('lehnt eine falsche Summe ab', () => {
+    expect(validateMathAnswer(7, 4, '10')).toBe(false);
+  });
+
+  it('stört sich nicht an Leerzeichen, Pluszeichen oder Komma', () => {
+    // Wer „ 11 " eintippt, hat die Aufgabe gelöst — das ist kein Bot.
+    expect(validateMathAnswer(7, 4, ' 11 ')).toBe(true);
+    expect(validateMathAnswer(7, 4, '+11')).toBe(true);
+    expect(validateMathAnswer(3, 4, '7,0')).toBe(true);
+  });
+
+  it('lehnt Leeres und Text ab', () => {
+    expect(validateMathAnswer(7, 4, '')).toBe(false);
+    expect(validateMathAnswer(7, 4, '   ')).toBe(false);
+    expect(validateMathAnswer(7, 4, 'elf')).toBe(false);
+  });
+
+  it('lehnt Zahlen mit Anhang ab', () => {
+    expect(validateMathAnswer(7, 4, '11abc')).toBe(false);
   });
 });

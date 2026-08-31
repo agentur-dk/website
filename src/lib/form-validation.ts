@@ -16,7 +16,7 @@ export interface ContactFormData {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const SPAM_MIN_MS = 2500;
+const SPAM_MIN_MS = 3000;
 const MESSAGE_MIN_LENGTH = 10;
 
 export function validateEmail(email: string): boolean {
@@ -37,6 +37,20 @@ export function isHoneypotFilled(value: string): boolean {
 
 export function isSpamSubmit(startedAt: number, now: number, minMs = SPAM_MIN_MS): boolean {
   return startedAt > 0 && now - startedAt < minMs;
+}
+
+/**
+ * Prüft die Antwort auf die Rechenaufgabe.
+ *
+ * Absichtlich nachsichtig beim Format: Leerzeichen, ein Plus davor oder
+ * ein Komma statt Punkt sollen nicht zur Ablehnung führen. Wer „ 11 "
+ * eintippt, hat die Aufgabe gelöst.
+ */
+export function validateMathAnswer(a: number, b: number, answer: string): boolean {
+  const roh = answer.trim().replace(',', '.').replace(/^\+/, '');
+  if (roh === '') return false;
+  const zahl = Number(roh);
+  return Number.isFinite(zahl) && zahl === a + b;
 }
 
 export function validateContactForm(data: ContactFormData): FormErrors {

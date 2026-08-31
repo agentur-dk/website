@@ -70,11 +70,14 @@ const schritte = [
       <input type="hidden" name="name" id="lf-name-combined" value="" />
       <!-- Spam: Zeitstempel (wird per JS gesetzt) -->
       <input type="hidden" name="form_started" id="lf-started" value="" />
-      <!-- Zwei Honigtöpfe: `_gotcha` ist der klassische Name, `homepage`
-           der Köder, den Formular-Bots gern von sich aus ausfüllen. Beide
-           sind für Tastatur und Screenreader unerreichbar. -->
+      <!-- Zwei Honigtöpfe, absichtlich unterschiedlich versteckt: `hp_email`
+           per `display: none`, `_gotcha` außerhalb des Bildschirms. Manche
+           Bots erkennen `display: none` und lassen solche Felder aus,
+           andere füllen alles, was sie im Markup finden. Beide sind für
+           Tastatur und Screenreader unerreichbar. -->
+      <input type="email" name="hp_email" id="lf-hp-email" class="lf-honeypot-none"
+        tabindex="-1" autocomplete="off" aria-hidden="true" />
       <input type="text" name="_gotcha" class="lf-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
-      <input type="text" name="homepage" class="lf-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
       <!-- Beleg, dass jemand das Formular wirklich bedient hat. Ein Bot,
            der Werte per Skript setzt, löst keine Eingabe-Ereignisse aus. -->
       <input type="hidden" name="interaktion" id="lf-interaktion" value="0" />
@@ -246,6 +249,27 @@ const schritte = [
           </div>
         </div>
 
+        <!-- Rechenprobe. Die Aufgabe entsteht erst im Browser: Stünde sie
+             im ausgelieferten HTML, wäre es für alle Besucher dieselbe und
+             ein Bot müsste sie genau einmal lernen. Bis das Skript sie
+             gesetzt hat, bleibt der Block verborgen. -->
+        <div class="lf-group lf-rechnung" id="lf-rechnung" hidden>
+          <label for="lf-rechenprobe" class="lf-label">
+            Sicherheitsfrage: Wie viel ist <span id="lf-rechnung-frage">…</span>?
+            <span aria-hidden="true">*</span>
+            <span class="sr-only">(Pflichtfeld)</span>
+          </label>
+          <input type="text" id="lf-rechenprobe" class="lf-control lf-control--kurz"
+            inputmode="numeric" autocomplete="off" enterkeyhint="send"
+            aria-describedby="lf-rechnung-hinweis lf-rechnung-error" />
+          <span id="lf-rechnung-hinweis" class="lf-hinweis">
+            Eine kurze Rechenaufgabe hält automatische Anfragen ab.
+          </span>
+          <span id="lf-rechnung-error" class="lf-error" role="alert" hidden>
+            Das Ergebnis stimmt noch nicht. Es steht eine neue Aufgabe bereit.
+          </span>
+        </div>
+
         <p class="lf-privacy">
           Bitte beachten Sie unsere
           <a href={`${base}datenschutz.html`} class="lf-privacy__link">Datenschutzerklärung</a>.
@@ -271,7 +295,10 @@ const schritte = [
 </section>
 
 <script>
-  import { validateEmail, validateName, validateMessage, isHoneypotFilled, isSpamSubmit } from '../lib/form-validation';
+  import {
+    validateEmail, validateName, validateMessage,
+    isHoneypotFilled, isSpamSubmit, validateMathAnswer,
+  } from '../lib/form-validation';
 
   (function () {
     const formEl = document.getElementById('lf-form') as HTMLFormElement | null;
@@ -303,6 +330,39 @@ const schritte = [
       }, { once: true, passive: true });
     }
 
+    // ---- Rechenprobe ------------------------------------------------
+    // Zwei einstellige Zahlen, Summe höchstens 18 — lösbar im Kopf, ohne
+    // Stift, ohne Nachdenken. crypto.getRandomValues statt Math.random:
+    // kostet nichts und ist die Gewohnheit, die man behalten will.
+    const rechnung = document.getElementById('lf-rechnung');
+    const rechnungFrage = document.getElementById('lf-rechnung-frage');
+    const rechenprobe = document.getElementById('lf-rechenprobe') as HTMLInputElement | null;
+    let summandA = 0;
+    let summandB = 0;
+
+    function zufall(bis: number): number {
+      const feld = new Uint32Array(1);
+      crypto.getRandomValues(feld);
+      return (feld[0] % bis) + 1;
+    }
+
+    function neueAufgabe(): void {
+      summandA = zufall(9);
+      summandB = zufall(9);
+      if (rechnungFrage) rechnungFrage.textContent = `${summandA} + ${summandB}`;
+      if (rechenprobe) {
+        rechenprobe.value = '';
+        rechenprobe.setAttribute('aria-invalid', 'false');
+      }
+    }
+
+    if (rechnung && rechnungFrage && rechenprobe) {
+      neueAufgabe();
+      rechnung.hidden = false;
+      rechenprobe.setAttribute('required', 'required');
+      rechenprobe.setAttribute('aria-required', 'true');
+    }
+
     const seiteUrl = document.getElementById('lf-page-url') as HTMLInputElement | null;
     if (seiteUrl) seiteUrl.value = window.location.href;
     if (startedInput) startedInput.value = String(Date.now());
@@ -313,6 +373,17 @@ const schritte = [
     /** Etwas in den Blick holen; der klebende Header bleibt frei. */
     function hinScrollen(el: HTMLElement): void {
       el.scrollIntoView({ block: 'start', behavior: langsam.matches ? 'auto' : 'smooth' });
+    }
+
+    /** Formular gegen die Bestätigung tauschen. */
+    function zeigeDanke(): void {
+      form.hidden = true;
+      if (!danke) return;
+      danke.hidden = false;
+      const dankeTitel = danke.querySelector<HTMLElement>('.lf-danke__title');
+      dankeTitel?.setAttribute('tabindex', '-1');
+      dankeTitel?.focus({ preventScroll: true });
+      hinScrollen(danke);
     }
 
     function feld<T extends HTMLElement>(id: string): T | null {
@@ -386,6 +457,20 @@ const schritte = [
           if (!gueltig) ersterFehler(website);
         } else if (website) {
           zeigeFehler(website, 'lf-website-error', false);
+        }
+
+        // Die Rechenprobe zuletzt: Wer sie falsch hat, bekommt eine neue
+        // Aufgabe. Die alte stehen zu lassen lädt zum Durchprobieren ein.
+        if (rechenprobe && rechnung && !rechnung.hidden) {
+          const stimmt = validateMathAnswer(summandA, summandB, rechenprobe.value);
+          zeigeFehler(rechenprobe, 'lf-rechnung-error', !stimmt);
+          if (!stimmt) {
+            ersterFehler(rechenprobe);
+            const merkeFokus = document.activeElement === rechenprobe;
+            neueAufgabe();
+            rechenprobe.setAttribute('aria-invalid', 'true');
+            if (merkeFokus) rechenprobe.focus();
+          }
         }
       }
 
@@ -487,11 +572,16 @@ const schritte = [
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Alle drei Prüfungen verwerfen stillschweigend: Wer erfährt, woran
-      // er gescheitert ist, baut es beim nächsten Versuch nach.
-      for (const name of ['_gotcha', 'homepage']) {
+      // Honigtopf gefüllt: Der Absender bekommt den ganz normalen
+      // Dankeblock zu sehen, gesendet wird nichts. Ein Bot, der eine
+      // Fehlermeldung bekäme, wüsste, dass er aufgeflogen ist, und
+      // probierte es beim nächsten Mal ohne das Feld.
+      for (const name of ['hp_email', '_gotcha']) {
         const topf = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
-        if (topf && isHoneypotFilled(topf.value)) return;
+        if (topf && isHoneypotFilled(topf.value)) {
+          zeigeDanke();
+          return;
+        }
       }
 
       const gestartet = Number(startedInput?.value ?? 0);
@@ -554,14 +644,7 @@ const schritte = [
           statusEl.textContent = 'Vielen Dank! Wir melden uns innerhalb von 24 Stunden bei Ihnen.';
           statusEl.className = 'lf-status sr-only';
         }
-        form.hidden = true;
-        if (danke) {
-          danke.hidden = false;
-          const dankeTitel = danke.querySelector<HTMLElement>('.lf-danke__title');
-          dankeTitel?.setAttribute('tabindex', '-1');
-          dankeTitel?.focus({ preventScroll: true });
-          hinScrollen(danke);
-        }
+        zeigeDanke();
       } catch {
         if (statusEl) {
           statusEl.textContent =
@@ -655,6 +738,13 @@ const schritte = [
     border-radius: var(--radius-md);
     color: var(--color-error-text);
     font-size: 0.9375rem;
+  }
+
+  /* Zwei Verstecke. `display: none` ist das offensichtlichere — manche
+     Bots erkennen es und lassen das Feld aus, andere füllen stur alles.
+     Deshalb daneben die Variante, die aus dem Bildschirm geschoben wird. */
+  .lf-honeypot-none {
+    display: none;
   }
 
   /* Honeypot: visuell unsichtbar, für Hilfstechnik versteckt. */
@@ -951,6 +1041,21 @@ const schritte = [
   }
   .lf-textarea--gross {
     min-height: 11rem;
+  }
+
+  /* Rechenprobe: schmales Feld, die Aufgabe steht in der Beschriftung. */
+  .lf-control--kurz {
+    max-width: 8rem;
+  }
+  .lf-hinweis {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-faint);
+  }
+  .lf-rechnung {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
   }
 
   .lf-error {

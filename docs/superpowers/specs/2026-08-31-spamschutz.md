@@ -1,25 +1,34 @@
 # Spamschutz des Anfrageformulars
 
-Stand 31.08.2026. Gilt für `src/components/LeadForm.astro` und für das
-PHP-Skript unter `https://dk-dk.de/formular/send.php`, das **nicht** in
-diesem Repository liegt.
+Stand 31.08.2026, überarbeitet nach der Festlegung auf reines
+GitHub-Pages-Hosting. Gilt für `src/components/LeadForm.astro`.
+
+> **Vorbemerkung, die alles andere bestimmt:** Die Seite wird statisch
+> ausgeliefert. Es gibt keinen eigenen Server, auf dem etwas geprüft
+> werden könnte. Damit fallen alle Verfahren weg, die einen signierten
+> Wert vom Server brauchen — also auch ALTCHA und ein fälschungssicherer
+> Zeitstempel. Was bleibt, läuft im Browser des Besuchers und lässt sich
+> von jemandem, der es darauf anlegt, umgehen. Es hält den Massenversand
+> ab, nicht den gezielten Angriff. Diese Unterscheidung ist wichtig, weil
+> sonst eine Sicherheit behauptet würde, die es nicht gibt.
+>
+> **Offen und dringend:** Wohin das Formular überhaupt sendet, ist
+> ungeklärt — siehe Abschnitt 6.
 
 ---
 
 ## 1 · Die unangenehme Wahrheit zuerst
 
-Alles, was im Browser passiert, kann ein Bot überspringen. Wer direkt
+Alles, was im Browser passiert, kann ein Bot überspringen. Wer den
+Endpunkt kennt und direkt dorthin sendet, sieht weder Honigtopf noch
+Zeitschranke noch Rechenaufgabe. Auch die Rechenaufgabe selbst ist
+clientseitig lösbar: `7 + 4` steht als Text im DOM, ein Skript liest sie
+und rechnet.
 
-```
-POST https://dk-dk.de/formular/send.php
-Content-Type: application/json
-{"name":"…","email":"…","message":"…"}
-```
-
-schickt, sieht weder Honigtopf noch Zeitschranke noch Bedienungsnachweis.
-Der Schutz im Formular hält die naive Mehrheit ab — Skripte, die
-Formulare im Netz absuchen und stumpf ausfüllen. **Die eigentliche
-Entscheidung, ob eine Nachricht durchgeht, muss im PHP fallen.**
+Was diese drei Stufen wirklich leisten: Sie halten die Skripte ab, die
+das Netz nach Formularen absuchen und stumpf ausfüllen — und das ist der
+allergrößte Teil des Formularspams. Gegen einen Angreifer, der sich diese
+eine Seite ansieht, helfen sie nicht.
 
 ## 2 · Warum kein reCAPTCHA
 
