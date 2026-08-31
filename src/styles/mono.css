@@ -295,37 +295,7 @@
 /* Hero-Fläche: eine Kugel rechts neben dem Satz, radial ausmaskiert.
    Feste Quadratform statt „volle Höhe der Sektion" — sonst wächst sie
    mit der Textmenge mit und liegt irgendwann hinter der Überschrift. */
-.theme-mono .hero__flaeche {
-  position: absolute;
-  /* Vom oberen Rand aus gesetzt, nicht mittig. Mittig hieße top: 50% —
-     und damit hinge die Position an der Höhe des Hero. Die ändert sich,
-     sobald die Webfonts einspringen und die Überschrift anders umbricht;
-     die Kugel rutschte dabei um gut 60 px. Lighthouse maß dafür
-     CLS 0,061 und zog die Startseite von 100 auf 98. */
-  top: 6rem;
-  right: 0;
-  bottom: auto;
-  left: auto;
-  width: min(30vw, 400px);
-  aspect-ratio: 1;
-  height: auto;
-  opacity: 0.55;
-  pointer-events: none;
-  mask-image: radial-gradient(70% 70% at 50% 50%, black 44%, transparent 86%);
-}
-@media (max-width: 1023px) {
-  /* Unter der Zweispaltigkeit gibt es keine Spalte mehr, in der die Kugel
-     stehen könnte — sie läge hinter der Überschrift. Auch schwach
-     abgedunkelt bleibt ein 1-Bit-Raster unter einer Zeile ein Raster unter
-     einer Zeile; tools/wcag-manual.mjs meldet die Überlappung bei 390 px.
-     Auf dem Telefon trägt die Bildsprache also über die Trennerbänder, die
-     Kartenköpfe und den Footer — dort steht kein Text darüber. */
-  .theme-mono .hero__flaeche {
-    display: none;
-  }
-}
-
-/* --- Flächen im Seitenkopf ---------------------------------- */
+/* --- Flächen im Seitenkopf der Unterseiten -------------------- */
 /* Drei Anordnungen, damit nicht jede Unterseite gleich aussieht. Alle drei
    halten sich von den Textspalten fern — ein Raster unter einer Zeile
    bleibt ein Raster unter einer Zeile, egal wie schwach.
@@ -383,6 +353,51 @@
 }
 .theme-mono .section--hero:has(.hero-flaeche--sockel) {
   padding-bottom: 9rem;
+}
+
+/* --- Die Kugel im Kopf der Startseite ------------------------ */
+.theme-mono .hero__flaeche {
+  /* Die Kugel hängt über die rechte Fensterkante hinaus: Ein Drittel liegt
+     draußen, zwei Drittel stehen im Bild. Der Anschnitt macht sie größer,
+     ohne dass sie den Satz bedrängt — und er nimmt ihr das Briefmarkenhafte
+     einer freistehenden Grafik.
+
+     Die Breite wächst mit dem Fenster, aber nicht beliebig: Sichtbar wird
+     `100vw - 2/3 · Breite`, und dieser Punkt muss rechts vom Satz bleiben.
+     Der Satz endet bei Containerrand + 680 px. Aus beidem folgt der
+     Faktor 1,4 und die Obergrenze — bei 1024 px bleibt die Kugel 340 px
+     schmal, bei 1440 px sind es 820 px.
+     tools/wcag-manual.mjs prüft in zwei Breiten nach, dass kein Text
+     darüber liegt. */
+  --kugel: clamp(340px, calc((100vw - 760px) * 1.4), 820px);
+
+  position: absolute;
+  /* Vom oberen Rand aus gesetzt, nicht mittig. Mittig hieße top: 50% —
+     und damit hinge die Position an der Höhe des Hero. Die ändert sich,
+     sobald die Webfonts einspringen und die Überschrift anders umbricht;
+     die Kugel rutschte dabei um gut 60 px. Lighthouse maß dafür
+     CLS 0,061 und zog die Startseite von 100 auf 98. */
+  top: 4rem;
+  right: calc(var(--kugel) / -3);
+  bottom: auto;
+  left: auto;
+  width: var(--kugel);
+  aspect-ratio: 1;
+  height: auto;
+  opacity: 0.55;
+  pointer-events: none;
+  mask-image: radial-gradient(70% 70% at 50% 50%, black 46%, transparent 88%);
+}
+@media (max-width: 1023px) {
+  /* Unter der Zweispaltigkeit gibt es keine Spalte mehr, in der die Kugel
+     stehen könnte — sie läge hinter der Überschrift. Auch schwach
+     abgedunkelt bleibt ein 1-Bit-Raster unter einer Zeile ein Raster unter
+     einer Zeile; tools/wcag-manual.mjs meldet die Überlappung bei 390 px.
+     Auf dem Telefon trägt die Bildsprache also über die Trennerbänder, die
+     Kartenköpfe und den Footer — dort steht kein Text darüber. */
+  .theme-mono .hero__flaeche {
+    display: none;
+  }
 }
 
 /* Footer-Fläche: ein Streifen an der Oberkante, über dem kein Text steht.
