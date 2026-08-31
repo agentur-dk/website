@@ -53,19 +53,28 @@ wird.
 
 | Maßnahme | Wirkung | Datenschutz |
 |---|---|---|
-| **Zwei Honigtöpfe** (`_gotcha`, `homepage`) | Felder, die kein Mensch sieht. Wer sie füllt, ist ein Skript. | speichert nichts |
-| **Zeitschranke** (`form_started`) | Absenden in unter 2,5 Sekunden gilt als maschinell. | ein Zeitstempel im Formular, nichts im Browser gespeichert |
+| **Honigtopf `hp_email`** | `display: none`, `aria-hidden="true"`, `tabindex="-1"`. Wer es füllt, ist ein Skript. Antwort: der normale Dankeblock, gesendet wird nichts. | speichert nichts |
+| **Honigtopf `_gotcha`** | Dasselbe, aber aus dem Bildschirm geschoben statt `display: none`. Manche Bots erkennen `display: none` und lassen solche Felder aus, andere füllen stur alles im Markup. | speichert nichts |
+| **Zeitschranke** (`form_started`) | Absenden in unter **3 Sekunden** gilt als maschinell. Nicht signiert — ohne Server nicht möglich. | ein Zeitstempel im Formular, nichts im Browser gespeichert |
+| **Rechenaufgabe** (`lf-rechenprobe`) | Zwei einstellige Zahlen, Summe höchstens 18. Entsteht erst im Browser, sonst wäre sie für alle Besucher dieselbe. Falsche Antwort → sofort eine neue. | reiner Text, kein Bild, keine Übermittlung — die Antwort wird nicht mitgesendet |
 | **Bedienungsnachweis** (`interaktion`) | Ein Bot, der Werte per Skript setzt, löst kein `pointerdown`, `keydown` oder `input` aus. Ohne eine einzige Bedienung wird nicht gesendet. | zählt keine Ereignisse, speichert keine Bewegung — nur „ja/nein" |
 
-Alle drei verwerfen stillschweigend. Wer erfährt, woran er gescheitert
-ist, baut es beim nächsten Versuch nach.
+Der Honigtopf spielt Erfolg vor, die übrigen verwerfen stillschweigend
+oder melden nur die Rechenaufgabe zurück. Wer erfährt, woran er
+gescheitert ist, baut es beim nächsten Versuch nach.
+
+Die Rechenaufgabe steht als Text in der Beschriftung, nicht als
+verzerrtes Bild: Ein Screenreader liest „Wie viel ist 7 + 4?" vor, ein
+Bild wäre eine Barriere und widerspräche allem, wofür diese Seite wirbt.
 
 Gegenprobe im Browser, mit abgefangenem Request:
 
 ```
-A) Bot füllt alles per Skript, ohne Ereignisse   → verworfen
-B) Honigtopf gefüllt, sonst echte Bedienung      → verworfen
-C) Echte Eingabe                                 → durchgelassen
+falsche Antwort               → nicht gesendet, neue Aufgabe steht bereit
+richtige Antwort              → gesendet, `rechenprobe` nicht im Payload
+hp_email gefüllt              → Dankeblock, nichts gesendet
+Absenden 1,5 s nach Aufruf    → nicht gesendet
+Werte per Skript, ohne Events → nicht gesendet
 ```
 
 ## 4 · Was ein Server ergänzen könnte — falls es einen gibt
@@ -76,8 +85,8 @@ nichts davon möglich. Nach Wirkung sortiert; nichts davon braucht einen
 Drittanbieter.
 
 1. **Die Felder gegenprüfen, die das Formular mitschickt.**
-   `_gotcha` und `homepage` müssen leer sein, `interaktion` muss `1`
-   sein, `form_started` muss mindestens 2,5 Sekunden zurückliegen und
+   `_gotcha` und `hp_email` müssen leer sein, `interaktion` muss `1`
+   sein, `form_started` muss mindestens 3 Sekunden zurückliegen und
    plausibel jung sein. Ein Bot, der direkt POSTet, schickt diese Felder
    meist gar nicht mit — schon deren Fehlen ist ein Signal.
 
@@ -106,16 +115,19 @@ Drittanbieter.
 
 ## 5 · Was das Formular zusätzlich schickt
 
-Für die Auswertung im PHP stehen bereit:
+Für eine spätere Auswertung auf einem Server stehen bereit:
 
 ```
 page          sprechender Seitenname, z. B. „SEO & GEO"
 page_url      vollständige Adresse der Seite
 form_started  Zeitstempel in Millisekunden
 interaktion   „1", wenn das Formular bedient wurde
+hp_email      Honigtopf, muss leer sein
 _gotcha       Honigtopf, muss leer sein
-homepage      Honigtopf, muss leer sein
 ```
+
+Die Antwort auf die Rechenaufgabe ist bewusst **nicht** dabei: Sie wird
+im Browser geprüft und hat auf der Empfängerseite nichts zu suchen.
 
 ---
 
