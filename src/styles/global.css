@@ -206,6 +206,12 @@ html {
 
 body {
   font-family: var(--font-body);
+  /* Bis zum 01.09.2026 stand hier keine Groesse. Der Fliesstext lief damit
+     auf dem Browser-Standard von 16px, und zwar ueberall dort, wo eine
+     Komponente nichts eigenes setzt — Antworten, Karten, FAQ-Text. Die
+     Skala in tokens/typography.css galt fuer diese Texte schlicht nicht.
+     Jetzt haengt der Fliesstext an ihr und waechst mit ihr. */
+  font-size: var(--font-size-base);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
@@ -341,7 +347,7 @@ a:not([class]):focus-visible {
     min-height: 44px;
     font-family: var(--font-body);
     font-weight: 700;
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: none;
@@ -422,12 +428,12 @@ a:not([class]):focus-visible {
 
   .btn--sm {
     padding: 0.375rem 0.875rem;
-    font-size: 0.8125rem;
+    font-size: 0.975rem;
     min-height: 36px;
   }
   .btn--lg {
     padding: 0.875rem 2rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     min-height: 52px;
   }
   .btn--full {
@@ -454,7 +460,7 @@ a:not([class]):focus-visible {
   }
   .card__title {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.01em;
@@ -462,7 +468,7 @@ a:not([class]):focus-visible {
     margin: 0 0 0.5rem;
   }
   .card__body {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted);
     line-height: 1.65;
     margin: 0;
@@ -475,7 +481,7 @@ a:not([class]):focus-visible {
     /* WCAG 2.5.8: eigenständige Schaltfläche, daher mindestens 24px hoch. */
     min-height: 24px;
     padding-block: 0.125rem;
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--color-primary-light);
     text-decoration: none;
@@ -520,7 +526,7 @@ a:not([class]):focus-visible {
     top: 1.25rem;
     right: 1.5rem;
     font-family: var(--font-display);
-    font-size: 2rem;
+    font-size: 2.4rem;
     font-weight: 700;
     color: var(--color-decor);
     line-height: 1;
@@ -580,7 +586,7 @@ a:not([class]):focus-visible {
     justify-content: center;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: #ffffff;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -593,7 +599,7 @@ a:not([class]):focus-visible {
   .case-card__visual--purple  { background-color: #412848; }
   .case-card__visual--teal    { background-color: #116b7a; }
   .case-card__initials {
-    font-size: 0.6875rem;
+    font-size: 0.825rem;
     text-align: center;
     line-height: 1.2;
   }
@@ -603,7 +609,7 @@ a:not([class]):focus-visible {
     gap: 0.5rem;
   }
   .case-card__tag {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-accent);
     text-transform: uppercase;
@@ -611,14 +617,14 @@ a:not([class]):focus-visible {
   }
   .case-card__title {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-text);
     line-height: 1.3;
     margin: 0;
   }
   .case-card__desc {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted);
     line-height: 1.65;
     margin: 0;
@@ -627,7 +633,7 @@ a:not([class]):focus-visible {
     /* WCAG 2.5.8: eigenständige Schaltfläche, mindestens 24px hoch. */
     min-height: 24px;
     padding-block: 0.125rem;
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--color-primary-light);
     text-decoration: none;
@@ -650,7 +656,7 @@ a:not([class]):focus-visible {
     align-items: center;
     padding: 0.25rem 0.75rem;
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -687,7 +693,7 @@ a:not([class]):focus-visible {
   }
   .hero__headline {
     font-family: var(--font-display);
-    font-size: clamp(1.9375rem, 5vw, 3.0625rem);
+    font-size: clamp(2.325rem, 6vw, 3.675rem);
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.02em;
@@ -696,7 +702,7 @@ a:not([class]):focus-visible {
     margin: 0 0 1.25rem;
   }
   .hero__subline {
-    font-size: 1.125rem;
+    font-size: 1.35rem;
     color: var(--color-text-muted);
     line-height: 1.7;
     max-width: 600px;
@@ -714,7 +720,7 @@ a:not([class]):focus-visible {
      ---------------------------------------------------------- */
   .section-label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -723,7 +729,7 @@ a:not([class]):focus-visible {
   }
   .section-title {
     font-family: var(--font-display);
-    font-size: clamp(1.5625rem, 4vw, 2.4375rem);
+    font-size: clamp(1.875rem, 4.8vw, 2.925rem);
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.02em;
@@ -734,7 +740,7 @@ a:not([class]):focus-visible {
   /* Schwerpunkte section */
   .schwerpunkte-section__eyebrow {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -743,7 +749,7 @@ a:not([class]):focus-visible {
   }
   .schwerpunkte-section__heading {
     font-family: var(--font-display);
-    font-size: clamp(1.5625rem, 4vw, 2.4375rem);
+    font-size: clamp(1.875rem, 4.8vw, 2.925rem);
     font-weight: 700;
     color: var(--color-text-on-light);
     letter-spacing: -0.02em;
@@ -751,7 +757,7 @@ a:not([class]):focus-visible {
     margin: 0 0 1rem;
   }
   .schwerpunkte-section__lead {
-    font-size: 1.0625rem;
+    font-size: 1.275rem;
     color: var(--color-text-muted-on-light);
     max-width: 60ch;
     margin: 0 0 2.5rem;
@@ -781,7 +787,7 @@ a:not([class]):focus-visible {
   }
   .schwerpunkt-card__title {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text-on-light);
     letter-spacing: -0.01em;
@@ -789,7 +795,7 @@ a:not([class]):focus-visible {
     margin: 0;
   }
   .schwerpunkt-card__text {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted-on-light);
     line-height: 1.65;
     margin: 0;
@@ -834,13 +840,13 @@ a:not([class]):focus-visible {
   .usp-card__content { flex: 1; }
   .usp-card__title {
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: 1.275rem;
     font-weight: 700;
     color: var(--color-text-on-light);
     margin: 0 0 0.375rem;
   }
   .usp-card__body {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted-on-light);
     line-height: 1.65;
     margin: 0;
@@ -869,20 +875,20 @@ a:not([class]):focus-visible {
   }
   .process__step-number {
     font-family: var(--font-display);
-    font-size: 1.75rem;
+    font-size: 2.1rem;
     font-weight: 700;
     color: var(--color-primary-on-light);
     line-height: 1;
   }
   .process__step-title {
     font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: var(--color-text-on-light);
     margin: 0;
   }
   .process__step-body {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted-on-light);
     line-height: 1.65;
     margin: 0;
@@ -913,7 +919,7 @@ a:not([class]):focus-visible {
     border: none;
     color: var(--color-text-on-light);
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     text-align: left;
     cursor: pointer;
@@ -943,7 +949,7 @@ a:not([class]):focus-visible {
   }
   .accordion__panel p {
     padding-bottom: 1.25rem;
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted-on-light);
     line-height: 1.7;
     margin: 0;
@@ -987,7 +993,7 @@ a:not([class]):focus-visible {
   .contact__info { display: flex; flex-direction: column; gap: 0.5rem; }
   .contact__address {
     font-style: normal;
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted);
     line-height: 1.7;
     margin: 0;
@@ -1017,7 +1023,7 @@ a:not([class]):focus-visible {
   }
   .page-header__title {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.02em;
@@ -1025,7 +1031,7 @@ a:not([class]):focus-visible {
     margin: 0.75rem 0 1rem;
   }
   .page-header__lead {
-    font-size: 1.125rem;
+    font-size: 1.35rem;
     color: var(--color-text-muted);
     max-width: 60ch;
     line-height: 1.65;
@@ -1043,7 +1049,7 @@ a:not([class]):focus-visible {
     list-style: none;
     margin: 0;
     padding: 0;
-    font-size: 0.8125rem;
+    font-size: 0.975rem;
     color: var(--color-text-faint);
   }
   .breadcrumb__list li:not(:last-child)::after {
@@ -1072,7 +1078,7 @@ a:not([class]):focus-visible {
   .lc-step { display: flex; flex-direction: column; gap: 0.75rem; }
   .lc-question {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
@@ -1099,7 +1105,7 @@ a:not([class]):focus-visible {
     background-color: var(--color-surface-alt);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     font-weight: 500;
     color: var(--color-text-muted);
     cursor: pointer;
@@ -1115,7 +1121,7 @@ a:not([class]):focus-visible {
   }
   .lc-option--compact {
     padding: 0.5rem 0.75rem;
-    font-size: 0.8125rem;
+    font-size: 0.975rem;
   }
   .lc-back {
     display: inline-flex;
@@ -1124,14 +1130,14 @@ a:not([class]):focus-visible {
     background: none;
     border: none;
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     cursor: pointer;
     padding: 0.25rem 0;
     transition: color 150ms ease;
   }
   .lc-back:hover { color: var(--color-text); }
   .lc-breadcrumb {
-    font-size: 0.8125rem;
+    font-size: 0.975rem;
     color: var(--color-text-faint);
     margin: 0;
   }
@@ -1141,7 +1147,7 @@ a:not([class]):focus-visible {
     gap: 0.5rem;
   }
   .lc-result__tag {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -1149,13 +1155,13 @@ a:not([class]):focus-visible {
   }
   .lc-result__title {
     font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
   }
   .lc-result__blurb {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted);
     line-height: 1.6;
     margin: 0;
@@ -1170,7 +1176,7 @@ a:not([class]):focus-visible {
     background: none;
     border: none;
     color: var(--color-text-faint);
-    font-size: 0.8125rem;
+    font-size: 0.975rem;
     cursor: pointer;
     padding: 0.25rem 0;
     margin-top: 0.25rem;
@@ -1217,7 +1223,7 @@ a:not([class]):focus-visible {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--color-text-muted);
     list-style: none;
@@ -1256,7 +1262,7 @@ a:not([class]):focus-visible {
   }
   .section__label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1265,7 +1271,7 @@ a:not([class]):focus-visible {
   }
   .section__headline {
     font-family: var(--font-display);
-    font-size: clamp(1.9375rem, 5vw, 3.0625rem);
+    font-size: clamp(2.325rem, 6vw, 3.675rem);
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.02em;
@@ -1274,7 +1280,7 @@ a:not([class]):focus-visible {
   }
   .section__heading {
     font-family: var(--font-display);
-    font-size: clamp(1.5625rem, 4vw, 2.4375rem);
+    font-size: clamp(1.875rem, 4.8vw, 2.925rem);
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.02em;
@@ -1283,13 +1289,13 @@ a:not([class]):focus-visible {
   }
   .section__subheading {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0 0 0.75rem;
   }
   .section__lead {
-    font-size: 1.125rem;
+    font-size: 1.35rem;
     color: var(--color-text-muted);
     max-width: 60ch;
     line-height: 1.65;
@@ -1328,7 +1334,7 @@ a:not([class]):focus-visible {
   }
   .card__heading {
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: 1.275rem;
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.01em;
@@ -1352,7 +1358,7 @@ a:not([class]):focus-visible {
     display: flex;
     align-items: flex-start;
     gap: 0.625rem;
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted);
     line-height: 1.5;
     padding-left: 0;
@@ -1367,7 +1373,7 @@ a:not([class]):focus-visible {
     justify-content: center;
     background-color: var(--color-primary);
     color: #ffffff;
-    font-size: 0.6875rem;
+    font-size: 0.825rem;
     font-weight: 700;
     border-radius: 50%;
     margin-top: 0.125rem;
@@ -1401,7 +1407,7 @@ a:not([class]):focus-visible {
   }
   .process-list__number {
     font-family: var(--font-display);
-    font-size: 1.75rem;
+    font-size: 2.1rem;
     font-weight: 700;
     color: var(--color-primary-on-light);
     line-height: 1;
@@ -1411,7 +1417,7 @@ a:not([class]):focus-visible {
   }
   .process-list__heading {
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: 1.275rem;
     font-weight: 700;
     color: var(--color-text-on-light);
     margin: 0;
@@ -1420,7 +1426,7 @@ a:not([class]):focus-visible {
     color: var(--color-text);
   }
   .process-list__body {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     color: var(--color-text-muted-on-light);
     line-height: 1.65;
     margin: 0;
@@ -1444,7 +1450,7 @@ a:not([class]):focus-visible {
   .footer-col__link {
     color: var(--color-primary-light);
     text-decoration: none;
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     font-weight: 500;
     transition: color 150ms ease;
   }
@@ -1466,7 +1472,7 @@ a:not([class]):focus-visible {
     gap: 1rem;
   }
   .content-cta__eyebrow {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1474,7 +1480,7 @@ a:not([class]):focus-visible {
   }
   .content-cta__title {
     font-family: var(--font-display);
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(1.8rem, 3.6vw, 2.4rem);
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.02em;
@@ -1482,7 +1488,7 @@ a:not([class]):focus-visible {
     margin: 0;
   }
   .content-cta__sub {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #d4d4d4;
     max-width: 480px;
     margin: 0;
@@ -1498,7 +1504,7 @@ a:not([class]):focus-visible {
   }
   .content-cta__phone {
     color: #d4d4d4;
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     text-decoration: none;
   }
   .content-cta__phone:hover {
@@ -1524,7 +1530,7 @@ a:not([class]):focus-visible {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-full);
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     font-weight: 500;
     color: var(--color-text-muted);
     cursor: pointer;
@@ -1543,7 +1549,7 @@ a:not([class]):focus-visible {
     font-weight: 600;
   }
   .filter-status {
-    font-size: 0.8125rem;
+    font-size: 0.975rem;
     color: var(--color-text-faint);
     margin: 0;
   }
@@ -1568,7 +1574,7 @@ a:not([class]):focus-visible {
     padding: 0;
   }
   .case-card__kpi {
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--color-accent);
     border-left: 2px solid var(--color-primary);
@@ -1576,7 +1582,7 @@ a:not([class]):focus-visible {
     margin-top: 0.25rem;
   }
   .case-card__meta {
-    font-size: 0.8125rem;
+    font-size: 0.975rem;
     color: var(--color-text-faint);
     margin: 0;
   }
@@ -1673,13 +1679,13 @@ a:not([class]):focus-visible {
   }
   .consent-banner__heading {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
   }
   .consent-banner__desc {
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     color: var(--color-text-muted);
     line-height: 1.6;
     margin: 0;
@@ -1723,7 +1729,7 @@ a:not([class]):focus-visible {
   }
   .consent-modal__title {
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: 1.275rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
@@ -1768,18 +1774,18 @@ a:not([class]):focus-visible {
     gap: 1rem;
   }
   .consent-modal__group-title {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--color-text);
   }
   .consent-modal__group-desc {
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     color: var(--color-text-muted);
     line-height: 1.6;
     margin: 0;
   }
   .consent-modal__badge {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--color-success);
     white-space: nowrap;

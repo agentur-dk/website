@@ -13,15 +13,18 @@
   --dk-font-mono:    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
                      'Liberation Mono', 'Courier New', monospace;
 
-  /* Schriftgrößen — 8-stufige Skala */
-  --dk-font-size-xs:   0.75rem;    /* 12px */
-  --dk-font-size-sm:   0.875rem;   /* 14px */
-  --dk-font-size-base: 1rem;       /* 16px */
-  --dk-font-size-md:   1.25rem;    /* 20px */
-  --dk-font-size-lg:   1.5625rem;  /* 25px */
-  --dk-font-size-xl:   1.9375rem;  /* 31px */
-  --dk-font-size-2xl:  2.4375rem;  /* 39px */
-  --dk-font-size-3xl:  3.0625rem;  /* 49px */
+  /* Schriftgrößen — 8-stufige Skala, Verhältnis 1,25.
+     Am 01.09.2026 geschlossen um 20 % angehoben: Der Fließtext war
+     mit 16px zu klein. Angehoben wurde die ganze Leiter, damit die
+     Abstände zwischen den Graden bleiben, wie sie abgestimmt sind. */
+  --dk-font-size-xs:   0.9rem;    /* 14.4px */
+  --dk-font-size-sm:   1.05rem;   /* 16.8px */
+  --dk-font-size-base: 1.2rem;       /* 19.2px */
+  --dk-font-size-md:   1.5rem;    /* 24px */
+  --dk-font-size-lg:   1.875rem;  /* 30px */
+  --dk-font-size-xl:   2.325rem;  /* 37.2px */
+  --dk-font-size-2xl:  2.925rem;  /* 46.8px */
+  --dk-font-size-3xl:  3.675rem;  /* 58.8px */
 }
 
 /* ============================================================
@@ -33,13 +36,13 @@
    Analyse dahinter: docs/superpowers/specs/2026-08-30-mummentum-analyse.md
    ============================================================ */
 :root {
-  --dk-tracking-display: -0.04em;   /* ab 49px */
-  --dk-tracking-2xl:     -0.035em;  /* 39px    */
-  --dk-tracking-xl:      -0.03em;   /* 31px    */
-  --dk-tracking-lg:      -0.02em;   /* 25px    */
-  --dk-tracking-md:      -0.015em;  /* 20px    */
-  --dk-tracking-base:     0;        /* ab 16px */
-  --dk-tracking-mono:     0.18em;   /* 10–12px Versalien */
+  --dk-tracking-display: -0.04em;   /* ab 59px */
+  --dk-tracking-2xl:     -0.035em;  /* 47px    */
+  --dk-tracking-xl:      -0.03em;   /* 37px    */
+  --dk-tracking-lg:      -0.02em;   /* 30px    */
+  --dk-tracking-md:      -0.015em;  /* 24px    */
+  --dk-tracking-base:     0;        /* ab 19px */
+  --dk-tracking-mono:     0.18em;   /* 12–14px Versalien */
 
   --dk-leading-display: 1.02;
   --dk-leading-title:   1.08;

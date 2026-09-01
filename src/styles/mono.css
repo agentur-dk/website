@@ -97,7 +97,7 @@
   align-items: center;
   gap: 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.825rem;
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -116,7 +116,7 @@
 
 /* --- Überschriften ------------------------------------------ */
 .theme-mono .hero__headline {
-  font-size: clamp(2.4375rem, 6.4vw, 4.25rem);
+  font-size: clamp(2.925rem, 7.68vw, 5.1rem);
   font-weight: 400;
   letter-spacing: var(--dk-tracking-display);
   line-height: var(--dk-leading-display);
@@ -132,7 +132,7 @@
 
 .theme-mono .section-title,
 .theme-mono .schwerpunkte-section__heading {
-  font-size: clamp(2rem, 4.6vw, 3.0625rem);
+  font-size: clamp(2.4rem, 5.52vw, 3.675rem);
   font-weight: 400;
   letter-spacing: var(--dk-tracking-2xl);
   line-height: var(--dk-leading-title);
@@ -147,7 +147,7 @@
 .theme-mono .usp-card__title,
 .theme-mono .schwerpunkt-card__title,
 .theme-mono .wert-card__title {
-  font-size: 1.375rem;
+  font-size: 1.65rem;
   font-weight: 400;
   letter-spacing: var(--dk-tracking-lg);
   line-height: var(--dk-leading-tight);
@@ -162,7 +162,7 @@
    dem Raster. */
 .theme-mono .page-header__title,
 .theme-mono .section__headline {
-  font-size: clamp(2rem, 4.8vw, 3.25rem);
+  font-size: clamp(2.4rem, 5.76vw, 3.9rem);
   font-weight: 400;
   letter-spacing: var(--dk-tracking-2xl);
   line-height: var(--dk-leading-title);
@@ -171,7 +171,7 @@
 }
 
 .theme-mono .section__heading {
-  font-size: clamp(1.75rem, 3.6vw, 2.4375rem);
+  font-size: clamp(2.1rem, 4.32vw, 2.925rem);
   font-weight: 400;
   letter-spacing: var(--dk-tracking-xl);
   line-height: var(--dk-leading-title);
@@ -180,7 +180,7 @@
 }
 
 .theme-mono .section__subheading {
-  font-size: 1.1875rem;
+  font-size: 1.425rem;
   font-weight: 400;
   letter-spacing: var(--dk-tracking-md);
   line-height: var(--dk-leading-tight);
@@ -192,7 +192,7 @@
   align-items: center;
   gap: 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.825rem;
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -232,7 +232,7 @@
 .theme-mono .section__lead,
 .theme-mono .page-header__lead,
 .theme-mono .schwerpunkte-section__lead {
-  font-size: 1.0625rem;
+  font-size: 1.275rem;
   line-height: var(--dk-leading-body);
   letter-spacing: var(--dk-tracking-base);
   max-width: var(--dk-measure-lead);
@@ -243,7 +243,7 @@
 .theme-mono .usp-card__body,
 .theme-mono .schwerpunkt-card__text,
 .theme-mono .wert-card__body {
-  font-size: 0.90625rem;
+  font-size: 1.0875rem;
   line-height: var(--dk-leading-body);
   max-width: var(--dk-measure-body);
   color: var(--color-text-muted);
@@ -252,7 +252,7 @@
 /* --- Zähler und Etiketten ----------------------------------- */
 .theme-mono .service-card__number {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: var(--dk-tracking-mono);
   color: var(--color-text-muted);
@@ -464,7 +464,7 @@
 }
 
 .theme-mono.theme-mono .cta-section__title {
-  font-size: clamp(2rem, 4.6vw, 3.0625rem);
+  font-size: clamp(2.4rem, 5.52vw, 3.675rem);
   letter-spacing: var(--dk-tracking-2xl);
   line-height: var(--dk-leading-title);
   max-width: var(--dk-measure-title);
@@ -474,7 +474,7 @@
 .theme-mono.theme-mono .cta-section__direct-label,
 .theme-mono.theme-mono .footer-heading {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.825rem;
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;

@@ -58,7 +58,7 @@ const durchlaeufe = [
                   alt={versteckt ? '' : k.name}
                   loading="lazy"
                   decoding="async"
-                  style={`--logo-hoehe: ${k.hoehe ?? 2.1}rem`}
+                  style={`--logo-hoehe: ${k.hoehe ?? 2.4}rem`}
                 />
               ) : (
                 <span class="logo-strip__name">{k.name}</span>
@@ -124,14 +124,14 @@ const durchlaeufe = [
     align-items: center;
     /* Gleiche Zeilenhöhe für Bild- und Wortmarken, damit eine gemischte
        Reihe eine gemeinsame Grundlinie behält. */
-    height: 3.5rem;
+    height: 5.3rem;
   }
 
   /* Aus jeder Bildmarke wird eine weiße Silhouette. */
   .logo-strip__logo {
-    height: var(--logo-hoehe, 2.1rem);
+    height: var(--logo-hoehe, 2.4rem);
     width: auto;
-    max-width: 13.2rem;
+    max-width: 19rem;
     object-fit: contain;
     filter: brightness(0) invert(1);
     /* Nicht ganz deckend: die Logos sollen die Überschriften der Seite
