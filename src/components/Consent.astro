@@ -1,92 +1,145 @@
 ---
 /**
- * Einwilligungsbanner — SimpleCMP, selbst gehostet.
+ * Einwilligungsbanner — CookieConsent (vanilla-cookieconsent, MIT).
  *
- * Ersetzt den vorher handgeschriebenen Banner. Die Regel dazu steht in
- * `~/Claude-Projekte/CLAUDE.md` und gilt für alle Webprojekte.
+ * **Vergleichsfassung zu SimpleCMP auf `main`.** Gleiche Aufgabe, gleiche
+ * Zusagen, gleiche Messpunkte — damit die Entscheidung auf Zahlen fällt
+ * und nicht auf Sternen.
  *
- * **Warum kein CDN:** Ein Aufruf an jsdelivr überträgt die IP jedes
- * Besuchers an einen Dritten — und zwar *bevor* eine Einwilligung
- * vorliegt. Genau das soll dieser Banner verhindern; er darf nicht selbst
- * der erste Verstoß sein. Dieselbe Begründung, aus der hier reCAPTCHA
- * ausgeschlossen ist und die Schriften lokal liegen. Herkunft und Bauweg
- * stehen in `public/vendor/simplecmp/HERKUNFT.md`.
+ * Unterschiede, die zählen:
  *
- * **Warum das große Bundle:** Die deutschen Texte stecken nur darin. Der
- * kleinere `core`-Build spart 62 kB und zeigt einen englischen Banner —
- * nachgemessen, „Alle akzeptieren" kommt darin nicht vor.
+ * — **Über npm statt selbst gebautes Bundle.** Die Fassung steht in
+ *   package.json, `npm update` zieht nach, Astro bündelt nur das
+ *   Gebrauchte. Bei SimpleCMP gibt es weder npm-Paket noch fertige
+ *   Bundles; das Bundle dort ist selbst gebaut und ohne Fassungsverwaltung.
  *
- * **Warum auf jeder Seite, auch auf Datenschutz und Impressum:** Der
- * vorherige Banner war dort abgeschaltet. Mit SimpleCMP wäre damit auch
- * der Knopf zum Ändern der Einstellungen weg — ausgerechnet auf der
- * Seite, auf die die Datenschutzerklärung zum Widerruf verweist. Der
- * Banner selbst erscheint ohnehin nur, solange nichts entschieden ist.
+ * — **Blockiert über das Markup.** Das Google-Tag steht als
+ *   `type="text/plain"` mit `data-category` im Dokument; ohne
+ *   Einwilligung führt der Browser es gar nicht erst aus. Die
+ *   SimpleCMP-Fassung legt das Skript nach der Zustimmung per JavaScript
+ *   an — das hängt daran, dass unser eigener Code richtig läuft.
+ *
+ * — **Deutsche Texte stehen hier.** CookieConsent liefert keine mit. Das
+ *   ist die bessere Aufteilung: Die Wortwahl gehört zur Seite. Bei
+ *   SimpleCMP zwingt sie zum großen Bundle, weil die Sprachdateien nur
+ *   darin stecken.
+ *
+ * Kein CDN, aus demselben Grund wie bisher: Ein Aufruf an jsdelivr
+ * überträgt die IP jedes Besuchers an einen Dritten, bevor eine
+ * Einwilligung vorliegt. Das Paket wird lokal gebündelt.
+ *
+ * `anonymize_ip` bleibt — die Datenschutzerklärung sagt es zu, und ein
+ * Werkzeugwechsel ist kein Anlass, eine Zusage fallen zu lassen.
  */
 const base = import.meta.env.BASE_URL;
+const GA_ID = 'G-KJ0TV1QCMB';
 ---
 
-<link rel="stylesheet" href={`${base}vendor/simplecmp/default.css`} />
-<script src={`${base}vendor/simplecmp/simplecmp.global.js`} defer is:inline></script>
-<script is:inline define:vars={{ base }}>
-  // Das Bundle wird mit `defer` geladen und steht deshalb erst nach dem
-  // Parsen bereit. `DOMContentLoaded` feuert nach allen defer-Skripten.
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof SimpleCMP === 'undefined') return;
+<script
+  type="text/plain"
+  data-category="analytics"
+  src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+  async
+></script>
+<script
+  type="text/plain"
+  data-category="analytics"
+  is:inline
+  set:html={`window.dataLayer=window.dataLayer||[];window.gtag=function(){window.dataLayer.push(arguments)};` +
+    `gtag('js',new Date());gtag('config','${GA_ID}',{anonymize_ip:true});`}
+></script>
 
-    var GA_ID = 'G-KJ0TV1QCMB';
-    var geladen = false;
+<!--
+  Kein `define:vars`: Astro macht daraus ein Inline-Skript ohne Modultyp,
+  und die `import`-Zeilen brechen mit »Cannot use import statement outside
+  a module«. Im Browser gemessen, im Markup nicht zu sehen. Der Basispfad
+  kommt deshalb über import.meta.env, das Vite beim Bauen einsetzt.
+-->
+<script>
+  import * as CookieConsent from 'vanilla-cookieconsent';
+  import 'vanilla-cookieconsent/dist/cookieconsent.css';
 
-    /**
-     * Google Analytics nachladen — nur nach Einwilligung.
-     *
-     * Übernommen aus dem abgelösten Banner, einschließlich
-     * `anonymize_ip`: Die Datenschutzerklärung sagt beides ausdrücklich
-     * zu, und ein Wechsel des Bannerwerkzeugs ist kein Anlass, eine
-     * Zusage stillschweigend fallen zu lassen.
-     */
-    function ladeGoogleTag() {
-      if (geladen) return;
-      geladen = true;
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
-      document.head.appendChild(s);
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function () { window.dataLayer.push(arguments); };
-      window.gtag('js', new Date());
-      window.gtag('config', GA_ID, { anonymize_ip: true });
-    }
+  const base = import.meta.env.BASE_URL;
 
-    SimpleCMP.init({
-      storageName: 'dk_consent_v2',
-      storageMethod: 'localStorage',
-      lang: 'de',
-      privacyPolicy: base + 'datenschutz.html',
-      imprint: base + 'impressum.html',
-      floatingTrigger: { label: 'Datenschutz-Einstellungen' },
+  void CookieConsent.run({
+    mode: 'opt-in',
+    manageScriptTags: true,
+    // Nimmt die Messcookies weg, wenn jemand die Einwilligung zurückzieht.
+    // Ohne das bliebe der Widerruf folgenlos.
+    autoClearCookies: true,
+    // Der Banner soll auch in der Messung erscheinen; sonst sähe die
+    // Leistungsmessung besser aus als die Wirklichkeit.
+    hideFromBots: false,
+    cookie: { name: 'dk_consent_v2' },
 
-      services: [
-        {
-          name: 'google-analytics',
-          title: 'Google Analytics',
-          description:
-            'Statistische Auswertung der Nutzung (Reichweitenmessung), '
-            + 'mit gekürzter IP-Adresse.',
-          purposes: ['performance'],
-          cookies: [/^_ga/],
-          default: false,
-          onAccept: ladeGoogleTag,
+    guiOptions: {
+      consentModal: { layout: 'box', position: 'bottom right' },
+      preferencesModal: { layout: 'box' },
+    },
+
+    categories: {
+      necessary: { enabled: true, readOnly: true },
+      analytics: {
+        autoClear: { cookies: [{ name: /^_ga/ }, { name: '_gid' }, { name: '_gat' }] },
+      },
+    },
+
+    language: {
+      default: 'de',
+      translations: {
+        de: {
+          consentModal: {
+            title: 'Datenschutz-Einstellungen',
+            description:
+              'Diese Seite nutzt localStorage und sessionStorage für Dinge, die ohne ' +
+              'sie nicht funktionieren: Ihre Auswahl hier, den Bewegungsschalter und ' +
+              'die Darstellung im Seitenkopf. Zusätzlich möchten wir anonymisiert ' +
+              'messen, welche Seiten aufgerufen werden. Ohne Ihre Zustimmung wird ' +
+              'dafür nichts geladen.',
+            acceptAllBtn: 'Alle akzeptieren',
+            acceptNecessaryBtn: 'Nur notwendige',
+            showPreferencesBtn: 'Einzeln auswählen',
+          },
+          preferencesModal: {
+            title: 'Datenschutz-Einstellungen',
+            acceptAllBtn: 'Alle akzeptieren',
+            acceptNecessaryBtn: 'Nur notwendige',
+            savePreferencesBtn: 'Auswahl speichern',
+            closeIconLabel: 'Schließen',
+            sections: [
+              {
+                title: 'Notwendig',
+                description:
+                  'Speichert Ihre Auswahl auf dieser Seite sowie den ' +
+                  'Bewegungsschalter. Ohne diese Einträge müssten Sie bei jedem ' +
+                  'Aufruf neu entscheiden. Sie lassen sich nicht abwählen.',
+                linkedCategory: 'necessary',
+              },
+              {
+                title: 'Statistik — Google Analytics',
+                description:
+                  'Misst anonymisiert, welche Seiten aufgerufen werden; die ' +
+                  'IP-Adresse wird gekürzt. Ohne Ihre Einwilligung wird das ' +
+                  'Google-Tag nicht geladen und keine Anfrage gestellt.',
+                linkedCategory: 'analytics',
+              },
+              {
+                title: 'Mehr dazu',
+                description:
+                  `Einzelheiten in der <a href="${base}datenschutz.html">Datenschutzerklärung</a>. ` +
+                  `Verantwortlich ist die im <a href="${base}impressum.html">Impressum</a> ` +
+                  'genannte Stelle. Sie können Ihre Auswahl jederzeit ändern.',
+              },
+            ],
+          },
         },
-        {
-          name: 'externe-medien',
-          title: 'Externe Medien',
-          description:
-            'Inhalte von fremden Servern, etwa Videos oder Karten. '
-            + 'Derzeit ist kein solcher Inhalt eingebunden.',
-          purposes: ['marketing'],
-          default: false,
-        },
-      ],
-    });
+      },
+    },
   });
+
+  // Widerruf von überall — Art. 7 Abs. 3 DSGVO verlangt, dass das
+  // Zurücknehmen so leicht ist wie das Erteilen.
+  for (const a of document.querySelectorAll('a[href="#datenschutz-einstellungen"]')) {
+    a.addEventListener('click', (e) => { e.preventDefault(); CookieConsent.showPreferences(); });
+  }
 </script>
