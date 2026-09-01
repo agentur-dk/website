@@ -2,31 +2,40 @@
 /**
  * Einwilligungsbanner — CookieConsent (vanilla-cookieconsent, MIT).
  *
- * **Vergleichsfassung zu SimpleCMP auf `main`.** Gleiche Aufgabe, gleiche
- * Zusagen, gleiche Messpunkte — damit die Entscheidung auf Zahlen fällt
- * und nicht auf Sternen.
+ * Verbindlich für alle Webprojekte; die Regel steht in
+ * `~/Claude-Projekte/CLAUDE.md`. Abgelöst wurden nacheinander ein
+ * handgeschriebener Banner und SimpleCMP — die Entscheidung fiel auf
+ * Messwerten, nicht auf Bekanntheit:
  *
- * Unterschiede, die zählen:
+ *   Bundle       SimpleCMP 58 kB gepackt  →  CookieConsent 14 kB
+ *   Lighthouse   30/32 Läufe ≥ 99         →  31/32, index mobil 96 → 100
+ *   axe-core     0 Verstöße               →  0 Verstöße
+ *   Bezug        selbst gebaut            →  npm, Fassung in package.json
  *
- * — **Über npm statt selbst gebautes Bundle.** Die Fassung steht in
- *   package.json, `npm update` zieht nach, Astro bündelt nur das
- *   Gebrauchte. Bei SimpleCMP gibt es weder npm-Paket noch fertige
- *   Bundles; das Bundle dort ist selbst gebaut und ohne Fassungsverwaltung.
+ * **Über npm, nicht als abgelegtes Bundle.** Die Fassung steht in
+ * package.json, `npm update` zieht sie nach, Astro bündelt nur das
+ * Gebrauchte. SimpleCMP hatte weder npm-Paket noch fertige Bundles; das
+ * Bundle dort war selbst gebaut und ohne Fassungsverwaltung.
  *
- * — **Blockiert über das Markup.** Das Google-Tag steht als
- *   `type="text/plain"` mit `data-category` im Dokument; ohne
- *   Einwilligung führt der Browser es gar nicht erst aus. Die
- *   SimpleCMP-Fassung legt das Skript nach der Zustimmung per JavaScript
- *   an — das hängt daran, dass unser eigener Code richtig läuft.
+ * **Blockiert wird über das Markup.** Das Google-Tag steht als
+ * `type="text/plain"` mit `data-category` im Dokument; ohne Einwilligung
+ * führt der Browser es gar nicht erst aus. Das hängt nicht daran, dass
+ * unser eigener Code richtig läuft — der strengere Weg.
  *
- * — **Deutsche Texte stehen hier.** CookieConsent liefert keine mit. Das
- *   ist die bessere Aufteilung: Die Wortwahl gehört zur Seite. Bei
- *   SimpleCMP zwingt sie zum großen Bundle, weil die Sprachdateien nur
- *   darin stecken.
+ * **Kein CDN.** Ein Aufruf an jsdelivr überträgt die IP jedes Besuchers an
+ * einen Dritten, und zwar *bevor* eine Einwilligung vorliegt. Genau das
+ * soll dieser Banner verhindern; er darf nicht selbst der erste Verstoß
+ * sein. Dieselbe Begründung, aus der reCAPTCHA ausgeschlossen ist und die
+ * Schriften lokal liegen.
  *
- * Kein CDN, aus demselben Grund wie bisher: Ein Aufruf an jsdelivr
- * überträgt die IP jedes Besuchers an einen Dritten, bevor eine
- * Einwilligung vorliegt. Das Paket wird lokal gebündelt.
+ * **Die deutschen Texte stehen hier**, nicht im Paket — CookieConsent
+ * liefert keine mit. Das ist die bessere Aufteilung: Die Wortwahl gehört
+ * zur Seite.
+ *
+ * **Auf jeder Seite, auch auf Datenschutz und Impressum.** Sonst fehlt der
+ * Knopf zum Ändern ausgerechnet dort, wohin die Datenschutzerklärung zum
+ * Widerruf verweist. Der Banner selbst erscheint ohnehin nur, solange
+ * nichts entschieden ist.
  *
  * `anonymize_ip` bleibt — die Datenschutzerklärung sagt es zu, und ein
  * Werkzeugwechsel ist kein Anlass, eine Zusage fallen zu lassen.
