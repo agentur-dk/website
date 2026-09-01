@@ -1,0 +1,4 @@
+SimpleCMP v0.4.1 (BSD-3-Clause), selbst gebaut aus
+https://github.com/SimpleCMP/simplecmp @ d9efdff — es gibt kein npm-Paket
+und keine Release-Bundles. Aktualisieren: klonen, pnpm install, pnpm build,
+dist/simplecmp.global.js und dist/styles/default.css hierher kopieren.
