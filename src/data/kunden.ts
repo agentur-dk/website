@@ -52,23 +52,25 @@ export const kunden: readonly Kunde[] = [
     name: 'TARGOBANK AG',
     logo: 'targobank.svg',
     // Mit 6,67:1 die breiteste Marke der Reihe — entsprechend flach.
-    hoehe: 1.4,
+    hoehe: 1.68,
   },
   {
-    name: 'Bundesministerium BMBFSFJ',
-    ohneLogo:
-      'Das Corporate Design des Bundes erlaubt keine Einfärbung oder sonstige ' +
-      'Veränderung des Behördenlogos, und eine Referenznennung mit Logo ' +
-      'erweckt den Anschein einer amtlichen Empfehlung. Hier bleibt es beim Namen.',
-  },
-  {
-    name: 'Berufsförderungswerk Düren',
+    name: 'Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend',
+    logo: 'bmbfsfj.svg',
+    hoehe: 2.8,
+    // Hier stand bis zum 01.09.2026 `ohneLogo` mit zwei Einwänden: Das
+    // Corporate Design des Bundes lässt keine Einfärbung zu, und eine
+    // Referenznennung mit Behördenlogo erweckt den Anschein einer
+    // amtlichen Empfehlung. Beides wurde vorgetragen; die Aufnahme ist
+    // eine ausdrückliche Entscheidung des Inhabers, nicht ein Versehen.
+    // Verwendet wird die offizielle Datei von bmbfsfj.bund.de, aus der
+    // nur die weiße Grundfläche entfernt wurde.
   },
   {
     name: 'Berufsförderungswerk Mainz',
     logo: 'bfw-mainz.svg',
     // Jubiläumszeichen „60 Jahre“. Kompakter als eine Wortmarke, deshalb höher.
-    hoehe: 2.25,
+    hoehe: 2.7,
   },
   {
     name: 'DU BIST GRIECHE',
@@ -77,7 +79,7 @@ export const kunden: readonly Kunde[] = [
     // Hausregel steht »DU BIST GRIECHE« auf 34 px und ist ein grauer Fleck.
     // Ab 45 px ist es lesbar, und die Fläche hat damit ungefähr dieselbe
     // optische Masse wie die breiten Wortmarken daneben.
-    hoehe: 2.8,
+    hoehe: 3.36,
     eigeneFarben:
       'Quadratisches Signet: weiße Schrift auf einer Fläche. Weiß gefiltert ' +
       'bliebe davon ein weißes Quadrat. Die Fläche steht deshalb auf ' +
@@ -85,9 +87,19 @@ export const kunden: readonly Kunde[] = [
       'damit die quadratische Form auf #101010 zu sehen ist.',
   },
   {
+    name: 'Generalkonsulat der Hellenischen Republik in Düsseldorf',
+    logo: 'generalkonsulat-hellenische-republik.png',
+    // Fast quadratisch (0,94:1) und feine Strichzeichnung — unter etwa
+    // 45 px wird der Schild zum Fleck. Deshalb die größte Höhe der Reihe.
+    hoehe: 3.4,
+    // Staatswappen eines anderen Landes. Derselbe Einwand wie beim
+    // Ministerium wurde vorgetragen, die Aufnahme ist eine ausdrückliche
+    // Entscheidung des Inhabers.
+  },
+  {
     name: 'Deutsche Handelskammer für Spanien',
     logo: 'ahk-spanien.png',
-    hoehe: 2.4,
+    hoehe: 2.88,
     eigeneFarben:
       'Der Bildteil ist eine Fläche mit weißem Stern und weißem „AHK“ darauf. ' +
       'Weiß gefiltert bliebe ein weißes Rechteck. Die Fläche liegt deshalb ' +
@@ -97,28 +109,28 @@ export const kunden: readonly Kunde[] = [
   {
     name: 'Bundesverband der Pneumologie, Schlaf- und Beatmungsmedizin',
     logo: 'pneumologenverband.svg',
-    hoehe: 2.2,
+    hoehe: 3.43,
   },
   {
     name: 'COCO-MAT',
     logo: 'coco-mat.svg',
-    hoehe: 1.6,
+    hoehe: 1.92,
   },
   {
     name: 'Aristo Pharma',
     logo: 'aristo-pharma.svg',
-    hoehe: 1.6,
+    hoehe: 1.92,
   },
   {
     name: 'Orthomol',
     logo: 'orthomol.svg',
-    hoehe: 1.5,
+    hoehe: 1.8,
   },
   {
     name: 'aposocial',
     logo: 'aposocial.svg',
     // Breite Wortmarke, 4,54:1. Bei der Vorgabe von 1.75rem wäre sie fast
     // 8rem breit und würde die Reihe dominieren.
-    hoehe: 1.5,
+    hoehe: 1.8,
   },
 ] as const;

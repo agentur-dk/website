@@ -58,7 +58,7 @@ const durchlaeufe = [
                   alt={versteckt ? '' : k.name}
                   loading="lazy"
                   decoding="async"
-                  style={`--logo-hoehe: ${k.hoehe ?? 1.75}rem`}
+                  style={`--logo-hoehe: ${k.hoehe ?? 2.1}rem`}
                 />
               ) : (
                 <span class="logo-strip__name">{k.name}</span>
@@ -111,7 +111,7 @@ const durchlaeufe = [
   .logo-strip__track {
     display: flex;
     align-items: center;
-    gap: 4.5rem;
+    gap: 5.2rem;
     width: max-content;
     animation: logo-scroll 40s linear infinite;
     list-style: none;
@@ -124,14 +124,14 @@ const durchlaeufe = [
     align-items: center;
     /* Gleiche Zeilenhöhe für Bild- und Wortmarken, damit eine gemischte
        Reihe eine gemeinsame Grundlinie behält. */
-    height: 2.5rem;
+    height: 3.5rem;
   }
 
   /* Aus jeder Bildmarke wird eine weiße Silhouette. */
   .logo-strip__logo {
-    height: var(--logo-hoehe, 1.75rem);
+    height: var(--logo-hoehe, 2.1rem);
     width: auto;
-    max-width: 11rem;
+    max-width: 13.2rem;
     object-fit: contain;
     filter: brightness(0) invert(1);
     /* Nicht ganz deckend: die Logos sollen die Überschriften der Seite
@@ -174,7 +174,7 @@ const durchlaeufe = [
       justify-content: center;
       width: 100%;
       flex-wrap: wrap;
-      gap: 2rem 3rem;
+      gap: 2.3rem 3.45rem;
     }
     .logo-strip__track-wrap {
       -webkit-mask-image: none;
@@ -190,7 +190,7 @@ const durchlaeufe = [
   }
 
   @media (max-width: 640px) {
-    .logo-strip__track { gap: 3rem; }
+    .logo-strip__track { gap: 3.45rem; }
     .logo-strip__name  { font-size: 0.9375rem; }
   }
 </style>
