@@ -12,7 +12,6 @@ const base = import.meta.env.BASE_URL;
   slug="datenschutz"
   title="Datenschutzerklärung | agentur dk"
   description="Datenschutzerklärung von agentur dk Köln: Hosting, Kontaktformular, Consent-Management. Keine Tracking-Tools ohne Einwilligung."
-  noConsent={true}
   mono
 >
   <Header />
@@ -67,7 +66,7 @@ const base = import.meta.env.BASE_URL;
           Wir setzen keine Tracking-Cookies ohne Ihre Einwilligung. Unsere Website nutzt <strong>ausschließlich localStorage und sessionStorage</strong> (kein HTTP-Cookie), und zwar für drei technisch notwendige Funktionen:
         </p>
         <ul>
-          <li><code>dk_consent_v1</code> (localStorage) — Ihre Datenschutzeinstellungen. Verbleibt im Browser bis zur manuellen Löschung oder bis Sie Ihre Einwilligung widerrufen.</li>
+          <li><code>dk_consent_v2</code> (localStorage) — Ihre Datenschutzeinstellungen. Verbleibt im Browser bis zur manuellen Löschung oder bis Sie Ihre Einwilligung widerrufen.</li>
           <li><code>dk-motion</code> (localStorage) — ob Sie die Animationen der Website angehalten haben. Verbleibt im Browser bis zur manuellen Löschung.</li>
           <li><code>dk-flaeche-hero</code> (sessionStorage) — welche der fünf Darstellungen im Seitenkopf Ihnen gezeigt wird. Wird beim Schließen des Browser-Tabs automatisch gelöscht, damit die Darstellung beim nächsten Besuch wechselt.</li>
         </ul>

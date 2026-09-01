@@ -1,0 +1,92 @@
+---
+/**
+ * Einwilligungsbanner — SimpleCMP, selbst gehostet.
+ *
+ * Ersetzt den vorher handgeschriebenen Banner. Die Regel dazu steht in
+ * `~/Claude-Projekte/CLAUDE.md` und gilt für alle Webprojekte.
+ *
+ * **Warum kein CDN:** Ein Aufruf an jsdelivr überträgt die IP jedes
+ * Besuchers an einen Dritten — und zwar *bevor* eine Einwilligung
+ * vorliegt. Genau das soll dieser Banner verhindern; er darf nicht selbst
+ * der erste Verstoß sein. Dieselbe Begründung, aus der hier reCAPTCHA
+ * ausgeschlossen ist und die Schriften lokal liegen. Herkunft und Bauweg
+ * stehen in `public/vendor/simplecmp/HERKUNFT.md`.
+ *
+ * **Warum das große Bundle:** Die deutschen Texte stecken nur darin. Der
+ * kleinere `core`-Build spart 62 kB und zeigt einen englischen Banner —
+ * nachgemessen, „Alle akzeptieren" kommt darin nicht vor.
+ *
+ * **Warum auf jeder Seite, auch auf Datenschutz und Impressum:** Der
+ * vorherige Banner war dort abgeschaltet. Mit SimpleCMP wäre damit auch
+ * der Knopf zum Ändern der Einstellungen weg — ausgerechnet auf der
+ * Seite, auf die die Datenschutzerklärung zum Widerruf verweist. Der
+ * Banner selbst erscheint ohnehin nur, solange nichts entschieden ist.
+ */
+const base = import.meta.env.BASE_URL;
+---
+
+<link rel="stylesheet" href={`${base}vendor/simplecmp/default.css`} />
+<script src={`${base}vendor/simplecmp/simplecmp.global.js`} defer is:inline></script>
+<script is:inline define:vars={{ base }}>
+  // Das Bundle wird mit `defer` geladen und steht deshalb erst nach dem
+  // Parsen bereit. `DOMContentLoaded` feuert nach allen defer-Skripten.
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof SimpleCMP === 'undefined') return;
+
+    var GA_ID = 'G-KJ0TV1QCMB';
+    var geladen = false;
+
+    /**
+     * Google Analytics nachladen — nur nach Einwilligung.
+     *
+     * Übernommen aus dem abgelösten Banner, einschließlich
+     * `anonymize_ip`: Die Datenschutzerklärung sagt beides ausdrücklich
+     * zu, und ein Wechsel des Bannerwerkzeugs ist kein Anlass, eine
+     * Zusage stillschweigend fallen zu lassen.
+     */
+    function ladeGoogleTag() {
+      if (geladen) return;
+      geladen = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID, { anonymize_ip: true });
+    }
+
+    SimpleCMP.init({
+      storageName: 'dk_consent_v2',
+      storageMethod: 'localStorage',
+      lang: 'de',
+      privacyPolicy: base + 'datenschutz.html',
+      imprint: base + 'impressum.html',
+      floatingTrigger: { label: 'Datenschutz-Einstellungen' },
+
+      services: [
+        {
+          name: 'google-analytics',
+          title: 'Google Analytics',
+          description:
+            'Statistische Auswertung der Nutzung (Reichweitenmessung), '
+            + 'mit gekürzter IP-Adresse.',
+          purposes: ['performance'],
+          cookies: [/^_ga/],
+          default: false,
+          onAccept: ladeGoogleTag,
+        },
+        {
+          name: 'externe-medien',
+          title: 'Externe Medien',
+          description:
+            'Inhalte von fremden Servern, etwa Videos oder Karten. '
+            + 'Derzeit ist kein solcher Inhalt eingebunden.',
+          purposes: ['marketing'],
+          default: false,
+        },
+      ],
+    });
+  });
+</script>

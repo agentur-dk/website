@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/mono.css';
-import ConsentBanner from '../components/ConsentBanner.astro';
+import Consent from '../components/Consent.astro';
 import SEO from '../components/seo/SEO.astro';
 import Fonts from '../components/seo/Fonts.astro';
 import { pageGraph, type ServiceInfo } from '../lib/schema';
@@ -14,7 +14,6 @@ interface Props {
   title:        string;
   description:  string;
   noindex?:     boolean;
-  noConsent?:   boolean;
   ogImage?:     string;
   /** Leistungsseiten liefern hier ihre Service-Daten für den JSON-LD-Graphen. */
   service?:     ServiceInfo;
@@ -31,7 +30,6 @@ const {
   title,
   description,
   noindex   = false,
-  noConsent = false,
   ogImage,
   service,
   pageType,
@@ -67,7 +65,7 @@ const graph = pageGraph({ slug, title, description, pageType, service, extra: sc
   </head>
   <body class={mono ? 'theme-mono' : undefined}>
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-    <ConsentBanner noConsent={noConsent} />
+    <Consent />
     <slot />
 
     <button type="button" class="back-to-top" aria-label="Nach oben scrollen" hidden>
