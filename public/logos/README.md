@@ -20,6 +20,41 @@ weiß (`brightness(0) invert(1)`). Das heißt:
 
 Dateiname = Slug, klein, mit Bindestrich: `bfw-dueren.svg`.
 
+## Zweifarbige Marken: `eigeneFarben`
+
+Manche Marke ist Schrift auf einer Fläche — ein Signet im Quadrat, ein
+Bildteil neben der Wortmarke. Weiß gefiltert bliebe davon ein weißer
+Klotz: Fläche und Schrift werden derselbe Ton, und die Form verschwindet.
+
+Für diesen Fall trägt der Eintrag `eigeneFarben` mit der Begründung. Die
+Leiste lässt die Datei dann unangetastet, und die Datei bringt ihre
+Farben selbst mit: **Flächen auf `#4a4a4a`, Schrift auf `#ffffff`.** Das
+Grau ist auf dem Grund der Leiste (`#101010`) als Form zu erkennen, ohne
+sich vorzudrängen; Weiß darauf erreicht 8,9:1.
+
+```ts
+{
+  name: 'DU BIST GRIECHE',
+  logo: 'du-bist-grieche.svg',
+  hoehe: 2.8,
+  eigeneFarben: 'Quadratisches Signet: weiße Schrift auf einer Fläche. …',
+}
+```
+
+Ohne diesen Eintrag greift der Weißfilter — das ist die Vorgabe und
+bleibt es, weil sie für einfarbige Dateien immer richtig ist.
+
+## PNG statt SVG — die Ausnahme
+
+Es gibt Marken, von denen im Netz nur ein JPG existiert. Dann wird der
+Hintergrund freigestellt und die Zeichnung auf Weiß gebracht, das
+Ergebnis liegt als PNG hier (`ahk-spanien.png`).
+
+Das ist die zweitbeste Lösung und soll auch so aussehen: Ein PNG wird
+beim Skalieren weich, wiegt ein Vielfaches und lässt sich nicht
+nachfärben. Wo es geht, die Vektorfassung beim Kunden anfragen — die
+liegt fast immer im Markenhandbuch neben der Negativversion.
+
 ## Eintragen
 
 ```ts

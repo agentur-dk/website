@@ -52,7 +52,8 @@ const durchlaeufe = [
             <li class="logo-strip__item" {...versteckt ? { 'aria-hidden': 'true' } : {}}>
               {k.datei ? (
                 <img
-                  class="logo-strip__logo"
+                  class:list={['logo-strip__logo',
+                    k.eigeneFarben && 'logo-strip__logo--eigen']}
                   src={k.datei}
                   alt={versteckt ? '' : k.name}
                   loading="lazy"
@@ -137,6 +138,13 @@ const durchlaeufe = [
        nicht überstrahlen. Auf Weiß über #121212 bleibt der Kontrast
        auch bei 0,75 weit über der Schwelle für Grafikobjekte. */
     opacity: 0.75;
+  }
+
+  /* Die Ausnahme vom Weißfilter. Warum sie für eine Marke gilt, steht als
+     Begründung bei `eigeneFarben` in src/data/kunden.ts — dort steht sie
+     neben der Entscheidung und nicht neben der Technik. */
+  .logo-strip__logo--eigen {
+    filter: none;
   }
 
   /* Wortmarke als Rückfall. Bewusst ohne Rahmen und Kästchen: gerahmte
