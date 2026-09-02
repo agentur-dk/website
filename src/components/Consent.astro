@@ -66,6 +66,9 @@ const GA_ID = 'G-KJ0TV1QCMB';
 -->
 <script>
   import * as CookieConsent from 'vanilla-cookieconsent';
+  // Die Festlegungen, an denen die Wirksamkeit haengt, stehen einmal
+  // fuer alle Projekte in @dk/basis — nicht je Projekt abgeschrieben.
+  import { erzeugeKonfiguration } from '@dk/basis/einwilligung';
   import 'vanilla-cookieconsent/dist/cookieconsent.css';
 
   const base = import.meta.env.BASE_URL;
@@ -73,20 +76,13 @@ const GA_ID = 'G-KJ0TV1QCMB';
   let vorher = false;
 
   void CookieConsent.run({
-    mode: 'opt-in',
+    ...erzeugeKonfiguration({ speicher: 'dk_consent_v2', datenschutz: base + 'datenschutz.html' }),
+
     manageScriptTags: true,
-    // Nimmt die Messcookies weg, wenn jemand die Einwilligung zurückzieht.
-    // Ohne das bliebe der Widerruf folgenlos.
     autoClearCookies: true,
-    // Der Banner soll auch in der Messung erscheinen; sonst sähe die
+    // Der Banner soll auch in der Messung erscheinen; sonst saehe die
     // Leistungsmessung besser aus als die Wirklichkeit.
     hideFromBots: false,
-    cookie: { name: 'dk_consent_v2' },
-
-    guiOptions: {
-      consentModal: { layout: 'box', position: 'bottom right' },
-      preferencesModal: { layout: 'box' },
-    },
 
     categories: {
       necessary: { enabled: true, readOnly: true },
