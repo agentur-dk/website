@@ -148,7 +148,11 @@ const GA_ID = 'G-KJ0TV1QCMB';
 
   // Widerruf von überall — Art. 7 Abs. 3 DSGVO verlangt, dass das
   // Zurücknehmen so leicht ist wie das Erteilen.
-  for (const a of document.querySelectorAll('a[href="#datenschutz-einstellungen"]')) {
+  // Zwei Wege, absichtlich: der Knopf in der Fußzeile jeder Seite und ein
+  // Anker, auf den die Datenschutzerklärung im Fließtext verweisen kann.
+  for (const a of document.querySelectorAll(
+    '[data-consent-oeffnen], a[href="#datenschutz-einstellungen"]',
+  )) {
     a.addEventListener('click', (e) => { e.preventDefault(); CookieConsent.showPreferences(); });
   }
 </script>

@@ -102,6 +102,17 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}${l.href}.html`} class="footer-link footer-link--sm">{l.label}</a>
           </li>
         ))}
+        <li>
+          {/*
+            Der Widerruf gehört hierher, neben Impressum und Datenschutz.
+            Art. 7 Abs. 3 DSGVO verlangt, dass das Zurücknehmen so leicht ist
+            wie das Erteilen — und erteilt wird mit einem Klick. Ein Knopf und
+            kein Link: Es wird nichts aufgerufen, sondern etwas geöffnet.
+          */}
+          <button type="button" class="footer-link footer-link--sm" data-consent-oeffnen>
+            Datenschutz-Einstellungen
+          </button>
+        </li>
       </ul>
       <MotionToggle />
     </div>
@@ -254,6 +265,19 @@ const base = import.meta.env.BASE_URL;
     padding: 0;
     display: flex;
     gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Der Knopf soll wie die Links daneben aussehen, nicht wie ein Knopf.
+     `font: inherit` ist der Teil, den man leicht vergisst: Ohne ihn setzt
+     der Browser seine eigene Schriftgröße, und die Zeile bricht auf. */
+  .footer-legal-list button {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
   }
 </style>
 
