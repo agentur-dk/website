@@ -70,6 +70,8 @@ const GA_ID = 'G-KJ0TV1QCMB';
 
   const base = import.meta.env.BASE_URL;
 
+  let vorher = false;
+
   void CookieConsent.run({
     mode: 'opt-in',
     manageScriptTags: true,
@@ -144,8 +146,28 @@ const GA_ID = 'G-KJ0TV1QCMB';
         },
       },
     },
+
+    onChange: () => {
+      const jetzt = CookieConsent.acceptedCategory('analytics');
+      const widerrufen = vorher && !jetzt;
+      vorher = jetzt;
+      if (widerrufen) window.location.reload();
+    },
+    onFirstConsent: () => { vorher = CookieConsent.acceptedCategory('analytics'); },
+    onConsent: () => { vorher = CookieConsent.acceptedCategory('analytics'); },
   });
 
+  /*
+   * Beim Widerruf neu laden.
+   *
+   * `autoClearCookies` nimmt die Cookies weg — mehr nicht. Ein bereits
+   * geladenes Google-Tag hängt im Speicher, hat seine Zuhörer gesetzt und
+   * sendet weiter bis zum Neuladen. Der Widerruf wäre sonst folgenlos, und
+   * genau das darf er nicht sein (Art. 7 Abs. 3 DSGVO).
+   *
+   * Nur beim Wegnehmen, nicht beim Erteilen: Beim Erteilen trägt
+   * CookieConsent das Skript selbst nach, dafür braucht es kein Neuladen.
+   */
   // Widerruf von überall — Art. 7 Abs. 3 DSGVO verlangt, dass das
   // Zurücknehmen so leicht ist wie das Erteilen.
   // Zwei Wege, absichtlich: der Knopf in der Fußzeile jeder Seite und ein
