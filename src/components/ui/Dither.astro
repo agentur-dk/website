@@ -99,7 +99,10 @@ const { field, pool, poolKey = 'hero', cell = 3, fps = 16, raster = 'kraeftig', 
       if (gemerkt !== null && auswahl.includes(gemerkt)) return gemerkt;
     } catch (e) { /* Speicher gesperrt */ }
 
-    const gezogen = auswahl[Math.floor(Math.random() * auswahl.length)];
+    /* Ein Index in eine nichtleere Liste — der Typ kennt die Laenge nicht.
+       `auswahl[0]!` waere kuerzer; der Rueckfall ist ehrlicher, weil er auch
+       dann etwas liefert, wenn jemand die Liste leert. */
+    const gezogen = auswahl[Math.floor(Math.random() * auswahl.length)] ?? auswahl[0]!;
     try {
       sessionStorage.setItem(schluessel, gezogen);
     } catch (e) { /* Speicher gesperrt */ }

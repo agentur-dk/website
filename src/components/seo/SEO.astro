@@ -9,15 +9,18 @@
  */
 import { siteConfig, absolute, SITE_URL, NOINDEX_ALL } from '../../config/site.config';
 
+/* `| undefined` an jedem optionalen Feld: Mit `exactOptionalPropertyTypes`
+   ist ein fehlender Schlüssel nicht dasselbe wie einer mit dem Wert
+   `undefined` — und aufrufende Seiten reichen genau das durch. */
 interface Props {
   /** Seiten-Slug ohne Endung, '' für die Startseite. */
   slug:         string;
   title:        string;
   description:  string;
-  noindex?:     boolean;
-  ogImage?:     string;
-  ogType?:      'website' | 'article';
-  canonical?:   string;
+  noindex?:     boolean | undefined;
+  ogImage?:     string | undefined;
+  ogType?:      'website' | 'article' | undefined;
+  canonical?:   string | undefined;
 }
 
 const {

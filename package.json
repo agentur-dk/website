@@ -19,13 +19,14 @@
     "check:a11y": "node tools/a11y.mjs",
     "check:wcag": "node tools/wcag-manual.mjs",
     "check:lighthouse": "node tools/lighthouse.mjs",
-    "verify": "npm run build && npm run check:types && npm test && npm run check:links && npm run check:seo && npm run check:css && npm run check:cta && npm run check:icons && npm run check:php && npm run check:shell && node tools/verify-live.mjs",
+    "verify": "npm run build && npm run check:types && npm test && npm run check:links && npm run check:seo && npm run check:css && npm run check:cta && npm run check:icons && npm run check:php && npm run check:e2e && npm run check:shell && node tools/verify-live.mjs",
     "og:image": "node tools/og-image.mjs",
     "fonts:metrics": "node tools/font-metrics.mjs --write",
     "fonts:subset": "node tools/subset-fonts.mjs",
     "check:cta": "node tools/check-cta.mjs",
     "check:icons": "node tools/check-icons.mjs",
     "check:php": "node tools/check-php.mjs",
+    "check:e2e": "node tools/e2e.mjs",
     "check:shell": "node tools/check-shell.mjs"
   },
   "dependencies": {
@@ -39,7 +40,7 @@
     "@axe-core/playwright": "^4.13.0",
     "axe-core": "^4.13.0",
     "lighthouse": "^13.4.1",
-    "playwright": "^1.62.1",
+    "playwright": "^1.63.0",
     "subset-font": "^2.5.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"

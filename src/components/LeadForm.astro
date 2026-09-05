@@ -345,7 +345,9 @@ const schritte = [
     function zufall(bis: number): number {
       const feld = new Uint32Array(1);
       crypto.getRandomValues(feld);
-      return (feld[0] % bis) + 1;
+      /* `feld[0]` ist nach `getRandomValues` immer belegt — der Typ weiss das
+         nicht, seit jeder Indexzugriff als moeglicherweise leer gilt. */
+      return ((feld[0] ?? 0) % bis) + 1;
     }
 
     function neueAufgabe(): void {

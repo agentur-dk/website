@@ -187,9 +187,10 @@ export function pageGraph(opts: {
   slug: string;
   title: string;
   description: string;
-  pageType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage';
-  service?: ServiceInfo;
-  extra?: Json[];
+  /* `| undefined` ausdrücklich — siehe SEO.astro. */
+  pageType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'ContactPage' | undefined;
+  service?: ServiceInfo | undefined;
+  extra?: Json[] | undefined;
 }): Json {
   const nodes: Json[] = [organizationSchema(), websiteSchema(),
     webPageSchema(opts.slug, opts.title, opts.description, opts.pageType)];

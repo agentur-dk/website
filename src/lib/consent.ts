@@ -3,7 +3,10 @@ export const STORAGE_KEY = 'dk_consent_v1';
 export interface ConsentSettings {
   necessary: boolean;
   statistics: boolean;
-  timestamp?: string;
+  /* `| undefined` ausdruecklich: Mit `exactOptionalPropertyTypes` ist ein
+     fehlender Schluessel nicht dasselbe wie einer mit dem Wert `undefined`,
+     und hier wird er gesetzt. */
+  timestamp?: string | undefined;
 }
 
 export function parseConsent(raw: string | null): ConsentSettings | null {

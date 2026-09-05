@@ -56,11 +56,15 @@ describe('FAQPage', () => {
 
   it('übernimmt Fragen und Antworten unverändert', () => {
     const schema = faqSchema('seo-geo') as any;
-    const source = faqs['seo-geo'].items;
+    /* Der Schlüssel existiert — der Typ weiss das nicht, seit jeder
+       Indexzugriff als moeglicherweise leer gilt. Im Test darf das laut sein:
+       Fehlt der Eintrag, soll die Prüfung scheitern und nicht stillschweigend
+       nichts vergleichen. */
+    const source = faqs['seo-geo']!.items;
     expect(schema.mainEntity).toHaveLength(source.length);
     schema.mainEntity.forEach((q: any, i: number) => {
-      expect(q.name).toBe(source[i].question);
-      expect(q.acceptedAnswer.text).toBe(source[i].answer);
+      expect(q.name).toBe(source[i]!.question);
+      expect(q.acceptedAnswer.text).toBe(source[i]!.answer);
     });
   });
 

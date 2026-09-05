@@ -40,7 +40,6 @@
  * `anonymize_ip` bleibt — die Datenschutzerklärung sagt es zu, und ein
  * Werkzeugwechsel ist kein Anlass, eine Zusage fallen zu lassen.
  */
-const base = import.meta.env.BASE_URL;
 const GA_ID = 'G-KJ0TV1QCMB';
 ---
 
@@ -72,7 +71,6 @@ const GA_ID = 'G-KJ0TV1QCMB';
   import 'vanilla-cookieconsent/dist/cookieconsent.css';
 
   const base = import.meta.env.BASE_URL;
-
   let vorher = false;
 
   void CookieConsent.run({

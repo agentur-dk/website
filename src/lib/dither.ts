@@ -30,7 +30,9 @@ export type Field = (x: number, y: number, w: number, h: number, t: number) => n
 
 /** Normalisiert eine Bayer-Matrix auf Schwellen in (0,1). */
 function normalize(m: readonly (readonly number[])[]): number[][] {
-  const n = m.length * m[0].length;
+  /* Eine Bayer-Matrix ist quadratisch und nie leer — der Typ weiss das nicht,
+     seit jeder Indexzugriff als moeglicherweise leer gilt. */
+  const n = m.length * (m[0]?.length ?? 0);
   return m.map((row) => row.map((v) => (v + 0.5) / n));
 }
 
@@ -424,7 +426,7 @@ export function paintDither(
   if (!ctx) return null;
 
   const rows = matrix.length;
-  const cols = matrix[0].length;
+  const cols = matrix[0]?.length ?? 0;
   const bild = ctx.createImageData(w, h);
   const px = bild.data;
 
@@ -435,7 +437,9 @@ export function paintDither(
       else if (wert > 1) wert = 1;
 
       const i = (y * w + x) * 4;
-      if (wert > matrix[y % rows][x % cols]) {
+      /* `rows` und `cols` stammen aus derselben Matrix; der Zugriff kann
+         nicht danebengehen. Der Rueckfall haelt nur den Typ zufrieden. */
+      if (wert > (matrix[y % rows]?.[x % cols] ?? 1)) {
         px[i] = r;
         px[i + 1] = g;
         px[i + 2] = b;
