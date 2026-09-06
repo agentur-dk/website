@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { siteConfig } from '../config/site.config';
+
+/**
+ * Wenn das Formular ohne JavaScript nicht durchgeht.
+ *
+ * Mit Skript stehen die Fehler an den Feldern, an die sie gehören. Ohne
+ * Skript kann eine statische Seite den Grund nicht anzeigen — der Endpunkt
+ * hängt ihn zwar als `?fehler=` an, aber ohne JavaScript liest ihn niemand
+ * aus. Deshalb sagt diese Seite, was in jedem Fall gilt: Es kam nichts an,
+ * und hier sind zwei Wege, die sicher funktionieren.
+ *
+ * Der Weg, den es NICHT gibt: den Besucher zurück auf ein leeres Formular
+ * schicken und ihn raten lassen, was schiefging.
+ */
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  slug="formular-fehler"
+  title="Anfrage konnte nicht gesendet werden | agentur dk"
+  description="Beim Absenden des Formulars ist etwas schiefgegangen. So erreichen Sie uns stattdessen — per E-Mail oder telefonisch."
+  noindex={true}
+  mono
+>
+  <Header />
+
+  <main id="main-content">
+    <DitherBand field="scan" label="Nicht angekommen" cell={4} />
+
+    <div class="error-page">
+      <div class="error-page__inner">
+        <h1 class="error-page__title">Das ist nicht durchgegangen.</h1>
+        <p class="error-page__desc">
+          Ihre Anfrage hat uns nicht erreicht. Häufigste Ursachen: eine
+          unvollständige Pflichtangabe, eine E-Mail-Adresse mit Tippfehler —
+          oder zu viele Anfragen von derselben Verbindung innerhalb einer
+          Stunde. Bitte versuchen Sie es noch einmal, oder nehmen Sie einen
+          der beiden direkten Wege.
+        </p>
+        <div class="error-page__actions">
+          <a href={`${base}#contact`} class="btn btn--accent btn--lg">Zurück zum Formular</a>
+          <a href={`mailto:${siteConfig.contact.email}`} class="btn btn--outline btn--lg">
+            E-Mail schreiben
+          </a>
+        </div>
+        <hr class="error-page__divider" aria-hidden="true">
+        <p class="error-page__desc">
+          Telefonisch: <a href={`tel:${siteConfig.contact.phone}`}>{siteConfig.contact.phoneDisplay}</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

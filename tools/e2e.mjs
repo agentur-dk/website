@@ -193,6 +193,63 @@ if (gesendet[0]) {
 pruefe('der Erfolg wird angesagt',
   (await page.locator('#lf-status').textContent())?.trim().length > 0);
 
+/* ── Und derselbe Weg ohne JavaScript ────────────────────────────────── */
+
+{
+  const ohne = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce' });
+  const seite = await ohne.newPage();
+
+  /* Der Endpunkt antwortet dem klassischen Formular mit einer Weiterleitung
+     — genau das prüft der letzte Schritt. */
+  const gesendetOhneJs = [];
+  await seite.route('**/formular/send.php**', async (route) => {
+    gesendetOhneJs.push(route.request().postData() ?? '');
+    await route.fulfill({ status: 303, headers: { location: `${ORIGIN}/danke.html` }, body: '' });
+  });
+
+  await seite.goto(`${ORIGIN}/`, { waitUntil: 'domcontentloaded' });
+
+  pruefe('ohne JavaScript: alle drei Schritte stehen da',
+    await seite.locator('#lf-step-1').isVisible()
+    && await seite.locator('#lf-step-2').isVisible()
+    && await seite.locator('#lf-step-3').isVisible());
+
+  pruefe('ohne JavaScript: keine Schrittzähler',
+    !(await seite.locator('[data-step-count]').first().isVisible()));
+
+  pruefe('ohne JavaScript: keine Weiter-Knöpfe, die nichts tun',
+    !(await seite.locator('[data-next="2"]').isVisible()));
+
+  pruefe('ohne JavaScript: das Formular kennt sein Ziel',
+    (await seite.locator('#lf-form').getAttribute('action'))?.includes('send.php')
+    && (await seite.locator('#lf-form').getAttribute('method'))?.toLowerCase() === 'post');
+
+  pruefe('ohne JavaScript prüft der Browser die Pflichtfelder',
+    (await seite.locator('#lf-form').getAttribute('novalidate')) === null,
+    'novalidate steht schon im Markup — dann prüft ohne Skript niemand');
+
+  await seite.locator('.lf-topic__input').first().check();
+  await seite.locator('#lf-message').fill('Testnachricht ohne JavaScript.');
+  await seite.locator('#lf-vorname').fill('Maria');
+  await seite.locator('#lf-nachname').fill('Testerin');
+  await seite.locator('#lf-email').fill('maria@example.invalid');
+  const haken = seite.locator('#lf-form input[type="checkbox"][required]');
+  if (await haken.count()) await haken.first().check();
+  await seite.locator('#lf-form button[type="submit"]').click();
+  await seite.waitForURL('**/danke.html', { timeout: 5000 }).catch(() => {});
+
+  pruefe('ohne JavaScript geht die Anfrage hinaus', gesendetOhneJs.length === 1,
+    `${gesendetOhneJs.length} statt einer`);
+  pruefe('und der Besucher landet auf der Dankeseite',
+    seite.url().endsWith('/danke.html'), `steht auf ${seite.url()}`);
+  if (gesendetOhneJs[0]) {
+    pruefe('sie nennt dem Endpunkt das Weiterleitungsziel',
+      gesendetOhneJs[0].includes('weiter=') && gesendetOhneJs[0].includes('danke.html'));
+  }
+
+  await ohne.close();
+}
+
 await browser.close();
 server.kill();
 

@@ -58,7 +58,29 @@ const schritte = [
     <!-- Status-Region: Erfolg und Fehler werden hier angesagt. -->
     <div id="lf-status" role="status" aria-live="polite" aria-atomic="true" class="lf-status sr-only"></div>
 
-    <form id="lf-form" class="lf-form" novalidate data-endpoint={FORM_ENDPOINT}>
+    {/*
+      Ein echtes `action`/`method`, kein reiner Skript-Absender.
+
+      Ohne JavaScript stehen alle drei Schritte untereinander — das Skript ist
+      es, das zwei davon ausblendet — und der Absenden-Knopf schickt ein
+      klassisches POST an denselben Endpunkt. Der antwortet dann mit einer
+      Weiterleitung auf `weiter` statt mit JSON.
+
+      Kein `novalidate` im Markup: Ohne Skript ist die Prüfung des Browsers
+      die einzige, die es vor dem Absenden gibt. Mit Skript wird sie
+      abgeschaltet (unten), weil die eigenen Meldungen genauer sind.
+    */}
+    <form
+      id="lf-form"
+      class="lf-form"
+      method="post"
+      action={FORM_ENDPOINT}
+      data-endpoint={FORM_ENDPOINT}
+    >
+      {/* Wohin der Endpunkt weiterleitet, wenn kein JavaScript antwortet.
+          Nur seiteneigene Pfade — send.php prüft das noch einmal. */}
+      <input type="hidden" name="weiter" value={`${base}danke.html`} />
+      <input type="hidden" name="weiter_fehler" value={`${base}formular-fehler.html`} />
       <!-- Auf welcher Seite wurde das Formular ausgefüllt? Der sprechende
            Name kommt aus der Seite, die volle Adresse setzt das Skript. -->
       <input type="hidden" name="page" value={page} />
@@ -609,6 +631,17 @@ const schritte = [
       if (pruefe(aktuell)) zeige(aktuell + 1);
     });
 
+    /*
+      Ab hier übernimmt das Skript.
+
+      `novalidate` erst jetzt: Ohne Skript ist die Prüfung des Browsers die
+      einzige vor dem Absenden. `data-js` schaltet im Stylesheet um — die
+      Schrittzähler und die Weiter-Knöpfe ergeben nur Sinn, wenn es Schritte
+      gibt.
+    */
+    form.setAttribute('novalidate', 'novalidate');
+    form.dataset.js = 'an';
+
     zeige(1, false);
 
     form.addEventListener('submit', async (e) => {
@@ -900,6 +933,22 @@ const schritte = [
   }
 
   /* ---- Schritte --------------------------------------------------- */
+  /*
+    Ohne JavaScript stehen alle drei Schritte untereinander. Dann sind ein
+    Zähler („Schritt 1 von 3") und ein Weiter-Knopf, der nichts tut, keine
+    Hilfe, sondern eine Irreführung. Beide erscheinen erst, wenn das Skript
+    das Formular übernommen hat (`data-js`).
+
+    Gezielt die Schritt-Knöpfe, nicht ihre Leiste: Der Absenden-Knopf sitzt in
+    derselben Leiste, und ohne ihn wäre das Formular ohne JavaScript zwar
+    vollständig sichtbar, aber nicht abschickbar.
+  */
+  .lf-form:not([data-js]) .lf-step__zaehler,
+  .lf-form:not([data-js]) [data-next],
+  .lf-form:not([data-js]) [data-back] {
+    display: none;
+  }
+
   .lf-step__zaehler {
     font-family: var(--font-mono);
     font-size: 0.6875rem;

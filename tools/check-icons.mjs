@@ -84,7 +84,16 @@ for (let i = 0; i < namen.length; i++) {
 }
 
 // --- Quelltext absuchen ---------------------------------------------------
-const quellen = dateien(SRC, ['.astro', '.ts']);
+/*
+ * Testdateien bleiben draussen.
+ *
+ * Sie enthalten Muster, die wie eine Verwendung aussehen — ein Test, der
+ * prüft, dass `<Icon name="…">` NICHT als Formularfeld zählt, trägt genau
+ * diese Zeichenkette. Der Prüfer meldete daraufhin ein Icon namens
+ * `([a-zA-Z_]…)`. Geprüft wird, was ausgeliefert wird, nicht was über die
+ * Auslieferung geschrieben steht.
+ */
+const quellen = dateien(SRC, ['.astro', '.ts']).filter((d) => !d.endsWith('.test.ts'));
 const benutzt = new Set();
 
 for (const datei of quellen) {

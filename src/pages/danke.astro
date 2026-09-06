@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+/**
+ * Die Erfolgsansicht des Formulars — für den Weg ohne JavaScript.
+ *
+ * Mit Skript bleibt der Besucher auf der Seite: Das Formular tauscht sich
+ * gegen einen Dankeblock, ohne Neuladen. Ohne Skript geht ein klassisches
+ * POST an den Endpunkt, und der antwortet mit einer Weiterleitung hierher
+ * (303, damit ein Neuladen die Anfrage nicht ein zweites Mal abschickt).
+ *
+ * `noindex`, weil diese Seite nur nach einer abgeschickten Anfrage einen
+ * Sinn hat. Im Suchergebnis wäre sie eine Sackgasse.
+ */
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  slug="danke"
+  title="Danke für Ihre Anfrage | agentur dk"
+  description="Ihre Anfrage ist bei uns angekommen. Wir melden uns in der Regel am nächsten Werktag."
+  noindex={true}
+  mono
+>
+  <Header />
+
+  <main id="main-content">
+    <DitherBand field="pulse" label="Angekommen" cell={4} />
+
+    <div class="error-page">
+      <div class="error-page__inner">
+        <h1 class="error-page__title">Danke — Ihre Anfrage ist da.</h1>
+        <p class="error-page__desc">
+          Wir haben sie per E-Mail bekommen und melden uns in der Regel am
+          nächsten Werktag. Wenn es eilt, rufen Sie gern direkt an.
+        </p>
+        <div class="error-page__actions">
+          <a href={`${base}`} class="btn btn--accent btn--lg">Zur Startseite</a>
+          <a href={`${base}projekte.html`} class="btn btn--outline btn--lg">Referenzen ansehen</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

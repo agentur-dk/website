@@ -290,6 +290,24 @@ function antworte(int $code, array $daten): void
     if (!($daten['ok'] ?? false) && ($daten['fehler'] ?? '') !== '') {
         $ziel .= (str_contains($ziel, '?') ? '&' : '?') . 'fehler=' . rawurlencode((string) $daten['fehler']);
     }
+
+    // Absolut, gegen die bereits geprüfte Herkunft.
+    //
+    // Der Endpunkt liegt auf vorschau.dk-dk.de, die Websites liegen
+    // woanders. Ein reiner Pfad im `Location` löst sich gegen DIESEN
+    // Rechnernamen auf — der Besucher landete auf der Dankeseite des
+    // Endpunkts, die es dort nicht gibt. Das ist der Grund, warum der
+    // Weg ohne JavaScript bisher nirgends benutzt wurde.
+    //
+    // Neue Angriffsfläche entsteht dabei nicht: `$herkunft` steht in
+    // `erlaubte_herkunft`, sonst wäre oben mit 403 Schluss gewesen, und
+    // `zielPfad()` lässt nur seiteneigene Pfade zu. Beides zusammen kann
+    // nur auf eine erlaubte Website zeigen.
+    global $herkunft;
+    if (($herkunft ?? '') !== '') {
+        $ziel = $herkunft . $ziel;
+    }
+
     header('Location: ' . $ziel, true, 303);
     exit;
 }
@@ -440,7 +458,20 @@ if ($ts > 0 && $sig !== '') {
  * ---------------------------------------------------------------- */
 
 if (feld($d, 'interaktion') !== '1') {
-    stillVerwerfen();
+    // Dieselbe Abwägung wie eine Stufe höher beim Zeitstempel: `interaktion`
+    // setzt erst ein Skript beim ersten Tastendruck. Ein klassisches
+    // Formular deshalb zu verwerfen hieße, den Weg ohne JavaScript
+    // abzuschalten — den Weg, für den er gebaut ist.
+    //
+    // Für ihn tragen die übrigen Stufen: zwei Honigtöpfe, die
+    // Inhaltsheuristik und die Sperre pro Stunde. Schwächer als mit
+    // Bedienungsnachweis, und das soll hier dastehen.
+    //
+    // Eine JSON-Anfrage kommt dagegen immer aus client.js, und das setzt
+    // das Feld. Dort bleibt es beim Verwerfen.
+    if ($istJson) {
+        stillVerwerfen();
+    }
 }
 
 /* ---------------------------------------------------------------- *

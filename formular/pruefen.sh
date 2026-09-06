@@ -78,6 +78,24 @@ sofort=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
   "$endpunkt")
 pruefe 'Honigtopf endet im Scheinerfolg' 200 "$sofort"
 
+# Der Weg ohne JavaScript: ein klassisches POST, kein JSON. Der Endpunkt
+# antwortet dann nicht mit einem Objekt, sondern mit einer Weiterleitung —
+# und die muss ABSOLUT sein. Ein reiner Pfad löst sich gegen den
+# Rechnernamen des Endpunkts auf, und der Besucher landete auf einer
+# Dankeseite, die es dort nicht gibt.
+#
+# Auch hier ist der Honigtopf gefüllt: Der Weg wird geprüft, ohne dass
+# eine Mail entsteht.
+ziel=$(curl -s -o /dev/null -D - --max-time 15 \
+  -H "Origin: $herkunft" \
+  --data-urlencode 'hp_email=pruefung@beispiel.invalid' \
+  --data-urlencode 'vorname=Test' --data-urlencode 'nachname=Lauf' \
+  --data-urlencode 'email=test@beispiel.de' \
+  --data-urlencode 'message=Pruefung ohne JavaScript, keine echte Anfrage.' \
+  --data-urlencode 'weiter=/danke.html' \
+  "$endpunkt" | grep -i '^location:' | tr -d '\r' | sed 's/[Ll]ocation: //')
+pruefe 'Formular ohne JS wird weitergeleitet' "$herkunft/danke.html" "$ziel"
+
 # Konfigurationsdatei darf nicht abrufbar sein. Das leistet die .htaccess
 # und damit Apache — der eingebaute PHP-Server kennt sie nicht, dort
 # schlägt diese Zeile also erwartbar fehl.

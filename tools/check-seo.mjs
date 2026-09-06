@@ -150,6 +150,22 @@ const sitemap = existsSync(join(DIST, 'sitemap.xml')) ? readFileSync(join(DIST, 
 const robotsTxt = existsSync(join(DIST, 'robots.txt')) ? readFileSync(join(DIST, 'robots.txt'), 'utf8') : '';
 const llmsTxt = existsSync(join(DIST, 'llms.txt')) ? readFileSync(join(DIST, 'llms.txt'), 'utf8') : '';
 
+/*
+ * Der Marker `[KI]` darf nie ausgeliefert werden.
+ *
+ * Er steuert die Kennzeichnung KI-erzeugter Bilder (src/lib/images.ts) und
+ * wird beim Rendern abgetrennt. Steht er im HTML, ist ein Bild an der
+ * Kennzeichnung vorbeigelaufen — dann fehlt die sichtbare Angabe, die
+ * Art. 50 der KI-Verordnung verlangt, und stattdessen steht Kauderwelsch im
+ * Alternativtext.
+ */
+for (const seite of readdirSync(DIST, { recursive: true })) {
+  if (typeof seite !== 'string' || !seite.endsWith('.html')) continue;
+  if (readFileSync(join(DIST, seite), 'utf8').includes('[KI]')) {
+    problems.push(`${seite}: der Marker [KI] steht im HTML — das Bild lief an der Kennzeichnung vorbei`);
+  }
+}
+
 if (!sitemap) problems.push('sitemap.xml fehlt');
 else if (staging) {
   // Während der Sperre müssen alle vier Kanäle dichthalten, nicht nur das

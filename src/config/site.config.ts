@@ -168,6 +168,15 @@ export const pages: PageEntry[] = [
 
   { slug: '404', label: 'Seite nicht gefunden', priority: 0.0, changefreq: 'yearly',
     noindex: true, summary: '' },
+
+  /* Die beiden Zielseiten des Formulars ohne JavaScript. `noindex`, weil sie
+     nur nach einer abgeschickten Anfrage einen Sinn haben — im Suchergebnis
+     wären sie eine Sackgasse. */
+  { slug: 'danke', label: 'Danke für Ihre Anfrage', priority: 0.0, changefreq: 'yearly',
+    noindex: true, summary: '' },
+
+  { slug: 'formular-fehler', label: 'Anfrage konnte nicht gesendet werden',
+    priority: 0.0, changefreq: 'yearly', noindex: true, summary: '' },
 ];
 
 /** Alle indexierbaren Seiten — Basis für Sitemap und llms.txt. */
