@@ -480,3 +480,152 @@
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
+
+/* ============================================================
+   Die helle Fläche
+
+   Die Seite bestand aus 21 dunklen Abschnitten und einem hellen —
+   und der eine war es nur dem Namen nach: `.section--light` gibt es,
+   aber das Mono-Thema flacht oben alle -light-Tokens auf Dunkel ab
+   (`--color-bg-light: #0b0b0b`). Gemessen im ausgelieferten HTML.
+
+   Statt einer neuen Farbe wird die vorhandene Palette **umgekehrt**.
+   Das Thema sagt selbst, worauf es beruht: „Hierarchie entsteht aus
+   Grad, Helligkeit und Laufweite, nicht aus Farbe." Ein warmes Creme
+   oder ein zweiter Akzent wäre ein Bruch damit; dieselben zwei Werte
+   getauscht ist keiner. #f3f3f3 ist der Textwert der dunklen Seite,
+   #101010 ihr Grund.
+
+   Kontraste nachgerechnet, nicht geschätzt:
+     #101010 auf #f3f3f3  17,15:1   (spiegelbildlich zur dunklen Seite)
+     #565656 auf #f3f3f3   6,61:1
+     #1C60AD auf #f3f3f3   5,69:1
+     #8a8a8a auf #f3f3f3   3,11:1   (tragende Kanten)
+
+   Der Akzent muss wechseln: #5090d0 erreicht auf #f3f3f3 nur 3,03:1
+   und fällt damit durch. #1C60AD steht ohnehin in der Palette.
+   ============================================================ */
+.theme-mono .section--hell {
+  --color-bg:            #f3f3f3;
+  --color-surface:       #ffffff;
+  --color-surface-alt:   #eaeaea;
+  --color-border:        #dcdcdc;
+  --color-border-strong: #8a8a8a;
+  --color-text:          #101010;
+  --color-text-muted:    #565656;
+  --color-text-faint:    #565656;
+  --color-decor:         #b4b4b4;
+  --color-accent:        #1C60AD;
+  --color-primary-light: #1C60AD;
+
+  /* Dieselben Werte auch unter den -on-light-Namen: Mehrere Regeln
+     greifen direkt darauf zu, etwa .schwerpunkte-section__heading. */
+  --color-bg-light:            #f3f3f3;
+  --color-surface-light:       #ffffff;
+  --color-surface-alt-light:   #eaeaea;
+  --color-border-light:        #dcdcdc;
+  --color-border-strong-light: #8a8a8a;
+  --color-text-on-light:       #101010;
+  --color-text-muted-on-light: #565656;
+  --color-text-faint-on-light: #565656;
+  --color-primary-on-light:    #1C60AD;
+  --color-focus-on-light:      #1C60AD;
+  --dk-color-decor-on-light:   #b4b4b4;
+
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Der Übergang von Dunkel nach Hell braucht keine Linie — der
+   Helligkeitssprung ist die Kante. Eine zusätzliche Trennlinie
+   verdoppelt nur, was das Auge ohnehin sieht. */
+.theme-mono .section--hell + .section--hell {
+  padding-top: 0;
+}
+
+/* ============================================================
+   Drei Vorteile nebeneinander statt untereinander
+
+   Die Karten standen als Spalte über die volle Breite, der Text
+   füllte davon knapp die Hälfte — die Zeilenlänge ist bewusst auf
+   38 Zeichen begrenzt, die Karte war es nicht. Das Ergebnis war
+   eine leere rechte Hälfte über drei Karten hinweg.
+
+   Nebeneinander stimmt beides: Die Zeilenlänge bleibt, wo sie
+   gehört, und die Fläche wird gefüllt. Ab 900 px, darunter bleibt
+   die Spalte richtig.
+   ============================================================ */
+@media (min-width: 900px) {
+  .theme-mono .usp-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  .theme-mono .usp-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* ============================================================
+   Der Handlungsaufruf am Ende des Vorgehens
+
+   Steht auf der hellen Fläche und muss sich von ihr abheben, ohne
+   laut zu werden: eine weiße Karte mit einer Akzentlinie oben, wie
+   die Vorgehensschritte darüber. Kein zweiter Farbton, keine
+   Umrandung in Blau — die Linie genügt als Zeichen, dass hier
+   etwas anderes steht als eine weitere Erklärung.
+   ============================================================ */
+.theme-mono .schritt-cta {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.theme-mono .schritt-cta__text {
+  margin: 0;
+  max-width: 46ch;
+  font-size: var(--dk-font-size-md, 1.25rem);
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.theme-mono .schritt-cta__aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+}
+
+/* Die Nummer steht neben dem Knopf, nicht darunter: Wer lieber
+   anruft, soll nicht erst am Knopf vorbeilesen müssen. */
+.theme-mono .schritt-cta__direkt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.theme-mono .schritt-cta__direkt:hover,
+.theme-mono .schritt-cta__direkt:focus-visible {
+  text-decoration: underline;
+}
+
+.theme-mono .schritt-cta__zeit {
+  margin: 0;
+  font-family: var(--dk-font-mono);
+  font-size: var(--dk-font-size-xs, 0.75rem);
+  letter-spacing: var(--dk-tracking-mono, 0.18em);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}

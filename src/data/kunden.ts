@@ -22,6 +22,19 @@ export interface Kunde {
   logo?: string;
 
   /**
+   * Hat diese Marke eine eigene Fallstudie auf der Startseite?
+   *
+   * Dann erscheint sie NICHT im Logostreifen. Vorher stand sie zweimal auf
+   * derselben Seite — einmal als Bildmarke, einmal als Überschrift der
+   * Fallstudie. Zweimal derselbe Name wirkt nicht doppelt so überzeugend,
+   * sondern nach kurzer Liste.
+   *
+   * Die Aufteilung dahinter: Der Streifen zeigt die Breite, die Fallstudie
+   * zeigt die Tiefe. Jeder Name macht eine Sache, keiner beides.
+   */
+  fallstudie?: boolean;
+
+  /**
    * Optische Höhe in rem, Vorgabe 1.75.
    * Eine breite Wortmarke wirkt bei gleicher Höhe größer als ein
    * quadratisches Signet — das gleicht dieser Wert aus.
@@ -49,13 +62,13 @@ export interface Kunde {
 
 export const kunden: readonly Kunde[] = [
   {
-    name: 'TARGOBANK AG',
+    name: 'TARGOBANK AG', fallstudie: true,
     logo: 'targobank.svg',
     // Mit 6,67:1 die breiteste Marke der Reihe — entsprechend flach.
     hoehe: 1.932,
   },
   {
-    name: 'Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend',
+    name: 'Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend', fallstudie: true,
     logo: 'bmbfsfj.svg',
     hoehe: 4.186,
     // Hier stand bis zum 01.09.2026 `ohneLogo` mit zwei Einwänden: Das
@@ -67,7 +80,7 @@ export const kunden: readonly Kunde[] = [
     // nur die weiße Grundfläche entfernt wurde.
   },
   {
-    name: 'Berufsförderungswerk Mainz',
+    name: 'Berufsförderungswerk Mainz', fallstudie: true,
     logo: 'bfw-mainz.svg',
     // Jubiläumszeichen „60 Jahre“. Kompakter als eine Wortmarke, deshalb höher.
     hoehe: 3.105,

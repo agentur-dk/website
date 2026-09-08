@@ -20,7 +20,16 @@ const base = import.meta.env.BASE_URL;
 /* Beim Build prüfen, ob jede eingetragene Datei wirklich unter public/logos/
    liegt. Ohne die Prüfung fiele ein Tippfehler im Dateinamen nur dadurch auf,
    dass in der Leiste eine Lücke klafft — und das sieht man leicht nicht. */
-const eintraege = kunden.map((k) => {
+/*
+ * Marken mit eigener Fallstudie bleiben draußen.
+ *
+ * Sie standen sonst zweimal auf derselben Seite: hier als Bildmarke und
+ * weiter unten als Überschrift ihrer Fallstudie. Zweimal derselbe Name
+ * wirkt nicht doppelt so überzeugend, sondern nach kurzer Liste.
+ *
+ * Der Streifen zeigt die Breite, die Fallstudie zeigt die Tiefe.
+ */
+const eintraege = kunden.filter((k) => !k.fallstudie).map((k) => {
   if (!k.logo) return { ...k, datei: null };
   const pfad = join('public', 'logos', k.logo);
   if (!existsSync(pfad)) {

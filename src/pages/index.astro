@@ -219,7 +219,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Why agentur dk -->
-    <section class="why-us section" aria-label="Warum agentur dk">
+    <section class="why-us section section--hell" aria-label="Warum agentur dk">
       <div class="container">
         <p class="section-label" aria-hidden="true">Warum wir</p>
         <h2 class="section-title">Direkt, persönlich, effizient</h2>
@@ -258,7 +258,7 @@ const base = import.meta.env.BASE_URL;
     <DitherBand field="rain" label="Vorgehen" />
 
     <!-- Process Section -->
-    <section class="process section" aria-label="Unser Vorgehen">
+    <section class="process section section--hell" aria-label="Unser Vorgehen">
       <div class="container">
         <p class="section-label" aria-hidden="true">Unser Vorgehen</p>
         <h2 class="section-title">So arbeiten wir zusammen</h2>
@@ -292,6 +292,29 @@ const base = import.meta.env.BASE_URL;
             </div>
           </li>
         </ol>
+
+          <!--
+            Der Handlungsaufruf steht hier, nicht erst am Seitenende: Wer die
+            vier Schritte gelesen hat, weiss gerade jetzt, worauf er sich
+            einlaesst. Bis zum Fuss der Seite sind es mehrere Bildschirmhoehen.
+
+            Nummer, Ort und Zeiten stammen aus derselben Quelle wie die
+            Fusszeile. Versprochen wird nur, was Schritt 1 oben zusagt.
+          -->
+          <div class="schritt-cta" data-reveal>
+            <p class="schritt-cta__text">
+              Schritt&nbsp;1 kostet nichts außer einer halben Stunde. Erzählen
+              Sie, was ansteht — wir sagen Ihnen, ob und wie wir helfen können.
+            </p>
+            <div class="schritt-cta__aktionen">
+              <a href="#kontakt" class="btn btn--primary">Gespräch vereinbaren</a>
+              <a href="tel:+4922198655229" class="schritt-cta__direkt">
+                <Icon name="phone" size={16} />
+                <span>+49 221 986 55 229</span>
+              </a>
+            </div>
+            <p class="schritt-cta__zeit">Köln · Mo–Fr 9–18 Uhr</p>
+          </div>
       </div>
     </section>
 
@@ -321,7 +344,7 @@ const base = import.meta.env.BASE_URL;
     <DitherBand field="fade" label="Kontakt" />
 
     <!-- Contact Section -->
-    <section class="contact section" aria-label="Kontakt">
+    <section id="kontakt" class="contact section" aria-label="Kontakt">
       <div class="container contact__inner">
         <!-- Contact Info -->
         <div class="contact__info">
