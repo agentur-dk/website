@@ -29,9 +29,18 @@ interface Props {
   /** Sprechender Name der Seite — landet als verstecktes Feld in der Mail. */
   readonly page?: string;
   readonly heading?: string;
+  /**
+   * Blau hinterlegen statt dunkel.
+   *
+   * Blau ist auf dieser Seite die einzige Farbe und markiert die
+   * Stellen, an denen etwas passieren soll. Das Formular ist eine
+   * davon — auf den Leistungsseiten sogar die einzige, weil dort
+   * kein Abschluss-Aufruf steht.
+   */
+  readonly blau?: boolean;
 }
 
-const { page = 'Unbekannte Seite', heading = 'Projekt anfragen' } = Astro.props;
+const { page = 'Unbekannte Seite', heading = 'Projekt anfragen', blau = false } = Astro.props;
 
 const topics = [
   'Barrierefreie Website (BFSG)',
@@ -51,7 +60,7 @@ const schritte = [
 ];
 ---
 
-<section class="lf-section" id="contact" aria-labelledby="lf-heading">
+<section class:list={['lf-section', blau && 'section--blau']} id="contact" aria-labelledby="lf-heading">
   <div class="lf-inner">
     <h2 id="lf-heading" class="lf-heading">{heading}</h2>
 

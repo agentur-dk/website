@@ -30,7 +30,13 @@ const heading = headingProp ?? set?.heading;
 const baseId = `faq-${(slug ?? 'default').replace(/[^a-z0-9]+/gi, '-')}`;
 ---
 
-<section class="faq-section" aria-labelledby={heading ? `${baseId}-heading` : undefined}>
+<!--
+  Weiss statt dunkel. Der FAQ-Block ist auf den meisten Seiten der
+  laengste zusammenhaengende Textteil — dunkel gesetzt zog er die
+  ganze Seite ins Dunkle. Auf heller Flaeche liest er sich wie das,
+  was er ist: Nachschlagetext, kein Bildteil.
+-->
+<section class="faq-section section--hell" aria-labelledby={heading ? `${baseId}-heading` : undefined}>
   <div class="faq-inner">
     {heading && (
       <h2 id={`${baseId}-heading`} class="faq-heading">{heading}</h2>

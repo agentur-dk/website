@@ -7,6 +7,11 @@ import Footer from '../components/Footer.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import CtaSection from '../components/CtaSection.astro';
 import Icon from '../components/ui/Icon.astro';
+import { Image } from 'astro:assets';
+import portraet from '../assets/team/daniel-kontelis.jpg';
+import bueroDom from '../assets/buero/koelner-dom-suedstadt.jpg';
+import bueroEingang from '../assets/buero/eingang.jpg';
+import bueroRaum from '../assets/buero/besprechungsraum.jpg';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -119,6 +124,76 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Prozess (dark surface) -->
+
+    <!--
+      Das Kernteam.
+
+      Inhalt aus der Agenturvorstellung (PDF), nicht erfunden: die fuenf
+      Namen, ihre Schwerpunkte, die Anschrift, die Bueroaufnahmen.
+
+      Eine Rolle steht dort, die hier bewusst fehlt: „Inhaber". Auf der
+      Website wird nicht ueber die Person argumentiert, sondern ueber das,
+      was sie fuer den Kunden bedeutet — ein Ansprechpartner statt einer
+      Kette. Das steht so auch in der PDF und ist das staerkere Argument.
+
+      Die Bilder stammen aus derselben PDF und sind entsprechend klein
+      (400x400 und 320x180). Fuer diese Groessen reicht das; groessere
+      Fassungen ersetzen sie ohne weitere Aenderung.
+    -->
+    <section class="section section--hell" aria-labelledby="team-heading">
+      <div class="container">
+        <p class="section-label" aria-hidden="true">Wer für Sie arbeitet</p>
+        <h2 id="team-heading" class="section__heading">Das Kernteam</h2>
+
+        <div class="team">
+          <figure class="team__karte">
+            <Image src={portraet} alt="Daniel Kontelis" width={200} height={200}
+                   class="team__portraet" loading="lazy" />
+            <figcaption class="team__unterschrift">
+              <p class="team__name">Daniel Kontelis</p>
+              <p class="team__rolle">Ihr Ansprechpartner</p>
+              <p class="team__kontakt">
+                <a href="tel:+4922198655229">+49 221 986 55 229</a><br />
+                <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a>
+              </p>
+            </figcaption>
+          </figure>
+
+          <div>
+            <p class="team__intro">
+              Wir sitzen in Köln. Je nach Projekt wächst das Team um erprobte
+              Fachleute — Sie behalten trotzdem einen Ansprechpartner für alle
+              Themen, nicht einen je Gewerk.
+            </p>
+            <ul class="team__liste" role="list">
+              <li><strong>Daniel Kontelis</strong><span>Projektmanagement, SEO, Design, Online-Marketing, KI</span></li>
+              <li><strong>Robin Kindopp</strong><span>Projektmanagement, Kundenkontakt, WordPress</span></li>
+              <li><strong>Filipos Makkas</strong><span>Projektmanagement, Design, Kundenkontakt</span></li>
+              <li><strong>Julius Heinisch</strong><span>Programmierung, Datenbanken</span></li>
+              <li><strong>Shakil Rifaat</strong><span>UX-Design, Interface-Design, Corporate Design</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="buero">
+          <div>
+            <h3 class="buero__titel">Unser Büro in der Kölner Südstadt</h3>
+            <p class="buero__adresse">
+              Sachsenring 57<br />50677 Köln
+            </p>
+          </div>
+          <div class="buero__bilder">
+            <Image src={bueroDom} alt="Blick durch Bäume auf den Kölner Dom, unweit des Büros"
+                   width={480} height={320} class="buero__bild buero__bild--gross" loading="lazy" />
+            <Image src={bueroEingang} alt="Eingangsbereich des Büros mit Altbautüren"
+                   width={320} height={180} class="buero__bild" loading="lazy" />
+            <Image src={bueroRaum} alt="Besprechungsraum mit langem Tisch und Whiteboards"
+                   width={320} height={180} class="buero__bild" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--hell" aria-labelledby="prozess-heading">
       <div class="container">
         <span class="section__label">Wie wir arbeiten</span>

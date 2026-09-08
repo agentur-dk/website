@@ -629,3 +629,222 @@
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
+
+/* ============================================================
+   Die blaue Fläche
+
+   Blau ist auf dieser Seite die einzige Farbe — bisher nur für
+   Knöpfe, Links und Fokus. Als ganze Fläche markiert es die
+   Stellen, an denen etwas passieren soll: den Abschluss-Aufruf,
+   das Formular. Deshalb bleibt es sparsam. Wären es fünf blaue
+   Abschnitte, hieße keiner mehr „hier".
+
+   Kontraste nachgerechnet auf #1C60AD:
+     #ffffff  6,31:1   Fließtext und Überschriften
+     #cfe0f2  4,69:1   Gedämpftes — knapp über der Schwelle,
+                       deshalb kein hellerer Ton als dieser
+     Knopf: #14477f auf Weiß  9,39:1
+
+   Rahmen kommen als weiße Deckschicht, nicht als eigener Farbwert:
+   Ein aufgehellter Blauton erreicht gegen den Grund nur 1,7–2,0:1.
+   ============================================================ */
+.theme-mono .section--blau {
+  --color-bg:            #1C60AD;
+  --color-surface:       #1a5798;
+  --color-surface-alt:   #17508c;
+  --color-border:        rgb(255 255 255 / 0.22);
+  --color-border-strong: rgb(255 255 255 / 0.45);
+  --color-text:          #ffffff;
+  --color-text-muted:    #cfe0f2;
+  --color-text-faint:    #cfe0f2;
+  --color-decor:         rgb(255 255 255 / 0.32);
+  --color-accent:        #ffffff;
+  --color-primary-light: #ffffff;
+
+  --color-bg-light:            #1C60AD;
+  --color-surface-light:       #1a5798;
+  --color-text-on-light:       #ffffff;
+  --color-text-muted-on-light: #cfe0f2;
+  --color-primary-on-light:    #ffffff;
+  --color-focus-on-light:      #ffffff;
+  --dk-color-decor-on-light:   rgb(255 255 255 / 0.32);
+
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Der Knopf dreht sich um: weiße Fläche, blaue Schrift. Ein blauer
+   Knopf auf blauem Grund wäre nur an seinem Rand zu erkennen. */
+.theme-mono .section--blau .btn--primary {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #14477f;
+}
+.theme-mono .section--blau .btn--primary:hover,
+.theme-mono .section--blau .btn--primary:focus-visible {
+  background: #e8f0f9;
+  border-color: #e8f0f9;
+  color: #14477f;
+}
+
+/* Der zweite Knopf bleibt eine Umrandung — sonst stünden zwei
+   gleich laute Aufforderungen nebeneinander. */
+.theme-mono .section--blau .btn--secondary,
+.theme-mono .section--blau .btn--ghost {
+  background: transparent;
+  border-color: rgb(255 255 255 / 0.55);
+  color: #ffffff;
+}
+.theme-mono .section--blau .btn--secondary:hover,
+.theme-mono .section--blau .btn--ghost:hover {
+  border-color: #ffffff;
+  background: rgb(255 255 255 / 0.1);
+}
+
+/* Der Fokusring muss auf Blau sichtbar bleiben; der übliche
+   Akzentton verschwindet darin. */
+.theme-mono .section--blau :focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* Icons erben die Textfarbe und werden damit weiß. Flächige
+   Icon-Plättchen bekommen die halbtransparente Deckschicht. */
+.theme-mono .section--blau .usp-card__check,
+.theme-mono .section--blau .service-card__icon {
+  background: rgb(255 255 255 / 0.16);
+  color: #ffffff;
+}
+
+/* ============================================================
+   Das Kernteam und das Büro
+
+   Die Seite sprach bis hierher nur in der Wir-Form über sich
+   selbst. Ein Gesicht und eine Anschrift sagen mehr über eine
+   kleine Agentur als drei Absätze darüber, dass sie klein ist.
+
+   Das Porträt steht links und bleibt klein: Es ist der
+   Ansprechpartner, nicht das Thema. Rechts die Liste, wer sonst
+   dabei ist — als Aufzählung, nicht als Kartenraster, weil fünf
+   Karten mehr Apparat wären als Inhalt.
+   ============================================================ */
+.theme-mono .team {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+@media (min-width: 800px) {
+  .theme-mono .team {
+    grid-template-columns: minmax(200px, 15rem) 1fr;
+    align-items: start;
+  }
+}
+
+.theme-mono .team__karte {
+  margin: 0;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+}
+
+.theme-mono .team__portraet {
+  width: 100%;
+  height: auto;
+  max-width: 10rem;
+  border-radius: 50%;
+  display: block;
+}
+
+.theme-mono .team__unterschrift { margin-top: 1.25rem; }
+
+.theme-mono .team__name {
+  margin: 0;
+  font-size: var(--dk-font-size-md, 1.25rem);
+  color: var(--color-text);
+}
+
+/* Die Rolle in Mono-Versalien wie die übrigen Etiketten der Seite —
+   sie ordnet ein, sie ist keine Überschrift. */
+.theme-mono .team__rolle {
+  margin: 0.25rem 0 0;
+  font-family: var(--dk-font-mono);
+  font-size: var(--dk-font-size-xs, 0.75rem);
+  letter-spacing: var(--dk-tracking-mono, 0.18em);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.theme-mono .team__kontakt {
+  margin: 0.9rem 0 0;
+  line-height: 1.7;
+  font-size: var(--dk-font-size-sm, 0.875rem);
+}
+.theme-mono .team__kontakt a { color: var(--color-accent); }
+
+.theme-mono .team__intro {
+  margin: 0 0 1.5rem;
+  max-width: 52ch;
+  font-size: var(--dk-font-size-md, 1.25rem);
+  line-height: 1.55;
+}
+
+.theme-mono .team__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+/* Eine Haarlinie je Eintrag statt eines Rahmens um jeden: Die Liste
+   soll als Liste lesbar bleiben, nicht als fünf Kacheln. */
+.theme-mono .team__liste li {
+  display: grid;
+  gap: 0.15rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.theme-mono .team__liste li:last-child { border-bottom: 0; padding-bottom: 0; }
+.theme-mono .team__liste strong { font-weight: 500; color: var(--color-text); }
+.theme-mono .team__liste span {
+  font-size: var(--dk-font-size-sm, 0.875rem);
+  color: var(--color-text-muted);
+}
+
+.theme-mono .buero {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+@media (min-width: 800px) {
+  .theme-mono .buero { grid-template-columns: minmax(200px, 15rem) 1fr; align-items: start; }
+}
+
+.theme-mono .buero__titel {
+  margin: 0 0 0.75rem;
+  font-size: var(--dk-font-size-lg, 1.5625rem);
+}
+.theme-mono .buero__adresse {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* Ein großes Bild oben, zwei kleine darunter — die Aufnahmen aus der
+   Agenturvorstellung haben genau diese Größen (480×320 und 320×180).
+   Das Raster folgt dem Material, statt es hochzurechnen. */
+.theme-mono .buero__bilder {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.theme-mono .buero__bild {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--color-border);
+}
+.theme-mono .buero__bild--gross { grid-column: 1 / -1; }
