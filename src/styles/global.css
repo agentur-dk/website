@@ -629,6 +629,43 @@ a:not([class]):focus-visible {
     line-height: 1.65;
     margin: 0;
   }
+  /* Dunkel wie die Porträtflächen im Kernteam: Die Dither-Komponente
+     zeichnet mit `--color-bg` als Grund — hell auf hell wäre eine leere
+     Fläche. */
+  .case-card__visual--dither {
+    background: #101010;
+    --color-bg: #101010;
+    overflow: hidden;
+  }
+  /* Nur in der Vorschau: der Hinweis über der Fallliste. */
+  .referenzen__warnung {
+    max-width: 60ch;
+    margin: 0 0 2rem;
+    padding: 0.9rem 1.1rem;
+    border-left: 3px solid var(--color-error-text, #b3261e);
+    background: var(--color-surface-alt);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  /* Der Kundenname steht UNTER dem Ergebnis: Zuerst soll man lesen,
+     was herauskam, dann bei wem. Umgekehrt sortiert der Leser nach
+     Bekanntheit statt nach Sache. */
+  .case-card__kunde {
+    font-size: 1rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+  /* Sichtbar nur in der Vorschau — sobald die Indexierungssperre fällt,
+     erscheinen unfreigegebene Fälle gar nicht mehr. Die Auszeichnung ist
+     trotzdem deutlich: Wer die Vorschau jemandem zeigt, soll auf den
+     ersten Blick sehen, was noch nicht veröffentlicht werden darf. */
+  .case-card__vorbehalt {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--color-error-text, #b3261e);
+    letter-spacing: 0.04em;
+  }
   .case-card__link {
     /* WCAG 2.5.8: eigenständige Schaltfläche, mindestens 24px hoch. */
     min-height: 24px;

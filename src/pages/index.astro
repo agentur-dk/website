@@ -13,6 +13,7 @@ import { HERO_FIELDS } from '../lib/dither';
 import DitherBand from '../components/DitherBand.astro';
 import Kernteam from '../components/Kernteam.astro';
 import EigeneProjekte from '../components/EigeneProjekte.astro';
+import { sichtbareReferenzen, zeigtUnfreigegebenes } from '../data/referenzen';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -408,42 +409,46 @@ const base = import.meta.env.BASE_URL;
     <section class="referenzen-section section section--hell" aria-labelledby="referenzen-heading">
       <div class="container">
         <p class="schwerpunkte-section__eyebrow">Ausgewählte Projekte</p>
-        <h2 class="schwerpunkte-section__heading" id="referenzen-heading">Was wir geleistet haben</h2>
-        <p class="schwerpunkte-section__lead">Ein Auszug aus unseren Projekten – von öffentlicher Hand über Finanzdienstleister bis zu Bildungsträgern.</p>
+        <h2 class="schwerpunkte-section__heading" id="referenzen-heading">Betriebe wie Ihrer</h2>
+        <p class="schwerpunkte-section__lead">Praxis, Kanzlei, Verwaltung, Selbstständige. Die großen Namen stehen oben in der Leiste — hier stehen die Projekte, in denen Sie sich wiederfinden.</p>
+        {zeigtUnfreigegebenes() && (
+          <p class="referenzen__warnung" role="note">
+            <strong>Nur in der Vorschau sichtbar:</strong> Einzelne Fälle sind noch nicht vom
+            Kunden freigegeben. Sobald die Indexierungssperre fällt, erscheinen ausschließlich
+            freigegebene Referenzen — ohne dass jemand daran denken muss.
+          </p>
+        )}
+        {/* Große Namen stehen in der Logoleiste oben — hier stehen die
+            Projekte, in denen sich ein Betrieb wiedererkennt, der selbst
+            einen sucht. Entschieden am 21.09.2026: „Große als Beweis,
+            kleine als Spiegel."
+
+            Die Liste kommt aus src/data/referenzen.ts und steht unter
+            Freigabevorbehalt: Solange die Indexierungssperre gilt, sind
+            auch unfreigegebene Fälle sichtbar und als solche markiert;
+            sobald die Seite live geht, verschwinden sie von selbst. */}
         <div class="case-grid">
-          <article class="case-card" data-reveal>
-            <div class="case-card__visual case-card__visual--blue" aria-hidden="true">
-              <span class="case-card__initials">BMBFSFJ</span>
-            </div>
-            <div class="case-card__body">
-              <span class="case-card__tag">Öffentliche Hand / BFSG</span>
-              <h3 class="case-card__title">Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend</h3>
-              <p class="case-card__desc">Konzeption, Gestaltung und Umsetzung eines deutschlandweiten Eltern-Anfrageportals für Familienhotels. Der Fokus liegt auf sozialschwachen Familien mit Kindern mit Handicap. Herausforderung: neue barrierearme Website und reibungsloser Buchungsprozess für alle.</p>
-              <a href={`${base}projekte.html`} class="case-card__link">Projekt ansehen&nbsp;→</a>
-            </div>
-          </article>
-          <article class="case-card" data-reveal>
-            <div class="case-card__visual case-card__visual--green" aria-hidden="true">
-              <span class="case-card__initials">TARG</span>
-            </div>
-            <div class="case-card__body">
-              <span class="case-card__tag">Finanzdienstleistung / Social Recruiting</span>
-              <h3 class="case-card__title">TARGOBANK AG</h3>
-              <p class="case-card__desc">Social-Recruiting-Kampagne für NRW mit Konzeption, Planung und Videodreh. Herausforderung: modernen Recruitingprozess in bestehende Konzernprozesse integrieren.</p>
-              <a href={`${base}projekte.html`} class="case-card__link">Projekt ansehen&nbsp;→</a>
-            </div>
-          </article>
-          <article class="case-card" data-reveal>
-            <div class="case-card__visual case-card__visual--purple" aria-hidden="true">
-              <span class="case-card__initials">BFW</span>
-            </div>
-            <div class="case-card__body">
-              <span class="case-card__tag">Bildung / Barrierefreiheit</span>
-              <h3 class="case-card__title">Berufsförderungswerk Düren &amp; Mainz</h3>
-              <p class="case-card__desc">Konzeption, Gestaltung und Entwicklung einer Website für die Zielgruppe blinde Menschen. Herausforderung: Usability und Design für sehende und blinde Menschen kombinieren.</p>
-              <a href={`${base}projekte.html`} class="case-card__link">Projekt ansehen&nbsp;→</a>
-            </div>
-          </article>
+          {sichtbareReferenzen().map((r) => (
+            <article class="case-card" data-reveal>
+              <div class="case-card__visual case-card__visual--dither" aria-hidden="true">
+                <Dither field={r.feld} cell={3} />
+              </div>
+              <div class="case-card__body">
+                <span class="case-card__tag">{r.einordnung}</span>
+                <h3 class="case-card__title">{r.titel}</h3>
+                <p class="case-card__desc">{r.ergebnis}</p>
+                <p class="case-card__kunde">
+                  <strong>{r.kunde}</strong>
+                  {!r.freigegeben && (
+                    <span class="case-card__vorbehalt"> · Freigabe ausstehend</span>
+                  )}
+                </p>
+                <a href={r.link} class="case-card__link" target="_blank" rel="noopener noreferrer">
+                  {r.link.replace('https://', '')}<span class="u-sr-only"> (öffnet in neuem Tab)</span>&nbsp;→
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
         <div class="referenzen-section__cta">
           <a href={`${base}projekte.html`} class="btn btn--outline">Alle Projekte ansehen</a>
