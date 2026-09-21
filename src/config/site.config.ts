@@ -74,6 +74,13 @@ export const siteConfig = {
   foundingYear: 2005,
   contact: {
     email:        'mail@dk-dk.de',
+    /* Calendly wird NICHT eingebettet, sondern verlinkt. Ein iframe
+       laedt Skripte und uebertraegt die IP des Besuchers, bevor er
+       zugestimmt hat — das waere nach § 25 TDDDG einwilligungs-
+       pflichtig und widerspraeche unserer eigenen Regel „kein Aufruf
+       an einen Dritten vor der Zustimmung". Als Link entscheidet der
+       Besucher selbst, und es faellt nichts an, was er nicht wollte. */
+    calendly:     'https://calendly.com/agentur-dk-follow-up/unverbindliches-erstgesprach',
     phone:        '+4922198655229',
     phoneDisplay: '+49 221 986 55 229',
     phoneSchema:  '+49-221-986-55-229',
@@ -115,6 +122,9 @@ export interface PageEntry {
 export const pages: PageEntry[] = [
   { slug: '',      label: 'Startseite',  priority: 1.0, changefreq: 'weekly',
     summary: 'Überblick über alle Leistungen: Website-Leasing, barrierefreie WordPress-Entwicklung, SEO/GEO, Online-Marketing.' },
+
+  { slug: 'beratung', label: 'Kostenfreies Erstgespräch', priority: 0.95, changefreq: 'monthly',
+    summary: 'Kostenfreies, unverbindliches Erstgespräch: in fünf Klicks das Anliegen schildern, danach Termin wählen oder Rückruf anfordern.' },
 
   { slug: 'leistungen', label: 'Leistungen', priority: 0.9, changefreq: 'monthly',
     summary: 'Alle Leistungen im Überblick mit Einstieg in die jeweiligen Detailseiten.' },

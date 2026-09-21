@@ -27,7 +27,7 @@ const ORIGIN = process.env.LH_ORIGIN ?? 'http://localhost:4321';
 const BASE = process.env.LH_BASE ?? '/';
 
 const ALL_PAGES = [
-  'index', 'leistungen', 'bfsg-wordpress-website-agentur', 'wordpress-entwicklung',
+  'index', 'beratung', 'leistungen', 'bfsg-wordpress-website-agentur', 'wordpress-entwicklung',
   'website-leasing', 'seo-geo', 'online-marketing', 'social-recruiting',
   'corporate-design', 'ki-services', 'projekte', 'ueber-uns',
   'barrierefreiheit', 'impressum', 'datenschutz', '404',

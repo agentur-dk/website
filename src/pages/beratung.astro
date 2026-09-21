@@ -1,0 +1,214 @@
+---
+/**
+ * Der Weg ins Erstgespräch.
+ *
+ * Diese Seite hat genau eine Aufgabe: aus Interesse ein Gespräch
+ * machen. Deshalb steht hier keine Leistungsliste, keine Preistabelle
+ * und kein zweiter Ausgang — nur die Frage, worum es geht, und zwei
+ * Wege zur Antwort (Termin oder Rückmeldung).
+ *
+ * Die Reihenfolge folgt dem, was ein Besucher wissen will, bevor er
+ * seine Mailadresse hergibt: Was passiert mit mir? Was kostet es?
+ * Wer ist am anderen Ende? Erst danach das Formular.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BeratungFunnel from '../components/BeratungFunnel.astro';
+import Dither from '../components/ui/Dither.astro';
+import { siteConfig } from '../config/site.config';
+
+const base = import.meta.env.BASE_URL;
+
+/* Vier Zusagen, keine Werbeversprechen. Jede ist eine Aussage darüber,
+   was in der nächsten Stunde passiert — nachprüfbar, nicht schmückend. */
+const erwartung = [
+  {
+    nr: '1',
+    titel: 'Kostenfrei und unverbindlich',
+    text: 'Kein Kleingedrucktes, keine Folgekosten, keine automatische Verlängerung von irgendetwas. Wenn es nicht passt, sagen wir das auch.',
+  },
+  {
+    nr: '2',
+    titel: 'Sie sprechen mit jemandem, der es macht',
+    text: 'Kein Vertrieb, der später übergibt. Wer mit Ihnen spricht, arbeitet auch an Ihrem Projekt.',
+  },
+  {
+    nr: '3',
+    titel: 'Wir sehen uns vorher an, was Sie haben',
+    text: 'Wenn Sie uns Ihre Website nennen, kennen wir sie, bevor wir telefonieren. Das spart die erste halbe Stunde.',
+  },
+  {
+    nr: '4',
+    titel: 'Sie gehen mit etwas Konkretem heraus',
+    text: 'Mindestens zwei Dinge, die Sie sofort ändern können — auch dann, wenn Sie sie selbst umsetzen oder jemand anderes beauftragen.',
+  },
+];
+---
+
+<BaseLayout
+  slug="beratung"
+  title="Kostenfreies Erstgespräch – Digitalagentur Köln | agentur dk"
+  description="Kostenfreies Erstgespräch mit der agentur dk aus Köln. In fünf Klicks Ihr Anliegen schildern, danach Termin wählen oder Rückruf anfordern."
+  mono
+>
+  <Header />
+  <main id="main-content" tabindex="-1">
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li aria-current="page">Erstgespräch</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ── Hero ────────────────────────────────────────────────── -->
+    <section class="ber-hero section" aria-labelledby="ber-hero-headline">
+      <div class="hero__flaeche" aria-hidden="true">
+        <Dither field="brain" cell={4} fps={12} />
+      </div>
+      <div class="container ber-hero__inner">
+        <p class="section-label">Kostenfreies Erstgespräch</p>
+        <h1 id="ber-hero-headline" class="ber-hero__headline">
+          Reden wir über Ihr Vorhaben.
+        </h1>
+        <p class="ber-hero__subline">
+          Eine halbe Stunde, in der Sie erzählen und wir zuhören. Danach wissen Sie,
+          was Ihr Vorhaben ungefähr bedeutet — an Aufwand, an Zeit und an Geld.
+          Ob Sie es mit uns machen, entscheiden Sie später.
+        </p>
+        <p class="ber-hero__anker">
+          <a class="btn btn--primary" href="#funnel">In fünf Klicks anfragen</a>
+          <a class="btn btn--ghost" href={`tel:${siteConfig.contact.phone}`}>
+            Oder anrufen: 0221 986 55 229
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Das erwartet Sie ────────────────────────────────────── -->
+    <section class="section section--hell" aria-labelledby="ber-erwartung-heading">
+      <div class="container">
+        <p class="section-label">Das erwartet Sie</p>
+        <h2 id="ber-erwartung-heading" class="ber-erwartung__heading">
+          Vier Dinge, auf die Sie sich verlassen können
+        </h2>
+        <ol class="ber-erwartung__liste">
+          {erwartung.map((e) => (
+            <li class="berkarte">
+              <span class="berkarte__nr" aria-hidden="true">{e.nr}</span>
+              <h3 class="berkarte__titel">{e.titel}</h3>
+              <p class="berkarte__text">{e.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── Der Funnel ──────────────────────────────────────────── -->
+    <BeratungFunnel page="Erstgespräch" />
+
+    <!-- ── Direkter Kontakt ────────────────────────────────────── -->
+    <section class="section section--blau" aria-labelledby="ber-direkt-heading">
+      <div class="container ber-direkt__inner">
+        <div>
+          <p class="section-label">Direkter Kontakt</p>
+          <h2 id="ber-direkt-heading" class="ber-direkt__heading">Lieber sofort sprechen?</h2>
+          <p class="ber-direkt__text">
+            Wenn es eilt oder Sie einfach lieber reden als tippen: Rufen Sie an.
+            Werktags zwischen 9 und 18 Uhr geht jemand ran, der Ihnen auch
+            antworten kann.
+          </p>
+        </div>
+        <div class="ber-direkt__wege">
+          <a class="ber-direkt__nummer" href={`tel:${siteConfig.contact.phone}`}>
+            {siteConfig.contact.phoneDisplay}
+          </a>
+          <a class="ber-direkt__mail" href={`mailto:${siteConfig.contact.email}`}>
+            {siteConfig.contact.email}
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ── Hero ────────────────────────────────────────────────────── */
+  /* `position: relative` ist Voraussetzung dafuer, dass .hero__flaeche
+     sich an diesem Abschnitt ausrichtet und nicht an der Seite. */
+  .ber-hero { position: relative; overflow: hidden; }
+  .ber-hero__inner { position: relative; max-width: var(--container-narrow); }
+  .ber-hero__headline {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.08;
+    letter-spacing: -.03em; margin: .4rem 0 1rem; text-wrap: balance;
+  }
+  .ber-hero__subline {
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    color: var(--color-text-muted); max-width: 48ch; margin: 0 0 2rem;
+  }
+  .ber-hero__anker { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0; }
+
+  /* ── Das erwartet Sie ────────────────────────────────────────── */
+  .ber-erwartung__heading {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem); line-height: 1.15;
+    letter-spacing: -.02em; margin: .35rem 0 2.5rem; text-wrap: balance;
+  }
+  .ber-erwartung__liste {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    counter-reset: none;
+  }
+  .berkarte {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 1.4rem;
+  }
+  .berkarte__nr {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem; margin-bottom: .9rem;
+    font-family: var(--font-mono); font-size: .9rem; font-weight: 700;
+    color: var(--color-text-inverse); background: var(--color-accent);
+    border-radius: 50%;
+  }
+  .berkarte__titel {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 1.05rem; line-height: 1.3; margin: 0 0 .4rem;
+    hyphens: manual; text-wrap: balance;
+  }
+  .berkarte__text {
+    margin: 0; font-size: .92rem; line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  /* ── Direkter Kontakt ────────────────────────────────────────── */
+  .ber-direkt__inner {
+    display: grid; gap: 2rem; align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+  .ber-direkt__heading {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.15;
+    margin: .35rem 0 .75rem;
+  }
+  .ber-direkt__text { margin: 0; max-width: 42ch; }
+  .ber-direkt__wege { display: grid; gap: .5rem; justify-items: start; }
+  .ber-direkt__nummer {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    letter-spacing: -.02em; text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .ber-direkt__nummer:hover, .ber-direkt__nummer:focus-visible { text-decoration: underline; }
+  .ber-direkt__mail { font-size: 1.05rem; }
+
+
+</style>

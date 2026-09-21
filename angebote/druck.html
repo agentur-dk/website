@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>agentur dk — Preisblatt Website-Pakete</title>
+<link rel="stylesheet" href="schriften-ttf.css">
+<style>
+  /* Bewusst ohne CSS-Variablen, ohne Grid und ohne Flexbox:
+     Die Druckausgabe läuft über eine ältere WebKit-Fassung. */
+
+  @page { size: A4; margin: 0; }
+
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 9.4pt;
+    line-height: 1.45;
+    color: #14171c;
+  }
+
+  .seite { padding: 0; }
+
+  /* ---------- Briefkopf ---------- */
+
+  table.raster { width: 100%; border-collapse: collapse; }
+  table.raster > tbody > tr > td { padding: 0; border: none; vertical-align: top; }
+
+  .briefkopf { border-bottom: 1.4pt solid #14171c; padding-bottom: 4mm; }
+
+  .signet {
+    width: 11mm; height: 11mm;
+    background: #1c60ad;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 15pt;
+    text-align: center;
+    line-height: 11mm;
+  }
+
+  .wortmarke-name {
+    font-family: Arial, sans-serif; font-weight: 700;
+    font-size: 13pt;
+    letter-spacing: -0.2pt;
+    line-height: 1.15;
+  }
+  .wortmarke-zusatz { font-size: 7.4pt; color: #4a515a; letter-spacing: 0.28pt; }
+
+  .kopf-rechts { text-align: right; font-size: 7.6pt; color: #4a515a; line-height: 1.5; }
+  .kopf-rechts .label {
+    display: block; white-space: nowrap;
+    font-family: Arial, sans-serif; font-weight: 700; font-size: 7.8pt; color: #14171c;
+    letter-spacing: 0; text-transform: uppercase;
+  }
+
+  /* ---------- Titel ---------- */
+
+  h1 {
+    font-family: Arial, sans-serif; font-weight: 700; font-size: 22pt;
+    letter-spacing: -0.25pt; line-height: 1.1;
+    margin: 7mm 0 2.5mm;
+  }
+  .lede { margin: 0 0 8mm; color: #4a515a; font-size: 9.8pt; width: 125mm; }
+
+  /* ---------- Abschnitte ---------- */
+
+  h2 {
+    font-family: Arial, sans-serif; font-weight: 700; font-size: 8.2pt;
+    letter-spacing: 0.85pt; text-transform: uppercase;
+    color: #1c60ad;
+    margin: 0 0 2.5mm;
+  }
+
+  .abschnitt { margin-bottom: 6.5mm; page-break-inside: avoid; }
+
+  table.preise { width: 100%; border-collapse: collapse; }
+  table.preise th, table.preise td {
+    text-align: left; padding: 2.2mm 3mm 2.2mm 0;
+    border-bottom: 0.4pt solid #d5d9de; vertical-align: top;
+  }
+  table.preise thead th {
+    font-family: Arial, sans-serif; font-weight: 700;
+    font-size: 7.4pt;
+    letter-spacing: 0.6pt; text-transform: uppercase; color: #5e6470;
+    border-bottom: 0.9pt solid #14171c; padding-bottom: 1.6mm;
+  }
+  table.preise tbody tr.letzte th, table.preise tbody tr.letzte td { border-bottom: none; }
+
+  .name { font-family: Arial, sans-serif; font-weight: 700; font-size: 9.6pt; }
+  .umfang { display: block; font-family: Arial, sans-serif; font-weight: 400; font-size: 8.1pt; color: #4a515a; margin-top: 0.4mm; }
+  .zahl { text-align: right; padding-right: 0 !important; white-space: nowrap; font-family: Arial, sans-serif; font-weight: 700; font-size: 10.4pt; }
+  .zahl-klein { font-size: 9.6pt; }
+  .zahl .umfang { text-align: right; }
+  .anfrage { font-family: Arial, sans-serif; font-weight: 400; color: #5e6470; font-size: 9.2pt; }
+
+  .notiz { font-size: 8.1pt; color: #4a515a; margin: 2.5mm 0 0; }
+
+  /* ---------- Zwei Wege ---------- */
+
+  .weg { background: #f5f6f8; border: 0.4pt solid #d5d9de; padding: 3.5mm 4mm; }
+  .weg h3 { font-family: Arial, sans-serif; font-weight: 700; font-size: 9.6pt; margin: 0 0 1.5mm; }
+  .weg ul { margin: 0; padding-left: 4.5mm; font-size: 8.3pt; color: #4a515a; }
+  .weg li { margin-bottom: 0.8mm; }
+
+  /* ---------- Fuß ---------- */
+
+  .konditionen { border-top: 1.4pt solid #14171c; padding-top: 3.5mm; margin-top: 7mm; page-break-inside: avoid; font-size: 8.1pt; color: #4a515a; }
+  .konditionen td { padding-right: 6mm !important; }
+  .konditionen td:last-child { padding-right: 0 !important; }
+  .konditionen b {
+    display: block; font-family: Arial, sans-serif; font-weight: 700;
+    color: #14171c; font-size: 7.5pt; letter-spacing: 0.7pt;
+    text-transform: uppercase; margin-bottom: 1mm;
+  }
+
+  .adresse {
+    margin-top: 5mm; padding-top: 2.5mm;
+    border-top: 0.4pt solid #d5d9de;
+    font-size: 7.5pt; color: #5e6470;
+  }
+</style>
+</head>
+<body>
+<div class="seite">
+
+  <table class="raster briefkopf">
+    <tbody><tr>
+      <td style="width: 14mm;"><div class="signet">dk</div></td>
+      <td style="padding-left: 3.5mm; vertical-align: middle;">
+        <div class="wortmarke-name">agentur dk</div>
+        <div class="wortmarke-zusatz">design &amp; kommunikation</div>
+      </td>
+      <td class="kopf-rechts" style="width: 54mm;">
+        <span class="label">Preisblatt</span>
+        Website-Pakete<br>
+        Stand September 2026
+      </td>
+    </tr></tbody>
+  </table>
+
+  <h1>Was kostet eine Website?</h1>
+  <p class="lede">Feste Paketpreise statt Stundenschätzung. Sie sehen vorher, was
+    Ihre Website kostet — und was sie im Jahr kostet, wenn sie läuft.
+    Alle Beträge netto, zzgl. 19 % MwSt.</p>
+
+  <div class="abschnitt">
+    <h2>Die Pakete · einmalig</h2>
+    <table class="preise">
+      <thead><tr>
+        <th>Paket</th>
+        <th class="zahl" style="width: 32mm;">Statisch</th>
+        <th class="zahl" style="width: 32mm;">WordPress</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="name">Website S</span><span class="umfang">One-Pager · 1 Seite</span></td>
+          <td class="zahl">2.100 €</td><td class="zahl">2.550 €</td>
+        </tr>
+        <tr>
+          <td><span class="name">Website M</span><span class="umfang">bis 5 Seiten</span></td>
+          <td class="zahl">4.750 €</td><td class="zahl">5.875 €</td>
+        </tr>
+        <tr>
+          <td><span class="name">Website L</span><span class="umfang">bis 10 Seiten</span></td>
+          <td class="zahl">7.650 €</td><td class="zahl">9.450 €</td>
+        </tr>
+        <tr>
+          <td><span class="name">Website XL</span><span class="umfang">bis 15 Seiten</span></td>
+          <td class="zahl">9.700 €</td><td class="zahl">12.075 €</td>
+        </tr>
+        <tr class="letzte">
+          <td><span class="name">Darüber hinaus</span><span class="umfang">ab 16 Seiten</span></td>
+          <td class="zahl"><span class="anfrage">auf Anfrage</span></td>
+          <td class="zahl"><span class="anfrage">auf Anfrage</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="notiz">In jedem Paket enthalten: Ersteinrichtung · Konzeption von
+      Navigation und Seitenaufbau · Umsetzung aller Seiten · Impressum und
+      Datenschutzerklärung · Kontaktformular mit Spamschutz · Einwilligungsbanner ·
+      Aufbau für Mobil, Tablet und Desktop · zwei Korrekturschleifen ·
+      Projektleitung bis zur Veröffentlichung.</p>
+    <p class="notiz">Die Paketgrößen entsprechen unseren Website-Leasing-Paketen — dieselbe Kalkulation, nur ohne Ratenzahlung.</p>
+  </div>
+
+  <div class="abschnitt">
+    <h2>Der Unterschied</h2>
+    <table class="raster">
+      <tbody><tr>
+        <td style="width: 50%; padding-right: 2mm;">
+          <div class="weg">
+            <h3>Statisch</h3>
+            <ul>
+              <li>Sie ändern nicht selbst — wir übernehmen das</li>
+              <li>Keine Wartung nötig, kein System, das altert</li>
+              <li>Sehr schnell, praktisch nicht angreifbar</li>
+              <li>Günstiger in Anschaffung und Betrieb</li>
+            </ul>
+          </div>
+        </td>
+        <td style="width: 50%; padding-left: 2mm;">
+          <div class="weg">
+            <h3>WordPress</h3>
+            <ul>
+              <li>Eigener Login, Sie ändern selbst</li>
+              <li>Wartung verpflichtend — Updates, Sicherung</li>
+              <li>Beiträge, Team, wachsende Inhalte</li>
+              <li>Sinnvoll, wenn Sie regelmäßig schreiben</li>
+            </ul>
+          </div>
+        </td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <div class="abschnitt">
+    <h2>Seiten ergänzen · einmalig</h2>
+    <table class="preise">
+      <thead><tr>
+        <th>Je zusätzliche Seite</th>
+        <th class="zahl" style="width: 32mm;">Statisch</th>
+        <th class="zahl" style="width: 32mm;">WordPress</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><span class="name">Seite 2 bis 5</span></td><td class="zahl zahl-klein">505 €</td><td class="zahl zahl-klein">675 €</td></tr>
+        <tr><td><span class="name">Seite 6 bis 10</span></td><td class="zahl zahl-klein">405 €</td><td class="zahl zahl-klein">540 €</td></tr>
+        <tr class="letzte"><td><span class="name">Seite 11 bis 15</span></td><td class="zahl zahl-klein">340 €</td><td class="zahl zahl-klein">450 €</td></tr>
+      </tbody>
+    </table>
+    <p class="notiz">Je größer die Website, desto günstiger die einzelne Seite —
+      und eine Seite kostet später dasselbe wie am Anfang. Eine einzeln
+      nachbestellte Seite: zzgl. 150 € Einrichtung, ab drei Seiten entfällt das.</p>
+  </div>
+
+  <div class="abschnitt">
+    <h2>Zusatzleistungen · einmalig</h2>
+    <table class="preise">
+      <tbody>
+        <tr><td><span class="name">Texterstellung</span><span class="umfang">je Seite, nach Ihrem Briefing</span></td><td class="zahl zahl-klein" style="width: 32mm;">200 €</td></tr>
+        <tr><td><span class="name">Bilder</span><span class="umfang">je Seite</span></td><td class="zahl zahl-klein">100 €</td></tr>
+        <tr><td><span class="name">SEO-Boost</span><span class="umfang">je Seite, für Ihre wichtigsten Themen</span></td><td class="zahl zahl-klein">300 €</td></tr>
+        <tr class="letzte"><td><span class="name">Individuelle Programmierung</span><span class="umfang">Schnittstellen, Rechner, Sonderwünsche</span></td><td class="zahl zahl-klein">100 € / Std.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="abschnitt">
+    <h2>Laufende Kosten · jährlich</h2>
+    <table class="preise">
+      <tbody>
+        <tr>
+          <td><span class="name">Hosting</span><span class="umfang">Server in Deutschland, Sicherung, SSL — inklusive einer Domain und einem E-Mail-Postfach</span></td>
+          <td class="zahl zahl-klein" style="width: 38mm;">340 €<span class="umfang">Website XL: 414 €</span></td>
+        </tr>
+        <tr>
+          <td><span class="name">Wartung</span><span class="umfang">Nur bei WordPress, dort verpflichtend — Updates, Sicherung, Sicherheitsprüfung</span></td>
+          <td class="zahl zahl-klein">1.080 – 3.000 €<span class="umfang">je nach Paketgröße</span></td>
+        </tr>
+        <tr class="letzte">
+          <td><span class="name">Änderungen</span><span class="umfang">Nur bei der statischen Website nötig — Text oder Bild</span></td>
+          <td class="zahl zahl-klein">20 € je Stück<span class="umfang">12 im Jahr: 200 €</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <table class="raster konditionen">
+    <tbody><tr>
+      <td style="width: 33.3%;">
+        <b>Preise</b>
+        Alle Beträge netto, zzgl. 19 % Umsatzsteuer. Dieses Blatt ist ein
+        Preisrahmen, kein verbindliches Angebot — das erstellen wir für Ihr Vorhaben.
+      </td>
+      <td style="width: 33.3%;">
+        <b>Zahlung</b>
+        50 % bei Auftragserteilung, 50 % bei Veröffentlichung. Laufende Kosten
+        jährlich im Voraus, erstmals zur Veröffentlichung.
+      </td>
+      <td style="width: 33.3%;">
+        <b>Ratenzahlung</b>
+        Dieselben Pakete gibt es auch als Website-Leasing über 24 Monate — ohne
+        Anzahlung und mit Hosting inklusive. Sprechen Sie uns an.
+      </td>
+    </tr></tbody>
+  </table>
+
+  <table class="raster adresse">
+    <tbody><tr>
+      <td>agentur dk — design &amp; kommunikation · Inhaber: Daniel Kontelis · Sachsenring 57 · 50677 Köln</td>
+      <td style="text-align: right;">info@dk-dk.de · dk-dk.de</td>
+    </tr></tbody>
+  </table>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="schriften-ttf.css">
+<style>
+  html,body{margin:0;padding:0;background:#fff;}
+  body{font-family:Arial,sans-serif;font-size:7.6pt;color:#5e6470;}
+  #kopf{display:none;border-bottom:.4pt solid #d5d9de;padding-bottom:2mm;}
+  table{width:100%;border-collapse:collapse;}
+  td{padding:0;vertical-align:middle;}
+  .marke{font-family:Arial,sans-serif;font-weight:700;font-size:9pt;color:#14171c;letter-spacing:-.2pt;}
+  .signet{width:6mm;height:6mm;background:#1c60ad;color:#fff;font-family:'Courier New',monospace;
+          font-weight:700;font-size:8pt;text-align:center;line-height:6mm;}
+  .rechts{text-align:right;}
+</style></head>
+<body>
+<div id="kopf">
+  <table><tr>
+    <td style="width:8mm;"><div class="signet">dk</div></td>
+    <td style="padding-left:2.5mm;"><span class="marke">agentur dk</span></td>
+    <td class="rechts">Preisblatt Website-Pakete · Stand September 2026</td>
+  </tr></table>
+</div>
+<script>
+  // Kein URLSearchParams: die Druckmaschine laeuft auf einer alten WebKit-Fassung.
+  function param(name) {
+    var t = location.search.substring(1).split('&');
+    for (var i = 0; i < t.length; i++) {
+      var p = t[i].split('=');
+      if (decodeURIComponent(p[0]) === name) return decodeURIComponent(p[1] || '');
+    }
+    return '';
+  }
+  if (parseInt(param('page'), 10) > 1) {
+    document.getElementById('kopf').style.display = 'block';
+  }
+</script>
+</body></html>

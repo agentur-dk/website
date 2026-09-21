@@ -1,0 +1,534 @@
+---
+/**
+ * Der Weg ins Erstgespräch — fünf Fragen, dann Termin.
+ *
+ * ── Warum als Funnel und nicht als Formular ───────────────────────────
+ * Ein Formular verlangt als Erstes, was am meisten kostet: Name, Firma,
+ * Mailadresse. Wer noch unsicher ist, bricht dort ab. Dieser Weg dreht
+ * die Reihenfolge um — vier der fünf Schritte sind ein einziger Klick,
+ * getippt wird erst, wenn jemand schon vier Entscheidungen getroffen
+ * hat. Das ist der ganze Trick an dieser Bauform.
+ *
+ * ── Ohne JavaScript ───────────────────────────────────────────────────
+ * Dann stehen alle Schritte untereinander auf einem Bildschirm und der
+ * Knopf schickt ein klassisches POST an denselben Endpunkt. Kein
+ * `novalidate` im Markup: Ohne Skript ist die Browserprüfung die
+ * einzige vor dem Absenden. Mit Skript wird sie abgeschaltet, weil die
+ * eigenen Meldungen genauer sind.
+ *
+ * Gebaut wie LeadForm.astro, nur mit Klickkarten statt Textfeldern —
+ * derselbe Endpunkt, dieselben Honigtöpfe, dieselbe Zeitschranke.
+ */
+import { FORM_ENDPOINT, siteConfig } from '../config/site.config';
+const base = import.meta.env.BASE_URL;
+
+interface Props {
+  readonly page?: string;
+}
+const { page = 'Erstgespräch' } = Astro.props;
+
+/* Die Fragen. Reihenfolge ist Absicht: vom Anliegen (leicht) über die
+   Lage (ehrlich) zum Ziel (konkret) und zur Dringlichkeit (qualifiziert).
+   Erst danach die Person. */
+const schritte = [
+  {
+    nr: 1,
+    name: 'anliegen',
+    frage: 'Worum geht es?',
+    hilfe: 'Wählen Sie, was am ehesten passt — im Gespräch sortieren wir das genauer.',
+    optionen: [
+      { wert: 'Neue Website',            zeile: 'Es gibt noch keine oder sie soll komplett neu' },
+      { wert: 'Website überarbeiten',    zeile: 'Vorhanden, aber nicht mehr zeitgemäß' },
+      { wert: 'Mehr gefunden werden',    zeile: 'Suchmaschinen, KI-Antworten, Sichtbarkeit' },
+      { wert: 'Marke und Erscheinungsbild', zeile: 'Logo, Farben, Auftritt' },
+      { wert: 'KI im Arbeitsalltag',     zeile: 'Anrufe, Termine, wiederkehrende Aufgaben' },
+      { wert: 'Etwas anderes',           zeile: 'Erzählen Sie es uns im letzten Schritt' },
+    ],
+  },
+  {
+    nr: 2,
+    name: 'lage',
+    frage: 'Wie sieht es heute aus?',
+    hilfe: 'Ehrlich ist hier nützlicher als schmeichelhaft.',
+    optionen: [
+      { wert: 'Noch keine Website',      zeile: 'Wir fangen bei null an' },
+      { wert: 'In die Jahre gekommen',   zeile: 'Läuft, sieht aber alt aus' },
+      { wert: 'Bringt keine Anfragen',   zeile: 'Sie ist da, es passiert nur nichts' },
+      { wert: 'Läuft gut, soll mehr',    zeile: 'Es funktioniert — und soll wachsen' },
+    ],
+  },
+  {
+    nr: 3,
+    name: 'ziel',
+    frage: 'Was soll dabei herauskommen?',
+    hilfe: 'Das entscheidet, worauf wir die Seite ausrichten.',
+    optionen: [
+      { wert: 'Anfragen von Kunden',     zeile: 'Mehr qualifizierte Kontakte' },
+      { wert: 'Termine im Kalender',     zeile: 'Buchungen statt Rückrufbitten' },
+      { wert: 'Bewerbungen',             zeile: 'Mitarbeiter finden' },
+      { wert: 'Verkäufe',                zeile: 'Produkte oder Leistungen online' },
+      { wert: 'Ein Auftritt, der passt', zeile: 'Wiedererkennbar und aktuell' },
+    ],
+  },
+  {
+    nr: 4,
+    name: 'zeit',
+    frage: 'Wann soll es soweit sein?',
+    hilfe: 'Auch „ich schaue mich erst um" ist eine gute Antwort.',
+    optionen: [
+      { wert: 'So schnell wie möglich',  zeile: 'Es eilt' },
+      { wert: 'In drei Monaten',         zeile: 'Geplant, aber nicht hektisch' },
+      { wert: 'Dieses Jahr',             zeile: 'Wir bereiten vor' },
+      { wert: 'Ich sammle Informationen', zeile: 'Noch ganz am Anfang' },
+    ],
+  },
+];
+---
+
+<section class="section section--hell" id="funnel" aria-labelledby="funnel-heading">
+  <div class="container funnel__inner">
+
+    <p class="section-label">In fünf Klicks zum Gespräch</p>
+    <h2 id="funnel-heading" class="funnel__heading">Erzählen Sie uns kurz, worum es geht</h2>
+    <p class="funnel__intro">
+      Vier Fragen, je ein Klick. Ihre Kontaktdaten brauchen wir erst am Ende —
+      und auch dann nur so viele, wie für eine Antwort nötig sind.
+    </p>
+
+    <!-- Ansage für Screenreader: Schrittwechsel, Fehler, Erfolg. -->
+    <div id="fn-status" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+    <form
+      id="fn-form"
+      method="post"
+      action={FORM_ENDPOINT}
+      data-endpoint={FORM_ENDPOINT}
+    >
+      <input type="hidden" name="weiter" value={`${base}danke.html`} />
+      {/* Die Feldnamen sind NICHT frei wählbar. `send.php` wertet
+          `page`, `form_started`, `message`, `website_url` und die
+          Namensfelder unter genau diesen Bezeichnungen aus; alles
+          Weitere reicht es als Zusatzzeile in die Mail durch.
+
+          `form_started` ist der gefährlichste davon: Fehlt es bei einer
+          JSON-Anfrage, ruft der Endpunkt `stillVerwerfen()` — die
+          Anfrage verschwindet ohne Fehler, ohne Protokoll, ohne dass
+          der Absender etwas merkt. Ein falsch benanntes Feld hätte hier
+          jede einzelne Anfrage aus diesem Funnel gekostet. */}
+      <input type="hidden" name="page" value={page} />
+      <input type="hidden" name="page_url" id="fn-url" value="" />
+
+      {/* Zwei Honigtöpfe wie in LeadForm: einer per CSS aus dem Bild
+          genommen, einer als Feld, das kein Mensch sieht. Ein Bot füllt
+          beide, ein Besucher keines. */}
+      <div class="fn-honeypot" aria-hidden="true">
+        <label for="fn-hp-email">Bitte nicht ausfüllen</label>
+        <input type="email" name="hp_email" id="fn-hp-email" tabindex="-1" autocomplete="off" />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+      </div>
+
+      {/* Zeitschranke: Der Endpunkt verwirft alles, was in weniger als
+          drei Sekunden zurückkommt. Ohne Skript bleibt das Feld leer —
+          dann greifen die Honigtöpfe und die Sperre pro Stunde, und der
+          klassische POST-Weg kommt durch. */}
+      <input type="hidden" name="form_started" id="fn-gestartet" value="" />
+
+      <!-- Fortschritt: ohne Skript unsichtbar, weil dann alles auf einmal dasteht. -->
+      <ol class="funnel__fortschritt" id="fn-fortschritt" hidden aria-label="Fortschritt">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <li class="funnel__punkt" data-punkt={n} aria-current={n === 1 ? 'step' : undefined}>
+            <span class="sr-only">Schritt {n} von 5</span>
+          </li>
+        ))}
+      </ol>
+
+      {schritte.map((s) => (
+        <fieldset class="funnel__schritt" data-schritt={s.nr}>
+          <legend class="funnel__frage">
+            <span class="funnel__zaehler" aria-hidden="true">{s.nr}/5</span>
+            {s.frage}
+          </legend>
+          <p class="funnel__hilfe">{s.hilfe}</p>
+          <div class="funnel__karten">
+            {s.optionen.map((o) => (
+              <label class="fkarte">
+                <input
+                  type="radio"
+                  name={s.name}
+                  value={o.wert}
+                  required={s.nr === 1}
+                  class="fkarte__radio"
+                  data-weiter={s.nr < 5 ? String(s.nr + 1) : undefined}
+                />
+                <span class="fkarte__inhalt">
+                  <span class="fkarte__titel">{o.wert}</span>
+                  <span class="fkarte__zeile">{o.zeile}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+          <button type="button" class="btn btn--ghost funnel__zurueck" data-zurueck={s.nr} hidden>
+            Zurück
+          </button>
+        </fieldset>
+      ))}
+
+      <fieldset class="funnel__schritt" data-schritt="5">
+        <legend class="funnel__frage">
+          <span class="funnel__zaehler" aria-hidden="true">5/5</span>
+          Wer sind Sie?
+        </legend>
+        <p class="funnel__hilfe">
+          Damit wir antworten können. Pflicht sind nur Name und E-Mail.
+        </p>
+
+        <div class="funnel__felder">
+          <label class="ffeld">
+            <span class="ffeld__label">Name <span aria-hidden="true">*</span></span>
+            <input type="text" name="name" required autocomplete="name" class="ffeld__input" />
+          </label>
+          <label class="ffeld">
+            <span class="ffeld__label">E-Mail <span aria-hidden="true">*</span></span>
+            <input type="email" name="email" required autocomplete="email" class="ffeld__input" />
+          </label>
+          <label class="ffeld">
+            <span class="ffeld__label">Unternehmen</span>
+            <input type="text" name="firma" autocomplete="organization" class="ffeld__input" />
+          </label>
+          <label class="ffeld">
+            <span class="ffeld__label">Telefon</span>
+            <input type="tel" name="telefon" autocomplete="tel" class="ffeld__input" />
+            <span class="ffeld__hilfe">Freiwillig — falls Ihnen ein Anruf lieber ist.</span>
+          </label>
+          <label class="ffeld ffeld--breit">
+            <span class="ffeld__label">Ihre Website</span>
+            <input type="url" name="website_url" placeholder="https://" class="ffeld__input" />
+            <span class="ffeld__hilfe">Falls vorhanden — dann sehen wir sie uns vorher an.</span>
+          </label>
+          <label class="ffeld ffeld--breit">
+            <span class="ffeld__label">Gibt es noch etwas, das wir wissen sollten?</span>
+            <textarea name="message" rows="3" class="ffeld__input"></textarea>
+          </label>
+        </div>
+
+        <label class="fcheck">
+          <input type="checkbox" name="einwilligung" value="ja" required class="fcheck__box" />
+          <span>
+            Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage
+            verarbeitet werden. <a href={`${base}datenschutz.html`}>Datenschutzerklärung</a>
+          </span>
+        </label>
+
+        <div class="funnel__abschluss">
+          <button type="submit" class="btn btn--primary funnel__senden">
+            Anfrage senden
+          </button>
+          <button type="button" class="btn btn--ghost funnel__zurueck" data-zurueck="5" hidden>
+            Zurück
+          </button>
+        </div>
+
+        <p class="funnel__oder">
+          <span>oder direkt einen Termin wählen</span>
+        </p>
+
+        {/* Calendly als LINK, nicht als iframe: Eine Einbettung lädt
+            Skripte und überträgt die IP, bevor jemand zugestimmt hat.
+            `rel="noopener"` ist Pflicht bei target="_blank". */}
+        <a
+          class="btn btn--secondary funnel__termin"
+          href={siteConfig.contact.calendly}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Termin im Kalender wählen
+          <span class="sr-only">(öffnet Calendly in einem neuen Tab)</span>
+        </a>
+        <p class="funnel__hinweis">
+          Der Kalender liegt bei Calendly, einem Dienst in den USA. Erst Ihr Klick
+          stellt die Verbindung her — vorher wird nichts übertragen.
+        </p>
+      </fieldset>
+
+      <p class="funnel__fehler" id="fn-fehler" role="alert" hidden></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .funnel__inner { max-width: var(--container-narrow); }
+
+  .funnel__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.15; letter-spacing: -.02em;
+    margin: .35rem 0 .75rem;
+    text-wrap: balance;
+  }
+  .funnel__intro {
+    color: var(--color-text-muted);
+    max-width: 52ch; margin: 0 0 2.5rem;
+  }
+
+  /* ── Fortschritt ──────────────────────────────────────────────
+     Fünf Striche statt eines Balkens: Der Besucher sieht, wie viel
+     noch kommt, nicht nur wie weit er ist. Das ist bei kurzen
+     Strecken der beruhigendere Hinweis. */
+  .funnel__fortschritt {
+    display: flex; gap: .4rem; list-style: none;
+    margin: 0 0 2rem; padding: 0;
+  }
+  .funnel__punkt {
+    flex: 1 1 0; height: 3px;
+    background: var(--color-border);
+    transition: background var(--transition-fast);
+  }
+  .funnel__punkt[data-erledigt] { background: var(--color-accent); }
+  .funnel__punkt[aria-current='step'] { background: var(--color-text); }
+
+  .funnel__schritt { border: 0; padding: 0; margin: 0; }
+  .funnel__frage {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    line-height: 1.25; padding: 0; margin-bottom: .4rem;
+    display: flex; align-items: baseline; gap: .6rem;
+  }
+  .funnel__zaehler {
+    font-family: var(--font-mono); font-size: .8rem; font-weight: 400;
+    color: var(--color-accent); letter-spacing: .08em;
+  }
+  .funnel__hilfe {
+    color: var(--color-text-muted); font-size: .95rem;
+    margin: 0 0 1.5rem; max-width: 50ch;
+  }
+
+  /* ── Klickkarten ──────────────────────────────────────────────
+     Das ganze Feld ist das Ziel, nicht nur ein 16-px-Kreis. Der
+     Radiobutton bleibt im Markup und bedienbar — er wird nur nicht
+     gezeichnet. `appearance: none` allein genügt nicht: Firefox
+     zeigt sonst weiter einen Rahmen. */
+  .funnel__karten {
+    display: grid; gap: .6rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+  .fkarte { position: relative; display: block; cursor: pointer; }
+  .fkarte__radio {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    margin: 0; opacity: 0; cursor: pointer;
+  }
+  .fkarte__inhalt {
+    display: block; padding: 1rem 1.1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+    min-height: 100%;
+  }
+  .fkarte:hover .fkarte__inhalt { border-color: var(--color-border-strong); }
+  .fkarte__radio:focus-visible + .fkarte__inhalt {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .fkarte__radio:checked + .fkarte__inhalt {
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 0 1px var(--color-accent);
+  }
+  .fkarte__titel {
+    display: block; font-weight: 700; font-size: 1rem;
+    margin-bottom: .15rem;
+  }
+  .fkarte__zeile {
+    display: block; font-size: .85rem; color: var(--color-text-muted);
+    line-height: 1.35;
+  }
+
+  /* ── Letzter Schritt ─────────────────────────────────────────── */
+  .funnel__felder {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    margin-bottom: 1.25rem;
+  }
+  .ffeld { display: grid; gap: .3rem; }
+  .ffeld--breit { grid-column: 1 / -1; }
+  .ffeld__label { font-weight: 600; font-size: .9rem; }
+  .ffeld__input {
+    font: inherit; font-size: 1rem;
+    padding: .7rem .8rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    width: 100%;
+  }
+  .ffeld__input:focus-visible {
+    outline: 2px solid var(--color-focus); outline-offset: 1px;
+    border-color: var(--color-accent);
+  }
+  .ffeld__hilfe { font-size: .8rem; color: var(--color-text-muted); }
+
+  .fcheck {
+    display: flex; gap: .6rem; align-items: flex-start;
+    font-size: .9rem; color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+  }
+  .fcheck__box { margin-top: .2rem; width: 1.1rem; height: 1.1rem; flex: none; }
+  .fcheck a { color: var(--color-accent); }
+
+  .funnel__abschluss { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+  /* Der Absendeknopf ist das Ziel der ganzen Strecke — er darf breiter
+     sein als ein gewöhnlicher Knopf und am Telefon die volle Zeile
+     nehmen. Die Klasse wird außerdem vom Skript gesucht. */
+  .funnel__senden { flex: 1 1 14rem; justify-content: center; }
+
+  .funnel__oder {
+    display: flex; align-items: center; gap: 1rem;
+    color: var(--color-text-muted); font-size: .85rem;
+    margin: 2rem 0 1rem;
+  }
+  .funnel__oder::before, .funnel__oder::after {
+    content: ''; flex: 1 1 0; height: 1px; background: var(--color-border);
+  }
+  .funnel__termin { display: inline-flex; }
+  .funnel__hinweis {
+    font-size: .8rem; color: var(--color-text-muted);
+    margin: .75rem 0 0; max-width: 48ch;
+  }
+
+  .funnel__zurueck { margin-top: 1.5rem; }
+
+  .funnel__fehler {
+    margin-top: 1rem; padding: .75rem 1rem;
+    background: var(--color-error); color: var(--color-error-text);
+    border-radius: var(--radius-md); font-size: .9rem;
+  }
+
+  /* Der Honigtopf darf nicht `display: none` sein — das füllen manche
+     Bots absichtlich nicht aus. Aus dem Bild genommen, aber im Baum. */
+  .fn-honeypot {
+    position: absolute; left: -9999px; width: 1px; height: 1px;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .funnel__punkt, .fkarte__inhalt { transition: none; }
+  }
+</style>
+
+<script>
+  /* Der Funnel wird erst hier zu einem Funnel. Ohne dieses Skript
+     stehen alle fünf Schritte untereinander und der Knopf schickt ein
+     klassisches POST — genau wie in LeadForm.astro. */
+  const form = document.getElementById('fn-form') as HTMLFormElement | null;
+  if (form) {
+    const schritte = Array.from(
+      form.querySelectorAll<HTMLElement>('.funnel__schritt'),
+    );
+    const punkte = Array.from(
+      form.querySelectorAll<HTMLElement>('.funnel__punkt'),
+    );
+    const fortschritt = document.getElementById('fn-fortschritt');
+    const status = document.getElementById('fn-status');
+    const fehler = document.getElementById('fn-fehler');
+    const gestartet = form.querySelector<HTMLInputElement>('#fn-gestartet');
+
+    /* Die Zeitschranke des Endpunkts: alles unter drei Sekunden gilt
+       als Bot. Der Wert muss gesetzt sein, BEVOR jemand klickt. */
+    if (gestartet) gestartet.value = String(Date.now());
+    const urlFeld = form.querySelector<HTMLInputElement>('#fn-url');
+    if (urlFeld) urlFeld.value = window.location.href;
+
+    /* Eigene Meldungen sind genauer als die des Browsers — aber erst
+       ab hier, weil ohne Skript die Browserprüfung die einzige ist. */
+    form.setAttribute('novalidate', '');
+    if (fortschritt) fortschritt.hidden = false;
+
+    const zeige = (nr: number) => {
+      schritte.forEach((s) => {
+        const eigen = Number(s.dataset.schritt);
+        s.hidden = eigen !== nr;
+        s.querySelectorAll<HTMLElement>('[data-zurueck]').forEach((b) => {
+          b.hidden = nr === 1;
+        });
+      });
+      punkte.forEach((p, i) => {
+        const n = i + 1;
+        if (n < nr) p.setAttribute('data-erledigt', '');
+        else p.removeAttribute('data-erledigt');
+        if (n === nr) p.setAttribute('aria-current', 'step');
+        else p.removeAttribute('aria-current');
+      });
+
+      /* Den Fokus mitnehmen, sonst steht der Screenreader noch beim
+         alten Schritt und die Tastatur springt an den Seitenanfang. */
+      const legende = schritte[nr - 1]?.querySelector<HTMLElement>('.funnel__frage');
+      if (legende) {
+        legende.setAttribute('tabindex', '-1');
+        legende.focus({ preventScroll: true });
+      }
+      if (status) status.textContent = `Schritt ${nr} von 5`;
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    zeige(1);
+
+    /* Ein Klick auf eine Karte ist zugleich die Antwort und das
+       Weiterblättern. Die kurze Verzögerung ist Absicht: Ohne sie
+       verschwindet die Karte, bevor man sieht, dass sie ausgewählt
+       wurde — das fühlt sich an, als hätte man danebengetippt. */
+    form.addEventListener('change', (e) => {
+      const ziel = e.target as HTMLElement;
+      if (!(ziel instanceof HTMLInputElement) || ziel.type !== 'radio') return;
+      const weiter = ziel.dataset.weiter;
+      if (!weiter) return;
+      window.setTimeout(() => zeige(Number(weiter)), 180);
+    });
+
+    form.addEventListener('click', (e) => {
+      const knopf = (e.target as HTMLElement).closest<HTMLElement>('[data-zurueck]');
+      if (!knopf) return;
+      const von = Number(knopf.dataset.zurueck);
+      if (von > 1) zeige(von - 1);
+    });
+
+    /* Absenden über fetch, damit die Seite stehen bleibt und der
+       Besucher eine Rückmeldung an Ort und Stelle bekommt. Schlägt es
+       fehl, bleibt das klassische POST als Rückfallebene. */
+    form.addEventListener('submit', async (e) => {
+      const pflicht = schritte[4]?.querySelectorAll<HTMLInputElement>('[required]') ?? [];
+      for (const feld of Array.from(pflicht)) {
+        if (!feld.checkValidity()) {
+          e.preventDefault();
+          if (fehler) {
+            fehler.hidden = false;
+            fehler.textContent = feld.type === 'checkbox'
+              ? 'Bitte stimmen Sie der Verarbeitung Ihrer Angaben zu.'
+              : 'Bitte füllen Sie die Pflichtfelder aus.';
+          }
+          feld.focus();
+          return;
+        }
+      }
+
+      e.preventDefault();
+      if (fehler) fehler.hidden = true;
+      const knopf = form.querySelector<HTMLButtonElement>('.funnel__senden');
+      if (knopf) { knopf.disabled = true; knopf.textContent = 'Wird gesendet …'; }
+
+      try {
+        const antwort = await fetch(form.dataset.endpoint ?? form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (!antwort.ok) throw new Error(String(antwort.status));
+        window.location.href = form.querySelector<HTMLInputElement>('[name="weiter"]')?.value ?? '/';
+      } catch {
+        /* Nicht stillschweigend scheitern: Wer hier steht, hat fünf
+           Schritte investiert. Das klassische POST bekommt die Anfrage
+           noch durch, auch wenn fetch blockiert wurde. */
+        form.removeAttribute('novalidate');
+        form.submit();
+      }
+    });
+  }
+</script>

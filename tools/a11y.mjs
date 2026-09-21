@@ -17,7 +17,7 @@ const BASE = process.env.LH_BASE ?? '/';
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22a', 'wcag22aa', 'best-practice'];
 
 const ALL_PAGES = [
-  'index', 'leistungen', 'bfsg-wordpress-website-agentur', 'wordpress-entwicklung',
+  'index', 'beratung', 'leistungen', 'bfsg-wordpress-website-agentur', 'wordpress-entwicklung',
   'website-leasing', 'seo-geo', 'online-marketing', 'social-recruiting',
   'corporate-design', 'ki-services', 'projekte', 'ueber-uns',
   'barrierefreiheit', 'impressum', 'datenschutz', '404',
