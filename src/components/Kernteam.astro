@@ -36,12 +36,21 @@ const hatAudio = existsSync(new URL(`../../public/${AUDIO}`, import.meta.url));
 /* Das Transkript ist Pflicht, nicht Zugabe: WCAG 1.2.1 verlangt zu
    reinem Ton eine Textalternative. Eine Agentur, die BFSG verkauft und
    das auf der eigenen Seite bricht, verkauft sich selbst nicht ab. */
+/* Gesprochen, nicht geschrieben. Die erste Fassung war eine Seite
+   Text zum Vorlesen — geschliffene Antithesen, „woran wir merken, dass
+   das aufgeht", Aufzählungen mit Doppelpunkt. So redet niemand.
+
+   Kurze Sätze, ein Gedanke je Satz, und die Erfahrung als Beobachtung
+   statt als Behauptung: „wer einmal da ist, bleibt meistens" überzeugt
+   mehr als „wir sind erfahren". Das Gründungsjahr steht in
+   site.config.ts und ist damit belegt, nicht geschätzt. */
 const transkript = [
-  'Hallo, ich bin Daniel Kontelis von der agentur dk aus Köln.',
-  'Wir machen das seit vielen Jahren – und in den Jahren haben wir vor allem eines gelernt: Die meisten Unternehmen brauchen nicht mehr Technik, sondern die richtige. Was heute funktioniert, sieht anders aus als vor fünf Jahren, und wir bauen mit dem, was jetzt trägt.',
-  'Beratung, Planung und Umsetzung kommen bei uns aus einer Hand. Sie müssen nicht drei Dienstleister koordinieren, und niemand schiebt etwas auf den anderen.',
-  'Woran wir merken, dass das aufgeht: Wer einmal bei uns ist, bleibt meistens. Manche Kunden betreuen wir seit über fünf Jahren.',
-  'Erzählen Sie mir einfach, was Sie vorhaben. Im ersten Gespräch sortieren wir gemeinsam, was Sie wirklich brauchen – und was Sie sich sparen können.',
+  'Hallo, ich bin Daniel Kontelis von der agentur dk in Köln.',
+  'Wir machen das seit 2005. In der Zeit lernt man vor allem eins: Die meisten brauchen weniger, als sie denken — aber das Richtige.',
+  'Technisch sind wir vorne dabei. Wir bauen trotzdem nichts ein, nur weil es neu ist.',
+  'Beratung, Planung, Umsetzung — alles bei uns. Ein Ansprechpartner, nicht drei.',
+  'Und wer einmal da ist, bleibt meistens. Manche schon seit Jahren.',
+  'Rufen Sie einfach an. Das erste Gespräch kostet nichts.',
 ];
 
 /* Die Porträts der Kollegen liegen noch nicht vor. Statt zu warten,
