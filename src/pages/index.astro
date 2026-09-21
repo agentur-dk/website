@@ -11,6 +11,8 @@ import Icon from '../components/ui/Icon.astro';
 import Dither from '../components/ui/Dither.astro';
 import { HERO_FIELDS } from '../lib/dither';
 import DitherBand from '../components/DitherBand.astro';
+import Kernteam from '../components/Kernteam.astro';
+import EigeneProjekte from '../components/EigeneProjekte.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -67,11 +69,11 @@ const base = import.meta.env.BASE_URL;
     <LogoStrip />
 
     <!-- Unsere Schwerpunkte -->
-    <section class="schwerpunkte-section section" aria-labelledby="schwerpunkte-heading">
+    <section class="schwerpunkte-section section section--hell" aria-labelledby="schwerpunkte-heading">
       <div class="container">
-        <p class="schwerpunkte-section__eyebrow">Unsere Schwerpunkte</p>
-        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Unsere zwei Schwerpunkte</h2>
-        <p class="schwerpunkte-section__lead">Zwei Bereiche, in denen wir besonders stark sind – und in denen wir Unternehmen nachweislich weiterhelfen.</p>
+        <p class="schwerpunkte-section__eyebrow">Was wir tun</p>
+        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Drei Bausteine, ein Ansprechpartner</h2>
+        <p class="schwerpunkte-section__lead">Die Website ist der Anfang, nicht das Ziel. Damit aus ihr Anfragen werden, muss sie gefunden werden – und was danach kommt, darf nicht an Ihrem Schreibtisch hängen bleiben.</p>
         <div class="schwerpunkte-grid">
           <!-- Karte A -->
           <article class="schwerpunkt-card" data-reveal>
@@ -93,13 +95,28 @@ const base = import.meta.env.BASE_URL;
             <div class="schwerpunkt-card__icon" aria-hidden="true">
               <Icon name="accessibility" size={48} strokeWidth={1.5} />
             </div>
-            <h3 class="schwerpunkt-card__title">BFSG &amp; digitale Barrierefreiheit</h3>
-            <p class="schwerpunkt-card__text">Seit Juni 2025 gilt das BFSG. Wir machen Ihre Website barrierearm nach EN 301 549 / WCAG 2.2 AA – rechtssicher und im echten Code, ohne Overlay-Plugins.</p>
+            <h3 class="schwerpunkt-card__title">Gefunden werden, in Suche und KI</h3>
+            <p class="schwerpunkt-card__text">Wer Sie sucht, soll Sie finden – bei Google und inzwischen auch dort, wo Antworten stehen statt Trefferlisten. Dazu gehört, dass die Seite technisch sauber gebaut ist: barrierefrei nach BFSG, schnell, verständlich für Mensch und Maschine.</p>
             <a href={`${base}bfsg-wordpress-website-agentur.html#bfsg-check`} class="btn btn--outline schwerpunkt-card__link">BFSG-Check starten</a>
+          </article>
+          <!-- Karte C: Die H1 verspricht drei Bausteine — bis zum
+               21.09.2026 standen hier zwei. -->
+          <article class="schwerpunkt-card" data-reveal>
+            <div class="card-head" aria-hidden="true">
+              <Dither field="brain" cell={3} class="card-head__flaeche" />
+            </div>
+            <div class="schwerpunkt-card__icon" aria-hidden="true">
+              <Icon name="cpu" size={48} strokeWidth={1.5} />
+            </div>
+            <h3 class="schwerpunkt-card__title">KI, die Arbeit abnimmt</h3>
+            <p class="schwerpunkt-card__text">Ein Assistent, der ans Telefon geht, wenn Sie am Patienten, im Termin oder auf der Baustelle sind. Terminbuchung ohne Rückruf. KI dort, wo sie messbar entlastet – nicht, weil sie gerade alle einbauen.</p>
+            <a href={`${base}ki-services.html`} class="btn btn--outline schwerpunkt-card__link">Mehr zu KI-Services</a>
           </article>
         </div>
       </div>
     </section>
+
+    <Kernteam />
 
     <DitherBand field="drift" label="Leistungen" />
 
@@ -341,10 +358,12 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
+    <EigeneProjekte />
+
     <DitherBand field="fade" label="Kontakt" />
 
     <!-- Contact Section -->
-    <section id="kontakt" class="contact section" aria-label="Kontakt">
+    <section id="kontakt" class="contact section section--blau" aria-label="Kontakt">
       <div class="container contact__inner">
         <!-- Contact Info -->
         <div class="contact__info">

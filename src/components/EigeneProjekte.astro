@@ -1,0 +1,120 @@
+---
+/**
+ * Was wir für uns selbst gebaut haben.
+ *
+ * ── Warum das auf die Startseite gehört ───────────────────────────────
+ * Jede Agentur behauptet, Reichweite aufbauen zu können. Hier steht der
+ * Beleg: eine Marke, die seit 2015 läuft, mit eigener Community, eigenem
+ * Podcast und inzwischen eigenem Shop. Das Besondere ist nicht die Zahl,
+ * sondern das Risiko — für einen Kunden wird bezahlt, hier wurde
+ * vorgeleistet.
+ *
+ * ── Warum nicht größer ────────────────────────────────────────────────
+ * Entschieden am 21.09.2026: zeigen, aber nicht in den Vordergrund.
+ * Griechenland ist der Beweis, nicht das Angebot. Wer eine
+ * Physiotherapie-Website sucht, soll nicht denken, er sei bei einer
+ * Community-Agentur gelandet.
+ *
+ * ── Zu den Zahlen ─────────────────────────────────────────────────────
+ * Alle aus „website-referenzen.docx" (Stand 21.09.2026). Was dort als
+ * unbelegt markiert ist, steht hier nicht.
+ */
+import Dither from './ui/Dither.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const zahlen = [
+  { wert: '750.000', einheit: 'Follower', zusatz: 'im erweiterten Kanalumfeld' },
+  { wert: '15.000',  einheit: 'Streams',  zusatz: 'je Podcast-Folge' },
+  { wert: 'seit 2015', einheit: '',       zusatz: 'täglich neue Inhalte' },
+];
+---
+
+<section class="ep section" aria-labelledby="ep-heading">
+  <div class="ep__flaeche" aria-hidden="true"><Dither field="drift" cell={4} fps={8} /></div>
+  <div class="container ep__inner">
+    <p class="section-label">Eigene Projekte</p>
+    <h2 id="ep-heading" class="ep__heading">Wir bauen nicht nur Websites. Wir haben eine Marke aufgebaut.</h2>
+    <p class="ep__lead">
+      <strong>DU BIST GRIECHE</strong> ist unsere eigene Marke – die größte Plattform
+      für Griechenland-Liebhaber im deutschsprachigen Raum. Aufgebaut ohne Auftraggeber,
+      ohne Budget von außen, auf eigenes Risiko. Was wir Kunden über Community, Inhalte
+      und Reichweite erzählen, haben wir hier zuerst an uns selbst ausprobiert.
+    </p>
+
+    <ul class="ep__zahlen" role="list">
+      {zahlen.map((z) => (
+        <li class="epzahl">
+          <p class="epzahl__wert">{z.wert} <span class="epzahl__einheit">{z.einheit}</span></p>
+          <p class="epzahl__zusatz">{z.zusatz}</p>
+        </li>
+      ))}
+    </ul>
+
+    <p class="ep__weiter">
+      Seit 2026 wird die Reichweite in eigene Produkte übersetzt – ein Shop mit
+      Schmuck, graviert in Köln. Daneben betreuen wir seit 2021
+      <strong>aposocial.de</strong>, eine Branchenplattform für Apotheken: die längste
+      durchgehende Zusammenarbeit in unserem Bestand.
+    </p>
+
+    <p class="ep__link">
+      <a class="btn btn--secondary" href={`${base}projekte.html`}>Alle Projekte ansehen</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .ep { position: relative; overflow: hidden; }
+  /* Links dunkel, rechts das Muster: Der Satz steht im Ruhigen, die
+     Fläche kommt von der Seite herein. Dieselbe Idee wie im Hero, nur
+     flacher — ein zweiter großer Auftritt wäre einer zu viel. */
+  .ep__flaeche {
+    position: absolute; top: 0; bottom: 0; right: 0;
+    width: clamp(220px, 38vw, 560px);
+    opacity: .38; pointer-events: none;
+    mask-image: linear-gradient(to right, transparent, #000 45%);
+  }
+  .ep__inner { position: relative; }
+  .ep__heading {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.6rem, 3.5vw, 2.3rem); line-height: 1.15;
+    letter-spacing: -.02em; margin: .35rem 0 1rem;
+    max-width: 22ch; text-wrap: balance;
+  }
+  .ep__lead, .ep__weiter {
+    max-width: 58ch; color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+  .ep__lead { margin: 0 0 2.5rem; }
+  .ep__weiter { margin: 2.5rem 0 1.75rem; }
+  .ep__lead strong, .ep__weiter strong { color: var(--color-text); }
+
+  .ep__zahlen {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    max-width: 44rem;
+  }
+  .epzahl {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+  }
+  .epzahl__wert {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.1;
+    margin: 0 0 .25rem; letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .epzahl__einheit {
+    font-family: var(--font-body, inherit); font-weight: 400;
+    font-size: .9rem; color: var(--color-text-muted);
+  }
+  .epzahl__zusatz {
+    margin: 0; font-size: .85rem; color: var(--color-text-muted);
+    line-height: 1.4;
+  }
+  .ep__link { margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) { .ep__flaeche { display: none; } }
+</style>
