@@ -66,7 +66,7 @@ export const referenzen: Referenz[] = [
     link: 'https://bnm-immobilien.de',
     tag: 'Immobilien',
     feld: 'drift',
-    freigegeben: false,
+    freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
   {
     titel: 'Acht Leistungen, zwei Zielgruppen, eine Seite',
@@ -81,7 +81,7 @@ export const referenzen: Referenz[] = [
     link: 'https://einfach-physio.de',
     tag: 'Gesundheit',
     feld: 'pulse',
-    freigegeben: false,
+    freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
   {
     titel: 'Eine Praxis, die ihre Website nicht kaufen wollte',
@@ -96,7 +96,7 @@ export const referenzen: Referenz[] = [
     link: 'https://koelner-physio-kollektiv.de',
     tag: 'Website-Leasing',
     feld: 'fade',
-    freigegeben: false,
+    freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
   {
     titel: 'Eine Kanzlei, die in zwei Sprachen berät',
@@ -110,7 +110,7 @@ export const referenzen: Referenz[] = [
     link: 'https://s-k-steuerberatung.de',
     tag: 'Kanzlei',
     feld: 'brain',
-    freigegeben: false,
+    freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
   {
     titel: 'Nach der Promotion stimmte der Name nicht mehr',
@@ -125,7 +125,7 @@ export const referenzen: Referenz[] = [
     link: 'https://anka-hansen.de',
     tag: 'Personal Branding',
     feld: 'pulse',
-    freigegeben: false,
+    freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
 ];
 
