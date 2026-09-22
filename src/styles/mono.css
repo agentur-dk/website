@@ -850,61 +850,129 @@
 .theme-mono .buero__bild--gross { grid-column: 1 / -1; }
 
 /* ============================================================
-   Das Porträt mit Abspielknopf auf „Über uns"
+   Das Porträt mit Abspielknopf auf „Über uns“
 
-   Ein Gesicht mit Knopf darauf sagt ohne Beschriftung, dass hier
-   jemand spricht. Der Knopf ist dabei **kein** Bedienelement, sondern
-   ein Zeichen: Bedient wird über die Blase darunter, die eine
-   Beschriftung trägt. Zwei gleichwertige Knöpfe für dieselbe Sache
-   wären für eine Tastatur eine Dopplung.
+   Ein Gesicht mit Knopf sagt ohne Beschriftung, dass hier jemand
+   spricht. Der Knopf sitzt unten rechts auf dem Rand des runden
+   Bildes — halb darauf, halb daneben. Mitten im Gesicht verdeckte
+   er das, was er ankündigt.
 
-   Ein Klick aufs Bild startet trotzdem — für die Maus ist das die
-   erwartete Geste. Die Tastatur erreicht denselben Weg über den
-   beschrifteten Knopf.
+   Er ist hier das **einzige** Bedienelement: Die Chatblase der
+   Startseite kommt auf dieser Seite nicht noch einmal vor. Deshalb
+   ein echter `<button>` mit Beschriftung und nicht, wie vorher, ein
+   Zeichen ohne Funktion neben einer Blase, die die Arbeit tat.
    ============================================================ */
 .theme-mono .team__bild {
   position: relative;
   display: block;
   width: 100%;
   max-width: 10rem;
-  cursor: pointer;
 }
 
+/* Die Mitte des Knopfes liegt auf dem Kreisrand: Bei einem Kreis mit
+   Mittelpunkt (50 %, 50 %) trifft die 45-Grad-Richtung nach unten
+   rechts den Rand bei 50 % + 50 % · √½ ≈ 85,4 %. Die krummen Zahlen
+   sind gerechnet, nicht geschoben.
+
+   Die 2,75 rem Durchmesser haben einen zweiten Grund: Die Karte hat
+   1,5 rem Innenabstand, und der Knopf ragt mit der Hälfte davon
+   (1,375 rem) heraus. Größer, und er stieße an den Kartenrand. */
 .theme-mono .team__play {
   position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 3.2rem;
-  height: 3.2rem;
+  left: 85.4%;
+  top: 85.4%;
+  transform: translate(-50%, -50%);
+  width: 2.75rem;
+  height: 2.75rem;
   display: grid;
   place-items: center;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: rgb(28 96 173 / 0.92);
+  background: rgb(28 96 173 / 0.96);
   color: #ffffff;
+  cursor: pointer;
   /* Ein Ring in der Grundfarbe trennt den Knopf vom Bild, damit er
      auf hellen wie dunklen Stellen des Porträts sichtbar bleibt. */
   box-shadow: 0 0 0 3px var(--color-surface);
   transition: transform 140ms ease, background-color 140ms ease;
 }
-.theme-mono .team__bild:hover .team__play { transform: scale(1.06); }
-.theme-mono .team__play svg { width: 1.5rem; height: 1.5rem; margin-left: 0.15rem; }
 
-/* Läuft die Aufnahme, wird aus dem Dreieck ein Pausenzeichen —
-   sonst zeigte das Bild weiter „abspielen", während es läuft. */
-.theme-mono .team__bild[data-laeuft] .team__play svg { display: none; }
-.theme-mono .team__bild[data-laeuft] .team__play::after {
-  content: '';
-  width: 1.1rem;
-  height: 1.3rem;
-  border-left: 0.36rem solid currentColor;
-  border-right: 0.36rem solid currentColor;
+.theme-mono .team__play:hover,
+.theme-mono .team__play:focus-visible {
+  background: rgb(28 96 173 / 1);
+  transform: translate(-50%, -50%) scale(1.06);
 }
+
+.theme-mono .team__ikon { width: 1.35rem; height: 1.35rem; }
+
+/* Das Dreieck sitzt optisch links von seiner Mitte — der Versatz
+   rückt es zurück. Das Pausenzeichen ist symmetrisch und braucht
+   ihn nicht. */
+.theme-mono .team__ikon--play { margin-left: 0.12rem; }
+
+/* Läuft die Aufnahme, wird aus dem Dreieck ein Pausenzeichen — sonst
+   zeigte der Knopf weiter „abspielen“, während er läuft. Getauscht
+   wird in CSS, damit es dafür nur einen Mechanismus gibt: Die Klasse
+   setzt die Verdrahtung, alles Sichtbare hängt daran. */
+.theme-mono .team__ikon--pause { display: none; }
+.theme-mono .team__bild.sn--laeuft .team__ikon--play { display: none; }
+.theme-mono .team__bild.sn--laeuft .team__ikon--pause { display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   .theme-mono .team__play { transition: none; }
 }
 
-.theme-mono .team__nachricht { margin-top: clamp(2rem, 4vw, 3rem); }
+/* ── Das Transkript auf „Über uns“ ──────────────────────────────────
+   In der Schrift der Seite, nicht im Messenger-Gewand: Das Chatfenster
+   steht auf der Startseite, und zweimal dasselbe Bild wäre einmal zu
+   viel. Über die volle Breite unter Karte und Liste. */
+.theme-mono .team__transkript {
+  grid-column: 1 / -1;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+}
+
+.theme-mono .team__aufklapp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.theme-mono .team__aufklapp::-webkit-details-marker { display: none; }
+
+/* Die Sperrung sitzt am Wort, nicht an der Zeile: Am Aufklapper
+   haengt auch der Pfeil, und der soll nicht mitgesperrt werden. */
+.theme-mono .team__wort { letter-spacing: 0.06em; }
+.theme-mono .team__aufklapp:hover { color: var(--color-text); }
+
+.theme-mono .team__pfeil { flex: 0 0 auto; transition: transform 160ms ease; }
+.theme-mono .team__transkript[open] .team__pfeil { transform: rotate(180deg); }
+
+/* Beide Beschriftungen stehen im Markup, CSS zeigt die passende. Ein
+   Aufklapper, der offen weiter „anzeigen“ sagt, beschriftet die
+   Vergangenheit. */
+.theme-mono .team__wort--auf { display: none; }
+.theme-mono .team__transkript[open] .team__wort--zu { display: none; }
+.theme-mono .team__transkript[open] .team__wort--auf { display: inline; }
+
+.theme-mono .team__worte {
+  margin-top: 1rem;
+  max-width: 62ch;
+  color: var(--color-text-muted);
+}
+.theme-mono .team__worte p { margin: 0 0 0.75rem; }
+.theme-mono .team__worte p:last-child { margin-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-mono .team__pfeil { transition: none; }
+}
 
 /* ============================================================
    Die Sprachnachricht im Chatfenster
@@ -930,10 +998,58 @@
    ============================================================ */
 .theme-mono .sn-wrap { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
 
-/* Abstaende auf der Startseite. Beim Entfernen des alten Stilblocks
-   waren sie mitgegangen — check-css hat es gemeldet. */
-.theme-mono .kt__nachricht { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
-.theme-mono .kt__weiter { margin: clamp(1.5rem, 3vw, 2rem) 0 0; }
+/* ============================================================
+   Der Abschnitt „Wer fuer Sie arbeitet" auf der Startseite
+
+   Untereinander: Text, Nachricht, Knopf. Erst hoeren, dann
+   weitergehen — der Knopf steht deshalb hinter der Nachricht und
+   nicht davor.
+
+   Ab 900 px nebeneinander: links Text und Knopf untereinander,
+   rechts die Nachricht ueber beide Zeilen. Nebeneinander, weil
+   beides dasselbe sagt — der Text behauptet kurze Wege, die
+   Stimme belegt sie.
+
+   Die Abstaende kommen aus dem Raster, nicht aus Aussenabstaenden
+   der Felder: Sonst addierten sich zwei Werte, die beide fuer sich
+   richtig aussehen.
+   ============================================================ */
+.theme-mono .kt {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+/* `min-width: 0` hebt die Vorgabe `auto` auf: Ohne sie waere die
+   Spalte mindestens so breit wie ihr laengstes unumbrechbares Wort
+   und schoebe die Nachricht aus dem Raster. */
+.theme-mono .kt__text { min-width: 0; }
+
+.theme-mono .kt .kt__lead { margin-bottom: 0; }
+.theme-mono .kt .kt__nachricht { margin-top: 0; }
+.theme-mono .kt__weiter { margin: 0; }
+
+/* Auf dem Telefon ist der Messenger bildschirmbreit. Jede andere
+   Breite saehe nach Abbildung aus statt nach Nachricht. */
+.theme-mono .kt__nachricht .sn-chat { max-width: 100%; }
+
+@media (min-width: 900px) {
+  .theme-mono .kt {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
+    column-gap: clamp(2rem, 5vw, 4rem);
+    row-gap: clamp(1.5rem, 3vw, 2rem);
+  }
+  .theme-mono .kt__text { grid-area: 1 / 1; }
+  .theme-mono .kt__weiter { grid-area: 2 / 1; align-self: start; }
+  /* Ueber beide Zeilen und auf deren Mitte: Die Nachricht ist der
+     zweite Hauptdarsteller, keine Randnotiz, die oben anklebt. */
+  .theme-mono .kt__nachricht { grid-area: 1 / 2 / 3 / 3; align-self: center; }
+  /* Die 24-rem-Spalte ist die echte Fensterbreite eines Messengers.
+     Breiter gezogen verlore er die Masse, an denen man ihn erkennt. */
+  .theme-mono .kt__nachricht .sn-chat { max-width: 24rem; }
+  /* Der Vorspann braucht in der schmaleren Spalte keine 54ch-Sperre
+     mehr — die Spalte selbst ist die Grenze. */
+  .theme-mono .kt__lead { max-width: none; }
+}
 
 /* Das Fenster. Das Kritzelmuster ist eine eigene Zeichnung, kein
    übernommenes: Kreise, Bögen und Striche in der Musterfarbe,

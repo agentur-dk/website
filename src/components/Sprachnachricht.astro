@@ -29,10 +29,9 @@
  * Reihenfolge ist Animation, die Höhe ist Messwert.
  *
  * ── Barrierefreiheit ──────────────────────────────────────────────────
- * WCAG 1.2.1 verlangt zu reinem Ton eine Textalternative. Das
- * Transkript steht deshalb im Dokument, unter dem Fenster, in der
- * Schrift der Seite — nicht im Chat, wo es wie eine zweite Nachricht
- * aussähe.
+ * WCAG 1.2.1 verlangt zu reinem Ton eine Textalternative. Sie muss
+ * **verfügbar** sein, nicht dauernd sichtbar: Das Transkript steht
+ * deshalb hinter einem Aufklapper in der Blase, wie im Messenger.
  */
 import { Image } from 'astro:assets';
 import Icon from './ui/Icon.astro';
@@ -57,7 +56,7 @@ const laenge = `${Math.floor(DAUER_SEKUNDEN / 60)}:${String(DAUER_SEKUNDEN % 60)
 
       <div class="sn__zeile">
         <button type="button" class="sn__knopf" data-sn-knopf
-                aria-label="Sprachnachricht abspielen">
+                aria-label="Sprachnachricht von Daniel Kontelis abspielen">
           <Icon name="play" size={22} class="sn__ikon sn__ikon--play" />
           <Icon name="pause" size={22} class="sn__ikon sn__ikon--pause" />
         </button>
@@ -119,95 +118,11 @@ const laenge = `${Math.floor(DAUER_SEKUNDEN / 60)}:${String(DAUER_SEKUNDEN % 60)
 <script>
   /*
    * Zwei Aufgaben: die Ankunft einmal zeigen, und danach abspielen.
+   * Beide stehen in src/lib/sprachnachricht.ts — „Ueber uns" benutzt
+   * dieselbe Verdrahtung fuer den Knopf am Portraet.
    */
-  const langsam = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const pausiert = () => document.documentElement.dataset['motion'] === 'paused';
+  import { ankunft, verdrahte } from '../lib/sprachnachricht';
 
-  /* ── Die Ankunft ────────────────────────────────────────────────────
-     Einmal beim ersten Sichtbarwerden, dann meldet sich der Beobachter
-     ab. Wer zurückscrollt, sieht eine fertige Nachricht — so wie im
-     Messenger auch. */
-  for (const fenster of document.querySelectorAll<HTMLElement>('[data-sn-chat]')) {
-    if (langsam.matches || pausiert()) {
-      fenster.classList.add('ist-da');
-      continue;
-    }
-    const beobachter = new IntersectionObserver((eintraege) => {
-      for (const e of eintraege) {
-        if (!e.isIntersecting) continue;
-        fenster.classList.add('kommt-an');
-        beobachter.unobserve(e.target);
-      }
-    }, { threshold: 0.4 });
-    beobachter.observe(fenster);
-  }
-
-  /* ── Die Wiedergabe ─────────────────────────────────────────────────
-     Ein unsichtbares <audio>, eigene Oberfläche. Läuft eine Nachricht
-     an, halten die anderen an — zwei Stimmen gleichzeitig sind kein
-     Merkmal, sondern ein Fehler. */
-  const alle = document.querySelectorAll<HTMLElement>('[data-sprachnachricht]');
-
-  for (const figur of alle) {
-    const audio = figur.querySelector<HTMLAudioElement>('[data-sn-audio]');
-    const knopf = figur.querySelector<HTMLButtonElement>('[data-sn-knopf]');
-    const welle = figur.querySelector<HTMLElement>('[data-sn-welle]');
-    const punkt = figur.querySelector<HTMLElement>('[data-sn-punkt]');
-    const zeit  = figur.querySelector<HTMLElement>('[data-sn-zeit]');
-    if (!audio || !knopf || !welle || !punkt || !zeit) continue;
-
-    const alsZeit = (s: number) =>
-      `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
-
-    /* Vor dem Abspielen steht die Länge da, während des Abspielens die
-       gelaufene Zeit — so hält es der Messenger, und so erfährt man
-       vorher, worauf man sich einlässt. */
-    function zeichne(): void {
-      const dauer = audio!.duration || 1;
-      const anteil = Math.min(1, audio!.currentTime / dauer);
-      figur.style.setProperty('--fortschritt', String(anteil));
-      punkt!.style.left = `${anteil * 100}%`;
-      zeit!.textContent = audio!.currentTime > 0 ? alsZeit(audio!.currentTime) : alsZeit(dauer);
-      welle!.setAttribute('aria-valuenow', String(Math.round(audio!.currentTime)));
-      welle!.setAttribute('aria-valuetext', `${alsZeit(audio!.currentTime)} von ${alsZeit(dauer)}`);
-    }
-
-    function zeige(laeuft: boolean): void {
-      knopf!.setAttribute('aria-label',
-        laeuft ? 'Sprachnachricht anhalten' : 'Sprachnachricht abspielen');
-      figur.classList.toggle('sn--laeuft', laeuft);
-    }
-
-    knopf.addEventListener('click', () => {
-      if (audio.paused) {
-        for (const andere of alle) {
-          const a = andere.querySelector<HTMLAudioElement>('[data-sn-audio]');
-          if (a && a !== audio) a.pause();
-        }
-        void audio.play();
-      } else {
-        audio.pause();
-      }
-    });
-
-    audio.addEventListener('play',  () => zeige(true));
-    audio.addEventListener('pause', () => zeige(false));
-    audio.addEventListener('ended', () => { zeige(false); audio.currentTime = 0; zeichne(); });
-    audio.addEventListener('timeupdate', zeichne);
-
-    welle.addEventListener('click', (e) => {
-      if (!audio.duration) return;
-      const kasten = welle.getBoundingClientRect();
-      audio.currentTime = ((e.clientX - kasten.left) / kasten.width) * audio.duration;
-      zeichne();
-    });
-
-    const gesicht = document.querySelector<HTMLElement>('[data-sn-gesicht]');
-    if (gesicht) {
-      gesicht.addEventListener('click', () => knopf.click());
-      audio.addEventListener('play',  () => gesicht.setAttribute('data-laeuft', ''));
-      audio.addEventListener('pause', () => gesicht.removeAttribute('data-laeuft'));
-      audio.addEventListener('ended', () => gesicht.removeAttribute('data-laeuft'));
-    }
-  }
+  ankunft();
+  verdrahte();
 </script>

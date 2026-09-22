@@ -9,7 +9,7 @@ import CtaSection from '../components/CtaSection.astro';
 import Icon from '../components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import portraet from '../assets/team/daniel-kontelis.jpg';
-import Sprachnachricht from '../components/Sprachnachricht.astro';
+import { TRANSKRIPT, DATEI } from '../data/sprachnachricht';
 import bueroDom from '../assets/buero/koelner-dom-suedstadt.jpg';
 import bueroEingang from '../assets/buero/eingang.jpg';
 import bueroRaum from '../assets/buero/besprechungsraum.jpg';
@@ -149,22 +149,28 @@ const base = import.meta.env.BASE_URL;
         <div class="team">
           <figure class="team__karte">
             <!--
-              Der Abspielknopf sitzt auf dem Portraet, nicht daneben: Ein
-              Gesicht mit Knopf sagt ohne Beschriftung, dass hier jemand
-              spricht. Er steuert dieselbe Aufnahme wie die Blase auf der
-              Startseite — eine Datei, ein Transkript, zwei Orte.
+              Der Abspielknopf sitzt am Portraet, halb darauf und halb
+              daneben: Ein Gesicht mit Knopf sagt ohne Beschriftung,
+              dass hier jemand spricht. Halb ausserhalb, damit er nicht
+              das Gesicht verdeckt, das er ankuendigt.
 
-              Das `aria-hidden` am Bildknopf ist Absicht: Die Blase
-              darunter traegt den bedienbaren Knopf mit Beschriftung.
-              Zwei gleichwertige Bedienelemente fuer dieselbe Sache
-              waeren fuer eine Tastatur eine Dopplung, kein Gewinn.
+              Hier steht er als **einziges** Bedienelement — die
+              Chatblase der Startseite kommt auf dieser Seite nicht
+              noch einmal vor. Sie waere dasselbe zweimal.
+
+              Dieselbe Datei, dasselbe Transkript, zwei Auftritte. Die
+              Verdrahtung liegt fuer beide in src/lib/sprachnachricht.ts.
             -->
-            <span class="team__bild" data-sn-gesicht>
+            <span class="team__bild" data-sprachnachricht>
               <Image src={portraet} alt="Daniel Kontelis" width={200} height={200}
                      class="team__portraet" loading="lazy" />
-              <span class="team__play">
-                <Icon name="play" size={24} />
-              </span>
+              <button type="button" class="team__play" data-sn-knopf
+                      aria-label="Sprachnachricht von Daniel Kontelis abspielen">
+                <Icon name="play" size={24} class="team__ikon team__ikon--play" />
+                <Icon name="pause" size={24} class="team__ikon team__ikon--pause" />
+              </button>
+              <audio data-sn-audio preload="none"
+                     src={`${base}${DATEI}`}></audio>
             </span>
             <figcaption class="team__unterschrift">
               <p class="team__name">Daniel Kontelis</p>
@@ -190,15 +196,30 @@ const base = import.meta.env.BASE_URL;
               <li><strong>Shakil Rifaat</strong><span>UX-Design, Interface-Design, Corporate Design</span></li>
             </ul>
           </div>
+
+          <!--
+            Die Textfassung der Aufnahme. WCAG 1.2.1 verlangt zu reinem
+            Ton eine Textalternative — verfuegbar, nicht dauernd
+            sichtbar. Ein `<details>` statt eigener Logik: Auf- und
+            Zuklappen, Tastatur und der Zustand fuer Hilfsmittel kommen
+            von der Plattform.
+
+            Hier in der Schrift der Seite, nicht im Messenger-Gewand:
+            Die Blase steht auf der Startseite, und zweimal dasselbe
+            Bild waere einmal zu viel.
+          -->
+          <details class="team__transkript">
+            <summary class="team__aufklapp">
+              <span class="team__wort team__wort--zu">Transkript der Sprachnachricht anzeigen</span>
+              <span class="team__wort team__wort--auf">Transkript ausblenden</span>
+              <Icon name="chevron-down" size={16} class="team__pfeil" />
+            </summary>
+            <div class="team__worte">
+              {TRANSKRIPT.map((absatz) => <p>{absatz}</p>)}
+            </div>
+          </details>
         </div>
 
-        <Sprachnachricht transkript={[
-          'Hallo, ich bin Daniel Kontelis – Gründer der agentur dk in Köln.',
-          'In den Medien bin ich seit über 20 Jahren. In der Zeit lernt man vor allem eins: Die Erfahrung liegt nicht in der Art der Umsetzung, sondern in der Kommunikation – tiefes Verständnis von Kundenwünschen und Zielgruppen.',
-          'Technisch sind wir auch vorne dabei. Beratung, Planung, Umsetzung — alles aus einer Hand.',
-          'Und wer einmal da ist, bleibt meistens. Fast alle Kunden schon seit vielen Jahren.',
-          'Rufen Sie einfach an – wir laden Sie gerne zu einem unverbindlichen Beratungsgespräch ein.',
-        ]} class="team__nachricht" />
 
         <div class="buero">
           <div>
@@ -343,6 +364,14 @@ const base = import.meta.env.BASE_URL;
   </main>
 
   <Footer mono />
+
+  <script>
+    /* Knopf und Aufnahme verbinden — dieselbe Verdrahtung wie in der
+       Chatblase der Startseite. Die Ankunftsbewegung entfaellt hier:
+       Es gibt kein Chatfenster, das ankommen koennte. */
+    import { verdrahte } from '../lib/sprachnachricht';
+    verdrahte();
+  </script>
 </BaseLayout>
 
 <style>

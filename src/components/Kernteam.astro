@@ -19,34 +19,47 @@
  * Grund, warum man einer Aufnahme mehr glaubt als einem Werbetext.
  */
 import Sprachnachricht from './Sprachnachricht.astro';
+import { TRANSKRIPT } from '../data/sprachnachricht';
 
 const base = import.meta.env.BASE_URL;
 
-const transkript = [
-  'Hallo, ich bin Daniel Kontelis – Gründer der agentur dk in Köln.',
-  'In den Medien bin ich seit über 20 Jahren. In der Zeit lernt man vor allem eins: Die Erfahrung liegt nicht in der Art der Umsetzung, sondern in der Kommunikation – tiefes Verständnis von Kundenwünschen und Zielgruppen.',
-  'Technisch sind wir auch vorne dabei. Beratung, Planung, Umsetzung — alles aus einer Hand.',
-  'Und wer einmal da ist, bleibt meistens. Fast alle Kunden schon seit vielen Jahren.',
-  'Rufen Sie einfach an – wir laden Sie gerne zu einem unverbindlichen Beratungsgespräch ein.',
-];
 ---
 
 <section class="section section--hell" aria-labelledby="kernteam-heading">
   <div class="container">
-    <p class="section-label">Wer für Sie arbeitet</p>
-    <h2 id="kernteam-heading" class="kt__heading">Kurze Wege heißt: Sie kennen die Leute</h2>
-    <p class="kt__lead">
-      Fünf Menschen in Köln, die seit Jahren zusammenarbeiten. Bei größeren
-      Projekten kommen erprobte Leute dazu – Ihr Ansprechpartner bleibt derselbe.
-    </p>
+    <!--
+      Zwei Spalten: links, was zu lesen ist, rechts die Nachricht.
+      Nebeneinander, weil beides dasselbe sagt — der Text behauptet
+      kurze Wege, die Stimme belegt sie. Untereinander laese man erst
+      die Behauptung und traefe den Beleg erst nach dem Scrollen.
 
-    <Sprachnachricht transkript={transkript} class="kt__nachricht" />
+      Unterhalb von 900 px steht die Nachricht darunter und nimmt die
+      volle Breite: Nebeneinander blieben fuer die Blase keine 200 px.
+    -->
+    <div class="kt">
+      <div class="kt__text">
+        <p class="section-label">Wer für Sie arbeitet</p>
+        <h2 id="kernteam-heading" class="kt__heading">Kurze Wege heißt: Sie kennen die Leute</h2>
+        <p class="kt__lead">
+          Fünf Menschen in Köln, die seit Jahren zusammenarbeiten. Bei größeren
+          Projekten kommen erprobte Leute dazu – Ihr Ansprechpartner bleibt derselbe.
+        </p>
 
-    <p class="kt__weiter">
-      <a href={`${base}ueber-uns.html`} class="btn btn--secondary">
-        Das ganze Team ansehen
-      </a>
-    </p>
+      </div>
+
+      <Sprachnachricht transkript={TRANSKRIPT} class="kt__nachricht" />
+
+      <!--
+        Der Knopf steht als eigenes Rasterfeld und nicht im Textblock:
+        Untereinander soll er NACH der Nachricht kommen — erst hoeren,
+        dann weitergehen. Im Textblock stuende er davor.
+      -->
+      <p class="kt__weiter">
+        <a href={`${base}ueber-uns.html`} class="btn btn--secondary">
+          Das ganze Team ansehen
+        </a>
+      </p>
+    </div>
   </div>
 </section>
 
