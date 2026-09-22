@@ -848,3 +848,239 @@
   border: 1px solid var(--color-border);
 }
 .theme-mono .buero__bild--gross { grid-column: 1 / -1; }
+
+/* ============================================================
+   Die Sprachnachricht
+
+   Die Form ist die aus einem Messenger — weiße Blase, Name oben,
+   Abspielknopf, Wellenform, Porträt mit Mikrofon-Plakette, darunter
+   Laufzeit und Länge. Sie ist bewusst vertraut: Niemand braucht eine
+   Erklärung, was dieser Knopf tut.
+
+   Das Blau ist das der Marke, nicht das des Vorbilds. Dass beide
+   ähnlich liegen, ist Zufall und kein Grund, die eigene Farbe
+   aufzugeben.
+
+   Der Fortschritt läuft über eine einzige Variable `--fortschritt`
+   (0 bis 1). Die Balken vergleichen ihre eigene Position damit — ohne
+   dass JavaScript 52 Elemente einzeln anfassen müsste.
+   ============================================================ */
+.theme-mono .sn {
+  --fortschritt: 0;
+  margin: 0;
+  max-width: 34rem;
+  padding: 1rem 1rem 1.15rem;
+  background: #ffffff;
+  border-radius: 1.15rem;
+  /* Eine Ecke bleibt eckig: So sitzt die Blase an ihrem Absender,
+     wie in jedem Messenger. */
+  border-top-left-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+  color: #101010;
+}
+
+.theme-mono .sn__von {
+  margin: 0 0 0.6rem;
+  font-weight: 500;
+  color: #1C60AD;
+}
+
+.theme-mono .sn__zeile {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.theme-mono .sn__knopf {
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #5a6672;
+  cursor: pointer;
+}
+.theme-mono .sn__knopf:hover { background: #eef2f6; }
+.theme-mono .sn__knopf:focus-visible {
+  outline: 3px solid #1C60AD;
+  outline-offset: 2px;
+}
+.theme-mono .sn__ikon { width: 1.6rem; height: 1.6rem; }
+
+/* Dreieck oder Pausenzeichen — entschieden an der einen Klasse, die das
+   Skript setzt. Beide SVGs stehen im Markup, nur eines ist sichtbar. */
+.theme-mono .sn__ikon--pause { display: none; }
+.theme-mono .sn--laeuft .sn__ikon--play { display: none; }
+.theme-mono .sn--laeuft .sn__ikon--pause { display: block; }
+
+/* Die Wellenform: 52 Balken, Höhe je Balken aus der Messung. */
+.theme-mono .sn__welle {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 2.2rem;
+  cursor: pointer;
+}
+
+/* Abgespielte Balken faerben sich blau. Der Vergleich passiert in CSS:
+   Jeder Balken kennt seine eigene Nummer als `--i`, die Figur kennt den
+   Fortschritt als `--fortschritt` (0 bis 1). Ist `fortschritt * 52`
+   groesser als die eigene Nummer, ist der Balken gehoert.
+
+   Der Kniff spart JavaScript: Sonst muessten bei jedem Zeitschritt 52
+   Elemente einzeln angefasst werden — viermal je Sekunde, waehrend die
+   Nachricht laeuft. */
+.theme-mono .sn__balken {
+  flex: 1 1 0;
+  height: var(--h);
+  min-height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #1C60AD calc((var(--fortschritt) * 52 - var(--i)) * 100%),
+    #c4ccd4 0
+  );
+}
+
+.theme-mono .sn__punkt {
+  position: absolute;
+  top: 50%;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-left: -0.425rem;
+  border-radius: 50%;
+  background: #1C60AD;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.theme-mono .sn__portraet {
+  position: relative;
+  flex: 0 0 auto;
+  width: 3.4rem;
+  height: 3.4rem;
+}
+.theme-mono .sn__foto {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+/* Die Mikrofon-Plakette sitzt am Rand des Bildes und sagt, worum es
+   sich handelt — dasselbe Zeichen wie im Vorbild. */
+.theme-mono .sn__mikro {
+  position: absolute;
+  left: -0.15rem;
+  bottom: -0.15rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: #1C60AD;
+}
+
+.theme-mono .sn__zeiten {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0 0;
+  padding-left: 3.35rem;
+  padding-right: 4.25rem;
+  font-size: var(--dk-font-size-sm, 0.875rem);
+  color: #5a6672;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Beide Zeitangaben tragen eine eigene Klasse, damit sie einzeln
+   ansprechbar bleiben: Die gelaufene Zeit aendert sich viermal je
+   Sekunde und bekommt deshalb feste Ziffernbreite, damit die Zeile
+   beim Zaehlen nicht wandert. Die Laenge steht fest. */
+.theme-mono .sn__gelaufen { font-variant-numeric: tabular-nums; }
+.theme-mono .sn__dauer { font-variant-numeric: tabular-nums; }
+
+.theme-mono .sn__quelle { display: none; }
+
+/* Das Transkript steht in derselben Blase, unter der Welle — wie im
+   Vorbild der mitgeschriebene Text. Es ist keine Zugabe: WCAG 1.2.1
+   verlangt zu reinem Ton eine Textalternative. */
+.theme-mono .sn__transkript {
+  margin: 0.9rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid #e4e8ec;
+  color: #101010;
+  font-size: var(--dk-font-size-md, 1.25rem);
+  line-height: 1.5;
+}
+.theme-mono .sn__transkript p { margin: 0 0 0.7rem; }
+.theme-mono .sn__transkript p:last-child { margin-bottom: 0; }
+
+@media (max-width: 520px) {
+  .theme-mono .sn__portraet { width: 2.6rem; height: 2.6rem; }
+  .theme-mono .sn__zeiten { padding-right: 3.4rem; }
+  .theme-mono .sn__transkript { font-size: 1.05rem; }
+}
+
+/* Die Blase steht links, nicht mittig: Sie ist eine Nachricht, kein
+   Aushang. Der Knopf darunter folgt dem Lesefluss. */
+.theme-mono .kt__nachricht { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
+.theme-mono .kt__weiter { margin: clamp(1.5rem, 3vw, 2rem) 0 0; }
+
+/* ============================================================
+   Das Porträt mit Abspielknopf auf „Über uns"
+
+   Ein Gesicht mit Knopf darauf sagt ohne Beschriftung, dass hier
+   jemand spricht. Der Knopf ist dabei **kein** Bedienelement, sondern
+   ein Zeichen: Bedient wird über die Blase darunter, die eine
+   Beschriftung trägt. Zwei gleichwertige Knöpfe für dieselbe Sache
+   wären für eine Tastatur eine Dopplung.
+
+   Ein Klick aufs Bild startet trotzdem — für die Maus ist das die
+   erwartete Geste. Die Tastatur erreicht denselben Weg über den
+   beschrifteten Knopf.
+   ============================================================ */
+.theme-mono .team__bild {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 10rem;
+  cursor: pointer;
+}
+
+.theme-mono .team__play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(28 96 173 / 0.92);
+  color: #ffffff;
+  /* Ein Ring in der Grundfarbe trennt den Knopf vom Bild, damit er
+     auf hellen wie dunklen Stellen des Porträts sichtbar bleibt. */
+  box-shadow: 0 0 0 3px var(--color-surface);
+  transition: transform 140ms ease, background-color 140ms ease;
+}
+.theme-mono .team__bild:hover .team__play { transform: scale(1.06); }
+.theme-mono .team__play svg { width: 1.5rem; height: 1.5rem; margin-left: 0.15rem; }
+
+/* Läuft die Aufnahme, wird aus dem Dreieck ein Pausenzeichen —
+   sonst zeigte das Bild weiter „abspielen", während es läuft. */
+.theme-mono .team__bild[data-laeuft] .team__play svg { display: none; }
+.theme-mono .team__bild[data-laeuft] .team__play::after {
+  content: '';
+  width: 1.1rem;
+  height: 1.3rem;
+  border-left: 0.36rem solid currentColor;
+  border-right: 0.36rem solid currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-mono .team__play { transition: none; }
+}
+
+.theme-mono .team__nachricht { margin-top: clamp(2rem, 4vw, 3rem); }

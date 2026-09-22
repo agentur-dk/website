@@ -81,6 +81,9 @@ export const ICONS = {
   /** Lucide `menu` — mobiler Menüknopf. */
   'menu': 'M4 12h16M4 6h16M4 18h16',
 
+  /* Lucide `mic`: Kapsel, Buegel, Staender — drei Teilpfade in einem `d`. */
+  'mic': 'M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3ZM19 10v2a7 7 0 0 1-14 0v-2M12 19v3',
+
   /** Lucide `palette` — Corporate Design. */
   'palette':
     'M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z M13.5 6.5h.01 M17.5 10.5h.01 M8.5 7.5h.01 M6.5 12.5h.01',

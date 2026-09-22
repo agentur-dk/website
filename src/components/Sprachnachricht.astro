@@ -1,0 +1,172 @@
+---
+/**
+ * Die Begrüßung als Sprachnachricht.
+ *
+ * ── Warum als Sprachnachricht ─────────────────────────────────────────
+ * Eine Agentur, die von kurzen Wegen spricht, kann das zeigen statt es
+ * zu behaupten: eine Stimme statt eines weiteren Absatzes in der
+ * Wir-Form. Die Form ist die aus einem Messenger, weil sie jeder kennt
+ * und niemand eine Bedienungsanleitung dafür braucht.
+ *
+ * ── Warum kein <audio controls> ───────────────────────────────────────
+ * Der Standardplayer sieht in jedem Browser anders aus und in keinem
+ * gut. Hier steuert eigenes Markup ein unsichtbares `<audio>` — die
+ * Wiedergabe bleibt also die des Browsers, nur die Oberfläche ist
+ * eigene.
+ *
+ * ── Zur Wellenform ────────────────────────────────────────────────────
+ * Aus der Datei gemessen (src/data/sprachnachricht.ts), nicht gemalt.
+ * Ein erfundenes Zackenmuster wäre Dekoration, die wie eine Information
+ * aussieht.
+ *
+ * ── Barrierefreiheit ──────────────────────────────────────────────────
+ * WCAG 1.2.1 verlangt zu reinem Ton eine Textalternative. Das
+ * Transkript steht deshalb **im Dokument**, nicht hinter einem
+ * Aufklapper, der zugeklappt startet. Der Knopf trägt einen
+ * `aria-label`, der Fortschritt eine `role="progressbar"` mit
+ * `aria-valuenow`; die Wellenform selbst ist `aria-hidden`, weil sie
+ * dasselbe noch einmal sagt.
+ */
+import { Image } from 'astro:assets';
+import Icon from './ui/Icon.astro';
+import portraet from '../assets/team/daniel-kontelis.jpg';
+import { WELLENFORM, DAUER_SEKUNDEN } from '../data/sprachnachricht';
+
+interface Props {
+  /** Die Absätze des Transkripts. */
+  readonly transkript: readonly string[];
+  /** Kompakt: ohne Transkript in der Blase, für Seiten, die es schon zeigen. */
+  readonly kompakt?: boolean;
+  readonly class?: string;
+}
+
+const { transkript, kompakt = false, class: klasse } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const datei = `${base}audio/daniel-kontelis-begruessung.mp3`;
+const minuten = Math.floor(DAUER_SEKUNDEN / 60);
+const sekunden = String(DAUER_SEKUNDEN % 60).padStart(2, '0');
+---
+
+<figure class:list={['sn', kompakt && 'sn--kompakt', klasse]} data-sprachnachricht>
+  <p class="sn__von">Daniel Kontelis</p>
+
+  <div class="sn__zeile">
+    <button type="button" class="sn__knopf" data-sn-knopf
+            aria-label="Sprachnachricht abspielen">
+      <Icon name="play" size={24} class="sn__ikon sn__ikon--play" />
+      <Icon name="pause" size={24} class="sn__ikon sn__ikon--pause" />
+    </button>
+
+    <div class="sn__welle" data-sn-welle role="progressbar"
+         aria-label="Fortschritt der Sprachnachricht"
+         aria-valuemin="0" aria-valuemax={DAUER_SEKUNDEN} aria-valuenow="0"
+         aria-valuetext="Noch nicht abgespielt">
+      {WELLENFORM.map((h, i) => (
+        <span class="sn__balken" style={`--h:${h}%;--i:${i}`} aria-hidden="true"></span>
+      ))}
+      <span class="sn__punkt" data-sn-punkt aria-hidden="true"></span>
+    </div>
+
+    <span class="sn__portraet">
+      <Image src={portraet} alt="" width={120} height={120} class="sn__foto" loading="lazy" />
+      <Icon name="mic" size={18} strokeWidth={2.4} class="sn__mikro" />
+    </span>
+  </div>
+
+  <p class="sn__zeiten">
+    <span class="sn__gelaufen" data-sn-zeit>0:00</span>
+    <span class="sn__dauer">{minuten}:{sekunden}</span>
+  </p>
+
+  <audio class="sn__quelle" data-sn-audio preload="none" src={datei}></audio>
+
+  {!kompakt && (
+    <figcaption class="sn__transkript">
+      {transkript.map((absatz) => <p>{absatz}</p>)}
+    </figcaption>
+  )}
+</figure>
+
+<script>
+  /*
+   * Ein unsichtbares <audio>, eine eigene Oberfläche.
+   *
+   * Mehrere Nachrichten auf einer Seite sind möglich — deshalb je Figur
+   * eine eigene Verdrahtung statt eines Suchens im ganzen Dokument.
+   *
+   * Läuft eine Nachricht an, halten die anderen an. Zwei Stimmen
+   * gleichzeitig sind keine Funktion, sondern ein Fehler.
+   */
+  const alle = document.querySelectorAll<HTMLElement>('[data-sprachnachricht]');
+
+  for (const figur of alle) {
+    const audio = figur.querySelector<HTMLAudioElement>('[data-sn-audio]');
+    const knopf = figur.querySelector<HTMLButtonElement>('[data-sn-knopf]');
+    const welle = figur.querySelector<HTMLElement>('[data-sn-welle]');
+    const punkt = figur.querySelector<HTMLElement>('[data-sn-punkt]');
+    const zeit  = figur.querySelector<HTMLElement>('[data-sn-zeit]');
+    if (!audio || !knopf || !welle || !punkt || !zeit) continue;
+
+    const alsZeit = (s: number) =>
+      `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+    function zeichne(): void {
+      const dauer = audio!.duration || 1;
+      const anteil = Math.min(1, audio!.currentTime / dauer);
+      figur.style.setProperty('--fortschritt', String(anteil));
+      punkt!.style.left = `${anteil * 100}%`;
+      zeit!.textContent = alsZeit(audio!.currentTime);
+      welle!.setAttribute('aria-valuenow', String(Math.round(audio!.currentTime)));
+      welle!.setAttribute('aria-valuetext', `${alsZeit(audio!.currentTime)} von ${alsZeit(dauer)}`);
+    }
+
+    /* Welches Zeichen der Knopf zeigt, entscheidet CSS an der Klasse
+       `sn--laeuft`. Das Skript setzt nur diese eine Klasse — vorher
+       schaltete es zusaetzlich zwei SVGs einzeln um, also zwei
+       Mechanismen fuer dieselbe Aussage. (Nebenbei: `hidden` gibt es in
+       TypeScript nur an HTMLElement, nicht an SVGElement.) */
+    function zeige(laeuft: boolean): void {
+      knopf!.setAttribute('aria-label',
+        laeuft ? 'Sprachnachricht anhalten' : 'Sprachnachricht abspielen');
+      figur.classList.toggle('sn--laeuft', laeuft);
+    }
+
+    knopf.addEventListener('click', () => {
+      if (audio.paused) {
+        for (const andere of alle) {
+          const a = andere.querySelector<HTMLAudioElement>('[data-sn-audio]');
+          if (a && a !== audio) a.pause();
+        }
+        void audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    audio.addEventListener('play',  () => zeige(true));
+    audio.addEventListener('pause', () => zeige(false));
+    audio.addEventListener('ended', () => { zeige(false); audio.currentTime = 0; zeichne(); });
+    audio.addEventListener('timeupdate', zeichne);
+
+    /* Ein Porträt mit Abspielknopf auf derselben Seite steuert dieselbe
+       Aufnahme. Es ist bewusst kein <button>: Die Bedienung für Tastatur
+       und Screenreader sitzt am beschrifteten Knopf oben. Für die Maus
+       ist der Klick aufs Gesicht die erwartete Geste. */
+    const gesicht = document.querySelector<HTMLElement>('[data-sn-gesicht]');
+    if (gesicht) {
+      gesicht.addEventListener('click', () => knopf!.click());
+      audio.addEventListener('play',  () => gesicht.setAttribute('data-laeuft', ''));
+      audio.addEventListener('pause', () => gesicht.removeAttribute('data-laeuft'));
+      audio.addEventListener('ended', () => gesicht.removeAttribute('data-laeuft'));
+    }
+
+    /* Klick in die Wellenform springt an die Stelle — wie im Messenger.
+       Erst nach dem Laden der Länge, sonst wäre der Sprung geraten. */
+    welle.addEventListener('click', (e) => {
+      if (!audio.duration) return;
+      const kasten = welle.getBoundingClientRect();
+      audio.currentTime = ((e.clientX - kasten.left) / kasten.width) * audio.duration;
+      zeichne();
+    });
+  }
+</script>

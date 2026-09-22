@@ -1,86 +1,33 @@
 ---
 /**
- * Wer am anderen Ende sitzt.
+ * Wer am anderen Ende sitzt — als Stimme, nicht als Galerie.
  *
- * ── Warum es diesen Abschnitt gibt ────────────────────────────────────
- * Die Startseite sprach bis zum 21.09.2026 in der Wir-Form, ohne dass
- * ein einziger Mensch darin vorkam. „Kurze Wege" ist eine Behauptung,
- * solange niemand sieht, zu wem die Wege kurz sind.
+ * ── Was sich am 22.09.2026 geändert hat ───────────────────────────────
+ * Vorher standen hier fünf Porträts, vier davon Dither-Flächen als
+ * Platzhalter. Auf der Startseite braucht es das Team nicht zweimal:
+ * Wer wissen will, wer dazugehört, geht auf „Über uns" — der Knopf
+ * dafür steht unten. Hier spricht einer, und das reicht.
  *
- * ── Zu den Bildern ────────────────────────────────────────────────────
- * Vier der fünf Porträts sind Dither-Flächen, keine Fotos. Das ist
- * Absicht und kein Provisorium mit schlechtem Gewissen: Ein
- * KI-erzeugtes Foto einer realen Person sähe aus wie eine Aufnahme und
- * wäre keine. Eine erkennbar abstrakte Fläche behauptet nichts. Sobald
- * echte Porträts vorliegen, treten sie an dieselbe Stelle.
+ * ── Warum eine Sprachnachricht ────────────────────────────────────────
+ * „Kurze Wege" ist eine Behauptung, solange niemand hört, zu wem sie
+ * kurz sind. Eine Stimme ist der Beleg, den ein weiterer Absatz in der
+ * Wir-Form nicht liefern kann.
  *
- * ── Zu den Zeilen unter den Namen ─────────────────────────────────────
- * Keine erfundenen Zitate. Was hier steht, sagt die Agentur über ihre
- * Leute — nicht die Leute über sich selbst. Ein Satz in
- * Anführungszeichen, den jemand nie gesagt hat, ist eine Fälschung,
- * auch wenn er nett gemeint ist.
+ * ── Zum Transkript ────────────────────────────────────────────────────
+ * Wortlaut wie gesprochen, vom Sprecher selbst geliefert. Nicht
+ * geglättet: Die kleinen Unebenheiten gesprochener Sprache sind der
+ * Grund, warum man einer Aufnahme mehr glaubt als einem Werbetext.
  */
-import { Image } from 'astro:assets';
-import { existsSync } from 'node:fs';
-import Dither from './ui/Dither.astro';
-import portraet from '../assets/team/daniel-kontelis.jpg';
-import { siteConfig } from '../config/site.config';
+import Sprachnachricht from './Sprachnachricht.astro';
 
 const base = import.meta.env.BASE_URL;
 
-/* Der Player erscheint nur, wenn die Aufnahme wirklich da ist. Ein
-   Abspielknopf, der ins Leere greift, ist schlimmer als keiner. */
-const AUDIO = 'audio/daniel-kontelis-begruessung.mp3';
-const hatAudio = existsSync(new URL(`../../public/${AUDIO}`, import.meta.url));
-
-/* Das Transkript ist Pflicht, nicht Zugabe: WCAG 1.2.1 verlangt zu
-   reinem Ton eine Textalternative. Eine Agentur, die BFSG verkauft und
-   das auf der eigenen Seite bricht, verkauft sich selbst nicht ab. */
-/* Gesprochen, nicht geschrieben. Die erste Fassung war eine Seite
-   Text zum Vorlesen — geschliffene Antithesen, „woran wir merken, dass
-   das aufgeht", Aufzählungen mit Doppelpunkt. So redet niemand.
-
-   Kurze Sätze, ein Gedanke je Satz, und die Erfahrung als Beobachtung
-   statt als Behauptung: „wer einmal da ist, bleibt meistens" überzeugt
-   mehr als „wir sind erfahren". Das Gründungsjahr steht in
-   site.config.ts und ist damit belegt, nicht geschätzt. */
 const transkript = [
-  'Hallo, ich bin Daniel Kontelis von der agentur dk in Köln.',
-  'Wir machen das seit 2005. In der Zeit lernt man vor allem eins: Die meisten brauchen weniger, als sie denken — aber das Richtige.',
-  'Technisch sind wir vorne dabei. Wir bauen trotzdem nichts ein, nur weil es neu ist.',
-  'Beratung, Planung, Umsetzung — alles bei uns. Ein Ansprechpartner, nicht drei.',
-  'Und wer einmal da ist, bleibt meistens. Manche schon seit Jahren.',
-  'Rufen Sie einfach an. Das erste Gespräch kostet nichts.',
-];
-
-/* Die Porträts der Kollegen liegen noch nicht vor. Statt zu warten,
-   sucht die Komponente selbst nach ihnen: Liegt `src/assets/team/
-   <datei>` da, wird das Bild gezeigt; sonst bleibt die Dither-Fläche.
-
-   `import.meta.glob` mit `eager` löst die Dateien zur Bauzeit auf —
-   ein einfaches `import` würde den Bau abbrechen, solange die Datei
-   fehlt. So genügt es, die Bilder abzulegen und neu zu bauen. Kein
-   Eingriff in den Code, keine Stelle, die jemand vergessen kann. */
-const bilder = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/team/*.{jpg,jpeg,png,webp}',
-  { eager: true },
-);
-const bildVon = (datei: string): ImageMetadata | undefined =>
-  bilder[`../assets/team/${datei}`]?.default;
-
-const team = [
-  { name: 'Robin Kindopp',  rolle: 'Projektmanagement, WordPress',
-    zeile: 'Wenn es um WordPress geht oder Ihr Projekt läuft, sprechen Sie meistens mit ihm.',
-    feld: 'pulse' as const, datei: 'robin-kindopp.jpg' },
-  { name: 'Filipos Makkas', rolle: 'Projektmanagement, Design',
-    zeile: 'Hält Gestaltung und Zeitplan zusammen – und sagt Ihnen, wenn beides nicht gleichzeitig geht.',
-    feld: 'drift' as const, datei: 'filipos-makkas.jpg' },
-  { name: 'Julius Heinisch', rolle: 'Programmierung, Datenbanken',
-    zeile: 'Alles, was hinter der Oberfläche passiert: Schnittstellen, Datenbanken, Sonderfälle.',
-    feld: 'fade' as const, datei: 'julius-heinisch.jpg' },
-  { name: 'Shakil Rifaat',  rolle: 'UX- und Interface-Design',
-    zeile: 'Sorgt dafür, dass Besucher finden, was sie suchen, ohne darüber nachzudenken.',
-    feld: 'brain' as const, datei: 'shakil-rifaat.jpg' },
+  'Hallo, ich bin Daniel Kontelis – Gründer der agentur dk in Köln.',
+  'In den Medien bin ich seit über 20 Jahren. In der Zeit lernt man vor allem eins: Die Erfahrung liegt nicht in der Art der Umsetzung, sondern in der Kommunikation – tiefes Verständnis von Kundenwünschen und Zielgruppen.',
+  'Technisch sind wir auch vorne dabei. Beratung, Planung, Umsetzung — alles aus einer Hand.',
+  'Und wer einmal da ist, bleibt meistens. Fast alle Kunden schon seit vielen Jahren.',
+  'Rufen Sie einfach an – wir laden Sie gerne zu einem unverbindlichen Beratungsgespräch ein.',
 ];
 ---
 
@@ -93,159 +40,41 @@ const team = [
       Projekten kommen erprobte Leute dazu – Ihr Ansprechpartner bleibt derselbe.
     </p>
 
-    <div class="kt__oben">
-      <figure class="kt__haupt">
-        <Image src={portraet} alt="Daniel Kontelis" width={240} height={240}
-               class="kt__foto" loading="lazy" />
-        <figcaption>
-          <p class="kt__name">Daniel Kontelis</p>
-          <p class="kt__rolle">Ihr Ansprechpartner</p>
-          <p class="kt__kontakt">
-            <a href={`tel:${siteConfig.contact.phone}`}>0221 986 55 229</a><br />
-            <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>
-          </p>
-        </figcaption>
-      </figure>
+    <Sprachnachricht transkript={transkript} class="kt__nachricht" />
 
-      <div class="kt__wort">
-        {hatAudio && (
-          <>
-            <p class="kt__wort-titel">Kurz vorgestellt</p>
-            {/* `preload="none"`: Ohne Klick wird nichts geladen — das
-                ist auch eine Datenschutzfrage, nicht nur eine der
-                Ladezeit. */}
-            <audio class="kt__audio" controls preload="none" src={`${base}${AUDIO}`}>
-              Ihr Browser kann diese Aufnahme nicht abspielen. Der Text steht darunter.
-            </audio>
-          </>
-        )}
-        <details class="kt__transkript" open={!hatAudio}>
-          <summary>{hatAudio ? 'Was gesagt wird (Transkript)' : 'Ein Wort vorab'}</summary>
-          {transkript.map((satz) => <p>{satz}</p>)}
-        </details>
-      </div>
-    </div>
-
-    <ul class="kt__liste" role="list">
-      {team.map((m) => (
-        <li class="ktkarte">
-          {bildVon(m.datei)
-            ? <Image src={bildVon(m.datei)!} alt={m.name} width={320} height={320}
-                     class="ktkarte__bild ktkarte__foto" loading="lazy" />
-            : <div class="ktkarte__bild" aria-hidden="true">
-                <Dither field={m.feld} cell={3} />
-              </div>}
-          <p class="ktkarte__name">{m.name}</p>
-          <p class="ktkarte__rolle">{m.rolle}</p>
-          <p class="ktkarte__zeile">{m.zeile}</p>
-        </li>
-      ))}
-    </ul>
+    <p class="kt__weiter">
+      <a href={`${base}ueber-uns.html`} class="btn btn--secondary">
+        Das ganze Team ansehen
+      </a>
+    </p>
   </div>
 </section>
 
 <style>
+  /* Aus der abgeloesten Fassung uebernommen. Beim Neuschreiben war der
+     Stilblock mitgegangen und die Ueberschrift stand in 19,2 px — also
+     in Fliesstextgroesse. Im Browser gemessen, nicht im Markup vermutet.
+
+     `font-weight: 700` steht hier wirkungslos: Das Mono-Thema setzt
+     alle Ueberschriften ueber `.theme-mono.theme-mono :is(h1..h6)` auf
+     400 und gewinnt mit (0,2,1) gegen die Spezifitaet einer scoped
+     Klasse (0,2,0). Nachgemessen — die Ueberschrift rendert in 400.
+     Das ist richtig so: Auf dieser Seite stehen alle Ueberschriften in
+     400, und eine Ausnahme waere ein Bruch. Die Zeile bleibt nur als
+     Hinweis stehen, damit sie niemand als Fehler wieder anfasst. */
   .kt__heading {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: clamp(1.6rem, 3.5vw, 2.2rem); line-height: 1.15;
-    letter-spacing: -.02em; margin: .35rem 0 .75rem; text-wrap: balance;
-  }
-  .kt__lead { color: var(--color-text-muted); max-width: 54ch; margin: 0 0 2.5rem; }
-
-  .kt__oben {
-    display: grid; gap: 2rem; align-items: start;
-    grid-template-columns: minmax(12rem, 16rem) 1fr;
-    margin-bottom: 3rem;
-  }
-  @media (max-width: 40rem) { .kt__oben { grid-template-columns: 1fr; } }
-
-  .kt__haupt { margin: 0; }
-  .kt__foto {
-    width: 100%; height: auto; aspect-ratio: 1;
-    object-fit: cover; border-radius: var(--radius-md);
-    filter: grayscale(1) contrast(1.05);
-  }
-  .kt__name {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: 1.1rem; margin: .9rem 0 .1rem;
-  }
-  .kt__rolle { color: var(--color-text-muted); font-size: .9rem; margin: 0 0 .5rem; }
-  .kt__kontakt { font-size: .9rem; margin: 0; line-height: 1.6; }
-  /* WCAG 2.5.8: Ein Ziel muss mindestens 24 × 24 px groß sein. Die
-     beiden Links waren 19 px hoch — die Zeilenhöhe allein reicht bei
-     0,9 rem nicht. `inline-block` ist nötig, damit Höhe und
-     Innenabstand überhaupt greifen; an einem reinen Inline-Element
-     tun sie es nicht. */
-  .kt__kontakt a {
-    display: inline-block;
-    min-height: 24px;
-    padding-block: .15rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    margin: .35rem 0 .75rem;
+    text-wrap: balance;
   }
 
-  /* Ohne Aufnahme steht hier nur das Transkript — dann braucht der
-     Block keine eigene Breite. Mit Aufnahme hält er beides zusammen. */
-  .kt__wort { min-width: 0; }
-  .kt__wort-titel {
-    font-family: var(--font-mono); font-size: .75rem;
-    letter-spacing: .12em; text-transform: uppercase;
-    color: var(--color-text-muted); margin: 0 0 .6rem;
-  }
-  .kt__audio { width: 100%; max-width: 28rem; margin-bottom: 1.25rem; }
-
-  .kt__transkript {
-    border-left: 3px solid var(--color-accent);
-    padding-left: 1.1rem; max-width: 56ch;
-  }
-  .kt__transkript > summary {
-    cursor: pointer; font-weight: 600; font-size: .9rem;
-    margin-bottom: .6rem;
-  }
-  .kt__transkript > p {
-    margin: 0 0 .7rem; color: var(--color-text-muted);
-    font-size: .95rem; line-height: 1.55;
-  }
-  .kt__transkript > p:last-child { margin-bottom: 0; }
-
-  .kt__liste {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; gap: 1.25rem;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  }
-  .ktkarte {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-  }
-  /* Dunkel, nicht hell: Die Dither-Komponente zeichnet mit
-     `--color-bg` als Grund. In einem hellen Abschnitt heißt das hell
-     auf hell — die Fläche sah leer aus, nicht abstrakt. Auf dunklem
-     Grund wird aus derselben Fläche ein Bild, und die ASCII-Ästhetik
-     der Seite bekommt einen Platz mitten im Hellen. */
-  .ktkarte__bild {
-    aspect-ratio: 1; margin-bottom: .9rem;
-    border-radius: var(--radius-md); overflow: hidden;
-    background: #101010;
-    --color-bg: #101010;
-  }
-  /* Dasselbe Maß wie die Dither-Fläche, damit der Wechsel von
-     Platzhalter zu Foto das Raster nicht verschiebt. Graustufen wie
-     beim Hauptporträt: Die Seite hat eine Farbe, und die ist blau. */
-  .ktkarte__foto {
-    width: 100%; height: auto; object-fit: cover;
-    filter: grayscale(1) contrast(1.05);
-  }
-  .ktkarte__name {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: 1rem; margin: 0 0 .1rem;
-  }
-  .ktkarte__rolle {
-    font-family: var(--font-mono); font-size: .75rem;
-    color: var(--color-accent); margin: 0 0 .5rem;
-    letter-spacing: .04em;
-  }
-  .ktkarte__zeile {
-    margin: 0; font-size: .88rem; line-height: 1.5;
+  .kt__lead {
     color: var(--color-text-muted);
+    max-width: 54ch;
+    margin: 0 0 2.5rem;
   }
 </style>
