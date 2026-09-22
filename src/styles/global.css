@@ -607,6 +607,13 @@ a:not([class]):focus-visible {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    /* Ohne `min-width: 0` schrumpft ein Flex-Kind nicht unter seine
+       min-content-Breite — und die bestimmt das längste Wort ohne
+       Umbruchstelle. Seit im Link die Domain steht
+       (`koelner-physio-kollektiv.de`) statt „Projekt ansehen", trug die
+       Karte bei 320 px 23 px über den Rand: horizontaler Scrollbalken
+       auf dem Telefon, WCAG 1.4.10. */
+    min-width: 0;
   }
   .case-card__tag {
     font-size: 0.9rem;

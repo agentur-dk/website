@@ -15,8 +15,10 @@
  * Voraussetzung: `node tools/serve.mjs` oder `npm run preview` läuft.
  */
 import { chromium } from 'playwright';
+import { pruefeProjekt } from './lib/richtige-seite.mjs';
 
 const ORIGIN = process.env.LH_ORIGIN ?? 'http://localhost:4321';
+let projektGeprueft = false;
 const BASE   = process.env.LH_BASE ?? '/';
 
 const ALL_PAGES = [
@@ -59,6 +61,10 @@ for (const name of pages) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: 900 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
+    /* Siehe lib/richtige-seite.mjs: Am 22.09.2026 lief auf Port 4321
+       ein fremdes Projekt, und dessen Befunde sahen aus wie eigene —
+       inklusive Klassen (`p.slug`), die es hier gar nicht gibt. */
+    if (!projektGeprueft) { await pruefeProjekt(page, url); projektGeprueft = true; }
     // Bis ans Seitenende scrollen, damit jede Fläche gezeichnet wurde —
     // gezeichnet wird erst beim Sichtbarwerden. `scroll-behavior: smooth`
     // muss dafür aus: Sonst animiert jeder Sprung, 60 ms reichen nicht, und

@@ -10,6 +10,7 @@
  *   node tools/a11y.mjs [--pages=index,leistungen]
  */
 import { chromium } from 'playwright';
+import { pruefeProjekt } from './lib/richtige-seite.mjs';
 import AxeBuilder from '@axe-core/playwright';
 
 const ORIGIN = process.env.LH_ORIGIN ?? 'http://localhost:4321';
@@ -56,12 +57,19 @@ async function settle(page) {
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
 const page = await ctx.newPage();
+let geprueft = false;
 
 let total = 0;
 const byRule = new Map();
 
 for (const name of pages) {
-  await page.goto(`${ORIGIN}${BASE}${name}.html`, { waitUntil: 'networkidle' });
+  const url = `${ORIGIN}${BASE}${name}.html`;
+  await page.goto(url, { waitUntil: 'networkidle' });
+  /* Einmal pro Lauf: Läuft unter dieser Adresse überhaupt dieses
+     Projekt? Siehe lib/richtige-seite.mjs — ein fremder Server auf
+     demselben Port hat schon Befunde geliefert, die es hier gar nicht
+     gab. */
+  if (geprueft === false) { await pruefeProjekt(page, url); geprueft = true; }
 
   const states = [
     ['default', async () => {}],

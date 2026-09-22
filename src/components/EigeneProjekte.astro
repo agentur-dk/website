@@ -116,5 +116,11 @@ const zahlen = [
   }
   .ep__link { margin: 0; }
 
+  /* Unterhalb von 60 rem bleibt für Text und Fläche nebeneinander kein
+     Platz mehr — die Fläche rutscht unter den Satz. wcag-manual meldete
+     bei 390 px zehn Textstellen über dem Raster (1.4.3). Am Telefon
+     entfällt sie deshalb ganz; die Sektion bleibt dunkel, nur eben
+     ohne Muster. */
+  @media (max-width: 60rem) { .ep__flaeche { display: none; } }
   @media (prefers-reduced-motion: reduce) { .ep__flaeche { display: none; } }
 </style>

@@ -142,7 +142,13 @@ const erwartung = [
   /* `position: relative` ist Voraussetzung dafuer, dass .hero__flaeche
      sich an diesem Abschnitt ausrichtet und nicht an der Seite. */
   .ber-hero { position: relative; overflow: hidden; }
-  .ber-hero__inner { position: relative; max-width: var(--container-narrow); }
+  /* Kein `container-narrow`: Der zentriert den Satz, und dann ragt er
+     rechts in die Dither-Kugel. Deren Geometrie (mono.css,
+     `.hero__flaeche`) ist dafür gerechnet, dass der Text LINKS steht
+     und bei Containerrand + 680 px endet. `margin-right: auto` hält
+     ihn dort. */
+  .ber-hero__inner { position: relative; }
+  .ber-hero__inner > * { max-width: 42rem; margin-right: auto; }
   .ber-hero__headline {
     font-family: var(--font-display); font-weight: 700;
     font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.08;

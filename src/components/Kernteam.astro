@@ -171,6 +171,16 @@ const team = [
   }
   .kt__rolle { color: var(--color-text-muted); font-size: .9rem; margin: 0 0 .5rem; }
   .kt__kontakt { font-size: .9rem; margin: 0; line-height: 1.6; }
+  /* WCAG 2.5.8: Ein Ziel muss mindestens 24 × 24 px groß sein. Die
+     beiden Links waren 19 px hoch — die Zeilenhöhe allein reicht bei
+     0,9 rem nicht. `inline-block` ist nötig, damit Höhe und
+     Innenabstand überhaupt greifen; an einem reinen Inline-Element
+     tun sie es nicht. */
+  .kt__kontakt a {
+    display: inline-block;
+    min-height: 24px;
+    padding-block: .15rem;
+  }
 
   /* Ohne Aufnahme steht hier nur das Transkript — dann braucht der
      Block keine eigene Breite. Mit Aufnahme hält er beides zusammen. */
