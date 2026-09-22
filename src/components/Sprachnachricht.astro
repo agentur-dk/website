@@ -1,31 +1,38 @@
 ---
 /**
- * Die Begrüßung als Sprachnachricht.
+ * Die Begrüßung als eingehende Sprachnachricht — im Chatfenster.
  *
- * ── Warum als Sprachnachricht ─────────────────────────────────────────
- * Eine Agentur, die von kurzen Wegen spricht, kann das zeigen statt es
- * zu behaupten: eine Stimme statt eines weiteren Absatzes in der
- * Wir-Form. Die Form ist die aus einem Messenger, weil sie jeder kennt
- * und niemand eine Bedienungsanleitung dafür braucht.
+ * ── Was hier nachgebaut wird ──────────────────────────────────────────
+ * Ein Ausschnitt aus einem Messenger-Verlauf: getönte Fläche mit
+ * Kritzelmuster, darauf eine eingehende Blase links, mit Zipfel. Wer
+ * dorthin scrollt, sieht die Nachricht ankommen — sie gleitet herein,
+ * das Bild springt auf, die Balken bauen sich von links auf.
  *
- * ── Warum kein <audio controls> ───────────────────────────────────────
- * Der Standardplayer sieht in jedem Browser anders aus und in keinem
- * gut. Hier steuert eigenes Markup ein unsichtbares `<audio>` — die
- * Wiedergabe bleibt also die des Browsers, nur die Oberfläche ist
- * eigene.
+ * Warum so und nicht in den Hausfarben: Die Form soll sofort erkennbar
+ * sein. Eine Blase in Schwarzweiß wäre eine Blase; diese hier ist eine
+ * Sprachnachricht, und das ohne ein Wort Erklärung. Sie steht bewusst
+ * als Fremdkörper auf der Seite — wie ein Screenshot, den jemand
+ * hereingelegt hat.
+ *
+ * ── Die Bewegung ──────────────────────────────────────────────────────
+ * Läuft einmal, beim ersten Sichtbarwerden, und hört dann auf. Eine
+ * Schleife wäre Dekoration; dies hier ist ein Ereignis.
+ *
+ * Sie gehorcht beiden Schaltern der Seite: `prefers-reduced-motion` und
+ * dem Pausenknopf in der Fußzeile (`html[data-motion="paused"]`). In
+ * beiden Fällen steht alles sofort fertig da — nichts fehlt, es bewegt
+ * sich nur nichts.
  *
  * ── Zur Wellenform ────────────────────────────────────────────────────
- * Aus der Datei gemessen (src/data/sprachnachricht.ts), nicht gemalt.
- * Ein erfundenes Zackenmuster wäre Dekoration, die wie eine Information
- * aussieht.
+ * 25 Balken, aus der Datei gemessen (src/data/sprachnachricht.ts). Beim
+ * Aufbau wachsen sie nacheinander auf ihre gemessene Höhe — die
+ * Reihenfolge ist Animation, die Höhe ist Messwert.
  *
  * ── Barrierefreiheit ──────────────────────────────────────────────────
  * WCAG 1.2.1 verlangt zu reinem Ton eine Textalternative. Das
- * Transkript steht deshalb **im Dokument**, nicht hinter einem
- * Aufklapper, der zugeklappt startet. Der Knopf trägt einen
- * `aria-label`, der Fortschritt eine `role="progressbar"` mit
- * `aria-valuenow`; die Wellenform selbst ist `aria-hidden`, weil sie
- * dasselbe noch einmal sagt.
+ * Transkript steht deshalb im Dokument, unter dem Fenster, in der
+ * Schrift der Seite — nicht im Chat, wo es wie eine zweite Nachricht
+ * aussähe.
  */
 import { Image } from 'astro:assets';
 import Icon from './ui/Icon.astro';
@@ -33,70 +40,112 @@ import portraet from '../assets/team/daniel-kontelis.jpg';
 import { WELLENFORM, DAUER_SEKUNDEN } from '../data/sprachnachricht';
 
 interface Props {
-  /** Die Absätze des Transkripts. */
   readonly transkript: readonly string[];
-  /** Kompakt: ohne Transkript in der Blase, für Seiten, die es schon zeigen. */
-  readonly kompakt?: boolean;
   readonly class?: string;
 }
 
-const { transkript, kompakt = false, class: klasse } = Astro.props;
+const { transkript, class: klasse } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const datei = `${base}audio/daniel-kontelis-begruessung.mp3`;
-const minuten = Math.floor(DAUER_SEKUNDEN / 60);
-const sekunden = String(DAUER_SEKUNDEN % 60).padStart(2, '0');
+const laenge = `${Math.floor(DAUER_SEKUNDEN / 60)}:${String(DAUER_SEKUNDEN % 60).padStart(2, '0')}`;
 ---
 
-<figure class:list={['sn', kompakt && 'sn--kompakt', klasse]} data-sprachnachricht>
-  <p class="sn__von">Daniel Kontelis</p>
+<div class:list={['sn-wrap', klasse]}>
+  <div class="sn-chat" data-sn-chat>
+    <figure class="sn" data-sprachnachricht>
+      <p class="sn__von">Daniel Kontelis</p>
 
-  <div class="sn__zeile">
-    <button type="button" class="sn__knopf" data-sn-knopf
-            aria-label="Sprachnachricht abspielen">
-      <Icon name="play" size={24} class="sn__ikon sn__ikon--play" />
-      <Icon name="pause" size={24} class="sn__ikon sn__ikon--pause" />
-    </button>
+      <div class="sn__zeile">
+        <button type="button" class="sn__knopf" data-sn-knopf
+                aria-label="Sprachnachricht abspielen">
+          <Icon name="play" size={22} class="sn__ikon sn__ikon--play" />
+          <Icon name="pause" size={22} class="sn__ikon sn__ikon--pause" />
+        </button>
 
-    <div class="sn__welle" data-sn-welle role="progressbar"
-         aria-label="Fortschritt der Sprachnachricht"
-         aria-valuemin="0" aria-valuemax={DAUER_SEKUNDEN} aria-valuenow="0"
-         aria-valuetext="Noch nicht abgespielt">
-      {WELLENFORM.map((h, i) => (
-        <span class="sn__balken" style={`--h:${h}%;--i:${i}`} aria-hidden="true"></span>
-      ))}
-      <span class="sn__punkt" data-sn-punkt aria-hidden="true"></span>
-    </div>
+        <div class="sn__mitte">
+          <div class="sn__welle" data-sn-welle role="progressbar"
+               aria-label="Fortschritt der Sprachnachricht"
+               aria-valuemin="0" aria-valuemax={DAUER_SEKUNDEN} aria-valuenow="0"
+               aria-valuetext="Noch nicht abgespielt">
+            {WELLENFORM.map((h, i) => (
+              <span class="sn__balken" style={`--h:${h}%;--i:${i}`} aria-hidden="true"></span>
+            ))}
+            <span class="sn__punkt" data-sn-punkt aria-hidden="true"></span>
+          </div>
+          <p class="sn__zeiten">
+            <span class="sn__gelaufen" data-sn-zeit>{laenge}</span>
+            <span class="sn__uhr">Jetzt</span>
+          </p>
+        </div>
 
-    <span class="sn__portraet">
-      <Image src={portraet} alt="" width={120} height={120} class="sn__foto" loading="lazy" />
-      <Icon name="mic" size={18} strokeWidth={2.4} class="sn__mikro" />
-    </span>
+        <span class="sn__portraet">
+          <Image src={portraet} alt="" width={120} height={120} class="sn__foto" loading="lazy" />
+          <span class="sn__plakette" aria-hidden="true">
+            <Icon name="mic" size={11} strokeWidth={2.6} />
+          </span>
+        </span>
+      </div>
+
+      <audio class="sn__quelle" data-sn-audio preload="none" src={datei}></audio>
+
+      <!--
+        Das Transkript steht hinter einem Aufklapper, wie im Messenger.
+
+        Das ist mit WCAG 1.2.1 vereinbar: Gefordert ist, dass zu reinem
+        Ton eine Textalternative **verfuegbar** ist — nicht, dass sie
+        dauernd sichtbar steht. Sie liegt im Dokument, traegt eine
+        sichtbare Bedienung und ist damit auch fuer Screenreader und
+        Suchmaschinen da. Ein `<details>` statt eigener Logik: Auf- und
+        Zuklappen, Tastaturbedienung und der Zustand fuer Hilfsmittel
+        kommen von der Plattform.
+      -->
+      <details class="sn__transkript">
+        <summary class="sn__aufklapp">
+          <!-- Beide Beschriftungen stehen im Markup, CSS zeigt die
+               passende. Ein Aufklapper, der offen weiter „anzeigen"
+               sagt, beschriftet die Vergangenheit. -->
+          <span class="sn__wort sn__wort--zu">Transkript anzeigen</span>
+          <span class="sn__wort sn__wort--auf">Transkript ausblenden</span>
+          <Icon name="chevron-down" size={14} class="sn__pfeil" />
+        </summary>
+        <div class="sn__worte">
+          {transkript.map((absatz) => <p>{absatz}</p>)}
+        </div>
+      </details>
+    </figure>
   </div>
-
-  <p class="sn__zeiten">
-    <span class="sn__gelaufen" data-sn-zeit>0:00</span>
-    <span class="sn__dauer">{minuten}:{sekunden}</span>
-  </p>
-
-  <audio class="sn__quelle" data-sn-audio preload="none" src={datei}></audio>
-
-  {!kompakt && (
-    <figcaption class="sn__transkript">
-      {transkript.map((absatz) => <p>{absatz}</p>)}
-    </figcaption>
-  )}
-</figure>
+</div>
 
 <script>
   /*
-   * Ein unsichtbares <audio>, eine eigene Oberfläche.
-   *
-   * Mehrere Nachrichten auf einer Seite sind möglich — deshalb je Figur
-   * eine eigene Verdrahtung statt eines Suchens im ganzen Dokument.
-   *
-   * Läuft eine Nachricht an, halten die anderen an. Zwei Stimmen
-   * gleichzeitig sind keine Funktion, sondern ein Fehler.
+   * Zwei Aufgaben: die Ankunft einmal zeigen, und danach abspielen.
    */
+  const langsam = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const pausiert = () => document.documentElement.dataset['motion'] === 'paused';
+
+  /* ── Die Ankunft ────────────────────────────────────────────────────
+     Einmal beim ersten Sichtbarwerden, dann meldet sich der Beobachter
+     ab. Wer zurückscrollt, sieht eine fertige Nachricht — so wie im
+     Messenger auch. */
+  for (const fenster of document.querySelectorAll<HTMLElement>('[data-sn-chat]')) {
+    if (langsam.matches || pausiert()) {
+      fenster.classList.add('ist-da');
+      continue;
+    }
+    const beobachter = new IntersectionObserver((eintraege) => {
+      for (const e of eintraege) {
+        if (!e.isIntersecting) continue;
+        fenster.classList.add('kommt-an');
+        beobachter.unobserve(e.target);
+      }
+    }, { threshold: 0.4 });
+    beobachter.observe(fenster);
+  }
+
+  /* ── Die Wiedergabe ─────────────────────────────────────────────────
+     Ein unsichtbares <audio>, eigene Oberfläche. Läuft eine Nachricht
+     an, halten die anderen an — zwei Stimmen gleichzeitig sind kein
+     Merkmal, sondern ein Fehler. */
   const alle = document.querySelectorAll<HTMLElement>('[data-sprachnachricht]');
 
   for (const figur of alle) {
@@ -110,21 +159,19 @@ const sekunden = String(DAUER_SEKUNDEN % 60).padStart(2, '0');
     const alsZeit = (s: number) =>
       `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
+    /* Vor dem Abspielen steht die Länge da, während des Abspielens die
+       gelaufene Zeit — so hält es der Messenger, und so erfährt man
+       vorher, worauf man sich einlässt. */
     function zeichne(): void {
       const dauer = audio!.duration || 1;
       const anteil = Math.min(1, audio!.currentTime / dauer);
       figur.style.setProperty('--fortschritt', String(anteil));
       punkt!.style.left = `${anteil * 100}%`;
-      zeit!.textContent = alsZeit(audio!.currentTime);
+      zeit!.textContent = audio!.currentTime > 0 ? alsZeit(audio!.currentTime) : alsZeit(dauer);
       welle!.setAttribute('aria-valuenow', String(Math.round(audio!.currentTime)));
       welle!.setAttribute('aria-valuetext', `${alsZeit(audio!.currentTime)} von ${alsZeit(dauer)}`);
     }
 
-    /* Welches Zeichen der Knopf zeigt, entscheidet CSS an der Klasse
-       `sn--laeuft`. Das Skript setzt nur diese eine Klasse — vorher
-       schaltete es zusaetzlich zwei SVGs einzeln um, also zwei
-       Mechanismen fuer dieselbe Aussage. (Nebenbei: `hidden` gibt es in
-       TypeScript nur an HTMLElement, nicht an SVGElement.) */
     function zeige(laeuft: boolean): void {
       knopf!.setAttribute('aria-label',
         laeuft ? 'Sprachnachricht anhalten' : 'Sprachnachricht abspielen');
@@ -148,25 +195,19 @@ const sekunden = String(DAUER_SEKUNDEN % 60).padStart(2, '0');
     audio.addEventListener('ended', () => { zeige(false); audio.currentTime = 0; zeichne(); });
     audio.addEventListener('timeupdate', zeichne);
 
-    /* Ein Porträt mit Abspielknopf auf derselben Seite steuert dieselbe
-       Aufnahme. Es ist bewusst kein <button>: Die Bedienung für Tastatur
-       und Screenreader sitzt am beschrifteten Knopf oben. Für die Maus
-       ist der Klick aufs Gesicht die erwartete Geste. */
-    const gesicht = document.querySelector<HTMLElement>('[data-sn-gesicht]');
-    if (gesicht) {
-      gesicht.addEventListener('click', () => knopf!.click());
-      audio.addEventListener('play',  () => gesicht.setAttribute('data-laeuft', ''));
-      audio.addEventListener('pause', () => gesicht.removeAttribute('data-laeuft'));
-      audio.addEventListener('ended', () => gesicht.removeAttribute('data-laeuft'));
-    }
-
-    /* Klick in die Wellenform springt an die Stelle — wie im Messenger.
-       Erst nach dem Laden der Länge, sonst wäre der Sprung geraten. */
     welle.addEventListener('click', (e) => {
       if (!audio.duration) return;
       const kasten = welle.getBoundingClientRect();
       audio.currentTime = ((e.clientX - kasten.left) / kasten.width) * audio.duration;
       zeichne();
     });
+
+    const gesicht = document.querySelector<HTMLElement>('[data-sn-gesicht]');
+    if (gesicht) {
+      gesicht.addEventListener('click', () => knopf.click());
+      audio.addEventListener('play',  () => gesicht.setAttribute('data-laeuft', ''));
+      audio.addEventListener('pause', () => gesicht.removeAttribute('data-laeuft'));
+      audio.addEventListener('ended', () => gesicht.removeAttribute('data-laeuft'));
+    }
   }
 </script>

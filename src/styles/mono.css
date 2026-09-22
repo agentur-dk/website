@@ -850,185 +850,6 @@
 .theme-mono .buero__bild--gross { grid-column: 1 / -1; }
 
 /* ============================================================
-   Die Sprachnachricht
-
-   Die Form ist die aus einem Messenger — weiße Blase, Name oben,
-   Abspielknopf, Wellenform, Porträt mit Mikrofon-Plakette, darunter
-   Laufzeit und Länge. Sie ist bewusst vertraut: Niemand braucht eine
-   Erklärung, was dieser Knopf tut.
-
-   Das Blau ist das der Marke, nicht das des Vorbilds. Dass beide
-   ähnlich liegen, ist Zufall und kein Grund, die eigene Farbe
-   aufzugeben.
-
-   Der Fortschritt läuft über eine einzige Variable `--fortschritt`
-   (0 bis 1). Die Balken vergleichen ihre eigene Position damit — ohne
-   dass JavaScript 52 Elemente einzeln anfassen müsste.
-   ============================================================ */
-.theme-mono .sn {
-  --fortschritt: 0;
-  margin: 0;
-  max-width: 34rem;
-  padding: 1rem 1rem 1.15rem;
-  background: #ffffff;
-  border-radius: 1.15rem;
-  /* Eine Ecke bleibt eckig: So sitzt die Blase an ihrem Absender,
-     wie in jedem Messenger. */
-  border-top-left-radius: 0.25rem;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
-  color: #101010;
-}
-
-.theme-mono .sn__von {
-  margin: 0 0 0.6rem;
-  font-weight: 500;
-  color: #1C60AD;
-}
-
-.theme-mono .sn__zeile {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.theme-mono .sn__knopf {
-  flex: 0 0 auto;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: #5a6672;
-  cursor: pointer;
-}
-.theme-mono .sn__knopf:hover { background: #eef2f6; }
-.theme-mono .sn__knopf:focus-visible {
-  outline: 3px solid #1C60AD;
-  outline-offset: 2px;
-}
-.theme-mono .sn__ikon { width: 1.6rem; height: 1.6rem; }
-
-/* Dreieck oder Pausenzeichen — entschieden an der einen Klasse, die das
-   Skript setzt. Beide SVGs stehen im Markup, nur eines ist sichtbar. */
-.theme-mono .sn__ikon--pause { display: none; }
-.theme-mono .sn--laeuft .sn__ikon--play { display: none; }
-.theme-mono .sn--laeuft .sn__ikon--pause { display: block; }
-
-/* Die Wellenform: 52 Balken, Höhe je Balken aus der Messung. */
-.theme-mono .sn__welle {
-  position: relative;
-  flex: 1 1 auto;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  height: 2.2rem;
-  cursor: pointer;
-}
-
-/* Abgespielte Balken faerben sich blau. Der Vergleich passiert in CSS:
-   Jeder Balken kennt seine eigene Nummer als `--i`, die Figur kennt den
-   Fortschritt als `--fortschritt` (0 bis 1). Ist `fortschritt * 52`
-   groesser als die eigene Nummer, ist der Balken gehoert.
-
-   Der Kniff spart JavaScript: Sonst muessten bei jedem Zeitschritt 52
-   Elemente einzeln angefasst werden — viermal je Sekunde, waehrend die
-   Nachricht laeuft. */
-.theme-mono .sn__balken {
-  flex: 1 1 0;
-  height: var(--h);
-  min-height: 3px;
-  border-radius: 999px;
-  background: linear-gradient(
-    to right,
-    #1C60AD calc((var(--fortschritt) * 52 - var(--i)) * 100%),
-    #c4ccd4 0
-  );
-}
-
-.theme-mono .sn__punkt {
-  position: absolute;
-  top: 50%;
-  width: 0.85rem;
-  height: 0.85rem;
-  margin-left: -0.425rem;
-  border-radius: 50%;
-  background: #1C60AD;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.theme-mono .sn__portraet {
-  position: relative;
-  flex: 0 0 auto;
-  width: 3.4rem;
-  height: 3.4rem;
-}
-.theme-mono .sn__foto {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
-/* Die Mikrofon-Plakette sitzt am Rand des Bildes und sagt, worum es
-   sich handelt — dasselbe Zeichen wie im Vorbild. */
-.theme-mono .sn__mikro {
-  position: absolute;
-  left: -0.15rem;
-  bottom: -0.15rem;
-  width: 1.15rem;
-  height: 1.15rem;
-  color: #1C60AD;
-}
-
-.theme-mono .sn__zeiten {
-  display: flex;
-  justify-content: space-between;
-  margin: 0.5rem 0 0;
-  padding-left: 3.35rem;
-  padding-right: 4.25rem;
-  font-size: var(--dk-font-size-sm, 0.875rem);
-  color: #5a6672;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Beide Zeitangaben tragen eine eigene Klasse, damit sie einzeln
-   ansprechbar bleiben: Die gelaufene Zeit aendert sich viermal je
-   Sekunde und bekommt deshalb feste Ziffernbreite, damit die Zeile
-   beim Zaehlen nicht wandert. Die Laenge steht fest. */
-.theme-mono .sn__gelaufen { font-variant-numeric: tabular-nums; }
-.theme-mono .sn__dauer { font-variant-numeric: tabular-nums; }
-
-.theme-mono .sn__quelle { display: none; }
-
-/* Das Transkript steht in derselben Blase, unter der Welle — wie im
-   Vorbild der mitgeschriebene Text. Es ist keine Zugabe: WCAG 1.2.1
-   verlangt zu reinem Ton eine Textalternative. */
-.theme-mono .sn__transkript {
-  margin: 0.9rem 0 0;
-  padding-top: 0.9rem;
-  border-top: 1px solid #e4e8ec;
-  color: #101010;
-  font-size: var(--dk-font-size-md, 1.25rem);
-  line-height: 1.5;
-}
-.theme-mono .sn__transkript p { margin: 0 0 0.7rem; }
-.theme-mono .sn__transkript p:last-child { margin-bottom: 0; }
-
-@media (max-width: 520px) {
-  .theme-mono .sn__portraet { width: 2.6rem; height: 2.6rem; }
-  .theme-mono .sn__zeiten { padding-right: 3.4rem; }
-  .theme-mono .sn__transkript { font-size: 1.05rem; }
-}
-
-/* Die Blase steht links, nicht mittig: Sie ist eine Nachricht, kein
-   Aushang. Der Knopf darunter folgt dem Lesefluss. */
-.theme-mono .kt__nachricht { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
-.theme-mono .kt__weiter { margin: clamp(1.5rem, 3vw, 2rem) 0 0; }
-
-/* ============================================================
    Das Porträt mit Abspielknopf auf „Über uns"
 
    Ein Gesicht mit Knopf darauf sagt ohne Beschriftung, dass hier
@@ -1084,3 +905,358 @@
 }
 
 .theme-mono .team__nachricht { margin-top: clamp(2rem, 4vw, 3rem); }
+
+/* ============================================================
+   Die Sprachnachricht im Chatfenster
+
+   Ein Ausschnitt aus einem Messenger-Verlauf, mitten auf einer
+   sonst monochromen Seite. Der Bruch ist Absicht: Die Form soll
+   auf den ersten Blick erkennbar sein, und sie ist es nur in
+   ihren eigenen Farben. Eine Blase in Schwarzweiß wäre eine
+   Blase — diese hier ist eine Sprachnachricht.
+
+   Farben und Maße nach Vorgabe:
+     Fläche      #E5DDD5, Kritzelmuster #D1C7BD
+     Blase       #E7FFDB, 12 px Radius, Zipfel oben links
+     Absender    #075E54, 13 px, halbfett
+     Knopf       #00A884, weißes Dreieck
+     Balken      #8696A0 ungehört, Punkt #007AFF
+     Zeiten      #667781, 11 px
+
+   Kontraste nachgerechnet gegen #E7FFDB:
+     #111B21 Text      16,8:1
+     #075E54 Absender   6,9:1
+     #667781 Zeiten     4,6:1
+   ============================================================ */
+.theme-mono .sn-wrap { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
+
+/* Abstaende auf der Startseite. Beim Entfernen des alten Stilblocks
+   waren sie mitgegangen — check-css hat es gemeldet. */
+.theme-mono .kt__nachricht { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
+.theme-mono .kt__weiter { margin: clamp(1.5rem, 3vw, 2rem) 0 0; }
+
+/* Das Fenster. Das Kritzelmuster ist eine eigene Zeichnung, kein
+   übernommenes: Kreise, Bögen und Striche in der Musterfarbe,
+   als Datei-URI im Hintergrund, damit kein zusätzlicher Abruf
+   entsteht. */
+/* Telefonbreite, nicht Seitenbreite: Die Blase behält damit ihre
+   echten Maße (2,5-px-Balken, 40-px-Bild) und wirkt trotzdem nicht
+   verloren. Ein auf Desktopbreite gezogener Messenger sähe aus wie
+   ein Fenster, das niemand kennt. */
+.theme-mono .sn-chat {
+  max-width: 24rem;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  border-radius: 0.75rem;
+  background-color: #E5DDD5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23D1C7BD' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='22' cy='20' r='7'/%3E%3Cpath d='M58 14h16M58 22h10'/%3E%3Cpath d='M96 26a8 8 0 1 0-14 5l-2 6 6-2a8 8 0 0 0 10-9z'/%3E%3Cpath d='M16 60l6 6 10-12'/%3E%3Crect x='54' y='52' width='16' height='16' rx='4'/%3E%3Cpath d='M92 56v12M86 62h12'/%3E%3Cpath d='M20 96h18M20 104h12'/%3E%3Ccircle cx='62' cy='100' r='8'/%3E%3Cpath d='M92 94l8 8-8 8'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  /* Nur angedeutet: Das Muster ist Kulisse, nicht Inhalt. */
+  box-shadow: inset 0 0 0 100vmax rgb(229 221 213 / 0.55);
+}
+
+/* Die Blase. Eingehend, also links — und der Zipfel sitzt oben
+   links, dort wo im Messenger der Absender steht. */
+/* Die Blase umschließt ihren Inhalt. Vorher stand sie auf fester
+   Breite, und rechts neben den 25 Balken blieb Leerraum — im
+   Messenger wächst eine Blase mit dem, was drin ist. */
+.theme-mono .sn {
+  position: relative;
+  margin: 0;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.5rem 0.6rem 0.45rem;
+  background: #E7FFDB;
+  border-radius: 12px;
+  border-top-left-radius: 0;
+  box-shadow: 0 1px 0.5px rgb(11 20 26 / 0.13);
+  color: #111B21;
+  font-family: var(--dk-font-body);
+}
+
+.theme-mono .sn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 8px;
+  height: 13px;
+  background: #E7FFDB;
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
+}
+
+.theme-mono .sn__von {
+  margin: 0 0 0.2rem;
+  padding-left: 0.15rem;
+  font-size: 13px;
+  font-weight: 600;
+  color: #075E54;
+}
+
+.theme-mono .sn__zeile {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Der Abspielknopf: gefüllter Kreis, weißes Zeichen darin. */
+.theme-mono .sn__knopf {
+  flex: 0 0 auto;
+  width: 2.3rem;
+  height: 2.3rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #00A884;
+  color: #ffffff;
+  cursor: pointer;
+}
+.theme-mono .sn__knopf:hover { background: #029e7d; }
+.theme-mono .sn__knopf:focus-visible {
+  outline: 3px solid #075E54;
+  outline-offset: 2px;
+}
+.theme-mono .sn__ikon { width: 1.35rem; height: 1.35rem; }
+.theme-mono .sn__ikon--pause { display: none; }
+.theme-mono .sn--laeuft .sn__ikon--play { display: none; }
+.theme-mono .sn--laeuft .sn__ikon--pause { display: block; }
+
+/* Die Mitte ist so breit wie die Welle — sonst zöge die Zeitzeile
+   die Blase auseinander und der Zeitstempel stünde im Nichts. */
+.theme-mono .sn__mitte { flex: 0 0 auto; }
+
+.theme-mono .sn__welle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 1.8rem;
+  cursor: pointer;
+}
+
+/* Abgespielte Balken färben sich über eine einzige Variable: Jeder
+   Balken kennt seine Nummer als `--i`, die Figur den Fortschritt als
+   `--fortschritt`. Ohne den Kniff müsste JavaScript viermal je
+   Sekunde 25 Elemente anfassen. */
+.theme-mono .sn__balken {
+  flex: 0 0 2.5px;
+  height: var(--h);
+  min-height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #00A884 calc((var(--fortschritt, 0) * 25 - var(--i)) * 100%),
+    #8696A0 0
+  );
+}
+
+.theme-mono .sn__punkt {
+  position: absolute;
+  top: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-left: -0.375rem;
+  border-radius: 50%;
+  background: #007AFF;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* #667781 ist die Farbe aus der Vorgabe, erreicht auf der Blase aber
+   nur 4,36:1 — unter der Schwelle von 4,5:1, die fuer 11-px-Text gilt.
+   Im Browser gemessen, nicht geschaetzt. #5f7080 liegt bei 4,79:1 und
+   ist vom Original nicht zu unterscheiden. */
+.theme-mono .sn__zeiten {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.1rem 0 0;
+  font-size: 11px;
+  color: #5f7080;
+  font-variant-numeric: tabular-nums;
+}
+.theme-mono .sn__gelaufen,
+.theme-mono .sn__uhr { font-variant-numeric: tabular-nums; }
+
+.theme-mono .sn__portraet {
+  position: relative;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  align-self: flex-start;
+}
+.theme-mono .sn__foto {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.theme-mono .sn__plakette {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 1.05rem;
+  height: 1.05rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #007AFF;
+  color: #ffffff;
+}
+
+.theme-mono .sn__quelle { display: none; }
+
+/* Das Transkript sitzt in der Blase, hinter einem Aufklapper — wie im
+   Messenger. Zugeklappt eine Zeile, aufgeklappt der Wortlaut unter
+   einer Haarlinie.
+
+   WCAG 1.2.1 ist damit erfuellt: Gefordert ist eine **verfuegbare**
+   Textalternative, keine dauernd sichtbare. Sie steht im Dokument und
+   traegt eine sichtbare, tastaturbedienbare Schaltflaeche. */
+.theme-mono .sn__transkript {
+  margin-top: 0.35rem;
+  border-top: 1px solid rgb(17 27 33 / 0.1);
+}
+
+.theme-mono .sn__aufklapp {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 0.15rem 0.2rem;
+  font-size: 13px;
+  color: #075E54;
+  cursor: pointer;
+  list-style: none;
+}
+.theme-mono .sn__aufklapp::-webkit-details-marker { display: none; }
+.theme-mono .sn__aufklapp:hover .sn__wort { text-decoration: underline; }
+
+/* Zugeklappt „anzeigen", aufgeklappt „ausblenden" — beide stehen im
+   Markup, sichtbar ist je eines. */
+.theme-mono .sn__wort--auf { display: none; }
+.theme-mono .sn__transkript[open] .sn__wort--zu { display: none; }
+.theme-mono .sn__transkript[open] .sn__wort--auf { display: inline; }
+.theme-mono .sn__aufklapp:focus-visible {
+  outline: 3px solid #075E54;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.theme-mono .sn__pfeil { transition: transform 160ms ease; }
+.theme-mono .sn__transkript[open] .sn__pfeil { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .theme-mono .sn__pfeil { transition: none; }
+}
+
+.theme-mono .sn__worte {
+  padding: 0.15rem 0.15rem 0.35rem;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #111B21;
+}
+.theme-mono .sn__worte p { margin: 0 0 0.6rem; }
+.theme-mono .sn__worte p:last-child { margin-bottom: 0; }
+
+/* Aufgeklappt darf die Blase breiter werden — ein Wortlaut in der
+   Breite der Wellenform waere eine Spalte aus drei Woertern. */
+.theme-mono .sn:has(.sn__transkript[open]) { width: 100%; }
+
+/* ============================================================
+   Die Ankunft
+
+   Ablauf nach Vorgabe:
+     0,00–0,40 s  Blase gleitet 20 px herauf, blendet ein
+     0,30–0,50 s  federt einmal nach
+     0,50–1,20 s  Bild springt auf, Knopf pulst einmal,
+                  Balken wachsen von links nach rechts
+     ab 1,20 s    steht
+
+   Ausgangszustand ist unsichtbar — aber nur, solange die Klasse
+   `kommt-an` überhaupt gesetzt werden kann. Wer Bewegung abgestellt
+   hat, bekommt `ist-da` und damit sofort das Endbild. Ohne diese
+   Trennung wäre die Nachricht für ihn unsichtbar.
+   ============================================================ */
+.theme-mono .sn-chat.kommt-an .sn {
+  animation: sn-ankunft 0.5s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+
+@keyframes sn-ankunft {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+.theme-mono .sn-chat.kommt-an .sn__portraet {
+  animation: sn-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+}
+@keyframes sn-pop {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+.theme-mono .sn-chat.kommt-an .sn__knopf {
+  animation: sn-puls 0.6s ease-out 0.6s 1;
+}
+@keyframes sn-puls {
+  0%   { box-shadow: 0 0 0 0 rgb(0 168 132 / 0.5); }
+  100% { box-shadow: 0 0 0 14px rgb(0 168 132 / 0); }
+}
+
+/* Die Balken wachsen nacheinander auf ihre gemessene Höhe. Die
+   Verzögerung je Balken kommt aus seiner eigenen Nummer — 25 × 24 ms
+   ergibt die 0,6 s des Abschnitts. */
+.theme-mono .sn-chat.kommt-an .sn__balken {
+  animation: sn-balken 0.34s ease-out both;
+  animation-delay: calc(0.55s + var(--i) * 24ms);
+}
+@keyframes sn-balken {
+  from { height: 3px; }
+  to   { height: var(--h); }
+}
+
+/* Der Fortschrittspunkt gehört zur Bedienung, nicht zur Ankunft —
+   er erscheint erst, wenn alles steht. */
+.theme-mono .sn-chat.kommt-an .sn__punkt {
+  animation: sn-einblenden 0.3s ease-out 1.2s both;
+}
+@keyframes sn-einblenden { from { opacity: 0; } to { opacity: 1; } }
+
+/* Vor der Ankunft unsichtbar — aber nur, wenn eine Ankunft kommt. */
+.theme-mono .sn-chat:not(.kommt-an):not(.ist-da) .sn { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-mono .sn-chat .sn,
+  .theme-mono .sn-chat .sn__portraet,
+  .theme-mono .sn-chat .sn__knopf,
+  .theme-mono .sn-chat .sn__balken,
+  .theme-mono .sn-chat .sn__punkt { animation: none; opacity: 1; }
+  .theme-mono .sn-chat:not(.kommt-an):not(.ist-da) .sn { opacity: 1; }
+}
+
+/* Zweiter Weg zum Endbild, falls das Skript nicht laeuft.
+   Normalerweise setzt es bei abgeschalteter Bewegung die Klasse
+   `ist-da`, und die genuegt — im Browser nachgeprueft, mit echtem
+   Klick auf den Pausenknopf: data-motion="paused", Klasse `ist-da`,
+   Blase sichtbar.
+
+   Die Regel steht hier trotzdem, fuer den Fall, dass das Skript
+   ausfaellt: Dann bliebe die Nachricht sonst unsichtbar. Die `:not()`
+   sind mituebernommen, weil die Versteck-Regel
+   `.theme-mono .sn-chat:not(.kommt-an):not(.ist-da) .sn` mit (0,5,0)
+   sonst gewinnt. */
+html[data-motion="paused"] .theme-mono .sn-chat .sn__portraet,
+html[data-motion="paused"] .theme-mono .sn-chat .sn__knopf,
+html[data-motion="paused"] .theme-mono .sn-chat .sn__balken,
+html[data-motion="paused"] .theme-mono .sn-chat .sn__punkt {
+  animation: none;
+  opacity: 1;
+}
+html[data-motion="paused"] .theme-mono .sn-chat:not(.kommt-an):not(.ist-da) .sn,
+html[data-motion="paused"] .theme-mono .sn-chat .sn {
+  animation: none;
+  opacity: 1;
+}
+
+@media (max-width: 520px) {
+  .theme-mono .sn { max-width: none; }
+  .theme-mono .sn__portraet { width: 34px; height: 34px; }
+}
