@@ -27,7 +27,8 @@
     "check:icons": "node tools/check-icons.mjs",
     "check:php": "node tools/check-php.mjs",
     "check:e2e": "node tools/e2e.mjs",
-    "check:shell": "node tools/check-shell.mjs"
+    "check:shell": "node tools/check-shell.mjs",
+    "check:formular": "node tools/check-formular.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

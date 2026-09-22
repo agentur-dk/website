@@ -58,7 +58,7 @@ jobs:
       - name: CNAME aus dem Preview-Build entfernen
         run: rm -f dist/CNAME
 
-      # Diese drei Prüfungen arbeiten auf dist/ und brauchen keinen Browser.
+      # Diese vier Prüfungen arbeiten auf dist/ und brauchen keinen Browser.
       - name: Interne Links
         run: npm run check:links
 
@@ -67,6 +67,12 @@ jobs:
 
       - name: CSS-Klassen
         run: npm run check:css
+
+      # Muss NACH dem Build laufen: prüft die gebauten Formulare gegen
+      # die Feldnamen in send.php. Stand zuerst als Unit-Test in src/lib/
+      # und ließ fünf Deployments scheitern — dort gibt es kein dist/.
+      - name: Formularfelder gegen den Endpunkt
+        run: npm run check:formular
 
       - uses: actions/upload-pages-artifact@v3
         with:
