@@ -124,12 +124,6 @@
   text-wrap: balance;
   margin: 1.75rem 0 1.5rem;
 }
-/* Der zweite Halbsatz derselben Zeile, nur heller: Headline und
-   Subheadline in einem Satz statt in zwei Elementen. */
-.theme-mono .hero__headline-soft {
-  color: var(--color-text-muted);
-}
-
 .theme-mono .section-title,
 .theme-mono .schwerpunkte-section__heading {
   font-size: clamp(2.4rem, 5.52vw, 3.675rem);
