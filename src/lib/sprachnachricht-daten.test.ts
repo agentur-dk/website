@@ -57,9 +57,51 @@ describe('Sprachnachrichten', () => {
     });
   }
 
-  it('die lange Aufnahme hat ihr Transkript', () => {
-    expect(LANG.transkript.length).toBeGreaterThan(0);
-  });
+  /*
+   * Die Sperre gegen eine Aufnahme ohne Wortlaut.
+   *
+   * WCAG 1.2.1 ist Stufe A: Zu reinem Ton MUSS eine gleichwertige
+   * Textalternative da sein. Etwas, das nicht ausgeliefert werden darf,
+   * gehoert nicht in die Zustaendigkeit der Aufmerksamkeit, sondern in
+   * einen Test.
+   *
+   * „Ueber uns" zeigt zusaetzlich einen ehrlichen Zwischenstand, wenn
+   * die Liste leer ist. Das ist keine Dopplung: Der Test greift beim
+   * Ausliefern, der Zwischenstand beim Entwickeln — `npm run dev`
+   * fuehrt keine Tests aus, und in der Minute zwischen neuer Datei und
+   * eingetragenem Text soll die Seite trotzdem nichts Falsches sagen.
+   */
+  for (const [name, a] of AUFNAHMEN) {
+    it(`${name} hat eine Textalternative (WCAG 1.2.1, Stufe A)`, () => {
+      expect(
+        a.transkript.length,
+        `${name} (${a.datei}) hat kein Transkript.\n\n` +
+        `Zu einer reinen Tonaufnahme verlangt WCAG 1.2.1 eine\n` +
+        `gleichwertige Textalternative — Stufe A, also das Mindeste.\n` +
+        `Wortlaut in src/data/sprachnachricht.ts bei ${name}.transkript\n` +
+        `eintragen. Nicht sinngemaess: abgeschrieben, wie gesprochen.`,
+      ).toBeGreaterThan(0);
+    });
+
+    it(`${name}: das Transkript ist fuer diese Laenge plausibel`, () => {
+      /* Grobe Gegenprobe gegen das Versehen, das Transkript der einen
+         Aufnahme unter die andere zu setzen. Deutsche Rede liegt bei
+         rund 100-180 Wort je Minute; die Grenzen hier sind weit genug,
+         dass langsames oder schnelles Sprechen nicht anschlaegt, und
+         eng genug, dass 33 Sekunden Text unter 8 Sekunden Ton
+         auffallen. */
+      const woerter = a.transkript.join(' ').split(/\s+/).filter(Boolean).length;
+      const jeMinute = (woerter / a.dauerSekunden) * 60;
+      expect(
+        jeMinute,
+        `${name}: ${woerter} Woerter auf ${a.dauerSekunden} s sind ` +
+        `${Math.round(jeMinute)} Woerter je Minute.\n\n` +
+        `Das liegt ausserhalb dessen, was ein Mensch spricht (60-260).\n` +
+        `Wahrscheinlich steht hier das Transkript einer anderen Aufnahme.`,
+      ).toBeGreaterThan(60);
+      expect(jeMinute).toBeLessThan(260);
+    });
+  }
 
   it('die Wellenform hat 25 Balken, jeder zwischen 20 und 100', () => {
     expect(WELLENFORM).toHaveLength(25);

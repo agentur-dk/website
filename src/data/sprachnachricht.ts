@@ -75,19 +75,18 @@ export const KURZ: Aufnahme = {
   bytes: 155279,
   dauerSekunden: 8,
   /*
-   * NOCH LEER — und das ist ein bekannter, sichtbarer Zustand, kein
-   * Versehen. Der Wortlaut liegt nur als Ton vor; abgeschrieben hat ihn
-   * noch niemand.
+   * Acht Sekunden, ein Atemzug — deshalb ein Absatz und nicht drei.
+   * Vom Sprecher selbst geliefert (23.09.2026).
    *
-   * Solange die Liste leer ist, zeigt „Über uns“ an der Stelle des
-   * Transkripts einen Verweis auf die Startseite, wo die ausführliche
-   * Nachricht samt Wortlaut steht. Das ist nach WCAG 1.2.1 noch keine
-   * gleichwertige Alternative FÜR DIESE Aufnahme — es ist der ehrlichste
-   * Zwischenstand, den es ohne den Text gibt, und er behauptet nichts
-   * Falsches. Sobald der Wortlaut da ist, fällt der Verweis von selbst
-   * weg: Die Seite fragt die Liste, nicht einen Schalter.
+   * Die Anführungszeichen um „Termin vereinbaren“ stehen nicht im Ton,
+   * sondern im Text: Gesprochen ist die Beschriftung eines Knopfes vom
+   * Satz zu unterscheiden, gelesen nicht. Sie machen sichtbar, was die
+   * Stimme betont — genau das ist die Aufgabe einer Textalternative.
+   * Der Knopf steht in derselben Karte, direkt darunter.
    */
-  transkript: [],
+  transkript: [
+    'Danke, dass Sie sich über uns informieren. Wir freuen uns, Sie kennenzulernen. Ein Klick auf „Termin vereinbaren“ und wir hören uns in den kommenden Tagen.',
+  ],
 };
 
 /**
