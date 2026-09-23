@@ -294,6 +294,22 @@ const base = import.meta.env.BASE_URL;
     letter-spacing: inherit;
     line-height: inherit;
     cursor: pointer;
+    /* WCAG 2.5.8 verlangt 24 × 24 px Zielfläche. Bei 13 px Schrift misst
+       die Zeile 21 px — zu wenig. Die Links daneben fallen unter die
+       Inline-Ausnahme des Kriteriums, ein `<button>` nicht.
+
+       Die drei Pixel oben und unten sind unsichtbar: Der Grund ist
+       durchsichtig, der Text steht weiter auf einer Linie mit den
+       Links. Es wächst die Fläche, nicht das Aussehen.
+
+       Der Fehler entstand hier beim Entfernen von `font: inherit`: Die
+       Kurzform hatte die Schrift auf 19,2 px gebläht, und mit ihr war
+       die Zeile zufällig hoch genug. Eine Regel kann falsch sein und
+       trotzdem etwas Richtiges bewirken — beim Aufräumen fällt das
+       Zweite mit weg. */
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
   }
 </style>
 
