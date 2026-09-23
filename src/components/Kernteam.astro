@@ -19,7 +19,7 @@
  * Grund, warum man einer Aufnahme mehr glaubt als einem Werbetext.
  */
 import Sprachnachricht from './Sprachnachricht.astro';
-import { TRANSKRIPT } from '../data/sprachnachricht';
+import { LANG } from '../data/sprachnachricht';
 
 const base = import.meta.env.BASE_URL;
 
@@ -46,7 +46,7 @@ const base = import.meta.env.BASE_URL;
         </p>
       </div>
 
-      <Sprachnachricht transkript={TRANSKRIPT} class="kt__nachricht" />
+      <Sprachnachricht aufnahme={LANG} class="kt__nachricht" />
 
       <!--
         Der Knopf steht als eigenes Rasterfeld und nicht im Textblock:

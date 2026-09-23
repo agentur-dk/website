@@ -9,7 +9,8 @@ import CtaSection from '../components/CtaSection.astro';
 import Icon from '../components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import portraet from '../assets/team/daniel-kontelis.jpg';
-import { TRANSKRIPT, DATEI } from '../data/sprachnachricht';
+import { KURZ, LANG } from '../data/sprachnachricht';
+import { siteConfig } from '../config/site.config';
 import bueroDom from '../assets/buero/koelner-dom-suedstadt.jpg';
 import bueroEingang from '../assets/buero/eingang.jpg';
 import bueroRaum from '../assets/buero/besprechungsraum.jpg';
@@ -158,19 +159,22 @@ const base = import.meta.env.BASE_URL;
               Chatblase der Startseite kommt auf dieser Seite nicht
               noch einmal vor. Sie waere dasselbe zweimal.
 
-              Dieselbe Datei, dasselbe Transkript, zwei Auftritte. Die
-              Verdrahtung liegt fuer beide in src/lib/sprachnachricht.ts.
+              Es ist die KURZE Aufnahme, nicht die der Startseite: acht
+              Sekunden statt dreiunddreissig. Beide Auftritte teilen sich
+              die Verdrahtung in src/lib/sprachnachricht.ts, aber jede
+              Aufnahme traegt ihren eigenen Wortlaut — src/data/
+              sprachnachricht.ts haelt beides zusammen, ein Test
+              dazwischen.
             -->
             <span class="team__bild" data-sprachnachricht>
               <Image src={portraet} alt="Daniel Kontelis" width={200} height={200}
                      class="team__portraet" loading="lazy" />
               <button type="button" class="team__play" data-sn-knopf
-                      aria-label="Sprachnachricht von Daniel Kontelis abspielen">
+                      aria-label={`Sprachnachricht von Daniel Kontelis abspielen, ${KURZ.dauerSekunden} Sekunden`}>
                 <Icon name="play" size={24} class="team__ikon team__ikon--play" />
                 <Icon name="pause" size={24} class="team__ikon team__ikon--pause" />
               </button>
-              <audio data-sn-audio preload="none"
-                     src={`${base}${DATEI}`}></audio>
+              <audio data-sn-audio preload="none" src={`${base}${KURZ.datei}`}></audio>
             </span>
             <figcaption class="team__unterschrift">
               <p class="team__name">Daniel Kontelis</p>
@@ -178,6 +182,25 @@ const base = import.meta.env.BASE_URL;
               <p class="team__kontakt">
                 <a href="tel:+4922198655229">+49 221 986 55 229</a><br />
                 <a href="mailto:mail@dk-dk.de">mail@dk-dk.de</a>
+              </p>
+              <!--
+                Der dritte Weg neben Telefon und Mail, und der einzige,
+                der zu einem festen Zeitpunkt fuehrt. Er steht in der
+                Karte, weil dort das Gesicht und die Stimme sind: Wer
+                gerade acht Sekunden zugehoert hat, ist der Buchung
+                naeher als drei Bildschirme weiter unten.
+
+                Calendly wird VERLINKT, nicht eingebettet. Ein iframe
+                laedt Skripte und uebertraegt die IP, bevor jemand
+                zugestimmt hat — § 25 TDDDG. Die Begruendung steht bei
+                `calendly` in src/config/site.config.ts.
+              -->
+              <p class="team__termin">
+                <a href={siteConfig.contact.calendly} class="btn btn--primary btn--full"
+                   target="_blank" rel="noopener noreferrer">
+                  Termin vereinbaren
+                  <span class="u-sr-only">(öffnet Calendly in einem neuen Tab)</span>
+                </a>
               </p>
             </figcaption>
           </figure>
@@ -206,17 +229,33 @@ const base = import.meta.env.BASE_URL;
             Hier in der Schrift der Seite, nicht im Messenger-Gewand:
             Die Blase steht auf der Startseite, und zweimal dasselbe
             Bild waere einmal zu viel.
+
+            Die Seite fragt den Datensatz, nicht einen Schalter: Liegt
+            fuer diese Aufnahme ein Wortlaut vor, steht er hier. Liegt
+            keiner vor, steht hier der Verweis darunter — und sobald
+            jemand den Wortlaut eintraegt, verschwindet der Verweis von
+            selbst. Ein Transkript der FALSCHEN Aufnahme kann auf diesem
+            Weg gar nicht erst entstehen.
           -->
-          <details class="team__transkript">
-            <summary class="team__aufklapp">
-              <span class="team__wort team__wort--zu">Transkript der Sprachnachricht anzeigen</span>
-              <span class="team__wort team__wort--auf">Transkript ausblenden</span>
-              <Icon name="chevron-down" size={16} class="team__pfeil" />
-            </summary>
-            <div class="team__worte">
-              {TRANSKRIPT.map((absatz) => <p>{absatz}</p>)}
-            </div>
-          </details>
+          {KURZ.transkript.length > 0 ? (
+            <details class="team__transkript">
+              <summary class="team__aufklapp">
+                <span class="team__wort team__wort--zu">Transkript der Sprachnachricht anzeigen</span>
+                <span class="team__wort team__wort--auf">Transkript ausblenden</span>
+                <Icon name="chevron-down" size={16} class="team__pfeil" />
+              </summary>
+              <div class="team__worte">
+                {KURZ.transkript.map((absatz) => <p>{absatz}</p>)}
+              </div>
+            </details>
+          ) : (
+            <p class="team__transkript team__transkript--offen">
+              Diese Begrüßung dauert {KURZ.dauerSekunden} Sekunden. Der
+              Wortlaut der <a href={`${base}#kernteam-heading`}>ausführlichen
+              Nachricht auf der Startseite</a> steht dort als Transkript
+              bereit — {LANG.dauerSekunden} Sekunden, zum Mitlesen.
+            </p>
+          )}
         </div>
 
 

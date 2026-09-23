@@ -36,17 +36,19 @@
 import { Image } from 'astro:assets';
 import Icon from './ui/Icon.astro';
 import portraet from '../assets/team/daniel-kontelis.jpg';
-import { WELLENFORM, DAUER_SEKUNDEN } from '../data/sprachnachricht';
+import { WELLENFORM, type Aufnahme } from '../data/sprachnachricht';
 
 interface Props {
-  readonly transkript: readonly string[];
+  /** Datei, Dauer und Wortlaut — aus src/data/sprachnachricht.ts. */
+  readonly aufnahme: Aufnahme;
   readonly class?: string;
 }
 
-const { transkript, class: klasse } = Astro.props;
+const { aufnahme, class: klasse } = Astro.props;
+const { dauerSekunden, transkript } = aufnahme;
 const base = import.meta.env.BASE_URL;
-const datei = `${base}audio/daniel-kontelis-begruessung.mp3`;
-const laenge = `${Math.floor(DAUER_SEKUNDEN / 60)}:${String(DAUER_SEKUNDEN % 60).padStart(2, '0')}`;
+const datei = `${base}${aufnahme.datei}`;
+const laenge = `${Math.floor(dauerSekunden / 60)}:${String(dauerSekunden % 60).padStart(2, '0')}`;
 ---
 
 <div class:list={['sn-wrap', klasse]}>
@@ -64,7 +66,7 @@ const laenge = `${Math.floor(DAUER_SEKUNDEN / 60)}:${String(DAUER_SEKUNDEN % 60)
         <div class="sn__mitte">
           <div class="sn__welle" data-sn-welle role="progressbar"
                aria-label="Fortschritt der Sprachnachricht"
-               aria-valuemin="0" aria-valuemax={DAUER_SEKUNDEN} aria-valuenow="0"
+               aria-valuemin="0" aria-valuemax={dauerSekunden} aria-valuenow="0"
                aria-valuetext="Noch nicht abgespielt">
             {WELLENFORM.map((h, i) => (
               <span class="sn__balken" style={`--h:${h}%;--i:${i}`} aria-hidden="true"></span>

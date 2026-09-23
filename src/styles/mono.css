@@ -917,6 +917,12 @@
   .theme-mono .team__play { transition: none; }
 }
 
+/* Der Termin-Knopf schliesst die Karte ab: Telefon, Mail, fester
+   Termin — drei Wege, der letzte der verbindlichste. Ueber die volle
+   Kartenbreite, damit er als Abschluss liest und nicht als vierte
+   Kontaktzeile. */
+.theme-mono .team__termin { margin: 1.25rem 0 0; }
+
 /* ── Das Transkript auf „Über uns“ ──────────────────────────────────
    In der Schrift der Seite, nicht im Messenger-Gewand: Das Chatfenster
    steht auf der Startseite, und zweimal dasselbe Bild wäre einmal zu
@@ -963,6 +969,16 @@
 }
 .theme-mono .team__worte p { margin: 0 0 0.75rem; }
 .theme-mono .team__worte p:last-child { margin-bottom: 0; }
+
+/* Der Zwischenstand, solange fuer eine Aufnahme kein Wortlaut vorliegt:
+   kein Aufklapper, sondern ein Satz, der sagt, was es gibt. Gleiche
+   Stelle, gleiche Anmutung — nur ohne das Versprechen, dass sich beim
+   Klicken etwas auftut. */
+.theme-mono .team__transkript--offen {
+  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  max-width: 62ch;
+  color: var(--color-text-muted);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .theme-mono .team__pfeil { transition: none; }
