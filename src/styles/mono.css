@@ -1287,6 +1287,39 @@
    Breite der Wellenform waere eine Spalte aus drei Woertern. */
 .theme-mono .sn:has(.sn__transkript[open]) { width: 100%; }
 
+/* ── Untereinander: die Blase mittig und auf 90 Prozent ─────────────
+   Am Schreibtisch steht die Blase links am Zipfel, wie eine eingehende
+   Nachricht das tut, und ist so breit wie ihr Inhalt — rund 226 px.
+
+   Steht das Fenster darunter über die volle Breite, sieht dieselbe
+   Blase verloren aus: 226 px in 342 px, alles links, rechts eine
+   leere Fläche. Deshalb hier mittig und auf 90 Prozent.
+
+   Damit sie dabei nicht hohl wird, wächst die Wellenform mit: Die
+   Spur nimmt den freien Platz (`flex: 1`), und die 25 Balken verteilen
+   sich darin (`space-between`) statt links zusammenzustehen. Ihre
+   Breite bleibt bei 2,5 px — es wächst der Abstand, nicht der Balken.
+   Genau so hält es der Messenger auch.
+
+   Der Fortschritt rechnet weiter richtig: Der Punkt sitzt auf einem
+   Prozentsatz der Spur, und die Einfärbung vergleicht die Nummer des
+   Balkens mit dem Anteil — beides kennt keine Pixel. */
+@media (max-width: 899px) {
+  /* Auch mit offenem Transkript: Sonst sprang die Blase beim Aufklappen
+     von 90 auf 100 Prozent (gemessen 279 → 310 px) und verlor dabei ihre
+     Mitte. Die Regel weiter oben, die fuer das Aufklappen auf volle
+     Breite geht, ist am Schreibtisch richtig — dort ist die Blase sonst
+     nur so breit wie die Wellenform und der Text braeche zu schmal um.
+     Hier ist sie es nicht. */
+  .theme-mono .kt__nachricht .sn,
+  .theme-mono .kt__nachricht .sn:has(.sn__transkript[open]) {
+    width: 90%;
+    margin-inline: auto;
+  }
+  .theme-mono .kt__nachricht .sn__mitte { flex: 1 1 auto; min-width: 0; }
+  .theme-mono .kt__nachricht .sn__welle { justify-content: space-between; }
+}
+
 /* ============================================================
    Die Ankunft
 
