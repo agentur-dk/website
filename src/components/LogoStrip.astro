@@ -11,7 +11,7 @@
  * Fehlt die Datei, setzt die Leiste den Namen. Beides ist so abgestimmt,
  * dass eine gemischte Reihe nicht wie ein Fehler aussieht.
  */
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { kunden } from '../data/kunden';
 
@@ -29,6 +29,58 @@ const base = import.meta.env.BASE_URL;
  *
  * Der Streifen zeigt die Breite, die Fallstudie zeigt die Tiefe.
  */
+/**
+ * Die Eigenmasse einer Bilddatei, in ihren eigenen Einheiten.
+ *
+ * ── Warum das sein muss ───────────────────────────────────────────────
+ * Die Logos laden verzoegert (`loading="lazy"`), und ein noch nicht
+ * geladenes Bild ohne Groessenangabe ist NULL Pixel breit. Die Spur der
+ * Laufschrift ist die Summe ihrer Kinder — sie faengt also schmal an und
+ * waechst, waehrend die Bilder eintreffen.
+ *
+ * Das ist nicht nur ein Sprung im Satz, sondern eine wandernde
+ * Geschwindigkeit: Die Animation verschiebt um -50 % der EIGENEN Breite
+ * in 40 s. Schmale Spur heisst wenige Pixel je Sekunde. Auf einem
+ * schmalen Bildschirm kommt ein grosser Teil der Spur nie ins Sichtfeld,
+ * die Bilder dort laden also gar nicht, und die Leiste bleibt dauerhaft
+ * langsam. Genau das war am Telefon zu sehen.
+ *
+ * Mit `width`/`height` am `<img>` kennt der Browser das Seitenverhaeltnis
+ * vor dem ersten Byte und haelt den Platz frei. Die Spur hat damit von
+ * Anfang an ihre endgueltige Breite.
+ *
+ * Eager laden waere die falsche Antwort: Die sechzehn Dateien wiegen
+ * zusammen 415 kB und stehen direkt unter dem Kopfbereich.
+ */
+function eigenmasse(pfad: string): { breite: number; hoehe: number } {
+  const puffer = readFileSync(pfad);
+
+  if (pfad.endsWith('.svg')) {
+    const kopf = puffer.toString('utf8', 0, 4000);
+    /* viewBox zuerst: Sie steht fast immer da und ist verlaesslicher als
+       width/height, die in Prozent oder Millimetern stehen duerfen. */
+    const kasten = kopf.match(
+      /viewBox\s*=\s*["']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i);
+    if (kasten) return { breite: Number(kasten[1]), hoehe: Number(kasten[2]) };
+    const b = kopf.match(/\bwidth\s*=\s*["']([\d.]+)(?:px)?["']/i);
+    const h = kopf.match(/\bheight\s*=\s*["']([\d.]+)(?:px)?["']/i);
+    if (b && h) return { breite: Number(b[1]), hoehe: Number(h[1]) };
+    throw new Error(
+      `LogoStrip: ${pfad} hat weder viewBox noch width/height in Pixeln. ` +
+      `Ohne Seitenverhaeltnis laeuft die Leiste ungleichmaessig — ` +
+      `viewBox in der Datei ergaenzen.`);
+  }
+
+  /* PNG: Breite und Hoehe stehen im IHDR, ab Byte 16, je vier Bytes. */
+  if (puffer.length > 24 && puffer.readUInt32BE(0) === 0x89504e47) {
+    return { breite: puffer.readUInt32BE(16), hoehe: puffer.readUInt32BE(20) };
+  }
+
+  throw new Error(
+    `LogoStrip: ${pfad} ist weder SVG noch PNG. Die Leiste braucht die ` +
+    `Eigenmasse, um Platz freizuhalten — Datei umwandeln oder ersetzen.`);
+}
+
 const eintraege = kunden.filter((k) => !k.fallstudie).map((k) => {
   if (!k.logo) return { ...k, datei: null };
   const pfad = join('public', 'logos', k.logo);
@@ -39,7 +91,17 @@ const eintraege = kunden.filter((k) => !k.fallstudie).map((k) => {
       `src/data/kunden.ts entfernen.`
     );
   }
-  return { ...k, datei: `${base}logos/${k.logo}` };
+  /* Die Hoehe in Pixeln, wie die CSS sie setzt (1 rem = 16 px). Breite
+     und Hoehe am <img> sind nur das Verhaeltnis — die CSS bestimmt die
+     tatsaechliche Groesse, der Browser rechnet die Breite daraus. */
+  const masse = eigenmasse(pfad);
+  const hoehePx = Math.round((k.hoehe ?? 2.4) * 16);
+  return {
+    ...k,
+    datei: `${base}logos/${k.logo}`,
+    breitePx: Math.round((masse.breite / masse.hoehe) * hoehePx),
+    hoehePx,
+  };
 });
 
 /* Zweiter Durchlauf nur für die nahtlose Schleife. Für Screenreader
@@ -65,6 +127,8 @@ const durchlaeufe = [
                     k.eigeneFarben && 'logo-strip__logo--eigen']}
                   src={k.datei}
                   alt={versteckt ? '' : k.name}
+                  width={k.breitePx}
+                  height={k.hoehePx}
                   loading="lazy"
                   decoding="async"
                   style={`--logo-hoehe: ${k.hoehe ?? 2.4}rem`}
@@ -198,8 +262,19 @@ const durchlaeufe = [
     animation-play-state: paused;
   }
 
-  @media (max-width: 640px) {
-    .logo-strip__track { gap: 3.45rem; }
-    .logo-strip__name  { font-size: 0.9375rem; }
-  }
+  /* Bis zum 23.09.2026 stand hier eine Ausnahme fuer schmale Fenster:
+     kleinerer Abstand, kleinere Wortmarken. Sie hat die Leiste langsamer
+     laufen lassen, ohne dass jemand die Dauer angefasst haette.
+
+     Der Zusammenhang: Die Animation verschiebt die Spur um -50 % IHRER
+     EIGENEN Breite, und zwar in 40 s. Ein kleinerer Abstand macht die
+     Spur schmaler, also sind es in denselben 40 s weniger Pixel.
+     Gemessen: 3686 px Spur und 46,1 px/s ab 641 px Fensterbreite,
+     3266 px Spur und 40,8 px/s darunter — elf Prozent langsamer.
+
+     Die Ausnahme ist weg. Die Leiste laeuft auf jeder Breite gleich,
+     und wer kuenftig den Abstand aendert, aendert damit wieder die
+     Geschwindigkeit: Das ist der Preis einer Dauer in Sekunden statt
+     in Pixeln pro Sekunde, und er ist jetzt wenigstens an einer
+     einzigen Stelle zu zahlen. */
 </style>
