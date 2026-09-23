@@ -95,7 +95,7 @@ export function texte(o: EinwilligungOptionen) {
   return {
     de: {
       consentModal: {
-        title: 'Datenschutz-Einstellungen',
+        title: 'Cookie-Einstellungen',
         description:
           'Wir laden nichts, dem Sie nicht zugestimmt haben. Notwendige '
           + 'Funktionen sind immer aktiv; alles andere entscheiden Sie. '
@@ -115,7 +115,7 @@ export function texte(o: EinwilligungOptionen) {
             name: 'Notwendig',
             description:
               'Für den Betrieb der Seite erforderlich — etwa Ihre '
-              + 'Datenschutz-Einstellungen selbst. Lässt sich nicht abschalten.',
+              + 'Cookie-Einstellungen selbst. Lässt sich nicht abschalten.',
             linkedCategory: 'necessary',
           },
           {

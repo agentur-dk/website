@@ -110,7 +110,7 @@ const base = import.meta.env.BASE_URL;
             kein Link: Es wird nichts aufgerufen, sondern etwas geöffnet.
           */}
           <button type="button" class="footer-link footer-link--sm" data-consent-oeffnen>
-            Datenschutz-Einstellungen
+            Cookie-Einstellungen
           </button>
         </li>
       </ul>
@@ -269,14 +269,30 @@ const base = import.meta.env.BASE_URL;
   }
 
   /* Der Knopf soll wie die Links daneben aussehen, nicht wie ein Knopf.
-     `font: inherit` ist der Teil, den man leicht vergisst: Ohne ihn setzt
-     der Browser seine eigene Schriftgröße, und die Zeile bricht auf. */
+
+     Hier stand `font: inherit`, und es hat genau das Gegenteil bewirkt:
+     Die Kurzform setzt auch die GRÖSSE, und zwar auf die geerbte —
+     `--font-size-base`, also 19,2 px. Damit war „Cookie-Einstellungen"
+     ein Drittel größer als „Impressum" und „Datenschutz" daneben.
+
+     Dass es überhaupt gewinnen konnte, liegt an Astros Bereichsbindung:
+     Sie hängt an JEDEN Selektor ein Attribut. Aus `.footer-legal-list
+     button` (0,1,1) wird damit (0,3,1) und schlägt `.footer-link--sm`
+     (0,2,0) — ohne die Bindung wäre es andersherum. Eine Regel, die im
+     Quelltext harmlos aussieht, gewinnt im gebauten CSS.
+
+     Deshalb hier keine Kurzform mehr, sondern die Eigenschaften, die
+     wirklich gemeint sind. Die Größe bleibt, wo sie hingehört: an der
+     Klasse, die auch die Links daneben tragen. */
   .footer-legal-list button {
     appearance: none;
     background: none;
     border: 0;
     padding: 0;
-    font: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
     cursor: pointer;
   }
 </style>
