@@ -124,6 +124,36 @@ for (const name of benutzt) {
   }
 }
 
+/*
+ * Dynamisch gesetzte Namen: `<Icon name={o.ikon} />`.
+ *
+ * Die Suche oben findet nur `name="literal"`. Der Beratungs-Funnel setzt
+ * seine Icons aber aus einer Datenliste — dort steht der Name als
+ * `ikon: 'globe'` im Datensatz, nie im Markup. Zehn Icons galten deshalb
+ * als unbenutzt, obwohl ihre Pfade im ausgelieferten HTML standen.
+ *
+ * Statt das Muster zu erweitern (und beim naechsten Schreibweise wieder
+ * danebenzuliegen), wird hier die einzige verlaessliche Quelle gefragt:
+ * das gebaute HTML. Steht der Pfad eines Icons darin, benutzt es jemand.
+ *
+ * Nur HINZUFUEGEN, nie wegnehmen: Ein veraltetes dist/ soll keine
+ * Verwendung vortaeuschen, die es im Quelltext nicht mehr gibt — aber
+ * es soll auch keine melden, die es sehr wohl gibt.
+ *
+ * Ein Tippfehler im dynamischen Namen faellt dadurch nicht hier auf,
+ * sondern frueher: Die Datenliste ist auf `IconName` typisiert, und
+ * `astro check` kennt jeden erlaubten Wert.
+ */
+if (existsSync(DIST)) {
+  const gebaut = readdirSync(DIST)
+    .filter((f) => f.endsWith('.html'))
+    .map((f) => readFileSync(join(DIST, f), 'utf8'))
+    .join('');
+  for (const { name, d } of eintraege) {
+    if (!benutzt.has(name) && gebaut.includes(d)) benutzt.add(name);
+  }
+}
+
 // 4. Kein Eintrag ohne Verwendung.
 for (const name of namen) {
   if (!benutzt.has(name)) {

@@ -499,7 +499,18 @@
    Der Akzent muss wechseln: #5090d0 erreicht auf #f3f3f3 nur 3,03:1
    und fällt damit durch. #1C60AD steht ohnehin in der Palette.
    ============================================================ */
-.theme-mono .section--hell {
+/* Zwei Eingaenge, ein Wertesatz.
+
+   `.section--hell` faerbt einen ganzen Abschnitt. `.auf-hell` setzt
+   NUR die Werte — fuer etwas, das auf einem beliebigen Grund steht und
+   trotzdem hell sein soll. Das Anfrageformular ist genau so ein Fall:
+   Es liegt auf der Startseite in einem blauen Abschnitt und auf acht
+   Leistungsseiten ebenso, soll aber ueberall gleich aussehen.
+
+   Abgeschrieben waere der zweite Satz eine zweite Wahrheit — sie liefe
+   auseinander, sobald jemand eine Farbe aendert. */
+.theme-mono .section--hell,
+.theme-mono .auf-hell {
   --color-bg:            #f3f3f3;
   --color-surface:       #ffffff;
   --color-surface-alt:   #eaeaea;
@@ -525,7 +536,11 @@
   --color-primary-on-light:    #1C60AD;
   --color-focus-on-light:      #1C60AD;
   --dk-color-decor-on-light:   #b4b4b4;
+}
 
+/* Die Flaeche nur fuer den Abschnitt: `.auf-hell` bringt seinen eigenen
+   Grund mit (das Formular ist eine weisse Karte). */
+.theme-mono .section--hell {
   background: var(--color-bg);
   color: var(--color-text);
 }
@@ -665,6 +680,47 @@
 
   background: var(--color-bg);
   color: var(--color-text);
+}
+
+/* Kein doppelter Rinnenabstand.
+
+   `.lf-inner` bringt seine eigenen 1,5 rem mit — richtig, solange das
+   Formular einen ganzen Abschnitt fuellt (acht Leistungsseiten). Auf
+   der Startseite steckt es aber in einem `.container`, der die Rinne
+   schon setzt: Aus 342 px wurden 294, und die Auswahlkarten waren dort
+   268 statt 316 px breit. Dasselbe Formular, zwei Breiten.
+
+   Die Regel steht hier und nicht im Bauteil: Astro bindet jeden
+   Selektor an sein Bauteil, und `.container` kommt darin nicht vor —
+   eine dort geschriebene Regel traefe nie. */
+.theme-mono .container .lf-inner { padding-inline: 0; }
+
+/* Was AUF hellem Grund steht, hoert nicht auf den blauen Abschnitt.
+
+   Ohne diese Regel stuende der weisse Knopf des blauen Abschnitts auf
+   der weissen Karte des Formulars — weiss auf weiss. Die doppelte
+   Klasse ist Absicht: `.theme-mono .section--blau .btn--primary` misst
+   (0,3,0), `.theme-mono .auf-hell.auf-hell .btn--primary` misst (0,4,0)
+   und gewinnt unabhaengig von der Reihenfolge im Bauteil. Eine Regel,
+   die nur wegen ihrer Stellung gewinnt, bricht beim naechsten Umbau. */
+.theme-mono .section--blau .auf-hell.auf-hell .btn--primary {
+  background: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+}
+.theme-mono .section--blau .auf-hell.auf-hell .btn--primary:hover,
+.theme-mono .section--blau .auf-hell.auf-hell .btn--primary:focus-visible {
+  background: #14477f;
+  border-color: #14477f;
+}
+.theme-mono .section--blau .auf-hell.auf-hell .btn--secondary,
+.theme-mono .section--blau .auf-hell.auf-hell .btn--ghost {
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+  background: transparent;
+}
+.theme-mono .section--blau .auf-hell.auf-hell :focus-visible {
+  outline-color: var(--color-accent);
 }
 
 /* Der Knopf dreht sich um: weiße Fläche, blaue Schrift. Ein blauer

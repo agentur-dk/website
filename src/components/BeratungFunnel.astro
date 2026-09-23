@@ -20,6 +20,8 @@
  * derselbe Endpunkt, dieselben Honigtöpfe, dieselbe Zeitschranke.
  */
 import { FORM_ENDPOINT, siteConfig } from '../config/site.config';
+import Icon from './ui/Icon.astro';
+import type { IconName } from '../lib/icons';
 const base = import.meta.env.BASE_URL;
 
 interface Props {
@@ -30,19 +32,30 @@ const { page = 'Erstgespräch' } = Astro.props;
 /* Die Fragen. Reihenfolge ist Absicht: vom Anliegen (leicht) über die
    Lage (ehrlich) zum Ziel (konkret) und zur Dringlichkeit (qualifiziert).
    Erst danach die Person. */
-const schritte = [
+interface Option {
+  readonly wert: string;
+  /* Der Typ ist der Sinn der Zeile: Ein Tippfehler im Icon-Namen faellt
+     damit beim Bauen auf und nicht im Browser als leere Stelle. */
+  readonly ikon: IconName;
+  readonly zeile: string;
+}
+
+const schritte: readonly {
+  nr: number; name: string; frage: string; hilfe: string;
+  optionen: readonly Option[];
+}[] = [
   {
     nr: 1,
     name: 'anliegen',
     frage: 'Worum geht es?',
     hilfe: 'Wählen Sie, was am ehesten passt — im Gespräch sortieren wir das genauer.',
     optionen: [
-      { wert: 'Neue Website',            zeile: 'Es gibt noch keine oder sie soll komplett neu' },
-      { wert: 'Website überarbeiten',    zeile: 'Vorhanden, aber nicht mehr zeitgemäß' },
-      { wert: 'Mehr gefunden werden',    zeile: 'Suchmaschinen, KI-Antworten, Sichtbarkeit' },
-      { wert: 'Marke und Erscheinungsbild', zeile: 'Logo, Farben, Auftritt' },
-      { wert: 'KI im Arbeitsalltag',     zeile: 'Anrufe, Termine, wiederkehrende Aufgaben' },
-      { wert: 'Etwas anderes',           zeile: 'Erzählen Sie es uns im letzten Schritt' },
+      { wert: 'Neue Website',            ikon: 'globe',          zeile: 'Es gibt noch keine oder sie soll komplett neu' },
+      { wert: 'Website überarbeiten',    ikon: 'refresh-cw',     zeile: 'Vorhanden, aber nicht mehr zeitgemäß' },
+      { wert: 'Mehr gefunden werden',    ikon: 'search-check',   zeile: 'Suchmaschinen, KI-Antworten, Sichtbarkeit' },
+      { wert: 'Marke und Erscheinungsbild', ikon: 'palette',     zeile: 'Logo, Farben, Auftritt' },
+      { wert: 'KI im Arbeitsalltag',     ikon: 'cpu',            zeile: 'Anrufe, Termine, wiederkehrende Aufgaben' },
+      { wert: 'Etwas anderes',           ikon: 'message-circle', zeile: 'Erzählen Sie es uns im letzten Schritt' },
     ],
   },
   {
@@ -51,10 +64,10 @@ const schritte = [
     frage: 'Wie sieht es heute aus?',
     hilfe: 'Ehrlich ist hier nützlicher als schmeichelhaft.',
     optionen: [
-      { wert: 'Noch keine Website',      zeile: 'Wir fangen bei null an' },
-      { wert: 'In die Jahre gekommen',   zeile: 'Läuft, sieht aber alt aus' },
-      { wert: 'Bringt keine Anfragen',   zeile: 'Sie ist da, es passiert nur nichts' },
-      { wert: 'Läuft gut, soll mehr',    zeile: 'Es funktioniert — und soll wachsen' },
+      { wert: 'Noch keine Website',      ikon: 'plus',           zeile: 'Wir fangen bei null an' },
+      { wert: 'In die Jahre gekommen',   ikon: 'clock',          zeile: 'Läuft, sieht aber alt aus' },
+      { wert: 'Bringt keine Anfragen',   ikon: 'trending-down',  zeile: 'Sie ist da, es passiert nur nichts' },
+      { wert: 'Läuft gut, soll mehr',    ikon: 'trending-up',    zeile: 'Es funktioniert — und soll wachsen' },
     ],
   },
   {
@@ -63,11 +76,11 @@ const schritte = [
     frage: 'Was soll dabei herauskommen?',
     hilfe: 'Das entscheidet, worauf wir die Seite ausrichten.',
     optionen: [
-      { wert: 'Anfragen von Kunden',     zeile: 'Mehr qualifizierte Kontakte' },
-      { wert: 'Termine im Kalender',     zeile: 'Buchungen statt Rückrufbitten' },
-      { wert: 'Bewerbungen',             zeile: 'Mitarbeiter finden' },
-      { wert: 'Verkäufe',                zeile: 'Produkte oder Leistungen online' },
-      { wert: 'Ein Auftritt, der passt', zeile: 'Wiedererkennbar und aktuell' },
+      { wert: 'Anfragen von Kunden',     ikon: 'mail',           zeile: 'Mehr qualifizierte Kontakte' },
+      { wert: 'Termine im Kalender',     ikon: 'calendar',       zeile: 'Buchungen statt Rückrufbitten' },
+      { wert: 'Bewerbungen',             ikon: 'users',          zeile: 'Mitarbeiter finden' },
+      { wert: 'Verkäufe',                ikon: 'shopping-cart',  zeile: 'Produkte oder Leistungen online' },
+      { wert: 'Ein Auftritt, der passt', ikon: 'layers',         zeile: 'Wiedererkennbar und aktuell' },
     ],
   },
   {
@@ -76,10 +89,10 @@ const schritte = [
     frage: 'Wann soll es soweit sein?',
     hilfe: 'Auch „ich schaue mich erst um" ist eine gute Antwort.',
     optionen: [
-      { wert: 'So schnell wie möglich',  zeile: 'Es eilt' },
-      { wert: 'In drei Monaten',         zeile: 'Geplant, aber nicht hektisch' },
-      { wert: 'Dieses Jahr',             zeile: 'Wir bereiten vor' },
-      { wert: 'Ich sammle Informationen', zeile: 'Noch ganz am Anfang' },
+      { wert: 'So schnell wie möglich',  ikon: 'zap',            zeile: 'Es eilt' },
+      { wert: 'In drei Monaten',         ikon: 'hourglass',      zeile: 'Geplant, aber nicht hektisch' },
+      { wert: 'Dieses Jahr',             ikon: 'calendar',       zeile: 'Wir bereiten vor' },
+      { wert: 'Ich sammle Informationen', ikon: 'compass',       zeile: 'Noch ganz am Anfang' },
     ],
   },
 ];
@@ -161,8 +174,20 @@ const schritte = [
                   data-weiter={s.nr < 5 ? String(s.nr + 1) : undefined}
                 />
                 <span class="fkarte__inhalt">
-                  <span class="fkarte__titel">{o.wert}</span>
-                  <span class="fkarte__zeile">{o.zeile}</span>
+                  {/*
+                    Das Icon ist Beiwerk, kein Inhalt: Es steht schon als
+                    Wort daneben. `Icon.astro` setzt deshalb ohnehin
+                    `aria-hidden` — vorgelesen wird nur der Titel und die
+                    Zeile darunter.
+
+                    Als `{/* … *\/}` und nicht als HTML-Kommentar: Der
+                    stand sonst neunzehnmal im ausgelieferten Dokument.
+                  */}
+                  <span class="fkarte__ikon"><Icon name={o.ikon} size={20} /></span>
+                  <span class="fkarte__text">
+                    <span class="fkarte__titel">{o.wert}</span>
+                    <span class="fkarte__zeile">{o.zeile}</span>
+                  </span>
                 </span>
               </label>
             ))}
@@ -317,7 +342,8 @@ const schritte = [
     margin: 0; opacity: 0; cursor: pointer;
   }
   .fkarte__inhalt {
-    display: block; padding: 1rem 1.1rem;
+    display: flex; align-items: flex-start; gap: .7rem;
+    padding: 1rem 1.1rem;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
@@ -333,6 +359,21 @@ const schritte = [
     border-color: var(--color-accent);
     box-shadow: inset 0 0 0 1px var(--color-accent);
   }
+  /* Das Icon sitzt auf der Oberkante der Ueberschrift, nicht auf der
+     Mitte der Karte: Sonst wandert es, sobald eine Erklaerzeile
+     umbricht, und die Reihe steht nicht mehr auf einer Linie.
+     `flex: 0 0 auto` haelt es quadratisch, auch wenn der Titel lang
+     ist. */
+  .fkarte__ikon {
+    flex: 0 0 auto;
+    display: grid; place-items: center;
+    width: 1.5rem; height: 1.5rem;
+    margin-top: .1rem;
+    color: var(--color-text-muted);
+  }
+  .fkarte__radio:checked + .fkarte__inhalt .fkarte__ikon { color: var(--color-accent); }
+  .fkarte__text { min-width: 0; }
+
   .fkarte__titel {
     display: block; font-weight: 700; font-size: 1rem;
     margin-bottom: .15rem;
