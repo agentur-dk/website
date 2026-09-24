@@ -1,0 +1,441 @@
+---
+/**
+ * Unsere Marken — was wir für uns selbst aufgebaut haben.
+ *
+ * ── Warum diese Seite ─────────────────────────────────────────────────
+ * Auf der Startseite steht DU BIST GRIECHE in vier Sätzen als Beleg.
+ * Das reicht, um zu sagen „wir können Reichweite"; es reicht nicht, um
+ * zu zeigen, WIE eine Marke entsteht. Diese Seite zeigt die Teile: die
+ * Idee, die Bausteine, die Jahre. Ein Interessent soll den Aufwand
+ * sehen, nicht nur das Ergebnis.
+ *
+ * ── Woher die Angaben stammen ─────────────────────────────────────────
+ * Nichts hier ist geschätzt.
+ *
+ *   750.000 Follower · 15.000 Streams je Folge · seit 2015
+ *     aus website-referenzen.docx (Stand 21.09.2026), dieselbe Quelle
+ *     wie in EigeneProjekte.astro. Was dort als unbelegt markiert war,
+ *     steht auch hier nicht.
+ *
+ *   Podcastname, Themenfelder
+ *     aus den Suchdaten der Marke (GA4/Search Console, Ausfuhr vom
+ *     28.08.2026): der Pfad `podcast-der-satz-des-pitagyros` und die
+ *     Suchanfragen, über die Menschen tatsächlich auf der Seite landen.
+ *
+ *   aposocial: Claim „Ihre tägliche Dosis Social Media"
+ *     aus dem WordPress-Export der Seite (21.07.2025).
+ *
+ * ── Die Lücken ────────────────────────────────────────────────────────
+ * Was nur Daniel weiß, steht als sichtbare Lücke im Text (.luecke) und
+ * nicht als plausible Erfindung. Das betrifft vor allem den
+ * Podcast-Folgenlink, die Newsletter-Angaben und die Frage, ob
+ * aposocial als eigene Marke oder als Kundenmarke geführt wird — dazu
+ * widersprechen sich die bestehenden Seiten (siehe unten).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Dither from '../components/ui/Dither.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Icon from '../components/ui/Icon.astro';
+
+const base = import.meta.env.BASE_URL;
+
+/** Die Bausteine von DU BIST GRIECHE. */
+const dbgTeile = [
+  {
+    icon: 'code',
+    titel: 'Die Website',
+    text: 'Der Kern seit 2015: täglich neue Inhalte, über zehn Jahrgänge Archiv. Sie trägt die Suchsichtbarkeit, aus der alles andere Reichweite bezieht.',
+  },
+  {
+    icon: 'users',
+    titel: 'Die Agora',
+    text: 'Der Community-Bereich der Plattform. Dort passiert, was eine Marke von einem Magazin unterscheidet: Die Leser reden miteinander, nicht nur mit uns.',
+  },
+  {
+    icon: 'mic',
+    titel: 'Der Podcast',
+    text: '„Der Satz des Pitagyros", zusammen mit Panayota Petridou. 15.000 Streams je Folge — das Format, das der Marke eine Stimme und ein Gesicht gibt.',
+  },
+  {
+    icon: 'mail',
+    titel: 'Der Newsletter',
+    text: 'Der Rückkanal, der niemandem gehört außer uns. Reichweite auf fremden Plattformen ist geliehen; eine E-Mail-Liste ist es nicht.',
+  },
+  {
+    icon: 'megaphone',
+    titel: 'Die Kanäle',
+    text: '750.000 Follower im erweiterten Kanalumfeld. Sie sind die Eingangstür — gelesen, gehört und gekauft wird auf den eigenen Flächen.',
+  },
+  {
+    icon: 'shopping-cart',
+    titel: 'Der Shop',
+    text: 'Seit 2026: Schmuck, graviert in Köln. Der Schritt, an dem aus Aufmerksamkeit ein Produkt wird — und aus einer Marke ein Geschäft.',
+  },
+] as const;
+
+/** Wonach Menschen suchen, wenn sie auf der Plattform landen. */
+const dbgThemen = [
+  'Griechische Namenstage',
+  'Griechische Nachnamen',
+  'Aktuelle Waldbrandlagen mit Karte',
+  'Identitätsformate („Welcher griechische Gott bin ich?")',
+];
+
+/** Die Chronik — wie aus einer Idee eine Marke wurde. */
+const dbgChronik = [
+  { jahr: '2015', text: 'Start als Inhalteseite. Kein Auftraggeber, kein Budget von außen, kein Gesellschafter — die Arbeit läuft vor, der Ertrag kommt später oder gar nicht.' },
+  { jahr: 'Die Jahre danach', text: 'Täglich veröffentlichen. Das ist der ganze Trick und zugleich der Teil, den fast alle unterschätzen: Reichweite entsteht aus Wiederholung, nicht aus Kampagnen.' },
+  { jahr: 'Community', text: 'Aus Lesern werden Teilnehmer. Die Agora macht aus der Seite einen Ort, an dem man bleibt, statt einen, den man liest und verlässt.' },
+  { jahr: 'Podcast', text: 'Die Marke bekommt eine Stimme. Ein Gesicht von außen — Panayota Petridou — bringt Publikum mit, das die Seite allein nie erreicht hätte.' },
+  { jahr: '2026', text: 'Der Shop. Erst an dieser Stelle wird die Reichweite zu Umsatz. Elf Jahre nach der ersten Zeile — das ist der ehrliche Zeitraum, über den Markenaufbau läuft.' },
+];
+---
+
+<BaseLayout
+  slug="marken"
+  title="Unsere Marken – DU BIST GRIECHE & aposocial | agentur dk"
+  description="Zwei Marken, die wir selbst aufgebaut haben: DU BIST GRIECHE seit 2015 und aposocial seit 2021 — Markenkern, Bausteine und der Weg dahin."
+  mono
+>
+
+  <Header />
+  <main id="main-content" tabindex="-1">
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li aria-current="page">Unsere Marken</li>
+        </ol>
+      </div>
+    </nav>
+
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="drift" cell={3} fps={12} /></div>
+      <div class="container">
+        <p class="section__label">Eigene Marken</p>
+        <h1 id="hero-heading" class="section__headline">Wir haben Marken aufgebaut, bevor wir Markenaufbau verkauft haben</h1>
+        <p class="section__lead">
+          Jede Agentur sagt, sie könne Markenaufbau. Auf dieser Seite steht, was wir
+          dafür selbst riskiert haben: zwei Marken, elf beziehungsweise fünf Jahre,
+          ohne Auftraggeber im Rücken.
+        </p>
+        <div class="hero__actions">
+          <a href="#dbg" class="btn btn--primary btn--lg">DU BIST GRIECHE ansehen</a>
+          <a href="#aposocial" class="btn btn--outline btn--lg">aposocial ansehen</a>
+        </div>
+      </div>
+    </section>
+
+    <DitherBand field="drift" label="Markenaufbau im eigenen Haus" cell={4} />
+
+    <section class="section section--hell" aria-labelledby="warum-heading">
+      <div class="container">
+        <p class="section__label">Warum wir das zeigen</p>
+        <h2 id="warum-heading" class="section__heading">Der Unterschied zwischen einem Auftrag und einem Risiko</h2>
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <p class="section__lead">
+              Für einen Kunden zu bauen heißt: Es gibt ein Briefing, ein Budget und
+              einen Abnahmetermin. Eine eigene Marke aufzubauen heißt: Es gibt nichts
+              davon. Niemand bezahlt die ersten drei Jahre, und niemand sagt, ob es
+              funktioniert.
+            </p>
+            <p class="section__lead">
+              Genau deshalb steht das hier. Was wir Kunden über Positionierung,
+              Inhalte und Ausdauer erzählen, haben wir zuerst an uns selbst
+              ausprobiert — mit eigenem Geld und ohne Rückfahrkarte.
+            </p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Was dabei entsteht, das ein Briefing nicht liefert</h3>
+            <ul class="checklist">
+              <li class="checklist__item">Wie lange es wirklich dauert, bis Reichweite trägt</li>
+              <li class="checklist__item">Welche Formate nach drei Jahren noch laufen — und welche nicht</li>
+              <li class="checklist__item">Was es kostet, eine Community zu halten statt sie zu kaufen</li>
+              <li class="checklist__item">Wann aus Aufmerksamkeit ein Produkt werden kann</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ DU BIST GRIECHE ══════════════════ -->
+    <section id="dbg" class="section" aria-labelledby="dbg-heading">
+      <div class="container">
+        <p class="section__label">Marke 01 · seit 2015</p>
+        <h2 id="dbg-heading" class="section__heading">DU BIST GRIECHE</h2>
+        <p class="section__lead">
+          Die größte Plattform für Griechenland-Liebhaber im deutschsprachigen Raum.
+          Aufgebaut ohne Auftraggeber, ohne Budget von außen, auf eigenes Risiko.
+        </p>
+
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <h3 class="section__subheading">Die DNA von DU BIST GRIECHE</h3>
+            <p class="marke__text">
+              Griechenland als Zugehörigkeit, nicht als Reiseziel. Die Marke spricht
+              Menschen an, für die Griechenland Herkunft, Familie oder Sehnsuchtsort
+              ist — und sie spricht sie als Gemeinschaft an, nicht als Zielgruppe.
+            </p>
+            <p class="marke__text">
+              Der Ton ist dabei nie belehrend und nie touristisch. Zwischen Namenstagen
+              und Waldbrandkarten liegt dieselbe Haltung: nützlich sein, bevor man
+              unterhält.
+            </p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Der USP von DU BIST GRIECHE</h3>
+            <p class="marke__text">
+              <strong>Servicejournalismus statt Postkartenmotive.</strong> Wer
+              „Griechenland" sagt, meint fast immer Urlaub. DU BIST GRIECHE besetzt
+              das, was danach kommt: Alltag, Sprache, Namen, Nachrichten von zu Hause.
+            </p>
+            <p class="marke__text">
+              Das ist der Grund, warum die Marke Suchanfragen gewinnt, für die kein
+              Reiseanbieter je gebaut hätte. Wonach Menschen tatsächlich suchen, wenn
+              sie hier landen:
+            </p>
+            <ul class="checklist">
+              {dbgThemen.map((t) => <li class="checklist__item">{t}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--hell" aria-labelledby="dbg-teile-heading">
+      <div class="container">
+        <p class="section__label">Der Aufbau</p>
+        <h2 id="dbg-teile-heading" class="section__heading">Aus welchen Teilen die Marke besteht</h2>
+        <p class="section__lead">
+          Eine Marke ist kein Logo und keine Website. Sie ist das, was zusammen
+          funktioniert — und jeder dieser Teile hat Jahre gebraucht.
+        </p>
+        <div class="card-grid card-grid--3col">
+          {dbgTeile.map((t) => (
+            <article class="card" data-reveal>
+              <span class="marke__ikon" aria-hidden="true"><Icon name={t.icon} size={22} /></span>
+              <h3 class="card__heading">{t.titel}</h3>
+              <p class="card__body">{t.text}</p>
+            </article>
+          ))}
+        </div>
+
+        <p class="marke__nachtrag">
+          <span class="luecke">Lücke: Link auf eine Podcast-Folge</span>
+          Welche Folge soll hier stehen, und unter welcher Adresse? Dann verlinke ich
+          sie direkt aus dem Podcast-Baustein. Dasselbe gilt für den Newsletter:
+          Erscheinungsrhythmus und Abonnentenzahl kenne ich nicht.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="dbg-chronik-heading">
+      <div class="container">
+        <p class="section__label">Der Weg</p>
+        <h2 id="dbg-chronik-heading" class="section__heading">Elf Jahre, in fünf Schritten</h2>
+        <ol class="chronik" role="list">
+          {dbgChronik.map((c) => (
+            <li class="chronik__eintrag">
+              <p class="chronik__jahr">{c.jahr}</p>
+              <p class="chronik__text">{c.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <DitherBand field="pulse" label="aposocial" cell={4} />
+
+    <!-- ══════════════════ aposocial ══════════════════ -->
+    <section id="aposocial" class="section section--hell" aria-labelledby="apo-heading">
+      <div class="container">
+        <p class="section__label">Marke 02 · seit 2021</p>
+        <h2 id="apo-heading" class="section__heading">aposocial</h2>
+        <p class="section__lead">
+          Eine Branchenplattform für Apotheken mit einem Versprechen im Claim:
+          <strong>„Ihre tägliche Dosis Social Media."</strong> Die längste
+          durchgehende Zusammenarbeit in unserem Bestand.
+        </p>
+
+        <p class="marke__nachtrag">
+          <span class="luecke">Lücke: Eigene Marke oder Kundenmarke?</span>
+          Die bestehenden Seiten widersprechen sich: <code>llms.txt</code> führt
+          aposocial als eigene Marke, die Startseite schreibt „betreuen wir seit
+          2021". Beides kann nicht stimmen, und die Antwort entscheidet, wie dieser
+          Abschnitt formuliert sein darf. Bis dahin steht hier nur, was in beiden
+          Fällen gilt: die Arbeit.
+        </p>
+
+        <div class="section__grid section__grid--2col">
+          <div class="section__col">
+            <h3 class="section__subheading">Die DNA von aposocial</h3>
+            <p class="marke__text">
+              Eine Apotheke ist ein Gesundheitsbetrieb mit Verkaufsfläche — und ein
+              Arbeitgeber, der um Personal konkurriert. aposocial übersetzt genau
+              diese Doppelrolle in Kommunikation, die im Alltag einer Offizin
+              tatsächlich zu leisten ist.
+            </p>
+            <p class="marke__text">
+              Der Claim sagt das Versprechen sehr genau: nicht Strategie, sondern
+              <em>tägliche Dosis</em>. Etwas, das jeden Tag ohne Agenturtermin
+              funktioniert.
+            </p>
+          </div>
+          <div class="section__col">
+            <h3 class="section__subheading">Der USP von aposocial</h3>
+            <p class="marke__text">
+              <strong>Branchentiefe statt Branchenbreite.</strong> Social Media für
+              alle gibt es überall. Eine Plattform, die weiß, was eine Apotheke
+              rechtlich sagen darf und was ihr Publikum interessiert, gibt es selten.
+            </p>
+            <p class="marke__text">
+              <span class="luecke">Lücke: Bausteine</span>
+              Aus welchen Teilen besteht aposocial heute — Redaktion, Vorlagen,
+              Schulungen, Community, Newsletter? Nenne mir die Bausteine, dann baue
+              ich sie hier genauso auf wie bei DU BIST GRIECHE.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="fazit-heading">
+      <div class="container">
+        <p class="section__label">Was daraus folgt</p>
+        <h2 id="fazit-heading" class="section__heading">Was wir daraus für Ihre Marke mitbringen</h2>
+        <div class="card-grid card-grid--3col">
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Wir kennen die Durststrecke</h3>
+            <p class="card__body">
+              Die ersten Jahre einer Marke bringen nichts ein. Wir können sagen, wie
+              lang sie dauert und woran man erkennt, dass man auf dem richtigen Weg
+              ist — weil wir sie zweimal durchlaufen haben.
+            </p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Wir bauen für den Betrieb, nicht für die Präsentation</h3>
+            <p class="card__body">
+              Was täglich bespielt werden muss, muss ohne Agentur funktionieren.
+              Diese Erfahrung steckt in jedem Redaktionsplan und jeder Vorlage, die
+              wir für Kunden anlegen.
+            </p>
+          </article>
+          <article class="card" data-reveal>
+            <h3 class="card__heading">Wir wissen, was eigene Flächen wert sind</h3>
+            <p class="card__body">
+              Reichweite auf fremden Plattformen ist geliehen. Website, Newsletter
+              und Shop gehören Ihnen — und sie sind der Teil, der bleibt, wenn ein
+              Kanal seine Regeln ändert.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <LeadForm
+      heading="Eine eigene Marke aufbauen?"
+      page="Unsere Marken"
+      blau
+    />
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Fließtext in den Markenabschnitten. Die Grade kommen aus der Leiter,
+     die Zeilenlänge aus dem Maß — beides siehe tokens/typography.css. */
+  .marke__text {
+    font-size: var(--dk-schrift-text);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+    margin: 0 0 var(--rinne-4);
+  }
+  .marke__text strong { color: var(--color-text); }
+
+  .marke__ikon {
+    display: block;
+    color: var(--color-accent);
+    margin-bottom: var(--rinne-2);
+  }
+
+  /* Die Chronik: eine Zeitleiste, die ohne Jahreszahlen-Optik auskommt.
+     Der senkrechte Strich links ist die Zeit, die Einträge sind die
+     Schritte darauf. */
+  .chronik {
+    list-style: none;
+    margin: var(--rinne-6) 0 0;
+    padding: 0;
+    border-left: 1px solid var(--color-border-strong);
+    display: flex;
+    flex-direction: column;
+    gap: var(--rinne-6);
+    max-width: 58rem;
+  }
+  .chronik__eintrag {
+    position: relative;
+    padding-left: var(--rinne-5);
+  }
+  /* Der Punkt sitzt auf der Linie, nicht daneben: -4px ist die halbe
+     Punktbreite plus die halbe Linienbreite. */
+  .chronik__eintrag::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 0.55em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-accent);
+  }
+  .chronik__jahr {
+    margin: 0 0 var(--rinne-1);
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .chronik__text {
+    margin: 0;
+    font-size: var(--dk-schrift-text);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+  }
+
+  /* Eine offene Stelle, die als solche zu erkennen ist.
+     Lieber eine sichtbare Lücke als eine plausible Erfindung — was hier
+     steht, weiß nur Daniel, und geraten wäre es eine Behauptung über
+     sein eigenes Geschäft. */
+  .marke__nachtrag {
+    margin: var(--rinne-6) 0 0;
+    padding: var(--rinne-4);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+  }
+  .luecke {
+    display: block;
+    margin-bottom: var(--rinne-1);
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+  .marke__nachtrag code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--color-text);
+  }
+</style>

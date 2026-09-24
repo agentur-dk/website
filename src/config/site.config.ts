@@ -164,6 +164,9 @@ export const pages: PageEntry[] = [
   { slug: 'projekte', label: 'Referenzen & Projekte', priority: 0.8, changefreq: 'monthly',
     summary: 'Ausgewählte Projekte für Bundesministerium, TARGOBANK, Berufsförderungswerke und Mittelstand.' },
 
+  { slug: 'marken', label: 'Unsere Marken', priority: 0.8, changefreq: 'monthly',
+    summary: 'Eigene Marken der agentur dk: DU BIST GRIECHE seit 2015 und aposocial seit 2021 — Markenkern, Bausteine und Aufbau.' },
+
   { slug: 'ueber-uns', label: 'Über uns', priority: 0.8, changefreq: 'monthly',
     summary: 'Agentur aus Köln mit kurzen Wegen — Arbeitsweise, Haltung und Team hinter agentur dk.' },
 
@@ -210,6 +213,7 @@ export const footerLeistungenNav: NavItem[] = [
 /** Footer: Unternehmen */
 export const footerUnternehmenNav: NavItem[] = [
   { href: 'ueber-uns',        label: 'Über uns'                   },
+  { href: 'marken',           label: 'Unsere Marken'              },
   { href: 'projekte',         label: 'Referenzen & Projekte'      },
   { href: 'barrierefreiheit', label: 'Barrierefreiheitserklärung' },
   { href: 'impressum',        label: 'Impressum'                  },

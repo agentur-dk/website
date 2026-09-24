@@ -29,7 +29,7 @@ const BASE = process.env.LH_BASE ?? '/';
 const ALL_PAGES = [
   'index', 'beratung', 'leistungen', 'bfsg-wordpress-website-agentur', 'wordpress-entwicklung',
   'website-leasing', 'seo-geo', 'online-marketing', 'social-recruiting',
-  'corporate-design', 'ki-services', 'projekte', 'ueber-uns',
+  'corporate-design', 'ki-services', 'projekte', 'marken', 'ueber-uns',
   'barrierefreiheit', 'impressum', 'datenschutz', '404',
 ];
 
