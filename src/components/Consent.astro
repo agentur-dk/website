@@ -73,6 +73,17 @@ const GA_ID = 'G-KJ0TV1QCMB';
   const base = import.meta.env.BASE_URL;
   let vorher = false;
 
+  /*
+   * Der Zustand hängt als data-einbettungen am <html>-Element — dasselbe
+   * Muster wie data-motion beim Bewegungsschalter. So kann CSS den
+   * Platzhalter wegnehmen, sobald der Player laden darf, ohne dass dafür
+   * Skript im Markup der Seite stehen muss.
+   */
+  function merkeEinbettungen(): void {
+    document.documentElement.dataset.einbettungen =
+      CookieConsent.acceptedCategory('einbettungen') ? 'erlaubt' : 'gesperrt';
+  }
+
   void CookieConsent.run({
     ...erzeugeKonfiguration({ speicher: 'dk_consent_v2', datenschutz: base + 'datenschutz.html' }),
 
@@ -87,6 +98,17 @@ const GA_ID = 'G-KJ0TV1QCMB';
       analytics: {
         autoClear: { cookies: [{ name: /^_ga/ }, { name: '_gid' }, { name: '_gat' }] },
       },
+      /*
+       * Eingebettete Inhalte, derzeit nur der Podcast-Player auf
+       * /marken.html.
+       *
+       * Ein eigener Zweck, nicht unter „Statistik" mitgeführt: Wer der
+       * Reichweitenmessung zustimmt, hat damit nicht einem Player
+       * zugestimmt, der die IP-Adresse an einen anderen Anbieter
+       * überträgt. Die Einwilligung muss granular je Dienst sein — steht
+       * so in der Projektregel und folgt aus Art. 4 Nr. 11 DSGVO.
+       */
+      einbettungen: {},
     },
 
     language: {
@@ -99,8 +121,9 @@ const GA_ID = 'G-KJ0TV1QCMB';
               'Diese Seite nutzt localStorage und sessionStorage für Dinge, die ohne ' +
               'sie nicht funktionieren: Ihre Auswahl hier, den Bewegungsschalter und ' +
               'die Darstellung im Seitenkopf. Zusätzlich möchten wir anonymisiert ' +
-              'messen, welche Seiten aufgerufen werden. Ohne Ihre Zustimmung wird ' +
-              'dafür nichts geladen.',
+              'messen, welche Seiten aufgerufen werden, und auf einer Seite einen ' +
+              'Podcast-Player einbetten. Ohne Ihre Zustimmung wird dafür nichts ' +
+              'geladen.',
             acceptAllBtn: 'Alle akzeptieren',
             acceptNecessaryBtn: 'Nur notwendige',
             showPreferencesBtn: 'Einzeln auswählen',
@@ -129,6 +152,16 @@ const GA_ID = 'G-KJ0TV1QCMB';
                 linkedCategory: 'analytics',
               },
               {
+                title: 'Eingebettete Inhalte — Podigee',
+                description:
+                  'Der Podcast-Player auf der Seite „Unsere Marken" wird von ' +
+                  'Podigee (Berlin) geladen. Dabei erfährt Podigee Ihre ' +
+                  'IP-Adresse. Ohne Ihre Einwilligung wird der Player nicht ' +
+                  'geladen; die Folge bleibt über einen gewöhnlichen Link ' +
+                  'erreichbar.',
+                linkedCategory: 'einbettungen',
+              },
+              {
                 title: 'Mehr dazu',
                 description:
                   `Einzelheiten in der <a href="${base}datenschutz.html">Datenschutzerklärung</a>. ` +
@@ -145,10 +178,11 @@ const GA_ID = 'G-KJ0TV1QCMB';
       const jetzt = CookieConsent.acceptedCategory('analytics');
       const widerrufen = vorher && !jetzt;
       vorher = jetzt;
+      merkeEinbettungen();
       if (widerrufen) window.location.reload();
     },
-    onFirstConsent: () => { vorher = CookieConsent.acceptedCategory('analytics'); },
-    onConsent: () => { vorher = CookieConsent.acceptedCategory('analytics'); },
+    onFirstConsent: () => { vorher = CookieConsent.acceptedCategory('analytics'); merkeEinbettungen(); },
+    onConsent: () => { vorher = CookieConsent.acceptedCategory('analytics'); merkeEinbettungen(); },
   });
 
   /*

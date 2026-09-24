@@ -225,11 +225,62 @@ const dbgChronik = [
           ))}
         </div>
 
+        <!--
+          Die erste Folge, hörbar auf der Seite.
+
+          Der Podigee-Player ist ein Dritter: Er lädt ein Skript von
+          player.podigee-cdn.net und holt seine Einstellungen von
+          dersatzdespitagyros.podigee.io. Beides überträgt die IP-Adresse
+          des Besuchers. Vor der Einwilligung darf das nicht passieren
+          (§ 25 TDDDG), deshalb steht das Skript als `type="text/plain"`
+          im Markup — der Browser führt es gar nicht erst aus. Erst wenn
+          der Zweck „einbettungen" angenommen ist, trägt CookieConsent es
+          nach. Das hängt nicht daran, dass unser eigenes Skript richtig
+          läuft.
+
+          Solange es gesperrt ist, steht hier kein leerer Kasten, sondern
+          eine Erklärung, ein Knopf, der die Auswahl öffnet, und ein
+          gewöhnlicher Link auf die Folge. Die Inhalte bleiben ohne
+          Einwilligung erreichbar — sonst wäre die Wahl keine.
+        -->
+        <figure class="folge">
+          <figcaption class="folge__kopf">
+            <span class="folge__reihe">Der Satz des Pitagyros · Folge 1 · 32:19</span>
+            <h3 class="folge__titel">Wer zu viel Geld hat</h3>
+          </figcaption>
+
+          <div class="folge__platzhalter" data-folge-platzhalter>
+            <p class="folge__hinweis">
+              Der Player kommt von Podigee und erfährt dabei Ihre IP-Adresse.
+              Deshalb laden wir ihn erst, wenn Sie zustimmen.
+            </p>
+            <p class="folge__wege">
+              <button type="button" class="btn btn--secondary" data-consent-oeffnen>
+                Player erlauben
+              </button>
+              <a class="folge__extern" href="https://dersatzdespitagyros.podigee.io/1-wer-zuviel-geld-hat"
+                 target="_blank" rel="noopener noreferrer">
+                Folge bei Podigee öffnen<span class="u-sr-only"> (öffnet in neuem Tab)</span>
+              </a>
+            </p>
+          </div>
+
+          <div class="folge__player" data-folge-player>
+            <script
+              type="text/plain"
+              data-category="einbettungen"
+              class="podigee-podcast-player"
+              src="https://player.podigee-cdn.net/podcast-player/javascripts/podigee-podcast-player.js"
+              data-configuration="https://dersatzdespitagyros.podigee.io/1-wer-zuviel-geld-hat/embed?context=external"
+              is:inline
+            ></script>
+          </div>
+        </figure>
+
         <p class="marke__nachtrag">
-          <span class="luecke">Lücke: Link auf eine Podcast-Folge</span>
-          Welche Folge soll hier stehen, und unter welcher Adresse? Dann verlinke ich
-          sie direkt aus dem Podcast-Baustein. Dasselbe gilt für den Newsletter:
-          Erscheinungsrhythmus und Abonnentenzahl kenne ich nicht.
+          <span class="luecke">Lücke: der Newsletter</span>
+          Erscheinungsrhythmus und Abonnentenzahl kenne ich nicht — sag mir beides,
+          dann steht es im Baustein oben statt einer allgemeinen Beschreibung.
         </p>
       </div>
     </section>
@@ -438,4 +489,54 @@ const dbgChronik = [
     font-size: 0.9em;
     color: var(--color-text);
   }
+
+  /* ── Die eingebettete Folge ─────────────────────────────────────────
+     Der Platzhalter und der Player tauschen die Plätze, sobald die
+     Einwilligung vorliegt. Gesteuert über data-einbettungen am
+     <html>-Element (siehe Consent.astro) — dasselbe Muster wie beim
+     Bewegungsschalter.
+
+     Ausgangszustand ist „Platzhalter sichtbar": Wer ohne Skript liest,
+     bekommt die Erklärung und den Link, nicht eine leere Fläche. */
+  .folge {
+    margin: var(--rinne-6) 0 0;
+    padding: var(--rinne-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    max-width: 44rem;
+  }
+  .folge__kopf { margin-bottom: var(--rinne-4); }
+  .folge__reihe {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--rinne-1);
+  }
+  .folge__titel { margin: 0; }
+  .folge__hinweis {
+    margin: 0 0 var(--rinne-4);
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+  }
+  .folge__wege {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--rinne-4);
+  }
+  .folge__extern {
+    font-size: var(--dk-schrift-karte);
+    color: var(--color-primary-light);
+  }
+
+  .folge__player { display: none; }
+  html[data-einbettungen='erlaubt'] .folge__player { display: block; }
+  html[data-einbettungen='erlaubt'] .folge__platzhalter { display: none; }
 </style>

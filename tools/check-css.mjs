@@ -45,6 +45,10 @@ const NO_STYLE_BY_DESIGN = new Map([
   ['ueber-grid__text',   'Layout kommt von .ueber-grid'],
   ['cta-section__text',   'Rasterzelle, Optik kommt von .cta-section__grid'],
   ['cta-section__direct', 'Gruppiert die drei Telefonzeilen, Optik kommt von deren Regeln'],
+  // Fremdklasse: Der Podigee-Player sucht selbst danach. Sie gehört nicht
+  // uns, und eine eigene Regel dafür wäre eine Behauptung über fremden
+  // Code. Ihre Optik bringt der Player mit, sobald er laden darf.
+  ['podigee-podcast-player', 'Haken des Podigee-Players (Fremdcode), Optik kommt vom Player selbst'],
 ]);
 
 /** Tailwind-Varianten, die vor dem Vergleich abgetrennt werden. */
