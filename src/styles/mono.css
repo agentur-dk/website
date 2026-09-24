@@ -1138,9 +1138,9 @@
 
 /* Die Blase. Eingehend, also links — und der Zipfel sitzt oben
    links, dort wo im Messenger der Absender steht. */
-/* Die Blase umschließt ihren Inhalt. Vorher stand sie auf fester
-   Breite, und rechts neben den 25 Balken blieb Leerraum — im
-   Messenger wächst eine Blase mit dem, was drin ist. */
+/* `fit-content` ist der Ausgangswert für eine Blase ohne Fenster um
+   sich. Im Chatfenster der Startseite wird er überschrieben: Dort füllt
+   sie das Fenster (siehe weiter unten). */
 .theme-mono .sn {
   position: relative;
   margin: 0;
@@ -1203,8 +1203,8 @@
 .theme-mono .sn--laeuft .sn__ikon--play { display: none; }
 .theme-mono .sn--laeuft .sn__ikon--pause { display: block; }
 
-/* Die Mitte ist so breit wie die Welle — sonst zöge die Zeitzeile
-   die Blase auseinander und der Zeitstempel stünde im Nichts. */
+/* Ausgangswert passend zu `fit-content` oben: Die Mitte ist so breit wie
+   die Welle. Im Chatfenster wächst sie mit (siehe weiter unten). */
 .theme-mono .sn__mitte { flex: 0 0 auto; }
 
 .theme-mono .sn__welle {
@@ -1339,19 +1339,18 @@
 .theme-mono .sn__worte p { margin: 0 0 0.6rem; }
 .theme-mono .sn__worte p:last-child { margin-bottom: 0; }
 
-/* Aufgeklappt darf die Blase breiter werden — ein Wortlaut in der
-   Breite der Wellenform waere eine Spalte aus drei Woertern. */
-.theme-mono .sn:has(.sn__transkript[open]) { width: 100%; }
+/* ── Die Blase füllt das Fenster, auf jeder Breite ─────────────────
+   Bis zum 24.09.2026 galt das nur untereinander: Am Schreibtisch stand
+   die Blase links am Zipfel und war so breit wie ihr Inhalt — 226 px in
+   einem 328 px breiten Fenster, und rechts davon eine leere Fläche
+   Tapete. Gemessen, nicht geschätzt: 1280 px Bildschirm, Fenster 384 px,
+   Wellenform 111 px.
 
-/* ── Untereinander: die Blase mittig und auf 90 Prozent ─────────────
-   Am Schreibtisch steht die Blase links am Zipfel, wie eine eingehende
-   Nachricht das tut, und ist so breit wie ihr Inhalt — rund 226 px.
+   Auf ausdrückliche Anweisung gilt jetzt überall, was vorher nur das
+   Telefon tat: 90 Prozent des Fensters, mittig. Der Zipfel bleibt oben
+   links — eingehend ist eingehend.
 
-   Steht das Fenster darunter über die volle Breite, sieht dieselbe
-   Blase verloren aus: 226 px in 342 px, alles links, rechts eine
-   leere Fläche. Deshalb hier mittig und auf 90 Prozent.
-
-   Damit sie dabei nicht hohl wird, wächst die Wellenform mit: Die
+   Damit die Blase dabei nicht hohl wird, wächst die Wellenform mit: Die
    Spur nimmt den freien Platz (`flex: 1`), und die 25 Balken verteilen
    sich darin (`space-between`) statt links zusammenzustehen. Ihre
    Breite bleibt bei 2,5 px — es wächst der Abstand, nicht der Balken.
@@ -1359,22 +1358,18 @@
 
    Der Fortschritt rechnet weiter richtig: Der Punkt sitzt auf einem
    Prozentsatz der Spur, und die Einfärbung vergleicht die Nummer des
-   Balkens mit dem Anteil — beides kennt keine Pixel. */
-@media (max-width: 899px) {
-  /* Auch mit offenem Transkript: Sonst sprang die Blase beim Aufklappen
-     von 90 auf 100 Prozent (gemessen 279 → 310 px) und verlor dabei ihre
-     Mitte. Die Regel weiter oben, die fuer das Aufklappen auf volle
-     Breite geht, ist am Schreibtisch richtig — dort ist die Blase sonst
-     nur so breit wie die Wellenform und der Text braeche zu schmal um.
-     Hier ist sie es nicht. */
-  .theme-mono .kt__nachricht .sn,
-  .theme-mono .kt__nachricht .sn:has(.sn__transkript[open]) {
-    width: 90%;
-    margin-inline: auto;
-  }
-  .theme-mono .kt__nachricht .sn__mitte { flex: 1 1 auto; min-width: 0; }
-  .theme-mono .kt__nachricht .sn__welle { justify-content: space-between; }
+   Balkens mit dem Anteil — beides kennt keine Pixel.
+
+   Und das Aufklappen des Transkripts verschiebt nichts mehr: Vorher
+   sprang die Blase dabei von ihrer Inhaltsbreite auf 100 Prozent
+   (gemessen 279 → 310 px) und verlor ihre Mitte. Jetzt steht die Breite
+   vorher fest. */
+.theme-mono .kt__nachricht .sn {
+  width: 90%;
+  margin-inline: auto;
 }
+.theme-mono .kt__nachricht .sn__mitte { flex: 1 1 auto; min-width: 0; }
+.theme-mono .kt__nachricht .sn__welle { justify-content: space-between; }
 
 /* ============================================================
    Die Ankunft
@@ -1472,6 +1467,5 @@ html[data-motion="paused"] .theme-mono .sn-chat .sn {
 }
 
 @media (max-width: 520px) {
-  .theme-mono .sn { max-width: none; }
   .theme-mono .sn__portraet { width: 34px; height: 34px; }
 }
