@@ -392,8 +392,36 @@ export interface PaintOptions {
   matrix?: readonly (readonly number[])[];
   /** Gelöschte Pixel transparent lassen, statt sie zu füllen. */
   transparent?: boolean;
-  /** Farbe der gesetzten Pixel als [r, g, b]. */
+  /**
+   * Farbe der gesetzten Pixel als [r, g, b].
+   *
+   * Ohne Angabe wird die berechnete `color` des Canvas genommen, also
+   * `currentColor`. Das ist keine Bequemlichkeit, sondern die Stelle, an
+   * der der Kontrast entschieden wird — und die gehört ins CSS, wo man
+   * sieht, worauf die Fläche liegt.
+   *
+   * Vorher stand hier fest [243, 243, 243]. Auf dunklem Grund war das
+   * richtig; auf den weißen Karten der Startseite zeichnete es Weiß auf
+   * Weiß. Gemessen am 25.09.2026: 1,04 : 1. Der dunkelste Punkt im ganzen
+   * Kartenkopf war die Rahmenlinie mit 1,37 : 1 — vom Muster selbst war
+   * nichts zu sehen.
+   */
   rgb?: readonly [number, number, number];
+}
+
+/**
+ * Die berechnete Textfarbe eines Elements als [r, g, b].
+ *
+ * `getComputedStyle().color` liefert immer `rgb()` oder `rgba()`, nie einen
+ * Namen oder ein Kürzel — deshalb reicht das Auslesen der ersten drei
+ * Zahlen. Liefert es wider Erwarten nichts Lesbares, bleibt es beim
+ * hellen Ton: Die meisten Flächen dieser Website liegen auf Dunkel, und
+ * ein zu heller Punkt ist dort sichtbar, ein zu dunkler nicht.
+ */
+function textfarbe(el: HTMLElement): [number, number, number] {
+  const zahlen = getComputedStyle(el).color.match(/\d+(?:\.\d+)?/g);
+  if (!zahlen || zahlen.length < 3) return [243, 243, 243];
+  return [Number(zahlen[0]), Number(zahlen[1]), Number(zahlen[2])];
 }
 
 /**
@@ -412,7 +440,7 @@ export function paintDither(
   const cell = options.cell ?? 3;
   const matrix = options.matrix ?? BAYER4;
   const transparent = options.transparent ?? true;
-  const [r, g, b] = options.rgb ?? [243, 243, 243];
+  const [r, g, b] = options.rgb ?? textfarbe(canvas);
 
   const rect = canvas.getBoundingClientRect();
   if (rect.width < 2 || rect.height < 2) return null;

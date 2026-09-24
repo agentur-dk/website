@@ -19,7 +19,7 @@
     "check:a11y": "node tools/a11y.mjs",
     "check:wcag": "node tools/wcag-manual.mjs",
     "check:lighthouse": "node tools/lighthouse.mjs",
-    "verify": "npm run build && npm run check:types && npm test && npm run check:links && npm run check:seo && npm run check:css && npm run check:typo && npm run check:cta && npm run check:icons && npm run check:php && npm run check:e2e && npm run check:shell && node tools/verify-live.mjs",
+    "verify": "npm run build && npm run check:types && npm test && npm run check:links && npm run check:seo && npm run check:css && npm run check:typo && npm run check:kontrast && npm run check:cta && npm run check:icons && npm run check:php && npm run check:e2e && npm run check:shell && node tools/verify-live.mjs",
     "og:image": "node tools/og-image.mjs",
     "fonts:metrics": "node tools/font-metrics.mjs --write",
     "fonts:subset": "node tools/subset-fonts.mjs",
@@ -29,7 +29,8 @@
     "check:e2e": "node tools/e2e.mjs",
     "check:shell": "node tools/check-shell.mjs",
     "check:formular": "node tools/check-formular.mjs",
-    "check:typo": "node tools/check-typo.mjs"
+    "check:typo": "node tools/check-typo.mjs",
+    "check:kontrast": "node tools/check-kontrast.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",

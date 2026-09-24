@@ -173,6 +173,40 @@ Hero dunkel, der Mittelteil hell, Kontakt und Abschluss auf der
 Akzentfläche, Fußzeile dunkel. Container 1140 px (breit 1280, schmal
 720), 24 px seitlich.
 
+### Kontrast: nie unter die Sichtbarkeit
+
+**Regel ab 25.09.2026, auf ausdrückliche Anweisung.** Kein Element wird in
+einem Kontrastverhältnis ausgeliefert, in dem man es nicht erkennen kann —
+auch keine Schmuckfläche, die kein Prüfwerkzeug beanstandet.
+
+Auslöser war die gerasterte Fläche im Kartenkopf der Startseite. Sie wurde
+in `dither.ts` fest in `#f3f3f3` gezeichnet; auf dunklem Grund richtig, auf
+den weißen Karten Weiß auf Weiß. An den ausgelieferten Pixeln gemessen:
+
+```
+vorher    Muster rgb(220,220,220) auf Weiss    1,37 : 1
+nachher   Muster rgb(148,148,148) auf Weiss    3,03 : 1
+```
+
+axe-core hatte nichts gemeldet — rein dekorative Grafiken sind von
+WCAG 1.4.11 ausgenommen. Genau deshalb braucht es die eigene Regel.
+
+**Die Farbe steht nicht mehr im Code.** Das Raster nimmt `currentColor`
+und folgt damit dem Abschnitt, auf dem es liegt: auf Dunkel hell, auf Hell
+dunkel. Der Kontrast wird im CSS entschieden, wo man sieht, worauf die
+Fläche liegt.
+
+`npm run check:kontrast` misst es nach: jede Seite, jede Fläche, die
+Opazität der ganzen Elternkette, gemischt über den ersten undurchsichtigen
+Grund darunter. Untergrenze 3 : 1.
+
+> Der erste Entwurf dieser Prüfung las `getComputedStyle().color` und
+> rechnete aus, was herauskommen *sollte*. Zur Gegenprobe wurde die alte
+> Fassung wiederhergestellt — die Prüfung meldete weiter „alles in
+> Ordnung". Sie maß die Absicht, nicht das Ergebnis. Jetzt zählt sie die
+> Pixel, die wirklich auf der Leinwand stehen, und die Gegenprobe meldet
+> die drei Flächen mit 1,04 : 1.
+
 ### Was das hält: `npm run check:typo`
 
 `tools/check-typo.mjs` liest den Quelltext und meldet jede `font-size`
