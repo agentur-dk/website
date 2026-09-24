@@ -797,12 +797,19 @@ const schritte = [
 
 <style>
   .lf-section {
-    padding-block: 5rem;
+    padding-block: var(--raum-abschnitt);
   }
+  /* Derselbe Kasten wie jeder andere Abschnitt, damit die Überschrift
+     auf derselben linken Kante steht (vorher 384 statt 174 px). Die
+     Lesebreite des Formulars bleibt erhalten — sie sitzt jetzt am
+     Formular selbst, nicht am Abschnitt. */
   .lf-inner {
-    max-width: var(--container-narrow);
+    max-width: var(--container-max);
     margin-inline: auto;
     padding-inline: 1.5rem;
+  }
+  .lf-form {
+    max-width: var(--container-narrow);
   }
   /* Das Formular steht als eigene Fläche auf dem Seitengrund. Vorher lief
      es ohne Rahmen im Text mit und sah aus wie ein weiterer Abschnitt —
@@ -832,9 +839,7 @@ const schritte = [
 
   .lf-heading {
     font-family: var(--font-display);
-    font-size: clamp(1.9375rem, 4vw, 2.4375rem);
     color: var(--color-text);
-    letter-spacing: -0.03em;
     line-height: 1.1;
     margin: 0 0 2.5rem;
     text-wrap: balance;
@@ -855,7 +860,7 @@ const schritte = [
   /* Grundzustand der Statusmeldung: Sie ist nur für Screenreader da,
      solange nichts schiefgeht. Erst .lf-status--error macht sie sichtbar. */
   .lf-status {
-    font-size: 0.9375rem;
+    font-size: var(--dk-schrift-karte);
   }
   .lf-status--error {
     position: static;
@@ -870,7 +875,7 @@ const schritte = [
     border: 1px solid var(--color-error);
     border-radius: var(--radius-md);
     color: var(--color-error-text);
-    font-size: 0.9375rem;
+    font-size: var(--dk-schrift-karte);
   }
 
   /* Zwei Verstecke. `display: none` ist das offensichtlichere — manche
@@ -898,7 +903,7 @@ const schritte = [
   .lf-progress__list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
+    gap: var(--rinne-1);
     list-style: none;
     margin: 0 0 0.875rem;
     padding: 0;
@@ -906,7 +911,7 @@ const schritte = [
   .lf-progress__item {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
+    gap: var(--rinne-1);
     min-width: 0;
     color: var(--color-text-faint);
     transition: color var(--transition-base);
@@ -926,7 +931,7 @@ const schritte = [
     border: 1px solid var(--color-border-strong);
     border-radius: 999px;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: var(--dk-schrift-klein);
     transition: border-color var(--transition-base), background-color var(--transition-base),
       color var(--transition-base);
   }
@@ -957,7 +962,7 @@ const schritte = [
   }
 
   .lf-progress__name {
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     line-height: 1.2;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -996,7 +1001,7 @@ const schritte = [
 
   .lf-step__zaehler {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--dk-schrift-klein);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--color-text-muted);
@@ -1004,9 +1009,7 @@ const schritte = [
   }
   .lf-step__title {
     font-family: var(--font-display);
-    font-size: clamp(1.375rem, 2.6vw, 1.75rem);
     font-weight: 400;
-    letter-spacing: -0.02em;
     line-height: 1.2;
     color: var(--color-text);
     margin: 0 0 0.75rem;
@@ -1016,7 +1019,7 @@ const schritte = [
     outline-offset: 4px;
   }
   .lf-step__lead {
-    font-size: 0.9375rem;
+    font-size: var(--dk-schrift-karte);
     line-height: 1.65;
     color: var(--color-text-muted);
     max-width: 52ch;
@@ -1037,7 +1040,7 @@ const schritte = [
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 0.75rem;
+    gap: var(--rinne-2);
     margin-top: 2rem;
   }
   .lf-step__nav--end {
@@ -1052,13 +1055,13 @@ const schritte = [
   }
   .lf-legend {
     padding: 0;
-    font-size: 0.9375rem;
+    font-size: var(--dk-schrift-karte);
     color: var(--color-text);
     margin-bottom: 1rem;
   }
   .lf-optional {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--dk-schrift-klein);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-text-faint);
@@ -1072,12 +1075,12 @@ const schritte = [
   .lf-topics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-    gap: 0.6rem;
+    gap: var(--rinne-1);
   }
   .lf-topic {
     display: flex;
     align-items: flex-start;
-    gap: 0.7rem;
+    gap: var(--rinne-2);
     /* 44px Zielhöhe — WCAG 2.5.8 fordert mindestens 24px. */
     min-height: 44px;
     padding: 1rem 1.1rem;
@@ -1105,7 +1108,7 @@ const schritte = [
   .lf-topic__text { min-width: 0; flex: 1 1 auto; }
   .lf-topic__zeile {
     display: block;
-    font-size: 0.85rem;
+    font-size: var(--dk-schrift-klein);
     line-height: 1.35;
     color: var(--color-text-muted);
   }
@@ -1157,7 +1160,7 @@ const schritte = [
   .lf-topic__label {
     display: block;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: var(--dk-schrift-karte);
     line-height: 1.3;
     margin-bottom: 0.15rem;
   }
@@ -1168,7 +1171,7 @@ const schritte = [
   .lf-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-    gap: 1.25rem;
+    gap: var(--rinne-3);
   }
   .lf-group {
     margin-bottom: 1.25rem;
@@ -1182,7 +1185,7 @@ const schritte = [
   }
   .lf-label {
     display: block;
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-text);
     margin-bottom: 0.5rem;
   }
@@ -1196,7 +1199,7 @@ const schritte = [
     background: var(--color-bg);
     color: var(--color-text);
     font: inherit;
-    font-size: 1rem;
+    font-size: var(--dk-schrift-karte);
     transition: border-color var(--transition-base), background-color var(--transition-base);
   }
   .lf-control::placeholder {
@@ -1228,7 +1231,7 @@ const schritte = [
   .lf-hinweis {
     display: block;
     margin-top: 0.5rem;
-    font-size: 0.8125rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-text-faint);
   }
   .lf-rechnung {
@@ -1239,12 +1242,12 @@ const schritte = [
   .lf-error {
     display: block;
     margin-top: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-error-text);
   }
 
   .lf-privacy {
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-text-muted);
     margin: 1.5rem 0 0;
   }
@@ -1257,13 +1260,13 @@ const schritte = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--rinne-1);
     min-height: 44px;
     padding: 0.75rem 1.5rem;
     border: 1px solid transparent;
     border-radius: var(--radius-md);
     font: inherit;
-    font-size: 0.9375rem;
+    font-size: var(--dk-schrift-karte);
     cursor: pointer;
     text-decoration: none;
     transition: background-color var(--transition-base), border-color var(--transition-base),
@@ -1316,9 +1319,7 @@ const schritte = [
   }
   .lf-danke__title {
     font-family: var(--font-display);
-    font-size: 1.5rem;
     font-weight: 400;
-    letter-spacing: -0.02em;
     color: var(--color-text);
     margin: 0 0 0.75rem;
   }
@@ -1327,7 +1328,7 @@ const schritte = [
     outline-offset: 4px;
   }
   .lf-danke__text {
-    font-size: 0.9375rem;
+    font-size: var(--dk-schrift-karte);
     line-height: 1.65;
     color: var(--color-text-muted);
     margin: 0;
@@ -1350,15 +1351,15 @@ const schritte = [
        90 px für den Text, „Nachricht" braucht bei 13 px etwa 62 px. Die
        Namen sind die halbe Auskunft der Leiste. */
     .lf-progress__item {
-      gap: 0.5rem;
+      gap: var(--rinne-1);
     }
     .lf-progress__marke {
       width: 1.5rem;
       height: 1.5rem;
-      font-size: 0.6875rem;
+      font-size: var(--dk-schrift-klein);
     }
     .lf-progress__name {
-      font-size: 0.8125rem;
+      font-size: var(--dk-schrift-klein);
     }
     .lf-step__nav .lf-btn {
       flex: 1 1 auto;

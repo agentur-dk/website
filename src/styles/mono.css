@@ -81,6 +81,29 @@
    Lärm; ein großer, eng laufender Regular erzeugt Gewicht.
    ============================================================ */
 
+/* ------------------------------------------------------------
+   Eine Regel je Ebene
+
+   Bis zum 24.09.2026 bestimmte die KLASSE den Grad, nicht die
+   Ebene. Ergebnis, im Browser gemessen: h1 in 81,6 / 62,4 / 56 px
+   je nach Seite, h2 in 57 / 40 / 28 / 19 / 17 / 13 px. Auf
+   projekte.html waren h2 und h3 gleich groß — zwischen den Ebenen
+   lag kein Unterschied mehr, und das ist der Sinn einer Ebene.
+
+   Jetzt gilt die Ebene, und die Klasse nur noch dort, wo sie
+   ausdrücklich etwas anderes meint (ein Fußzeilen-Etikett zum
+   Beispiel ist ein h2, aber keine Abschnittsüberschrift).
+
+     h1   der Gegenstand der Seite
+     h2   ein Abschnitt darin
+     h3   ein Block im Abschnitt — Karte, Frage, Schritt
+     h4   eine Zwischenüberschrift im Fließtext
+
+   Die eine Ausnahme ist die Startseite: Ihr h1 trägt den
+   Hero-Grad. Sie ist die Haustür, die übrigen Seiten sind
+   Räume — und diese Ausnahme steht hier, statt sich über
+   zwanzig Klassen zu verteilen.
+   ------------------------------------------------------------ */
 .theme-mono h1,
 .theme-mono h2,
 .theme-mono h3,
@@ -90,16 +113,37 @@
   font-weight: 400;
 }
 
+.theme-mono h1 {
+  font-size: var(--dk-schrift-titel-1);
+  letter-spacing: var(--dk-tracking-titel-1);
+  line-height: var(--dk-leading-title);
+}
+.theme-mono h2 {
+  font-size: var(--dk-schrift-titel-2);
+  letter-spacing: var(--dk-tracking-titel-2);
+  line-height: var(--dk-leading-title);
+}
+.theme-mono h3 {
+  font-size: var(--dk-schrift-titel-3);
+  letter-spacing: var(--dk-tracking-titel-3);
+  line-height: var(--dk-leading-tight);
+}
+.theme-mono h4 {
+  font-size: var(--dk-schrift-vorspann);
+  letter-spacing: var(--dk-tracking-vorspann);
+  line-height: var(--dk-leading-tight);
+}
+
 /* --- Rubrik über der Überschrift ---------------------------- */
 .theme-mono .section-label,
 .theme-mono .schwerpunkte-section__eyebrow {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--rinne-2);
   font-family: var(--font-mono);
-  font-size: 0.825rem;
+  font-size: var(--dk-schrift-klein);
   font-weight: 400;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--dk-tracking-mono);
   text-transform: uppercase;
   color: var(--color-text-muted);
   margin-bottom: 0;
@@ -116,9 +160,9 @@
 
 /* --- Überschriften ------------------------------------------ */
 .theme-mono .hero__headline {
-  font-size: clamp(2.925rem, 7.68vw, 5.1rem);
+  font-size: var(--dk-schrift-hero);
   font-weight: 400;
-  letter-spacing: var(--dk-tracking-display);
+  letter-spacing: var(--dk-tracking-hero);
   line-height: var(--dk-leading-display);
   max-width: var(--dk-measure-display);
   text-wrap: balance;
@@ -126,9 +170,7 @@
 }
 .theme-mono .section-title,
 .theme-mono .schwerpunkte-section__heading {
-  font-size: clamp(2.4rem, 5.52vw, 3.675rem);
   font-weight: 400;
-  letter-spacing: var(--dk-tracking-2xl);
   line-height: var(--dk-leading-title);
   max-width: var(--dk-measure-title);
   text-wrap: balance;
@@ -141,9 +183,7 @@
 .theme-mono .usp-card__title,
 .theme-mono .schwerpunkt-card__title,
 .theme-mono .wert-card__title {
-  font-size: 1.65rem;
   font-weight: 400;
-  letter-spacing: var(--dk-tracking-lg);
   line-height: var(--dk-leading-tight);
   max-width: 22ch;
 }
@@ -156,27 +196,21 @@
    dem Raster. */
 .theme-mono .page-header__title,
 .theme-mono .section__headline {
-  font-size: clamp(2.4rem, 5.76vw, 3.9rem);
   font-weight: 400;
-  letter-spacing: var(--dk-tracking-2xl);
   line-height: var(--dk-leading-title);
   max-width: var(--dk-measure-title);
   text-wrap: balance;
 }
 
 .theme-mono .section__heading {
-  font-size: clamp(2.1rem, 4.32vw, 2.925rem);
   font-weight: 400;
-  letter-spacing: var(--dk-tracking-xl);
   line-height: var(--dk-leading-title);
   max-width: 22ch;
   text-wrap: balance;
 }
 
 .theme-mono .section__subheading {
-  font-size: 1.425rem;
   font-weight: 400;
-  letter-spacing: var(--dk-tracking-md);
   line-height: var(--dk-leading-tight);
 }
 
@@ -184,11 +218,11 @@
 .theme-mono .section__label {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--rinne-2);
   font-family: var(--font-mono);
-  font-size: 0.825rem;
+  font-size: var(--dk-schrift-klein);
   font-weight: 400;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--dk-tracking-mono);
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
@@ -226,9 +260,9 @@
 .theme-mono .section__lead,
 .theme-mono .page-header__lead,
 .theme-mono .schwerpunkte-section__lead {
-  font-size: 1.275rem;
+  font-size: var(--dk-schrift-vorspann);
   line-height: var(--dk-leading-body);
-  letter-spacing: var(--dk-tracking-base);
+  letter-spacing: var(--dk-tracking-vorspann);
   max-width: var(--dk-measure-lead);
   color: var(--color-text-muted);
 }
@@ -237,7 +271,7 @@
 .theme-mono .usp-card__body,
 .theme-mono .schwerpunkt-card__text,
 .theme-mono .wert-card__body {
-  font-size: 1.0875rem;
+  font-size: var(--dk-schrift-karte);
   line-height: var(--dk-leading-body);
   max-width: var(--dk-measure-body);
   color: var(--color-text-muted);
@@ -246,7 +280,7 @@
 /* --- Zähler und Etiketten ----------------------------------- */
 .theme-mono .service-card__number {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--dk-schrift-klein);
   font-weight: 400;
   letter-spacing: var(--dk-tracking-mono);
   color: var(--color-text-muted);
@@ -332,8 +366,11 @@
               linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   mask-composite: intersect;
 }
+/* Der Streifen steht IM Polster, also muss das Polster um seine Höhe
+   wachsen — sonst liegt die Rubrik darin. Abgeleitet statt geraten:
+   der weite Takt plus eine Rinne. Ergibt dieselben 136 px wie vorher. */
 .theme-mono .section--hero:has(.hero-flaeche--band) {
-  padding-top: 8.5rem;
+  padding-top: calc(var(--raum-abschnitt-weit) + var(--rinne-4));
 }
 
 /* Sockel unter den Knöpfen. */
@@ -345,8 +382,10 @@
               linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   mask-composite: intersect;
 }
+/* Dasselbe unten, eine Rinne mehr, weil der Sockel höher ist als der
+   Streifen. Ergibt dieselben 144 px wie vorher. */
 .theme-mono .section--hero:has(.hero-flaeche--sockel) {
-  padding-bottom: 9rem;
+  padding-bottom: calc(var(--raum-abschnitt-weit) + var(--rinne-5));
 }
 
 /* --- Die Kugel im Kopf der Startseite ------------------------ */
@@ -458,8 +497,6 @@
 }
 
 .theme-mono.theme-mono .cta-section__title {
-  font-size: clamp(2.4rem, 5.52vw, 3.675rem);
-  letter-spacing: var(--dk-tracking-2xl);
   line-height: var(--dk-leading-title);
   max-width: var(--dk-measure-title);
   text-wrap: balance;
@@ -468,7 +505,7 @@
 .theme-mono.theme-mono .cta-section__direct-label,
 .theme-mono.theme-mono .footer-heading {
   font-family: var(--font-mono);
-  font-size: 0.825rem;
+  font-size: var(--dk-schrift-klein);
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -569,13 +606,13 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: stretch;
-    gap: 1.25rem;
+    gap: var(--rinne-3);
   }
 
   .theme-mono .usp-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: var(--rinne-3);
   }
 }
 
@@ -596,14 +633,14 @@
   border-top: 3px solid var(--color-accent);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--rinne-3);
   align-items: flex-start;
 }
 
 .theme-mono .schritt-cta__text {
   margin: 0;
   max-width: 46ch;
-  font-size: var(--dk-font-size-md, 1.25rem);
+  font-size: var(--dk-schrift-vorspann);
   line-height: 1.5;
   color: var(--color-text);
 }
@@ -612,7 +649,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem 1.5rem;
+  gap: var(--rinne-3) var(--rinne-4);
 }
 
 /* Die Nummer steht neben dem Knopf, nicht darunter: Wer lieber
@@ -620,7 +657,7 @@
 .theme-mono .schritt-cta__direkt {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--rinne-1);
   color: var(--color-accent);
   text-decoration: none;
   font-weight: 500;
@@ -633,7 +670,7 @@
 .theme-mono .schritt-cta__zeit {
   margin: 0;
   font-family: var(--dk-font-mono);
-  font-size: var(--dk-font-size-xs, 0.75rem);
+  font-size: var(--dk-schrift-klein);
   letter-spacing: var(--dk-tracking-mono, 0.18em);
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -780,7 +817,7 @@
    ============================================================ */
 .theme-mono .team {
   display: grid;
-  gap: clamp(2rem, 4vw, 3rem);
+  gap: var(--rinne-spalte);
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 
@@ -811,7 +848,7 @@
 
 .theme-mono .team__name {
   margin: 0;
-  font-size: var(--dk-font-size-md, 1.25rem);
+  font-size: var(--dk-schrift-vorspann);
   color: var(--color-text);
 }
 
@@ -820,7 +857,7 @@
 .theme-mono .team__rolle {
   margin: 0.25rem 0 0;
   font-family: var(--dk-font-mono);
-  font-size: var(--dk-font-size-xs, 0.75rem);
+  font-size: var(--dk-schrift-klein);
   letter-spacing: var(--dk-tracking-mono, 0.18em);
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -829,14 +866,14 @@
 .theme-mono .team__kontakt {
   margin: 0.9rem 0 0;
   line-height: 1.7;
-  font-size: var(--dk-font-size-sm, 0.875rem);
+  font-size: var(--dk-schrift-karte);
 }
 .theme-mono .team__kontakt a { color: var(--color-accent); }
 
 .theme-mono .team__intro {
   margin: 0 0 1.5rem;
   max-width: 52ch;
-  font-size: var(--dk-font-size-md, 1.25rem);
+  font-size: var(--dk-schrift-vorspann);
   line-height: 1.55;
 }
 
@@ -845,28 +882,28 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.85rem;
+  gap: var(--rinne-2);
 }
 
 /* Eine Haarlinie je Eintrag statt eines Rahmens um jeden: Die Liste
    soll als Liste lesbar bleiben, nicht als fünf Kacheln. */
 .theme-mono .team__liste li {
   display: grid;
-  gap: 0.15rem;
+  gap: var(--rinne-1);
   padding-bottom: 0.85rem;
   border-bottom: 1px solid var(--color-border);
 }
 .theme-mono .team__liste li:last-child { border-bottom: 0; padding-bottom: 0; }
 .theme-mono .team__liste strong { font-weight: 500; color: var(--color-text); }
 .theme-mono .team__liste span {
-  font-size: var(--dk-font-size-sm, 0.875rem);
+  font-size: var(--dk-schrift-karte);
   color: var(--color-text-muted);
 }
 
 .theme-mono .buero {
   margin-top: clamp(3rem, 6vw, 4.5rem);
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: var(--rinne-spalte);
 }
 
 @media (min-width: 800px) {
@@ -875,7 +912,6 @@
 
 .theme-mono .buero__titel {
   margin: 0 0 0.75rem;
-  font-size: var(--dk-font-size-lg, 1.5625rem);
 }
 .theme-mono .buero__adresse {
   margin: 0;
@@ -889,7 +925,7 @@
 .theme-mono .buero__bilder {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  gap: var(--rinne-2);
 }
 .theme-mono .buero__bild {
   width: 100%;
@@ -993,11 +1029,11 @@
 .theme-mono .team__aufklapp {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--rinne-1);
   cursor: pointer;
   list-style: none;
   font-family: var(--font-mono, monospace);
-  font-size: 0.8125rem;
+  font-size: var(--dk-schrift-klein);
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
@@ -1082,7 +1118,7 @@
    ============================================================ */
 .theme-mono .kt {
   display: grid;
-  gap: clamp(1.75rem, 4vw, 2.5rem);
+  gap: var(--rinne-spalte);
 }
 
 /* `min-width: 0` hebt die Vorgabe `auto` auf: Ohne sie waere die
@@ -1101,8 +1137,8 @@
 @media (min-width: 900px) {
   .theme-mono .kt {
     grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
-    column-gap: clamp(2rem, 5vw, 4rem);
-    row-gap: clamp(1.5rem, 3vw, 2rem);
+    column-gap: var(--rinne-spalte);
+    row-gap: var(--rinne-5);
   }
   .theme-mono .kt__text { grid-area: 1 / 1; }
   .theme-mono .kt__weiter { grid-area: 2 / 1; align-self: start; }
@@ -1116,6 +1152,25 @@
      mehr — die Spalte selbst ist die Grenze. */
   .theme-mono .kt__lead { max-width: none; }
 }
+
+/* ============================================================
+   Die eine erlaubte Ausnahme von der Leiter
+
+   Alles zwischen hier und dem Ende des Sprachnachrichten-Blocks
+   setzt Schriftgrade in px statt über die Token: 13 px für den
+   Absender, 11 px für Zeit und Dauer, 14 px für das Transkript.
+
+   Der Grund ist die Vorgabe selbst. Die Sprachnachricht bildet
+   eine WhatsApp-Blase nach, und zwar auf ausdrückliche Anweisung
+   1:1 — mit den Farben, Maßen und Graden des Originals. Ein Grad
+   aus unserer Leiter wäre hier nicht konsequenter, sondern
+   falsch: Die Nachbildung lebt davon, dass man sie wiedererkennt.
+
+   tools/check-typo.mjs kennt genau diese Ausnahme und lässt sie
+   nur für Selektoren zu, die mit .sn beginnen. Jede weitere
+   Ausnahme muss dort eingetragen und hier begründet werden —
+   das ist die Hürde, die es vorher nicht gab.
+   ============================================================ */
 
 /* Das Fenster. Das Kritzelmuster ist eine eigene Zeichnung, kein
    übernommenes: Kreise, Bögen und Striche in der Musterfarbe,

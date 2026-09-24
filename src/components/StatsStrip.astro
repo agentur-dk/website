@@ -35,7 +35,7 @@ const { stats, heading } = Astro.props;
     background-color: var(--color-surface);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
-    padding-block: 3.5rem;
+    padding-block: var(--raum-abschnitt);
   }
 
   .stats-inner {
@@ -46,7 +46,7 @@ const { stats, heading } = Astro.props;
 
   .stats-heading {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: var(--dk-schrift-text);
     font-weight: 700;
     color: var(--color-text-muted);
     text-align: center;
@@ -57,7 +57,7 @@ const { stats, heading } = Astro.props;
   .stats-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
-    gap: 2.5rem 2rem;
+    gap: var(--rinne-5) var(--rinne-5);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -68,12 +68,12 @@ const { stats, heading } = Astro.props;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.375rem;
+    gap: var(--rinne-1);
   }
 
   .stats-number {
     font-family: var(--font-display);
-    font-size: clamp(2.4375rem, 5vw, 3.0625rem);
+    font-size: var(--dk-schrift-titel-1);
     font-weight: 700;
     color: var(--color-accent);
     letter-spacing: -0.03em;
@@ -87,7 +87,7 @@ const { stats, heading } = Astro.props;
   }
 
   .stats-label {
-    font-size: 0.9375rem;
+    font-size: var(--dk-schrift-karte);
     font-weight: 500;
     color: var(--color-text-muted);
     line-height: 1.4;

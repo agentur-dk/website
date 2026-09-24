@@ -136,13 +136,13 @@ const base = import.meta.env.BASE_URL;
     max-width: var(--container-max);
     margin-inline: auto;
     padding-inline: 1.5rem;
-    padding-block: 4rem 3rem;
+    padding-block: var(--raum-abschnitt);
   }
 
   .site-footer__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-    gap: 2.5rem;
+    gap: var(--rinne-5);
   }
 
   /* Logo */
@@ -158,19 +158,19 @@ const base = import.meta.env.BASE_URL;
   .footer-logo__name {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: var(--dk-schrift-karte);
     color: #ffffff;
     letter-spacing: -0.02em;
   }
 
   .footer-logo__tagline {
-    font-size: 0.7rem;
+    font-size: var(--dk-schrift-klein);
     color: #d4d4d4;
     letter-spacing: 0.08em;
   }
 
   .footer-desc {
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     color: #d4d4d4;
     margin-bottom: 1rem;
     line-height: 1.6;
@@ -178,14 +178,14 @@ const base = import.meta.env.BASE_URL;
 
   .footer-address {
     font-style: normal;
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     color: #d4d4d4;
   }
 
   /* Column headings */
   .footer-heading {
     font-family: var(--font-display);
-    font-size: 0.8125rem;
+    font-size: var(--dk-schrift-klein);
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -200,14 +200,14 @@ const base = import.meta.env.BASE_URL;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--rinne-1);
   }
 
   /* Links */
   .footer-link {
     color: #d4d4d4;
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     transition: color var(--transition-fast);
   }
 
@@ -216,12 +216,12 @@ const base = import.meta.env.BASE_URL;
   }
 
   .footer-link--sm {
-    font-size: 0.8125rem;
+    font-size: var(--dk-schrift-klein);
   }
 
   .footer-text {
     color: #d4d4d4;
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
   }
 
   /* Screen-reader only */
@@ -250,11 +250,11 @@ const base = import.meta.env.BASE_URL;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--rinne-3);
   }
 
   .footer-copyright {
-    font-size: 0.8125rem;
+    font-size: var(--dk-schrift-klein);
     color: #d4d4d4;
     margin: 0;
   }
@@ -264,7 +264,7 @@ const base = import.meta.env.BASE_URL;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 1.5rem;
+    gap: var(--rinne-4);
     flex-wrap: wrap;
   }
 

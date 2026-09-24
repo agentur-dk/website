@@ -12,19 +12,71 @@
      Schriftdateien im Repository lagen und eine geladen wurde. */
   --dk-font-mono:    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
                      'Liberation Mono', 'Courier New', monospace;
+}
 
-  /* Schriftgrößen — 8-stufige Skala, Verhältnis 1,25.
-     Am 01.09.2026 geschlossen um 20 % angehoben: Der Fließtext war
-     mit 16px zu klein. Angehoben wurde die ganze Leiter, damit die
-     Abstände zwischen den Graden bleiben, wie sie abgestimmt sind. */
-  --dk-font-size-xs:   0.9rem;    /* 14.4px */
-  --dk-font-size-sm:   1.05rem;   /* 16.8px */
-  --dk-font-size-base: 1.2rem;       /* 19.2px */
-  --dk-font-size-md:   1.5rem;    /* 24px */
-  --dk-font-size-lg:   1.875rem;  /* 30px */
-  --dk-font-size-xl:   2.325rem;  /* 37.2px */
-  --dk-font-size-2xl:  2.925rem;  /* 46.8px */
-  --dk-font-size-3xl:  3.675rem;  /* 58.8px */
+/* ============================================================
+   Die Leiter
+   Umbau am 24.09.2026, auf ausdrückliche Anweisung: eine Skala,
+   keine Ausnahmen.
+
+   Vorher standen im Quelltext 205 font-size-Deklarationen mit
+   69 verschiedenen Werten, davon 18 handgeschriebene clamp().
+   Im Browser gemessen ergab das 44 Schriftgrößen auf acht
+   Seiten — drei Viertel aller Textstellen lagen neben der
+   damaligen Token-Skala. Sichtbar wurde es an den Überschriften:
+   h1 maß 81,6 / 62,4 / 56 px je nach Seite, h2 sogar
+   12 / 58,8 / 46,8 / 35,2 / 19,2 px. Auf projekte.html waren h2
+   und h3 gleich groß — zwischen den Ebenen lag kein Unterschied
+   mehr.
+
+   Jetzt: ein Verhältnis (1,2), ein Anker (der Fließtext mit
+   19,2 px), und jede Stufe trägt genau eine Aufgabe. Der Name
+   sagt die Aufgabe, nicht die Größe — wer „die nächstkleinere"
+   sucht, erfindet eine neue Zahl; wer „Kartentext" sucht, findet
+   die eine richtige.
+
+     Stufe  -1    13,33 px    klein
+     Stufe   0    16,00 px    karte
+     Stufe   1    19,20 px    text        ← Anker
+     Stufe   2    23,04 px    vorspann
+     Stufe   3    27,65 px    titel-3
+     Stufe   4    33,18 px      (Zwischenstufe, nur als clamp-Minimum)
+     Stufe   5    39,81 px    titel-2
+     Stufe   6    47,78 px      (Zwischenstufe, nur als clamp-Minimum)
+     Stufe   7    57,33 px    titel-1
+     Stufe   9    82,56 px    hero
+
+   Überschriften überspringen je eine Stufe. Das ist Absicht:
+   Zwischen zwei Textgraden reicht ein Schritt von 1,2 — zwischen
+   zwei Überschriftenebenen sieht man ihn nicht mehr.
+
+   Die drei fließenden Grade sind gerechnet, nicht geschätzt:
+   sie laufen linear zwischen 390 px und 1440 px Fensterbreite.
+   Auf dem Telefon treffen sie fast genau die bisherigen Werte
+   (Hero 47,8 statt 46,8 · Seitentitel 39,8 statt 38,4), am
+   Schreibtisch vereinheitlichen sie, was vorher auseinanderlief.
+   ============================================================ */
+:root {
+  --dk-schrift-klein:    0.8333rem;  /* 13,3 px */
+  --dk-schrift-karte:    1rem;       /* 16 px   */
+  --dk-schrift-text:     1.2rem;     /* 19,2 px */
+  --dk-schrift-vorspann: 1.44rem;    /* 23 px   */
+  --dk-schrift-titel-3:  1.728rem;   /* 27,6 px */
+  --dk-schrift-titel-2:  clamp(2.074rem, 1.92rem + 0.632vw, 2.488rem);   /* 33,2 → 39,8 px */
+  --dk-schrift-titel-1:  clamp(2.488rem, 2.082rem + 1.668vw, 3.583rem);  /* 39,8 → 57,3 px */
+  --dk-schrift-hero:     clamp(2.986rem, 2.179rem + 3.312vw, 5.16rem);   /* 47,8 → 82,6 px */
+
+  /* Die alten Namen zeigen auf die neue Leiter. Sie bleiben, weil
+     Tailwind-Klassen wie text-lg über den @theme-Block darauf
+     zugreifen — nicht als zweite Skala, sondern als Weiterleitung. */
+  --dk-font-size-xs:   var(--dk-schrift-klein);
+  --dk-font-size-sm:   var(--dk-schrift-karte);
+  --dk-font-size-base: var(--dk-schrift-text);
+  --dk-font-size-md:   var(--dk-schrift-vorspann);
+  --dk-font-size-lg:   var(--dk-schrift-titel-3);
+  --dk-font-size-xl:   var(--dk-schrift-titel-2);
+  --dk-font-size-2xl:  var(--dk-schrift-titel-1);
+  --dk-font-size-3xl:  var(--dk-schrift-hero);
 }
 
 /* ============================================================
@@ -32,26 +84,41 @@
    Zwei gegenläufige Kurven: Große Grade laufen enger und
    stehen dichter, kleine laufen weiter und stehen luftiger.
    Mono-Etiketten sind die einzige Sperrung ins Positive —
-   ohne sie zerfällt ein Versalsatz bei 10px.
+   ohne sie zerfällt ein Versalsatz bei 13px.
+
+   Jede Laufweite hängt an einem Grad, nicht an einem Bauteil.
+   Vorher standen 26 verschiedene letter-spacing-Werte im
+   Quelltext, die meisten frei gewählt.
    Analyse dahinter: docs/superpowers/specs/2026-08-30-mummentum-analyse.md
    ============================================================ */
 :root {
-  --dk-tracking-display: -0.04em;   /* ab 59px */
-  --dk-tracking-2xl:     -0.035em;  /* 47px    */
-  --dk-tracking-xl:      -0.03em;   /* 37px    */
-  --dk-tracking-lg:      -0.02em;   /* 30px    */
-  --dk-tracking-md:      -0.015em;  /* 24px    */
-  --dk-tracking-base:     0;        /* ab 19px */
-  --dk-tracking-mono:     0.18em;   /* 12–14px Versalien */
+  --dk-tracking-hero:     -0.04em;   /* 83 px */
+  --dk-tracking-titel-1:  -0.035em;  /* 57 px */
+  --dk-tracking-titel-2:  -0.03em;   /* 40 px */
+  --dk-tracking-titel-3:  -0.02em;   /* 28 px */
+  --dk-tracking-vorspann: -0.015em;  /* 23 px */
+  --dk-tracking-text:      0;        /* 19 px und darunter */
+  --dk-tracking-mono:      0.18em;   /* 13 px Versalien */
+
+  /* Die alten Namen bleiben als Weiterleitung, siehe oben. */
+  --dk-tracking-display: var(--dk-tracking-hero);
+  --dk-tracking-2xl:     var(--dk-tracking-titel-1);
+  --dk-tracking-xl:      var(--dk-tracking-titel-2);
+  --dk-tracking-lg:      var(--dk-tracking-titel-3);
+  --dk-tracking-md:      var(--dk-tracking-vorspann);
+  --dk-tracking-base:    var(--dk-tracking-text);
 
   --dk-leading-display: 1.02;
   --dk-leading-title:   1.08;
   --dk-leading-tight:   1.25;
   --dk-leading-body:    1.65;
 
-  /* Zeilenlänge in Zeichen statt in Pixeln: bleibt beim Zoomen richtig. */
+  /* Zeilenlänge in Zeichen statt in Pixeln: bleibt beim Zoomen richtig.
+     --dk-measure-body gilt für jeden Fließtext, auch in den
+     Referenzkarten — dort lief er vorher über 105 Zeichen. */
   --dk-measure-display: 20ch;
   --dk-measure-title:   20ch;
   --dk-measure-lead:    56ch;
-  --dk-measure-body:    38ch;
+  --dk-measure-body:    68ch;
+  --dk-measure-eng:     38ch;
 }

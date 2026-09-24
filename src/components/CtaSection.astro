@@ -77,7 +77,7 @@ const { phone, phoneDisplay, hours } = siteConfig.contact;
     background-color: var(--color-bg);
     /* Viel Luft nach unten, damit der Footer-Verlauf auf freiem Grund
        anfaengt und nicht direkt an der Schrift klebt. */
-    padding-block: 5rem 7rem;
+    padding-block: var(--raum-abschnitt-weit);
   }
 
   .cta-section__inner {
@@ -105,13 +105,13 @@ const { phone, phoneDisplay, hours } = siteConfig.contact;
     /* Rechte Spalte mit fester Breite, damit die Aktionen buendig mit
        dem rechten Ende der Haarlinie abschliessen. */
     grid-template-columns: minmax(0, 1fr) minmax(13rem, 19rem);
-    gap: 3rem 4rem;
+    gap: var(--rinne-6) var(--rinne-6);
     align-items: start;
   }
 
   .cta-section__label {
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: var(--dk-schrift-klein);
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -121,17 +121,15 @@ const { phone, phoneDisplay, hours } = siteConfig.contact;
 
   .cta-section__title {
     font-family: var(--font-display);
-    font-size: clamp(1.9375rem, 4vw, 2.75rem);
     font-weight: 700;
     color: var(--color-text);
-    letter-spacing: -0.02em;
     line-height: 1.15;
     margin: 0;
     max-width: 14ch;
   }
 
   .cta-section__sub {
-    font-size: 1.0625rem;
+    font-size: var(--dk-schrift-karte);
     line-height: 1.6;
     color: var(--color-text-muted);
     max-width: 42ch;
@@ -142,7 +140,7 @@ const { phone, phoneDisplay, hours } = siteConfig.contact;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2rem;
+    gap: var(--rinne-5);
     /* Optischer Ausgleich: der Button soll auf der Hoehe der
        Ueberschrift stehen, nicht auf Hoehe des Labels darueber. */
     padding-top: 1.75rem;
@@ -154,7 +152,7 @@ const { phone, phoneDisplay, hours } = siteConfig.contact;
 
   .cta-section__direct-label {
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: var(--dk-schrift-klein);
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -167,7 +165,7 @@ const { phone, phoneDisplay, hours } = siteConfig.contact;
   .cta-section__phone {
     display: inline-block;
     font-family: var(--font-display);
-    font-size: 1.375rem;
+    font-size: var(--dk-schrift-vorspann);
     font-weight: 500;
     letter-spacing: -0.01em;
     color: var(--color-text);
@@ -189,18 +187,18 @@ const { phone, phoneDisplay, hours } = siteConfig.contact;
   }
 
   .cta-section__hours {
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-text-faint);
     margin: 0.625rem 0 0;
   }
 
   @media (max-width: 860px) {
     .cta-section {
-      padding-block: 3.5rem 5rem;
+      padding-block: var(--raum-abschnitt-weit);
     }
     .cta-section__grid {
       grid-template-columns: 1fr;
-      gap: 2.5rem;
+      gap: var(--rinne-5);
     }
     .cta-section__title {
       max-width: 20ch;

@@ -53,46 +53,45 @@ const base = import.meta.env.BASE_URL;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding-block: var(--space-20);
+    padding-block: var(--raum-abschnitt-weit);
   }
   .error-page__inner {
     max-width: 560px;
   }
   .error-page__code {
     font-family: var(--font-mono);
-    font-size: clamp(4rem, 15vw, 8rem);
+    font-size: var(--dk-schrift-hero);
     font-weight: var(--font-weight-bold);
     color: var(--color-primary-light);
     letter-spacing: var(--letter-spacing-mono);
     line-height: 1;
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--spacing-6);
   }
   .error-page__title {
-    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-text);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--spacing-4);
   }
   .error-page__desc {
     color: var(--color-text-muted);
     font-size: var(--font-size-md);
-    margin-bottom: var(--space-10);
+    margin-bottom: var(--spacing-10);
   }
   .error-page__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
+    gap: var(--rinne-3);
     justify-content: center;
   }
   .error-page__divider {
     border: none;
     border-top: 1px solid var(--color-border);
-    margin-block: var(--space-12);
+    margin-block: var(--spacing-12);
   }
   .error-page__links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-6);
+    gap: var(--rinne-4);
     justify-content: center;
     list-style: none;
     padding: 0;

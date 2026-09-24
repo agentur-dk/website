@@ -110,7 +110,7 @@
   .bfsg-yn-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: var(--rinne-2);
     margin-block: 1.5rem;
   }
 
@@ -137,7 +137,7 @@
     min-height: 120px;
     padding: 2rem;
     font-family: var(--font-display);
-    font-size: 1.75rem;
+    font-size: var(--dk-schrift-titel-3);
     font-weight: 700;
     border: 3px solid transparent;
     border-radius: 0;
@@ -181,26 +181,26 @@
     .bfsg-option__label {
       min-height: 80px;
       padding: 1.25rem;
-      font-size: 1.375rem;
+      font-size: var(--dk-schrift-vorspann);
     }
   }
 
   .bfsg-step__legend {
-    font-size: 0.875rem;
+    font-size: var(--dk-schrift-klein);
     font-weight: 600;
     color: var(--color-text-muted);
     margin-bottom: 0.5rem;
   }
   .bfsg-step__question {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: var(--dk-schrift-text);
     font-weight: 700;
     color: var(--color-text);
     margin-bottom: 0.5rem;
   }
   .bfsg-step__nav {
     display: flex;
-    gap: 1rem;
+    gap: var(--rinne-3);
     justify-content: flex-end;
     margin-top: 1rem;
   }
@@ -213,7 +213,6 @@
   }
   .bfsg-result__title {
     font-family: var(--font-display);
-    font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text);
     margin-bottom: 0.75rem;
@@ -226,7 +225,7 @@
   .bfsg-result__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--rinne-2);
   }
 
   /* ── Ergebnis-Buttons (Agentur-Stil) ── */
@@ -266,13 +265,13 @@
 
   .bfsg-disclaimer {
     margin-top: 1.5rem;
-    font-size: 0.8125rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-text-faint);
     font-style: italic;
     line-height: 1.6;
   }
   .bfsg-footnotes {
-    font-size: 0.8125rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-text-muted);
     line-height: 1.7;
     padding-left: 1.5rem;
@@ -280,7 +279,7 @@
   }
   .bfsg-footnotes li { margin-bottom: 0.5rem; }
   .bfsg-footnotes__update {
-    font-size: 0.75rem;
+    font-size: var(--dk-schrift-klein);
     color: var(--color-text-faint);
     margin-top: 0.75rem;
   }

@@ -1,7 +1,14 @@
 # 🎨 Designguide – agentur dk Website (dk-dk.de)
 
 > **Zweck:** Dieser Guide ist die verbindliche Referenz für ALLE neuen Seiten und Weiterentwicklungen der agentur-dk-Website. Beim Bauen neuer Seiten: Guide lesen und umsetzen.
-> **Stand:** 16.08.2026 · Eigenständiges Designsystem der agentur dk
+> **Stand:** 24.09.2026 · Eigenständiges Designsystem der agentur dk
+>
+> **Achtung, Abschnitt 1 ist veraltet.** Die Farbtabelle unten beschreibt
+> die Fassung vor der monochromen Bildsprache (#121212 statt #101010, fette
+> Überschriften statt Gewicht 400). Was tatsächlich ausgeliefert wird, steht
+> in `src/styles/mono.css` und `src/styles/tokens/colors.css`. Die
+> Abschnitte 2 und 3 sind am 24.09.2026 gegen den gebauten Stand geprüft
+> und neu geschrieben.
 
 ---
 
@@ -29,24 +36,160 @@ Nur diese Farben verwenden. Palette: **schwarz, grau, weiß, blau #1C60AD**.
 
 **Semantisch:** Fehler `#ff9999` (Text) / `#ff6b6b` (UI), Erfolg `#5dbf6a` (dunkel) bzw. `#2e7d32` (hell).
 
-## 2. Typografie (lokal & barrierefrei)
+## 2. Typografie — eine Leiter, keine Ausnahmen
 
-| Einsatz | Font | Details |
+**Stand 24.09.2026.** Vorher stand hier eine Skala, an die sich niemand
+hielt: 205 `font-size`-Deklarationen mit 69 verschiedenen Werten, darunter
+18 handgeschriebene `clamp()`. Im Browser gemessen waren 44 Schriftgrade
+im Einsatz, drei Viertel aller Textstellen lagen neben der Skala. Sichtbar
+wurde es an den Überschriften: `h1` maß 81,6 / 62,4 / 56 px je nach Seite,
+`h2` sogar 12 / 58,8 / 46,8 / 35,2 / 19,2 px — auf `projekte.html` waren
+`h2` und `h3` gleich groß.
+
+### Die Schriften
+
+| Einsatz | Schrift | Gewicht |
 |---|---|---|
-| **Headlines** (h1–h6, Karten-Titel, Sektions-Titel) | **Space Grotesk** | `font: 700 40px / 1.1 'Space Grotesk', sans-serif` – h1 groß (clamp 31–49px), h2/h3 skaliert, Zeilenhöhe 1.1–1.2, leicht negatives Letter-Spacing |
-| **Fließtext & UI** (Body, Buttons, Formulare, Nav, Footer) | **Manrope** | `font-family: 'Manrope', sans-serif`, Gewichte 400/500/600/700 |
-| **Code/pre** | Roboto Mono | nur für Codeblöcke |
+| Überschriften, Kennzahlen | **Space Grotesk** | 400 (die monochrome Bildsprache setzt keine fetten Überschriften) |
+| Fließtext, Bedienelemente | **Manrope** | 400 / 500 / 600 / 700 |
+| Etiketten, Nummern | System-Monospace | 400 |
 
-**Lokal gehostet** (fonts/): `space-grotesk-v3-latin-{400,500,700}.woff2`, `manrope-v20-latin-{400,500,600,700}.woff2`, `roboto-mono-v31-latin-{300,400,700}.woff2`. Keine CDN-Fonts. `font-display: swap`. Preload: Space Grotesk 700 + Manrope 400.
+Lokal gehostet in `public/fonts/`, kein CDN, `font-display: swap`,
+vorgeladen werden Space Grotesk 400 und Manrope 400.
 
-**Größen-Skala:** xs 12px · sm 14px · base 16px · md 20px · lg 25px · xl 31px · 2xl 39px · 3xl 49px.
+### Die Leiter
 
-## 3. Layout & Sektions-Rhythmus (dunkel/hell-Balance)
+Ein Verhältnis (1 : 1,2), ein Anker (der Fließtext mit 19,2 px), und
+jede Stufe trägt genau eine Aufgabe. **Der Name sagt die Aufgabe, nicht
+die Größe** — wer „die nächstkleinere" sucht, erfindet eine neue Zahl;
+wer „Kartentext" sucht, findet die eine richtige.
 
-- **Dunkel/hell wechseln** – nie durchgehend dunkel. Muster: Hero (dunkel) → Stats (dunkel) → Leistungen (hell) → Warum wir (hell) → Prozess (hell) → FAQ (hell) → Kontakt (dunkel). Landingpages: Hero (dunkel) → Problem (dunkel) → Leistungen (hell) → Prozess (hell) → FAQ (hell) → Kontakt (dunkel).
-- **Container:** max 1140px (breit 1280px, schmal 720px), Padding 24px seitlich, Sektionen `padding-block: 80px`.
-- **Grids:** `grid--auto-sm/md/lg` mit `minmax(min(100%, Xpx), 1fr)` (kein Viewport-Overflow auf Mobile).
-- **Hero:** große Space-Grotesk-Headline, Label (Kleinbuchstaben-Uppercase mit Akzentfarbe), Lead-Text (Manrope, muted), 2 CTA-Buttons. `hero__headline` hat `min-height` (CLS-Fix, Typewriter).
+| Token | Größe | Aufgabe |
+|---|---|---|
+| `--dk-schrift-klein` | 13,3 px | Etiketten, Fußzeile, Hinweise, Kartennummern |
+| `--dk-schrift-karte` | 16 px | Fließtext in Karten, Listen, Formularen |
+| `--dk-schrift-text` | 19,2 px | Fließtext der Seite — **der Anker** |
+| `--dk-schrift-vorspann` | 23 px | der Satz unter einer Überschrift |
+| `--dk-schrift-titel-3` | 27,6 px | Kartenüberschriften, FAQ-Fragen, Schritte |
+| `--dk-schrift-titel-2` | 33,2 → 39,8 px | Abschnittsüberschriften |
+| `--dk-schrift-titel-1` | 39,8 → 57,3 px | Seitentitel |
+| `--dk-schrift-hero` | 47,8 → 82,6 px | Hero der Startseite |
+
+Die drei fließenden Grade laufen linear zwischen 390 px und 1440 px
+Fensterbreite. Sie sind gerechnet, nicht geschätzt, und stehen in
+`src/styles/tokens/typography.css` — **neue `clamp()` für Schriftgrade
+gibt es nicht.** Ein viertes wäre eine vierte Meinung darüber, wie
+Schrift mitwächst.
+
+Überschriften überspringen je eine Stufe. Das ist Absicht: Zwischen
+zwei Textgraden reicht ein Schritt von 1,2 — zwischen zwei
+Überschriftenebenen sieht man ihn nicht mehr.
+
+### Eine Regel je Ebene
+
+Der Grad hängt an der **Ebene**, nicht an der Klasse:
+
+```
+h1   der Gegenstand der Seite          titel-1   (Startseite: hero)
+h2   ein Abschnitt darin               titel-2
+h3   ein Block im Abschnitt            titel-3
+h4   Zwischenüberschrift im Fließtext  vorspann
+```
+
+Eine Klasse setzt einen Grad nur noch, wenn sie ausdrücklich etwas
+anderes meint — ein Fußzeilen-Etikett ist ein `h2`, aber keine
+Abschnittsüberschrift. Solche Stellen sind gezählt und benannt, nicht
+verstreut.
+
+### Laufweite
+
+Jede Laufweite hängt an einem Grad, nicht an einem Bauteil: von
+`-0,04em` beim Hero bis `+0,18em` beim Versal-Etikett. Vorher standen
+26 frei gewählte Werte im Quelltext.
+
+### Zeilenlänge
+
+`--dk-measure-body` (68 Zeichen) gilt für jeden Fließtext. Vorher lief
+er in den Referenzkarten über 105 Zeichen, auf `projekte.html` in 11 von
+14 Absätzen über 80.
+
+## 3. Layout — zwei Takte, sechs Rinnen, eine Kante
+
+### Der senkrechte Rhythmus
+
+Vorher trugen die Abschnitte fünf verschiedene Polster (80/80, 56/56,
+40/48, 0/80, 80/112). Der Rhythmus ist die stillste Qualität einer
+Seite; mit fünf Takten hat sie keinen.
+
+| Token | Wert | Wo |
+|---|---|---|
+| `--dk-raum-abschnitt` | 56 → 80 px | jeder Abschnitt |
+| `--dk-raum-abschnitt-weit` | 80 → 112 px | Hero und Abschluss — wo die Seite anfängt und aufhört |
+
+Zwei abgeleitete Sonderfälle, beide begründet: Wo eine Rasterfläche **im**
+Polster steht, wächst es um ihre Höhe — `calc(var(--raum-abschnitt-weit)
++ var(--rinne-4))`. Und zwei aufeinanderfolgende helle Abschnitte teilen
+sich einen Zwischenraum statt zwei zu stapeln
+(`.section--hell + .section--hell { padding-top: 0 }`).
+
+### Die Rinnen
+
+41 verschiedene `gap`-Werte standen im Quelltext. Sechs Stufen decken sie
+ab, plus **eine** fließende für Hauptspalten:
+
+```
+--dk-rinne-1   8 px   Wortabstände, Zeilen einer Liste
+--dk-rinne-2  12 px   Symbol und Beschriftung
+--dk-rinne-3  16 px   Felder in einer Zeile
+--dk-rinne-4  24 px   Karten in einem Raster
+--dk-rinne-5  32 px   Spalten
+--dk-rinne-6  48 px   Hauptspalten eines Abschnitts
+--dk-rinne-spalte  32 → 48 px   die eine fließende
+```
+
+### Eine linke Kante
+
+**Jede Abschnittsüberschrift beginnt auf derselben senkrechten Linie.**
+Vorher saßen FAQ, Formular und Selbstcheck in einem 720-px-Kasten und
+begannen 210 px weiter rechts als der Rest der Seite — beim Scrollen las
+sich das wie ein eingeschobener Fremdkörper. Jetzt trägt jeder Abschnitt
+denselben Kasten (1140 px), und die **Lesebreite sitzt am Inhalt**: die
+FAQ-Liste, das Formular, die Fragenliste tragen sie selbst.
+
+Zwei Ausnahmen, beide auf Seitenebene und deshalb unauffällig:
+Impressum, Datenschutz und Barrierefreiheitserklärung sind Dokumente und
+laufen ganz in der schmalen Spalte.
+
+### Zentriert wird nichts, außer einer Tafel
+
+Abschnittsüberschriften sind linksbündig — ausnahmslos. Das Etikett mit
+dem kurzen Strich davor funktioniert nur am linken Satzrand. Zentriert
+sein darf, was eine **eigene Tafel** ist: die Bestätigung nach dem
+Absenden, ein eingelassener CTA-Kasten. Ein Abschnitt ist keine Tafel.
+
+### Dunkel und hell
+
+Hero dunkel, der Mittelteil hell, Kontakt und Abschluss auf der
+Akzentfläche, Fußzeile dunkel. Container 1140 px (breit 1280, schmal
+720), 24 px seitlich.
+
+### Was das hält: `npm run check:typo`
+
+`tools/check-typo.mjs` liest den Quelltext und meldet jede `font-size`
+ohne Token, jedes Abschnittspolster ohne Takt, jede `gap` ohne Rinne,
+jedes neue `clamp()` für einen Schriftgrad und jeden Token-Namen, den es
+nicht gibt. Es läuft in `npm run verify`.
+
+**Erlaubt ist genau eine Ausnahme, und sie ist benannt:** der
+Sprachnachrichten-Block bildet auf ausdrückliche Anweisung eine
+WhatsApp-Blase 1:1 nach und setzt dafür px-Grade. Jede weitere Ausnahme
+muss im Skript eingetragen **und** im CSS begründet werden — das ist die
+Hürde, die vorher fehlte.
+
+> Beim ersten Lauf fand das Skript einen echten Fehler: Die 404-Seite
+> setzte sechs Abstände gegen `var(--space-*)` — ein Token, den es
+> nirgends gibt. CSS verschluckt eine unbekannte Variable stillschweigend,
+> die Abstände fielen ersatzlos weg, und niemand hatte es gesehen.
 
 ## 4. Komponenten
 

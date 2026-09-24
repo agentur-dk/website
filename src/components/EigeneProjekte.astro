@@ -78,7 +78,7 @@ const zahlen = [
   .ep__inner { position: relative; }
   .ep__heading {
     font-family: var(--font-display); font-weight: 700;
-    font-size: clamp(1.6rem, 3.5vw, 2.3rem); line-height: 1.15;
+    line-height: 1.15;
     letter-spacing: -.02em; margin: .35rem 0 1rem;
     max-width: 22ch; text-wrap: balance;
   }
@@ -92,7 +92,7 @@ const zahlen = [
 
   .ep__zahlen {
     list-style: none; margin: 0; padding: 0;
-    display: grid; gap: 1.5rem;
+    display: grid; gap: var(--rinne-4);
     grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
     max-width: 44rem;
   }
@@ -102,16 +102,16 @@ const zahlen = [
   }
   .epzahl__wert {
     font-family: var(--font-display); font-weight: 700;
-    font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.1;
+    font-size: var(--dk-schrift-titel-3); line-height: 1.1;
     margin: 0 0 .25rem; letter-spacing: -.02em;
     font-variant-numeric: tabular-nums;
   }
   .epzahl__einheit {
     font-family: var(--font-body, inherit); font-weight: 400;
-    font-size: .9rem; color: var(--color-text-muted);
+    font-size: var(--dk-schrift-klein); color: var(--color-text-muted);
   }
   .epzahl__zusatz {
-    margin: 0; font-size: .85rem; color: var(--color-text-muted);
+    margin: 0; font-size: var(--dk-schrift-klein); color: var(--color-text-muted);
     line-height: 1.4;
   }
   .ep__link { margin: 0; }

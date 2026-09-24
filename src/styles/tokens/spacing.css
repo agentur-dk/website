@@ -34,6 +34,38 @@
   --dk-transition-base: 250ms ease;
   --dk-transition-slow: 400ms ease;
 
+  /* ------------------------------------------------------------
+     Der senkrechte Rhythmus
+     Umbau am 24.09.2026, auf ausdrückliche Anweisung.
+
+     Vorher trugen die Abschnitte fünf verschiedene Polster:
+     80/80, 56/56, 40/48, 0/80 und 80/112 — im Browser gemessen,
+     nicht im Quelltext gezählt. Der Rhythmus ist die stillste
+     Qualität einer Seite; mit fünf Takten hat sie keinen.
+
+     Jetzt zwei, und beide haben einen Grund:
+       normal  jeder Abschnitt
+       weit    der Hero und der Abschluss — die beiden Stellen,
+               an denen die Seite anfängt und aufhört
+     ------------------------------------------------------------ */
+  --dk-raum-abschnitt:      clamp(3.5rem, 6.2vw, 5rem);   /* 56 → 80 px */
+  --dk-raum-abschnitt-weit: clamp(5rem, 8.6vw, 7rem);     /* 80 → 112 px */
+
+  /* ------------------------------------------------------------
+     Die Rinnen
+     41 verschiedene gap-Werte standen im Quelltext. Sechs Stufen
+     decken sie ab; alles dazwischen rastet auf die nächste ein.
+     ------------------------------------------------------------ */
+  --dk-rinne-1: 0.5rem;   /*  8 px — Wortabstände, Zeilen in einer Liste */
+  --dk-rinne-2: 0.75rem;  /* 12 px — Symbol und Beschriftung */
+  --dk-rinne-3: 1rem;     /* 16 px — Felder in einer Zeile */
+  --dk-rinne-4: 1.5rem;   /* 24 px — Karten in einem Raster */
+  --dk-rinne-5: 2rem;     /* 32 px — Spalten */
+  --dk-rinne-6: 3rem;     /* 48 px — Hauptspalten eines Abschnitts */
+  /* Die einzige fließende Rinne: der Zwischenraum zweier Hauptspalten,
+     der am Telefon enger stehen muss als am Schreibtisch. */
+  --dk-rinne-spalte: clamp(2rem, 4vw, 3rem);   /* 32 → 48 px */
+
   /* Container-Breiten */
   --dk-container-max:    1140px;
   --dk-container-wide:   1280px;

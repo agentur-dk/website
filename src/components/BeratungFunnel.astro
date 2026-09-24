@@ -281,13 +281,14 @@ const schritte: readonly {
 </section>
 
 <style>
-  .funnel__inner { max-width: var(--container-narrow); }
+  /* Kante wie jeder andere Abschnitt der Seite; die Lesebreite
+     sitzt an der Fragenliste, nicht am Abschnitt. */
+  .funnel__inner { max-width: var(--container-max); }
+  .funnel__schritt { max-width: var(--container-narrow); }
 
   .funnel__heading {
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.15; letter-spacing: -.02em;
-    margin: .35rem 0 .75rem;
+    line-height: 1.15;    margin: .35rem 0 .75rem;
     text-wrap: balance;
   }
   .funnel__intro {
@@ -300,7 +301,7 @@ const schritte: readonly {
      noch kommt, nicht nur wie weit er ist. Das ist bei kurzen
      Strecken der beruhigendere Hinweis. */
   .funnel__fortschritt {
-    display: flex; gap: .4rem; list-style: none;
+    display: flex; gap: var(--rinne-1); list-style: none;
     margin: 0 0 2rem; padding: 0;
   }
   .funnel__punkt {
@@ -314,16 +315,16 @@ const schritte: readonly {
   .funnel__schritt { border: 0; padding: 0; margin: 0; }
   .funnel__frage {
     font-family: var(--font-display); font-weight: 700;
-    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    font-size: var(--dk-schrift-vorspann);
     line-height: 1.25; padding: 0; margin-bottom: .4rem;
-    display: flex; align-items: baseline; gap: .6rem;
+    display: flex; align-items: baseline; gap: var(--rinne-1);
   }
   .funnel__zaehler {
-    font-family: var(--font-mono); font-size: .8rem; font-weight: 400;
+    font-family: var(--font-mono); font-size: var(--dk-schrift-klein); font-weight: 400;
     color: var(--color-accent); letter-spacing: .08em;
   }
   .funnel__hilfe {
-    color: var(--color-text-muted); font-size: .95rem;
+    color: var(--color-text-muted); font-size: var(--dk-schrift-karte);
     margin: 0 0 1.5rem; max-width: 50ch;
   }
 
@@ -333,7 +334,7 @@ const schritte: readonly {
      gezeichnet. `appearance: none` allein genügt nicht: Firefox
      zeigt sonst weiter einen Rahmen. */
   .funnel__karten {
-    display: grid; gap: .6rem;
+    display: grid; gap: var(--rinne-1);
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   }
   .fkarte { position: relative; display: block; cursor: pointer; }
@@ -342,7 +343,7 @@ const schritte: readonly {
     margin: 0; opacity: 0; cursor: pointer;
   }
   .fkarte__inhalt {
-    display: flex; align-items: flex-start; gap: .7rem;
+    display: flex; align-items: flex-start; gap: var(--rinne-2);
     padding: 1rem 1.1rem;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -375,25 +376,25 @@ const schritte: readonly {
   .fkarte__text { min-width: 0; }
 
   .fkarte__titel {
-    display: block; font-weight: 700; font-size: 1rem;
+    display: block; font-weight: 700; font-size: var(--dk-schrift-karte);
     margin-bottom: .15rem;
   }
   .fkarte__zeile {
-    display: block; font-size: .85rem; color: var(--color-text-muted);
+    display: block; font-size: var(--dk-schrift-klein); color: var(--color-text-muted);
     line-height: 1.35;
   }
 
   /* ── Letzter Schritt ─────────────────────────────────────────── */
   .funnel__felder {
-    display: grid; gap: 1rem;
+    display: grid; gap: var(--rinne-3);
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
     margin-bottom: 1.25rem;
   }
-  .ffeld { display: grid; gap: .3rem; }
+  .ffeld { display: grid; gap: var(--rinne-1); }
   .ffeld--breit { grid-column: 1 / -1; }
-  .ffeld__label { font-weight: 600; font-size: .9rem; }
+  .ffeld__label { font-weight: 600; font-size: var(--dk-schrift-klein); }
   .ffeld__input {
-    font: inherit; font-size: 1rem;
+    font: inherit; font-size: var(--dk-schrift-karte);
     padding: .7rem .8rem;
     background: var(--color-surface);
     border: 1px solid var(--color-border-strong);
@@ -405,25 +406,25 @@ const schritte: readonly {
     outline: 2px solid var(--color-focus); outline-offset: 1px;
     border-color: var(--color-accent);
   }
-  .ffeld__hilfe { font-size: .8rem; color: var(--color-text-muted); }
+  .ffeld__hilfe { font-size: var(--dk-schrift-klein); color: var(--color-text-muted); }
 
   .fcheck {
-    display: flex; gap: .6rem; align-items: flex-start;
-    font-size: .9rem; color: var(--color-text-muted);
+    display: flex; gap: var(--rinne-1); align-items: flex-start;
+    font-size: var(--dk-schrift-klein); color: var(--color-text-muted);
     margin-bottom: 1.5rem;
   }
   .fcheck__box { margin-top: .2rem; width: 1.1rem; height: 1.1rem; flex: none; }
   .fcheck a { color: var(--color-accent); }
 
-  .funnel__abschluss { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+  .funnel__abschluss { display: flex; flex-wrap: wrap; gap: var(--rinne-2); align-items: center; }
   /* Der Absendeknopf ist das Ziel der ganzen Strecke — er darf breiter
      sein als ein gewöhnlicher Knopf und am Telefon die volle Zeile
      nehmen. Die Klasse wird außerdem vom Skript gesucht. */
   .funnel__senden { flex: 1 1 14rem; justify-content: center; }
 
   .funnel__oder {
-    display: flex; align-items: center; gap: 1rem;
-    color: var(--color-text-muted); font-size: .85rem;
+    display: flex; align-items: center; gap: var(--rinne-3);
+    color: var(--color-text-muted); font-size: var(--dk-schrift-klein);
     margin: 2rem 0 1rem;
   }
   .funnel__oder::before, .funnel__oder::after {
@@ -431,7 +432,7 @@ const schritte: readonly {
   }
   .funnel__termin { display: inline-flex; }
   .funnel__hinweis {
-    font-size: .8rem; color: var(--color-text-muted);
+    font-size: var(--dk-schrift-klein); color: var(--color-text-muted);
     margin: .75rem 0 0; max-width: 48ch;
   }
 
@@ -440,7 +441,7 @@ const schritte: readonly {
   .funnel__fehler {
     margin-top: 1rem; padding: .75rem 1rem;
     background: var(--color-error); color: var(--color-error-text);
-    border-radius: var(--radius-md); font-size: .9rem;
+    border-radius: var(--radius-md); font-size: var(--dk-schrift-klein);
   }
 
   /* Der Honigtopf darf nicht `display: none` sein — das füllen manche

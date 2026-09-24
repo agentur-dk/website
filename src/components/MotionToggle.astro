@@ -66,7 +66,7 @@ import Icon from './ui/Icon.astro';
   .motion-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--rinne-1);
     /* 44px Zielhöhe — deutlich über den 24px, die 2.5.8 mindestens fordert. */
     min-height: 44px;
     padding: 0.5rem 0.75rem;
@@ -75,7 +75,7 @@ import Icon from './ui/Icon.astro';
     border-radius: var(--radius-sm, 4px);
     color: var(--color-text-muted);
     font: inherit;
-    font-size: 0.8125rem;
+    font-size: var(--dk-schrift-klein);
     cursor: pointer;
     transition: color var(--transition-fast), border-color var(--transition-fast);
   }

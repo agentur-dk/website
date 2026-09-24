@@ -146,7 +146,7 @@ const durchlaeufe = [
 
 <style>
   .logo-strip {
-    padding-block: 2.5rem 3rem;
+    padding-block: var(--raum-abschnitt);
     overflow: hidden;
   }
 
@@ -166,7 +166,7 @@ const durchlaeufe = [
     text-align: center;
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: var(--dk-schrift-klein);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-text-faint);
@@ -184,7 +184,7 @@ const durchlaeufe = [
   .logo-strip__track {
     display: flex;
     align-items: center;
-    gap: 5.2rem;
+    gap: var(--rinne-6);
     width: max-content;
     animation: logo-scroll 40s linear infinite;
     list-style: none;
@@ -224,7 +224,7 @@ const durchlaeufe = [
      Namen sehen aus wie Platzhalter, nicht wie Referenzen. */
   .logo-strip__name {
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: var(--dk-schrift-karte);
     font-weight: 500;
     letter-spacing: 0.015em;
     color: var(--color-text);
@@ -247,7 +247,7 @@ const durchlaeufe = [
       justify-content: center;
       width: 100%;
       flex-wrap: wrap;
-      gap: 2.3rem 3.45rem;
+      gap: var(--rinne-5) var(--rinne-6);
     }
     .logo-strip__track-wrap {
       -webkit-mask-image: none;
