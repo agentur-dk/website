@@ -42,37 +42,84 @@ import Icon from '../components/ui/Icon.astro';
 
 const base = import.meta.env.BASE_URL;
 
-/** Die Bausteine von DU BIST GRIECHE. */
-const dbgTeile = [
+/**
+ * Die beiden Marken in einer Zeile — das Erste, was man sieht.
+ * `bausteine` zählt, was unten im Markensystem steht; `seit` ist belegt.
+ */
+const marken = [
   {
-    icon: 'code',
-    titel: 'Die Website',
-    text: 'Der Kern seit 2015: täglich neue Inhalte, über zehn Jahrgänge Archiv. Sie trägt die Suchsichtbarkeit, aus der alles andere Reichweite bezieht.',
+    id: 'dbg',
+    logo: 'du-bist-grieche.svg',
+    eigenfarben: true,
+    // Quadratisch (1:1) — bei gleicher Höhe wie eine breite Wortmarke
+    // wirkt sie wie eine Briefmarke. Dieselbe Abwägung steht in
+    // kunden.ts neben der Logoleiste.
+    logoHoehe: '4.25rem',
+    name: 'DU BIST GRIECHE',
+    seit: 2015,
+    bausteine: 6,
+    kurz: 'Die größte Plattform für Griechenland-Liebhaber im deutschsprachigen Raum.',
   },
   {
-    icon: 'users',
-    titel: 'Die Agora',
-    text: 'Der Community-Bereich der Plattform. Dort passiert, was eine Marke von einem Magazin unterscheidet: Die Leser reden miteinander, nicht nur mit uns.',
+    id: 'aposocial',
+    logo: 'aposocial.svg',
+    eigenfarben: false,
+    logoHoehe: '1.9rem',
+    name: 'aposocial',
+    seit: 2021,
+    bausteine: null,
+    kurz: 'Branchenplattform für Apotheken — „Ihre tägliche Dosis Social Media".',
+  },
+];
+
+const JAHR_HEUTE = 2026;
+
+/**
+ * Nur, was belegt ist.
+ *
+ * Für Website (2015) und Shop (2026) steht das Jahr in der geprüften
+ * Quelle. Für Agora, Podcast, Newsletter und Kanäle steht es nirgends —
+ * und ein geschätztes Jahr auf einer Zeitleiste ist keine Schätzung
+ * mehr, sondern eine Behauptung. Sie fehlen deshalb, sichtbar benannt
+ * im Kasten darunter.
+ */
+const MEILENSTEINE: Record<number, string> = {
+  2015: 'Erste Zeile',
+  2026: 'Der Shop',
+};
+
+/**
+ * Das Markensystem, nach Aufgabe gruppiert.
+ *
+ * Sechs Kacheln nebeneinander zeigen sechs Dinge. Drei Gruppen zeigen,
+ * WIE sie zusammenhängen: Eine Marke zieht an, bindet und erlöst — und
+ * erst das macht aus Einzelteilen ein System. Genau das war auf der
+ * ersten Fassung dieser Seite nicht zu sehen.
+ */
+const dbgSystem = [
+  {
+    gruppe: 'Anziehen',
+    zweck: 'Menschen finden die Marke, ohne sie zu kennen.',
+    teile: [
+      { icon: 'code',      titel: 'Website',  text: 'Der Kern seit 2015, über zehn Jahrgänge Archiv. Trägt die Suchsichtbarkeit.' },
+      { icon: 'megaphone', titel: 'Kanäle',   text: '750.000 Follower im erweiterten Kanalumfeld. Die Eingangstür.' },
+    ],
   },
   {
-    icon: 'mic',
-    titel: 'Der Podcast',
-    text: '„Der Satz des Pitagyros", zusammen mit Panayota Petridou. 15.000 Streams je Folge — das Format, das der Marke eine Stimme und ein Gesicht gibt.',
+    gruppe: 'Binden',
+    zweck: 'Aus Besuchern werden Wiederkehrer.',
+    teile: [
+      { icon: 'users', titel: 'Agora',      text: 'Der Community-Bereich. Die Leser reden miteinander, nicht nur mit uns.' },
+      { icon: 'mic',   titel: 'Podcast',    text: '„Der Satz des Pitagyros" mit Panayota Petridou. 15.000 Streams je Folge.' },
+      { icon: 'mail',  titel: 'Newsletter', text: 'Der Rückkanal, der uns gehört. Reichweite auf fremden Plattformen ist geliehen.' },
+    ],
   },
   {
-    icon: 'mail',
-    titel: 'Der Newsletter',
-    text: 'Der Rückkanal, der niemandem gehört außer uns. Reichweite auf fremden Plattformen ist geliehen; eine E-Mail-Liste ist es nicht.',
-  },
-  {
-    icon: 'megaphone',
-    titel: 'Die Kanäle',
-    text: '750.000 Follower im erweiterten Kanalumfeld. Sie sind die Eingangstür — gelesen, gehört und gekauft wird auf den eigenen Flächen.',
-  },
-  {
-    icon: 'shopping-cart',
-    titel: 'Der Shop',
-    text: 'Seit 2026: Schmuck, graviert in Köln. Der Schritt, an dem aus Aufmerksamkeit ein Produkt wird — und aus einer Marke ein Geschäft.',
+    gruppe: 'Erlösen',
+    zweck: 'Aus Aufmerksamkeit wird ein Geschäft.',
+    teile: [
+      { icon: 'shopping-cart', titel: 'Shop', text: 'Seit 2026: Schmuck, graviert in Köln. Elf Jahre nach der ersten Zeile.' },
+    ],
   },
 ] as const;
 
@@ -117,16 +164,45 @@ const dbgChronik = [
       <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="drift" cell={3} fps={12} /></div>
       <div class="container">
         <p class="section__label">Eigene Marken</p>
-        <h1 id="hero-heading" class="section__headline">Wir haben Marken aufgebaut, bevor wir Markenaufbau verkauft haben</h1>
+        <h1 id="hero-heading" class="section__headline">Zwei Marken, elf Jahre, kein Auftraggeber</h1>
         <p class="section__lead">
-          Jede Agentur sagt, sie könne Markenaufbau. Auf dieser Seite steht, was wir
-          dafür selbst riskiert haben: zwei Marken, elf beziehungsweise fünf Jahre,
-          ohne Auftraggeber im Rücken.
+          Jede Agentur sagt, sie könne Markenaufbau. Hier steht, was wir dafür
+          selbst riskiert haben — mit eigenem Geld, ohne Briefing und ohne
+          Rückfahrkarte.
         </p>
-        <div class="hero__actions">
-          <a href="#dbg" class="btn btn--primary btn--lg">DU BIST GRIECHE ansehen</a>
-          <a href="#aposocial" class="btn btn--outline btn--lg">aposocial ansehen</a>
-        </div>
+        <!-- Beide Marken auf einen Blick: Marke, Spanne, Umfang.
+             Vorher standen hier zwei Knöpfe — die sagten nichts über
+             das, was dahintersteht. -->
+        <ul class="markenliste" role="list">
+          {marken.map((m) => (
+            <li class="markenkarte">
+              <a class="markenkarte__link" href={`#${m.id}`}>
+                <img
+                  class:list={['markenkarte__logo', m.eigenfarben && 'markenkarte__logo--eigen']}
+                  src={`${base}logos/${m.logo}`} alt={m.name}
+                  width="240" height="80" loading="lazy"
+                  style={`--logo-hoehe: ${m.logoHoehe}`}
+                />
+                <span class="markenkarte__spanne">
+                  <span class="markenkarte__jahr">{m.seit}</span>
+                  <span class="markenkarte__strich" aria-hidden="true"></span>
+                  <span class="markenkarte__jahr">heute</span>
+                </span>
+                <span class="markenkarte__zahlen">
+                  <span class="markenkarte__zahl">
+                    <b>{JAHR_HEUTE - m.seit}</b> Jahre
+                  </span>
+                  {m.bausteine && (
+                    <span class="markenkarte__zahl">
+                      <b>{m.bausteine}</b> Bausteine
+                    </span>
+                  )}
+                </span>
+                <span class="markenkarte__kurz">{m.kurz}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 
@@ -173,6 +249,38 @@ const dbgChronik = [
           Aufgebaut ohne Auftraggeber, ohne Budget von außen, auf eigenes Risiko.
         </p>
 
+        <!-- Die Spanne als Fläche, nicht als Satz.
+             Zwölf Jahresblöcke, lückenlos gefüllt: Das ist der Beleg für
+             Ausdauer, den eine Zahl allein nicht liefert. Die beiden
+             Marken darunter im selben Maßstab — so sieht man, dass die
+             eine doppelt so lange läuft wie die andere. -->
+        <div class="leiste">
+          <ol class="leiste__jahre" role="list" aria-label="Veröffentlichungsjahre">
+            {Array.from({ length: JAHR_HEUTE - 2015 + 1 }, (_, i) => 2015 + i).map((jahr) => {
+              const schritt = MEILENSTEINE[jahr];
+              return (
+                <li class:list={['leiste__jahr', schritt && 'leiste__jahr--punkt']}>
+                  <span class="leiste__block" aria-hidden="true"></span>
+                  <span class="leiste__zahl">{String(jahr).slice(2)}</span>
+                  {schritt && <span class="leiste__marke">{schritt}</span>}
+                </li>
+              );
+            })}
+          </ol>
+          <p class="leiste__legende">
+            {Object.entries(MEILENSTEINE).map(([jahr, was]) => (
+              <span class="leiste__legendeneintrag">
+                <span class="leiste__punkt" aria-hidden="true"></span>{jahr} · {was}
+              </span>
+            ))}
+          </p>
+          <p class="leiste__fuss">
+            Zwölf Jahrgänge, täglich veröffentlicht. Keine Kampagne, kein Relaunch —
+            Wiederholung über elf Jahre ist der ganze Mechanismus. Markiert sind die
+            beiden Jahre, für die uns ein Beleg vorliegt.
+          </p>
+        </div>
+
         <div class="section__grid section__grid--2col">
           <div class="section__col">
             <h3 class="section__subheading">Die DNA von DU BIST GRIECHE</h3>
@@ -215,13 +323,25 @@ const dbgChronik = [
           Eine Marke ist kein Logo und keine Website. Sie ist das, was zusammen
           funktioniert — und jeder dieser Teile hat Jahre gebraucht.
         </p>
-        <div class="card-grid card-grid--3col">
-          {dbgTeile.map((t) => (
-            <article class="card" data-reveal>
-              <span class="marke__ikon" aria-hidden="true"><Icon name={t.icon} size={22} /></span>
-              <h3 class="card__heading">{t.titel}</h3>
-              <p class="card__body">{t.text}</p>
-            </article>
+        <div class="system">
+          {dbgSystem.map((g) => (
+            <section class="system__gruppe" aria-label={g.gruppe}>
+              <header class="system__kopf">
+                <h3 class="system__name">{g.gruppe}</h3>
+                <p class="system__zweck">{g.zweck}</p>
+              </header>
+              <ul class="system__teile" role="list">
+                {g.teile.map((teil) => (
+                  <li class="system__teil">
+                    <span class="system__ikon" aria-hidden="true"><Icon name={teil.icon} size={20} /></span>
+                    <span class="system__text">
+                      <b class="system__titel">{teil.titel}</b>
+                      {teil.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
         </div>
 
@@ -487,6 +607,236 @@ const dbgChronik = [
   .marke__nachtrag code {
     font-family: var(--font-mono);
     font-size: 0.9em;
+    color: var(--color-text);
+  }
+
+  /* ── Die beiden Marken im Kopf ──────────────────────────────────────
+     Zwei Karten statt zweier Knöpfe. Wer die Seite öffnet, sieht sofort
+     beide Marken, ihre Spanne und ihren Umfang — das war der Punkt, an
+     dem die erste Fassung scheiterte: Sie behauptete Breite, statt sie
+     zu zeigen. */
+  .markenliste {
+    list-style: none;
+    margin: var(--rinne-6) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: var(--rinne-4);
+    max-width: 52rem;
+  }
+  .markenkarte { display: flex; }
+  .markenkarte__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rinne-3);
+    flex: 1;
+    padding: var(--rinne-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: border-color var(--transition-fast);
+  }
+  .markenkarte__link:hover { border-color: var(--color-primary); }
+  .markenkarte__logo {
+    height: var(--logo-hoehe, 2.6rem);
+    width: auto;
+    max-width: 14rem;
+    object-fit: contain;
+    object-position: left;
+    /* Die Logos sind für dunklen Grund gedacht; eines bringt eigene
+       Farben mit (siehe eigeneFarben in kunden.ts). */
+    filter: brightness(0) invert(1);
+  }
+  .markenkarte__logo--eigen { filter: none; }
+
+  /* Die Spanne als Strich: Anfangsjahr, Linie, heute. Eine Jahreszahl
+     allein liest man, eine Strecke sieht man. */
+  .markenkarte__spanne {
+    display: flex;
+    align-items: center;
+    gap: var(--rinne-2);
+  }
+  .markenkarte__jahr {
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .markenkarte__strich {
+    flex: 1;
+    height: 1px;
+    background: var(--color-accent);
+  }
+  .markenkarte__zahlen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--rinne-4);
+  }
+  .markenkarte__zahl {
+    font-size: var(--dk-schrift-klein);
+    color: var(--color-text-muted);
+  }
+  .markenkarte__zahl b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--dk-schrift-titel-3);
+    font-weight: 400;
+    letter-spacing: var(--dk-tracking-titel-3);
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .markenkarte__kurz {
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+  }
+
+  /* ── Die Jahresleiste ───────────────────────────────────────────────
+     Zwölf gefüllte Blöcke. Der Beleg für Ausdauer ist die Fläche, nicht
+     die Jahreszahl daneben. */
+  .leiste { margin: var(--rinne-6) 0 var(--rinne-6); max-width: 52rem; }
+  .leiste__jahre {
+    list-style: none;
+    margin: 0 0 var(--rinne-3);
+    padding: 0;
+    display: flex;
+    gap: 3px;
+  }
+  .leiste__jahr {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--rinne-1);
+    min-width: 0;
+  }
+  /* Ruhiger Grundton, damit die Leiste nicht schreit: #6c6c6c erreicht
+     auf #101010 gemessen 3,62 : 1 und liegt damit über der Schwelle für
+     grafische Objekte. Die belegten Jahre stehen im Akzent und heben
+     sich dadurch ab — das ist die Bewegung, die man sehen soll. */
+  .leiste__block {
+    display: block;
+    width: 100%;
+    height: 2.75rem;
+    background: #6c6c6c;
+    border-radius: 1px;
+  }
+  .leiste__jahr--punkt .leiste__block { background: var(--color-accent); }
+  .leiste__jahr--punkt .leiste__zahl { color: var(--color-text); }
+  /* Die Beschriftung steht über dem Block, nicht neben ihm — sonst
+     schiebt sie bei zwölf Spalten die ganze Leiste über den Rand.
+     Gemessen bei 390 px: 395 px Dokumentbreite, also eine waagerechte
+     Bildlaufleiste auf jedem Telefon. Deshalb absolut positioniert und
+     unter 48 rem ganz weg; dort trägt die Legende darunter dieselbe
+     Information, nur lesbar. */
+  .leiste__jahr { position: relative; }
+  .leiste__marke {
+    position: absolute;
+    bottom: calc(100% + var(--rinne-1));
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+  .leiste__jahre { margin-top: 1.75rem; }
+
+  .leiste__legende {
+    display: none;
+    margin: 0 0 var(--rinne-3);
+    gap: var(--rinne-4);
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .leiste__legendeneintrag { display: inline-flex; align-items: center; gap: var(--rinne-1); }
+  .leiste__punkt {
+    width: 8px; height: 8px; border-radius: 1px;
+    background: var(--color-accent);
+  }
+
+  @media (max-width: 48rem) {
+    .leiste__marke { display: none; }
+    .leiste__jahre { margin-top: 0; }
+    .leiste__legende { display: flex; }
+    /* Jedes zweite Jahr genügt, wenn zwölf Spalten auf 320 px müssen. */
+    .leiste__jahr:nth-child(even) .leiste__zahl { visibility: hidden; }
+  }
+  .leiste__zahl {
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .leiste__fuss {
+    margin: 0;
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+  }
+
+  /* ── Das Markensystem ───────────────────────────────────────────────
+     Drei Gruppen statt sechs gleicher Kacheln. Die Gruppierung ist die
+     Aussage: Eine Marke zieht an, bindet und erlöst. Sechs Kacheln
+     nebeneinander zeigen sechs Dinge; drei Gruppen zeigen, wie sie
+     zusammenhängen. */
+  .system {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: var(--rinne-5);
+    margin-top: var(--rinne-6);
+  }
+  .system__gruppe {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rinne-4);
+    padding-top: var(--rinne-3);
+    border-top: 2px solid var(--color-accent);
+  }
+  .system__kopf { display: flex; flex-direction: column; gap: var(--rinne-1); }
+  .system__name { margin: 0; }
+  .system__zweck {
+    margin: 0;
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+  }
+  .system__teile {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--rinne-3);
+  }
+  .system__teil {
+    display: flex;
+    gap: var(--rinne-3);
+    padding: var(--rinne-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+  }
+  .system__ikon { flex-shrink: 0; color: var(--color-accent); }
+  .system__text {
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+  }
+  .system__titel {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 400;
     color: var(--color-text);
   }
 
