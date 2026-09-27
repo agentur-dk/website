@@ -1,0 +1,526 @@
+---
+/**
+ * Karriereseite der agentur dk.
+ *
+ * ── Die Vorlage ───────────────────────────────────────────────────────
+ * Gebaut nach dem Muster unserer eigenen Personalgewinnungs-Seiten
+ * (freut-sich-auf-mich.de, siehe ~/Claude-Projekte/Code/). Die
+ * Abschnittsfolge dort ist erprobt und wird hier übernommen:
+ *
+ *   Auftakt · Stellen · Vorteile · Arbeitsplatz · Ablauf ·
+ *   Auf einen Blick · Fragen · Bewerbung
+ *
+ * ── Die Anrede ────────────────────────────────────────────────────────
+ * Diese Seite duzt, der Rest der Website siezt. Das ist kein Versehen,
+ * sondern eine Entscheidung: Hier liest eine Bewerberin, nicht eine
+ * Auftraggeberin. In der Personalgewinnung ist das Du der Normalfall,
+ * und die s-k-Seite führt es genauso.
+ *
+ * Nicht zu verwechseln mit dem Leistungs-Check im Hero der Startseite —
+ * der duzt Kundschaft und ist deshalb ein Fehler, kein Register.
+ *
+ * ── Was hier NICHT steht ──────────────────────────────────────────────
+ * Die Regel aus dem s-k-Projekt gilt hier genauso, und sie ist auf
+ * einer Karriereseite noch schärfer: Eine Bewerberin liest jeden Satz
+ * als Zusage.
+ *
+ * Also: keine erfundenen Stellen, keine erfundene Vier-Tage-Woche, kein
+ * erfundenes Homeoffice, keine Gehaltsspanne, keine Urlaubstage. Nichts
+ * davon ist im Projekt belegt. Wo es fehlt, steht ein sichtbar
+ * gekennzeichneter Platzhalter (.luecke) und nicht ein plausibler Satz.
+ *
+ * Belegt und deshalb verwendet:
+ *   Anschrift, Südstadt, Erreichbarkeit  aus site.config.ts und Impressum
+ *   „Fünf Menschen in Köln, die seit     aus Kernteam.astro
+ *    Jahren zusammenarbeiten"
+ *   „Kurze Wege, ein Ansprechpartner"    aus Kernteam.astro / index.astro
+ *   Die Leistungen                        aus site.config.ts
+ *   Die Bürofotos                         aus src/assets/buero/
+ *   Eigene Marken                         aus marken.astro
+ *
+ * tests/jobs-inhalt.test.ts führt die Wendungen, die hier nicht stehen
+ * dürfen — nach demselben Muster wie tests/inhalt.test.ts im
+ * s-k-Projekt.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DitherBand from '../components/DitherBand.astro';
+import Dither from '../components/ui/Dither.astro';
+import Icon from '../components/ui/Icon.astro';
+import { Image } from 'astro:assets';
+import bueroDom from '../assets/buero/koelner-dom-suedstadt.jpg';
+import bueroEingang from '../assets/buero/eingang.jpg';
+import bueroRaum from '../assets/buero/besprechungsraum.jpg';
+
+const base = import.meta.env.BASE_URL;
+
+/**
+ * Was die Arbeit hier ausmacht — ausschließlich aus dem, was die
+ * Website ohnehin über die Arbeitsweise sagt. Das sind Tatsachen über
+ * den Betrieb, keine Zusagen über Konditionen.
+ */
+const arbeitsweise = [
+  {
+    icon: 'zap',
+    titel: 'Kurze Wege, wörtlich',
+    text: 'Fünf Menschen, keine Abteilungen. Deine Frage landet dort, wo sie beantwortet wird — kein Abteilungs-Ping-Pong.',
+  },
+  {
+    icon: 'layers',
+    titel: 'Ganze Projekte statt Teilstücke',
+    text: 'Beratung, Planung, Umsetzung liegen hier zusammen. Du siehst ein Projekt vom ersten Gespräch bis zur Betreuung nach dem Start.',
+  },
+  {
+    icon: 'accessibility',
+    titel: 'Barrierefreiheit ist kein Aufpreis',
+    text: 'BFSG und WCAG 2.2 AA sind hier der Normalzustand, nicht ein Extra am Ende. Das prüft bei uns ein Skript, nicht ein gutes Gefühl.',
+  },
+  {
+    icon: 'trending-up',
+    titel: 'Eine eigene Marke zum Üben',
+    text: 'Mit DU BIST GRIECHE betreiben wir seit 2015 eine eigene Plattform. Was du dort ausprobierst, geht auf unser Risiko — nicht auf das eines Kunden.',
+  },
+] as const;
+
+/** Die Auftraggeber, die auf der Website belegt sind. */
+const referenzen = ['Bundesministerium für Familie, Senioren, Frauen und Jugend', 'TARGOBANK', 'Berufsförderungswerke'];
+
+/** Auf einen Blick — jede Zeile steht so schon auf der Website. */
+const aufEinenBlick = [
+  { was: 'Wo',            wert: 'Sachsenring 57, Kölner Südstadt' },
+  { was: 'Wie viele',     wert: 'Fünf Menschen' },
+  { was: 'Erreichbar',    wert: 'Mo–Fr, 9–18 Uhr' },
+  { was: 'Wofür',         wert: 'Websites, Online-Marketing, KI-Lösungen' },
+];
+
+/** Fragen, die sich aus dem Belegten beantworten lassen. */
+const fragen = [
+  {
+    frage: 'Wo genau ist das Büro?',
+    antwort: 'Sachsenring 57 in der Kölner Südstadt. Altbau, eigener Besprechungsraum, der Dom ist zu Fuß erreichbar.',
+  },
+  {
+    frage: 'Wie groß ist das Team?',
+    antwort: 'Fünf Menschen, die seit Jahren zusammenarbeiten. Bei größeren Projekten kommen erprobte Leute dazu — der Ansprechpartner bleibt derselbe.',
+  },
+  {
+    frage: 'Woran arbeitet ihr?',
+    antwort: 'An Websites und WordPress, an Barrierefreiheit nach BFSG, an SEO und GEO, an Online-Marketing, Social Recruiting, Corporate Design und KI-Services. Dazu an unseren eigenen Marken.',
+  },
+  {
+    frage: 'Für wen?',
+    antwort: 'Für Betriebe aus dem Mittelstand — Praxen, Kanzleien, Verwaltungen — und für Auftraggeber wie das Bundesfamilienministerium, die TARGOBANK und Berufsförderungswerke.',
+  },
+];
+---
+
+<BaseLayout
+  slug="jobs"
+  title="Jobs bei agentur dk – arbeiten in Köln | agentur dk"
+  description="Arbeiten bei der agentur dk in der Kölner Südstadt: fünf Menschen, kurze Wege, ganze Projekte statt Teilstücke. Offene Stellen und Bewerbung."
+  mono
+>
+
+  <Header />
+  <main id="main-content" tabindex="-1">
+
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li><a href={`${base}`}>Start</a></li>
+          <li aria-current="page">Jobs</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ── Auftakt ────────────────────────────────────────────────── -->
+    <section class="section section--hero" aria-labelledby="hero-heading">
+      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="mesh" cell={3} fps={12} /></div>
+      <div class="container">
+        <p class="section__label">Jobs · Köln</p>
+        <h1 id="hero-heading" class="section__headline">Fünf Leute. Keine Abteilungen. Ganze Projekte.</h1>
+        <p class="section__lead">
+          Wir bauen Websites, Sichtbarkeit und KI-Lösungen aus einer Hand — von der
+          Kölner Südstadt aus, für Betriebe zwischen Praxis und Bundesministerium.
+          Wenn dir kurze Wege lieber sind als ein Organigramm, lies weiter.
+        </p>
+        <p class="jobs__wege">
+          <a href="#stellen" class="btn btn--primary btn--lg">Offene Stellen</a>
+          <a href="#bewerben" class="btn btn--outline btn--lg">Direkt bewerben</a>
+        </p>
+      </div>
+    </section>
+
+    <DitherBand field="drift" label="Arbeiten bei agentur dk" cell={4} />
+
+    <!-- ── Stellen ────────────────────────────────────────────────── -->
+    <section id="stellen" class="section section--hell" aria-labelledby="stellen-heading">
+      <div class="container">
+        <p class="section__label">Offene Stellen</p>
+        <h2 id="stellen-heading" class="section__heading">Hierfür suchen wir dich</h2>
+
+        <!--
+          Hier stehen bewusst keine Stellen.
+
+          Eine erfundene Stellenanzeige ist kein Platzhaltertext — darauf
+          bewirbt sich jemand. Welche Stellen offen sind, weiß nur die
+          Agentur; im Projekt steht dazu nichts. Der Kasten bleibt, bis
+          die Angaben da sind.
+        -->
+        <div class="marke__nachtrag">
+          <span class="luecke">Fehlt: die offenen Stellen</span>
+          <p class="jobs__luecketext">
+            Auf eine Stellenanzeige bewirbt sich ein Mensch — deshalb steht hier
+            nichts Erfundenes. Sag mir je Stelle vier Dinge, dann steht sie in
+            zehn Minuten hier:
+          </p>
+          <ul class="checklist">
+            <li class="checklist__item">Bezeichnung und Umfang (Vollzeit, Teilzeit, Ausbildung, Werkstudium)</li>
+            <li class="checklist__item">Was die Person bei uns tun würde — drei bis fünf Aufgaben</li>
+            <li class="checklist__item">Was sie mitbringen sollte, und was ausdrücklich nicht nötig ist</li>
+            <li class="checklist__item">Ab wann, und ob es eine Gehaltsspanne geben soll</li>
+          </ul>
+          <p class="jobs__luecketext">
+            Gebaut ist der Abschnitt schon: Eine Stelle ist ein Eintrag in einer
+            Liste, mit aufklappbaren Anforderungen — so wie auf den Seiten, die
+            wir für Kunden bauen.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Wie hier gearbeitet wird ───────────────────────────────── -->
+    <section class="section" aria-labelledby="arbeit-heading">
+      <div class="container">
+        <p class="section__label">Wie hier gearbeitet wird</p>
+        <h2 id="arbeit-heading" class="section__heading">Was du hier anders findest als in einer großen Agentur</h2>
+        <p class="section__lead">
+          Vier Dinge, die keine Zusage sind, sondern eine Beschreibung: So läuft
+          die Arbeit hier, und so steht sie auch auf dem Rest dieser Website.
+        </p>
+        <ul class="jobs__karten" role="list">
+          {arbeitsweise.map((a) => (
+            <li class="jobs__karte">
+              <span class="jobs__ikon" aria-hidden="true"><Icon name={a.icon} size={22} /></span>
+              <h3 class="jobs__kartentitel">{a.titel}</h3>
+              <p class="jobs__kartentext">{a.text}</p>
+            </li>
+          ))}
+        </ul>
+
+        <div class="marke__nachtrag">
+          <span class="luecke">Fehlt: die Konditionen</span>
+          <p class="jobs__luecketext">
+            Homeoffice, Arbeitszeitmodell, Urlaubstage, Weiterbildung, Jobticket —
+            nichts davon ist auf dieser Website belegt, und eine Bewerberin liest
+            jede dieser Angaben als Zusage. Was davon stimmt, trage ich ein.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Arbeitsplatz ───────────────────────────────────────────── -->
+    <section class="section section--hell" aria-labelledby="ort-heading">
+      <div class="container">
+        <p class="section__label">Dein Arbeitsplatz</p>
+        <h2 id="ort-heading" class="section__heading">Altbau in der Südstadt, zehn Minuten vom Dom</h2>
+        <p class="section__lead">
+          Kein Großraumbüro, kein Campus. Ein Altbau am Sachsenring mit eigenem
+          Besprechungsraum — und einem Viertel drumherum, in dem man mittags
+          auch rauskommt.
+        </p>
+        <div class="jobs__bilder">
+          <Image src={bueroEingang} alt="Eingangsbereich des Büros mit Altbautüren"
+                 width={640} height={360} class="jobs__bild" loading="lazy" />
+          <Image src={bueroRaum} alt="Besprechungsraum mit langem Tisch und Whiteboards"
+                 width={640} height={360} class="jobs__bild" loading="lazy" />
+          <Image src={bueroDom} alt="Blick durch Bäume auf den Kölner Dom, unweit des Büros"
+                 width={640} height={360} class="jobs__bild" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Auf einen Blick ────────────────────────────────────────── -->
+    <section class="section" aria-labelledby="blick-heading">
+      <div class="container">
+        <p class="section__label">Auf einen Blick</p>
+        <h2 id="blick-heading" class="section__heading">Das Wichtigste in vier Zeilen</h2>
+        <dl class="jobs__blick">
+          {aufEinenBlick.map((z) => (
+            <div class="jobs__blickzeile">
+              <dt class="jobs__blickwas">{z.was}</dt>
+              <dd class="jobs__blickwert">{z.wert}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="jobs__referenzen">
+          Auftraggeber, die auf dieser Website belegt sind:
+          {referenzen.map((r, i) => (
+            <>{i > 0 ? ' · ' : ' '}<b>{r}</b></>
+          ))}
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Fragen ─────────────────────────────────────────────────── -->
+    <section class="section section--hell" aria-labelledby="fragen-heading">
+      <div class="container">
+        <p class="section__label">Fragen und Antworten</p>
+        <h2 id="fragen-heading" class="section__heading">Was Bewerberinnen und Bewerber meistens wissen wollen</h2>
+        <div class="jobs__fragen">
+          {fragen.map((f) => (
+            <details class="jobs__frage">
+              <summary class="jobs__frageknopf">
+                {f.frage}
+                <Icon name="chevron-down" size={16} class="jobs__pfeil" />
+              </summary>
+              <p class="jobs__antwort">{f.antwort}</p>
+            </details>
+          ))}
+        </div>
+        <div class="marke__nachtrag">
+          <span class="luecke">Fehlt: die Fragen zum Ablauf</span>
+          <p class="jobs__luecketext">
+            Wie lange dauert es bis zur Rückmeldung? Wer führt das Gespräch? Gibt es
+            einen Probetag? Das sind die Fragen, die im Bewerbungsprozess wirklich
+            gestellt werden — und die Antworten kenne ich nicht.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Bewerben ───────────────────────────────────────────────── -->
+    <section id="bewerben" class="section section--blau" aria-labelledby="bewerben-heading">
+      <div class="container">
+        <p class="section__label">Bewerbung</p>
+        <h2 id="bewerben-heading" class="section__heading">Schreib uns — kurz reicht</h2>
+        <p class="section__lead">
+          Ein paar Sätze dazu, was du machst und was du suchen würdest. Alles
+          Weitere klären wir im Gespräch.
+        </p>
+        <p class="jobs__kontakt">
+          <a class="btn btn--secondary btn--lg" href="mailto:mail@dk-dk.de?subject=Bewerbung">
+            mail@dk-dk.de
+          </a>
+          <a class="jobs__telefon" href="tel:+4922198655229">
+            <Icon name="phone" size={18} /> +49&nbsp;221&nbsp;986&nbsp;55&nbsp;229
+          </a>
+        </p>
+        <p class="jobs__zeiten">Mo–Fr, 9–18 Uhr · Sachsenring 57, 50677 Köln</p>
+
+        <div class="marke__nachtrag marke__nachtrag--hell">
+          <span class="luecke">Zu entscheiden: das Bewerbungsformular</span>
+          <p class="jobs__luecketext">
+            Auf den Kundenseiten läuft die Bewerbung über ein eigenes Formular
+            („Blitzbewerbung"). Hier steht bis auf Weiteres die allgemeine
+            Adresse — soll eine eigene her (<code>job@dk-dk.de</code>), und soll
+            das Formular dazu? Ein Formular für Bewerbungen nimmt besondere
+            Kategorien von Daten entgegen und braucht eigene Löschfristen; das
+            baue ich gern, aber nicht nebenbei.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .jobs__wege {
+    margin: var(--rinne-6) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--rinne-4);
+  }
+
+  /* Vier Kacheln zur Arbeitsweise. */
+  .jobs__karten {
+    list-style: none;
+    margin: var(--rinne-6) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--rinne-4);
+  }
+  .jobs__karte {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rinne-2);
+    padding: var(--rinne-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+  }
+  .jobs__ikon { color: var(--color-accent); }
+  .jobs__kartentitel { margin: 0; }
+  .jobs__kartentext {
+    margin: 0;
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+  }
+
+  /* Die Bürofotos: drei gleich hohe Bilder nebeneinander. */
+  .jobs__bilder {
+    margin-top: var(--rinne-6);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: var(--rinne-4);
+  }
+  .jobs__bild {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Auf einen Blick: Begriff und Wert in zwei Spalten. */
+  .jobs__blick {
+    margin: var(--rinne-6) 0 0;
+    max-width: 44rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .jobs__blickzeile {
+    display: grid;
+    grid-template-columns: minmax(7rem, 12rem) minmax(0, 1fr);
+    gap: var(--rinne-4);
+    padding: var(--rinne-3) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .jobs__blickwas {
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .jobs__blickwert {
+    margin: 0;
+    font-size: var(--dk-schrift-text);
+    color: var(--color-text);
+  }
+  .jobs__referenzen {
+    margin: var(--rinne-5) 0 0;
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+  }
+  .jobs__referenzen b { color: var(--color-text); font-weight: 400; }
+
+  /* Fragen als Aufklapper — dieselbe Mechanik wie beim Transkript. */
+  .jobs__fragen {
+    margin-top: var(--rinne-6);
+    max-width: var(--container-narrow);
+    border-top: 1px solid var(--color-border);
+  }
+  .jobs__frage { border-bottom: 1px solid var(--color-border); }
+  .jobs__frageknopf {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--rinne-3);
+    padding: var(--rinne-4) 0;
+    font-size: var(--dk-schrift-text);
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    min-height: 44px;
+  }
+  .jobs__frageknopf::-webkit-details-marker { display: none; }
+  .jobs__frageknopf:hover { color: var(--color-primary-light); }
+  .jobs__frageknopf:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .jobs__pfeil { flex-shrink: 0; transition: transform 160ms ease; }
+  .jobs__frage[open] .jobs__pfeil { transform: rotate(180deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .jobs__pfeil { transition: none; }
+  }
+  .jobs__antwort {
+    margin: 0 0 var(--rinne-4);
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+  }
+
+  .jobs__kontakt {
+    margin: var(--rinne-5) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--rinne-5);
+  }
+  .jobs__telefon {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rinne-2);
+    font-size: var(--dk-schrift-text);
+    color: var(--color-text);
+    min-height: 44px;
+  }
+  .jobs__zeiten {
+    margin: var(--rinne-3) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* Eine offene Stelle im Text, die als solche zu erkennen ist.
+     Dieselbe Behandlung wie auf der Markenseite; die Klassen sind dort
+     gekapselt und deshalb hier noch einmal gesetzt. Auf einer
+     Karriereseite wiegt die Regel schwerer als sonst: Eine Bewerberin
+     liest jeden Satz als Zusage. */
+  .marke__nachtrag {
+    margin: var(--rinne-6) 0 0;
+    padding: var(--rinne-4);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+    max-width: var(--dk-measure-body);
+  }
+  .luecke {
+    display: block;
+    margin-bottom: var(--rinne-3);
+    font-family: var(--font-mono);
+    font-size: var(--dk-schrift-klein);
+    letter-spacing: var(--dk-tracking-mono);
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+  .marke__nachtrag code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--color-text);
+  }
+
+  /* Die Liste im Lücken-Kasten braucht Luft nach unten — sonst klebt
+     der Folgeabsatz am letzten Punkt. */
+  .marke__nachtrag .checklist { margin-bottom: var(--rinne-4); }
+
+  .jobs__luecketext {
+    margin: 0 0 var(--rinne-3);
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+  }
+  .jobs__luecketext:last-child { margin-bottom: 0; }
+
+  /* Auf der blauen Fläche braucht der gestrichelte Kasten einen eigenen
+     Rand — der dunkle aus dem Regelsatz verschwindet dort. */
+  .marke__nachtrag--hell {
+    border-color: rgb(255 255 255 / 0.45);
+    color: rgb(255 255 255 / 0.85);
+  }
+  .marke__nachtrag--hell .luecke { color: #ffffff; }
+  .marke__nachtrag--hell code { color: #ffffff; }
+</style>

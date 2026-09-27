@@ -87,6 +87,14 @@ const currentPath = Astro.url.pathname;
 
         <li>
           <a
+            href={`${base}jobs.html`}
+            aria-current={currentPath.includes('jobs') ? 'page' : undefined}
+            class="nav-link"
+          >Jobs</a>
+        </li>
+
+        <li>
+          <a
             href={`${base}ueber-uns.html`}
             aria-current={currentPath.includes('ueber-uns') ? 'page' : undefined}
             class="nav-link"
