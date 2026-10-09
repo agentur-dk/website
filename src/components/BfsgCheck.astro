@@ -1,10 +1,8 @@
 ---
-// BfsgCheck — interactive BFSG self-check, no props
 ---
 
 <div class="bfsg-quiz" id="bfsg-quiz" aria-live="polite">
 
-  <!-- Schritt 1 -->
   <fieldset class="bfsg-step" id="bfsg-step-1" data-step="1">
     <legend class="bfsg-step__legend">Frage 1 von 4</legend>
     <p class="bfsg-step__question">Erbringen Sie Dienstleistungen?<sup>1</sup></p>
@@ -15,7 +13,6 @@
     </div>
   </fieldset>
 
-  <!-- Schritt 2 -->
   <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-2" data-step="2">
     <legend class="bfsg-step__legend">Frage 2 von 4</legend>
     <p class="bfsg-step__question">Haben Sie 10 oder mehr Mitarbeiter?</p>
@@ -29,7 +26,6 @@
     </div>
   </fieldset>
 
-  <!-- Schritt 3 -->
   <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-3" data-step="3">
     <legend class="bfsg-step__legend">Frage 3 von 4</legend>
     <p class="bfsg-step__question">Über 2 Mio. Euro Jahresumsatz oder Bilanzsumme?</p>
@@ -43,7 +39,6 @@
     </div>
   </fieldset>
 
-  <!-- Schritt 4 -->
   <fieldset class="bfsg-step bfsg-step--hidden" id="bfsg-step-4" data-step="4">
     <legend class="bfsg-step__legend">Frage 4 von 4</legend>
     <p class="bfsg-step__question">Bieten Sie Produkte wie Webshops, E-Books oder Terminals an?</p>
@@ -57,7 +52,6 @@
     </div>
   </fieldset>
 
-  <!-- Ergebnis -->
   <div class="bfsg-result bfsg-result--hidden" id="bfsg-result" role="region" aria-labelledby="bfsg-result-title" tabindex="-1">
     <h3 class="bfsg-result__title" id="bfsg-result-title"></h3>
     <p class="bfsg-result__text" id="bfsg-result-text"></p>
@@ -128,7 +122,6 @@
     white-space: nowrap; border: 0;
   }
 
-  /* ── Ja/Nein-Button-Basis ── */
   .bfsg-option__label {
     display: flex;
     align-items: center;
@@ -149,34 +142,29 @@
   .bfsg-option__label[data-choice="ja"]   { background-color: var(--bfsg-ja); }
   .bfsg-option__label[data-choice="nein"] { background-color: var(--bfsg-nein); }
 
-  /* Hover */
   .bfsg-option:hover .bfsg-option__label {
     filter: brightness(1.1);
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
 
-  /* Active */
   .bfsg-option:active .bfsg-option__label {
     transform: translateY(0);
   }
 
-  /* Tastatur-Fokus (via :focus-within auf dem label-wrapper) */
-  /* Auch hier: Der Rahmen markiert die Auswahl und den Fokus. Schwarz
-     auf einer farbigen Kachel vor dunklem Grund verschwindet halb. */
+  /* Der Rahmen markiert Auswahl und Fokus; Schwarz auf einer farbigen
+     Kachel vor dunklem Grund verschwindet halb. */
   .bfsg-option:focus-within .bfsg-option__label {
     border-color: #ffffff;
     box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.22);
   }
 
-  /* Checked */
   .bfsg-option__radio:checked + .bfsg-option__label {
     border-color: #ffffff;
     transform: scale(1.02);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
   }
 
-  /* Mobile: etwas kompaktere Buttons */
   @media (max-width: 480px) {
     .bfsg-option__label {
       min-height: 80px;
@@ -228,7 +216,6 @@
     gap: var(--rinne-2);
   }
 
-  /* ── Ergebnis-Buttons (Agentur-Stil) ── */
   .bfsg-result__actions .btn--primary {
     background-color: var(--bfsg-cta);
     color: #fff;
@@ -243,14 +230,9 @@
     color: var(--bfsg-cta);
   }
 
-  /* Weiß, nicht schwarz. Diese Regel stammt aus der Zeit, als das
-     Ergebnisfeld auf hellem Grund stand: `border: 3px solid #000` und
-     `color: #000` auf inzwischen #0b0b0b ergeben ein Kontrastverhältnis
-     von 1,03:1 — der Knopf war schlicht unsichtbar.
-
-     Aufgefallen ist das erst beim Draufschauen, nicht in der Prüfung:
-     axe-core überspringt Elemente mit `hidden`, und das Ergebnisfeld ist
-     bis zum Ende des Selbstchecks genau das. */
+  /* Weiß, weil das Ergebnisfeld auf dunklem Grund steht. axe-core sieht
+     es nicht: Es überspringt Elemente mit `hidden`, und das ist dieses
+     Feld bis zum Ende des Selbstchecks. */
   .bfsg-result__actions .btn--outline {
     background-color: transparent;
     border: 3px solid var(--color-text);

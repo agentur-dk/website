@@ -29,25 +29,14 @@ const base = import.meta.env.BASE_URL;
 
   <main id="main-content">
 
-    <!-- Hero Section -->
     <section class="hero section" aria-labelledby="hero-headline">
       <div class="hero__flaeche" aria-hidden="true"><Dither field="brain" pool={HERO_FIELDS} cell={4} fps={12} /></div>
       <div class="container hero__inner">
         <div class="hero__content">
           {/*
-            Aufteilung über der Falz: Die Rubrik trägt das Hauptkeyword
-            („Digitalagentur aus Köln"), die H1 die Breite des Angebots,
-            die Zeile darunter die Einordnung. Vorher stand das Keyword
-            in der H1 und zusätzlich in der Rubrik — dieselbe Phrase
-            dreimal, dazu ein viertes Mal im Title. Wiederholung bringt
-            in der Suche nichts; eine zweite, andere Aussage schon.
-
-            Der Halbsatz „— drei Bausteine, ein Ansprechpartner." stand
-            bis zum 23.09.2026 als gedämpfte Fortsetzung IN der H1. Er
-            steht jetzt darunter, als eigene Zeile in Vorspanngröße.
-            Der Grund ist der Rhythmus: Die H1 nennt drei Dinge, die
-            Zeile darunter zählt sie zusammen. In einem Atemzug gesagt,
-            ging die Pointe unter.
+            Die Rubrik trägt das Hauptkeyword, die H1 die Breite des Angebots,
+            die Zeile darunter zählt sie zusammen. Dieselbe Phrase mehrfach
+            bringt in der Suche nichts; eine zweite, andere Aussage schon.
           */}
           <p class="section-label">Digitalagentur aus Köln</p>
           <h1 id="hero-headline" class="hero__headline">Websites, Online-Marketing und KI-Lösungen</h1>
@@ -56,28 +45,24 @@ const base = import.meta.env.BASE_URL;
             <a href="#contact" class="btn btn--accent btn--lg">Projekt anfragen</a>
           </div>
 
-          <!-- Leistungs-Check -->
           <div class="leistungs-check" data-quiz data-base={base} role="region" aria-label="Leistungs-Check">
             <div class="quiz-widget__live u-sr-only" aria-live="polite" aria-atomic="true"></div>
             <div data-quiz-inner></div>
-            <!-- Vorlage für den Zurück-Pfeil: hält das Icon im Markup statt im Skript. -->
+            {/* Vorlage für den Zurück-Pfeil: hält das Icon im Markup statt im Skript. */}
             <template data-quiz-icon="arrow-left"><Icon name="arrow-left" size={16} /></template>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Kundenlogo-Leiste -->
     <LogoStrip />
 
-    <!-- Unsere Schwerpunkte -->
     <section class="schwerpunkte-section section section--hell" aria-labelledby="schwerpunkte-heading">
       <div class="container">
         <p class="schwerpunkte-section__eyebrow">Was wir tun</p>
         <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Drei Bausteine, ein Ansprechpartner</h2>
         <p class="schwerpunkte-section__lead">Die Website ist der Anfang, nicht das Ziel. Damit aus ihr Anfragen werden, muss sie gefunden werden – und was danach kommt, darf nicht an Ihrem Schreibtisch hängen bleiben.</p>
         <div class="schwerpunkte-grid">
-          <!-- Karte A -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="card-head" aria-hidden="true">
               <Dither field="pulse" cell={3} class="card-head__flaeche" />
@@ -89,7 +74,6 @@ const base = import.meta.env.BASE_URL;
             <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
             <a href={`${base}website-leasing.html`} class="btn btn--outline schwerpunkt-card__link">Mehr zum Website-Leasing</a>
           </article>
-          <!-- Karte B -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="card-head" aria-hidden="true">
               <Dither field="drift" cell={3} class="card-head__flaeche" />
@@ -101,8 +85,7 @@ const base = import.meta.env.BASE_URL;
             <p class="schwerpunkt-card__text">Wer Sie sucht, soll Sie finden – bei Google und inzwischen auch dort, wo Antworten stehen statt Trefferlisten. Dazu gehört, dass die Seite technisch sauber gebaut ist: barrierefrei nach BFSG, schnell, verständlich für Mensch und Maschine.</p>
             <a href={`${base}bfsg-wordpress-website-agentur.html#bfsg-check`} class="btn btn--outline schwerpunkt-card__link">BFSG-Check starten</a>
           </article>
-          <!-- Karte C: Die H1 verspricht drei Bausteine — bis zum
-               21.09.2026 standen hier zwei. -->
+          {/* Karte C: Die H1 verspricht drei Bausteine. */}
           <article class="schwerpunkt-card" data-reveal>
             <div class="card-head" aria-hidden="true">
               <Dither field="brain" cell={3} class="card-head__flaeche" />
@@ -122,14 +105,12 @@ const base = import.meta.env.BASE_URL;
 
     <DitherBand field="drift" label="Leistungen" />
 
-    <!-- Services Section -->
     <section id="services" class="services section section--hell">
       <div class="container">
         <p class="section-label" aria-hidden="true">Leistungen</p>
         <h2 class="section-title">Alle Leistungen im Überblick</h2>
         <ul class="services__grid" role="list">
 
-          <!-- Card 0: Website-Leasing (hervorgehoben) -->
           <li class="service-card service-card--featured" data-reveal>
             <span class="service-card__number" aria-hidden="true">Neu</span>
             <div class="card__icon">
@@ -142,7 +123,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}website-leasing.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Website-Leasing</span></a>
           </li>
 
-          <!-- Card 1: Barrierefreie Websites -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">01</span>
             <div class="card__icon">
@@ -155,7 +135,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}bfsg-wordpress-website-agentur.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Barrierefreie Websites (BFSG)</span></a>
           </li>
 
-          <!-- Card 2: WordPress-Entwicklung -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">02</span>
             <div class="card__icon">
@@ -168,7 +147,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}wordpress-entwicklung.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über WordPress-Entwicklung</span></a>
           </li>
 
-          <!-- Card 3: SEO & GEO -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">03</span>
             <div class="card__icon">
@@ -181,7 +159,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}seo-geo.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über SEO und GEO</span></a>
           </li>
 
-          <!-- Card 4: Online-Marketing -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">04</span>
             <div class="card__icon">
@@ -194,7 +171,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}online-marketing.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Online-Marketing</span></a>
           </li>
 
-          <!-- Card 5: Corporate Design -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">05</span>
             <div class="card__icon">
@@ -207,7 +183,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}corporate-design.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Corporate Design</span></a>
           </li>
 
-          <!-- Card 6: KI-Services -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">06</span>
             <div class="card__icon">
@@ -220,7 +195,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}ki-services.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über KI-Services</span></a>
           </li>
 
-          <!-- Card 7: Social Recruiting -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">07</span>
             <div class="card__icon">
@@ -237,7 +211,6 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <!-- Why agentur dk -->
     <section class="why-us section section--hell" aria-label="Warum agentur dk">
       <div class="container">
         <p class="section-label" aria-hidden="true">Warum wir</p>
@@ -276,7 +249,6 @@ const base = import.meta.env.BASE_URL;
 
     <DitherBand field="rain" label="Vorgehen" />
 
-    <!-- Process Section -->
     <section class="process section section--hell" aria-label="Unser Vorgehen">
       <div class="container">
         <p class="section-label" aria-hidden="true">Unser Vorgehen</p>
@@ -312,14 +284,12 @@ const base = import.meta.env.BASE_URL;
           </li>
         </ol>
 
-          <!--
+          {/*
             Der Handlungsaufruf steht hier, nicht erst am Seitenende: Wer die
-            vier Schritte gelesen hat, weiss gerade jetzt, worauf er sich
-            einlaesst. Bis zum Fuss der Seite sind es mehrere Bildschirmhoehen.
-
-            Nummer, Ort und Zeiten stammen aus derselben Quelle wie die
-            Fusszeile. Versprochen wird nur, was Schritt 1 oben zusagt.
-          -->
+            vier Schritte gelesen hat, weiß gerade jetzt, worauf er sich
+            einlässt. Nummer, Ort und Zeiten kommen aus derselben Quelle wie
+            die Fußzeile.
+          */}
           <div class="schritt-cta" data-reveal>
             <p class="schritt-cta__text">
               Schritt&nbsp;1 kostet nichts außer einer halben Stunde. Erzählen
@@ -337,7 +307,6 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <!-- FAQ Section -->
     <section id="faq" class="faq section section--hell">
       <div class="container">
         <p class="section-label" aria-hidden="true">FAQ</p>
@@ -364,10 +333,8 @@ const base = import.meta.env.BASE_URL;
 
     <DitherBand field="fade" label="Kontakt" />
 
-    <!-- Contact Section -->
     <section id="kontakt" class="contact section section--blau" aria-label="Kontakt">
       <div class="container contact__inner">
-        <!-- Contact Info -->
         <div class="contact__info">
           <p class="section-label" aria-hidden="true">Kontakt</p>
           <h2 class="section-title">Projekt anfragen</h2>
@@ -399,14 +366,12 @@ const base = import.meta.env.BASE_URL;
           </address>
         </div>
 
-        <!-- Contact Form -->
         <div class="contact__form-wrapper">
           <LeadForm page="Startseite" heading="Ihre Anfrage in drei Schritten" />
         </div>
       </div>
     </section>
 
-    <!-- Referenzen -->
     <section class="referenzen-section section section--hell" aria-labelledby="referenzen-heading">
       <div class="container">
         <p class="schwerpunkte-section__eyebrow">Ausgewählte Projekte</p>
@@ -419,15 +384,10 @@ const base = import.meta.env.BASE_URL;
             freigegebene Referenzen — ohne dass jemand daran denken muss.
           </p>
         )}
-        {/* Große Namen stehen in der Logoleiste oben — hier stehen die
-            Projekte, in denen sich ein Betrieb wiedererkennt, der selbst
-            einen sucht. Entschieden am 21.09.2026: „Große als Beweis,
-            kleine als Spiegel."
-
-            Die Liste kommt aus src/data/referenzen.ts und steht unter
-            Freigabevorbehalt: Solange die Indexierungssperre gilt, sind
-            auch unfreigegebene Fälle sichtbar und als solche markiert;
-            sobald die Seite live geht, verschwinden sie von selbst. */}
+        {/* Große Namen stehen in der Logoleiste — hier die Projekte, in denen
+            sich ein Betrieb wiedererkennt („Große als Beweis, kleine als
+            Spiegel"). Unfreigegebene Fälle erscheinen nur in der Vorschau,
+            markiert; mit dem Live-Schalten verschwinden sie von selbst. */}
         <div class="case-grid">
           {sichtbareReferenzen().map((r) => (
             <article class="case-card" data-reveal>
@@ -457,14 +417,12 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <!-- Stats Strip -->
     <StatsStrip stats={[
       { number: "20+", label: "Jahre Erfahrung" },
       { number: "600+", label: "Projekte umgesetzt" },
       { number: "500+", label: "Kunden betreut" }
     ]} />
 
-    <!-- Closing CTA -->
     <CtaSection
       title="Bereit für Ihre neue Website?"
       text="Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden."
@@ -476,7 +434,6 @@ const base = import.meta.env.BASE_URL;
 
   <Footer mono />
 
-  <!-- Inline styles carried from legacy (logo strip + service featured card) -->
   <style is:global>
     .service-card--featured{border-color:var(--color-primary,#1C60AD);background:linear-gradient(135deg,var(--color-surface,#1e1e1e) 0%,rgba(28,96,173,.12) 100%)}
     .service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size: var(--dk-schrift-klein);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
@@ -484,7 +441,6 @@ const base = import.meta.env.BASE_URL;
     .referenzen-section__cta{text-align:center;margin-top:var(--spacing-10)}
   </style>
 
-  <!-- Leistungs-Check quiz script -->
   <script>
   import { SERVICES as QUIZ_SERVICES, STEP1_OPTIONS, getStep2Config, hasStep2 } from '../lib/quiz';
 
@@ -500,7 +456,6 @@ const base = import.meta.env.BASE_URL;
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Resolve relative hrefs to absolute paths using BASE from data attribute
     const SERVICES = Object.fromEntries(
       Object.entries(QUIZ_SERVICES).map(([k, v]) => [k, { ...v, href: BASE + v.href }])
     );
@@ -533,7 +488,6 @@ const base = import.meta.env.BASE_URL;
       return btn;
     }
 
-    /** Zurück-Pfeil aus der <template>-Vorlage im Markup (Quelle: src/lib/icons.ts). */
     function backArrowNode(): Node | null {
       const tpl = document.querySelector('template[data-quiz-icon="arrow-left"]');
       return tpl instanceof HTMLTemplateElement ? tpl.content.cloneNode(true) : null;

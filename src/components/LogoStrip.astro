@@ -1,15 +1,9 @@
 ---
 /**
- * Vertrauensleiste: Kundenlogos bzw. Kundennamen in einer Endlosschleife.
- *
- * Bildmarken werden weiß dargestellt: `brightness(0)` färbt alles Sichtbare
- * schwarz und lässt die Transparenz stehen, `invert(1)` dreht das auf Weiß.
- * Aus jedem mehrfarbigen Logo wird damit eine saubere Silhouette — der
- * übliche Weg für eine Logowand auf dunklem Grund, und der einzige, der
- * ohne eine eigens gelieferte Weißversion je Marke auskommt.
- *
- * Fehlt die Datei, setzt die Leiste den Namen. Beides ist so abgestimmt,
- * dass eine gemischte Reihe nicht wie ein Fehler aussieht.
+ * Vertrauensleiste in Endlosschleife. Bildmarken werden zur weißen
+ * Silhouette (`brightness(0) invert(1)`) — der einzige Weg ohne eigens
+ * gelieferte Weißversion je Marke. Fehlt die Datei, steht der Name, so
+ * abgestimmt, dass eine gemischte Reihe nicht wie ein Fehler aussieht.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -17,40 +11,19 @@ import { kunden } from '../data/kunden';
 
 const base = import.meta.env.BASE_URL;
 
-/* Beim Build prüfen, ob jede eingetragene Datei wirklich unter public/logos/
-   liegt. Ohne die Prüfung fiele ein Tippfehler im Dateinamen nur dadurch auf,
-   dass in der Leiste eine Lücke klafft — und das sieht man leicht nicht. */
+/* Ein Tippfehler im Dateinamen fiele sonst nur als Lücke in der Leiste
+   auf — und die übersieht man leicht. */
 /*
- * Marken mit eigener Fallstudie bleiben draußen.
- *
- * Sie standen sonst zweimal auf derselben Seite: hier als Bildmarke und
- * weiter unten als Überschrift ihrer Fallstudie. Zweimal derselbe Name
- * wirkt nicht doppelt so überzeugend, sondern nach kurzer Liste.
- *
- * Der Streifen zeigt die Breite, die Fallstudie zeigt die Tiefe.
+ * Marken mit eigener Fallstudie bleiben draußen: Zweimal derselbe Name auf
+ * einer Seite wirkt nach kurzer Liste. Der Streifen zeigt die Breite, die
+ * Fallstudie die Tiefe.
  */
 /**
- * Die Eigenmasse einer Bilddatei, in ihren eigenen Einheiten.
- *
- * ── Warum das sein muss ───────────────────────────────────────────────
- * Die Logos laden verzoegert (`loading="lazy"`), und ein noch nicht
- * geladenes Bild ohne Groessenangabe ist NULL Pixel breit. Die Spur der
- * Laufschrift ist die Summe ihrer Kinder — sie faengt also schmal an und
- * waechst, waehrend die Bilder eintreffen.
- *
- * Das ist nicht nur ein Sprung im Satz, sondern eine wandernde
- * Geschwindigkeit: Die Animation verschiebt um -50 % der EIGENEN Breite
- * in 40 s. Schmale Spur heisst wenige Pixel je Sekunde. Auf einem
- * schmalen Bildschirm kommt ein grosser Teil der Spur nie ins Sichtfeld,
- * die Bilder dort laden also gar nicht, und die Leiste bleibt dauerhaft
- * langsam. Genau das war am Telefon zu sehen.
- *
- * Mit `width`/`height` am `<img>` kennt der Browser das Seitenverhaeltnis
- * vor dem ersten Byte und haelt den Platz frei. Die Spur hat damit von
- * Anfang an ihre endgueltige Breite.
- *
- * Eager laden waere die falsche Antwort: Die sechzehn Dateien wiegen
- * zusammen 415 kB und stehen direkt unter dem Kopfbereich.
+ * Die Eigenmaße einer Bilddatei. Ein lazy geladenes Bild ohne Größe ist
+ * null Pixel breit, die Spur der Laufschrift wüchse also beim Laden — und
+ * weil die Animation um -50 % der eigenen Breite in 40 s verschiebt, liefe
+ * eine schmale Spur dauerhaft langsamer. Mit `width`/`height` steht die
+ * Breite vorher fest. Eager laden wäre zu schwer für direkt unter dem Kopf.
  */
 function eigenmasse(pfad: string): { breite: number; hoehe: number } {
   const puffer = readFileSync(pfad);
@@ -200,7 +173,6 @@ const durchlaeufe = [
     height: 5.3rem;
   }
 
-  /* Aus jeder Bildmarke wird eine weiße Silhouette. */
   .logo-strip__logo {
     height: var(--logo-hoehe, 2.4rem);
     width: auto;
@@ -262,19 +234,7 @@ const durchlaeufe = [
     animation-play-state: paused;
   }
 
-  /* Bis zum 23.09.2026 stand hier eine Ausnahme fuer schmale Fenster:
-     kleinerer Abstand, kleinere Wortmarken. Sie hat die Leiste langsamer
-     laufen lassen, ohne dass jemand die Dauer angefasst haette.
-
-     Der Zusammenhang: Die Animation verschiebt die Spur um -50 % IHRER
-     EIGENEN Breite, und zwar in 40 s. Ein kleinerer Abstand macht die
-     Spur schmaler, also sind es in denselben 40 s weniger Pixel.
-     Gemessen: 3686 px Spur und 46,1 px/s ab 641 px Fensterbreite,
-     3266 px Spur und 40,8 px/s darunter — elf Prozent langsamer.
-
-     Die Ausnahme ist weg. Die Leiste laeuft auf jeder Breite gleich,
-     und wer kuenftig den Abstand aendert, aendert damit wieder die
-     Geschwindigkeit: Das ist der Preis einer Dauer in Sekunden statt
-     in Pixeln pro Sekunde, und er ist jetzt wenigstens an einer
-     einzigen Stelle zu zahlen. */
+  /* Keine Ausnahme für schmale Fenster: Die Animation läuft um -50 % der
+     eigenen Breite in fester Zeit, ein kleinerer Abstand machte die Leiste
+     also langsamer. Wer den Abstand ändert, ändert die Geschwindigkeit. */
 </style>

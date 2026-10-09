@@ -1,23 +1,12 @@
 ---
 /**
- * LeadForm.astro — das Anfrageformular, dreistufig.
+ * Das Anfrageformular in drei Schritten — Anliegen, Nachricht, Kontakt —,
+ * weil sechs Felder auf einmal der Punkt sind, an dem Formulare abgebrochen
+ * werden. Die Leiste darüber zeigt, wo man steht und was noch kommt.
  *
- * Vorher lagen Anliegen und alles andere in zwei Schritten, der zweite
- * davon mit Name, E-Mail, Website und Nachricht auf einmal. Das ist der
- * Punkt, an dem Formulare abgebrochen werden: sechs Felder gleichzeitig,
- * bevor man weiß, wie lang es noch dauert.
- *
- * Jetzt sind es drei überschaubare Schritte mit einer Leiste darüber, die
- * zeigt, wo man steht und was noch kommt:
- *
- *   1  Anliegen   — die Themen-Auswahl wie bisher
- *   2  Nachricht  — nur das Textfeld, sonst nichts
- *   3  Kontakt    — Vorname, Nachname, E-Mail, Firma, Website + Absenden
- *
- * Ohne JavaScript sind alle drei Schritte sichtbar und das Formular
- * abschickbar; die Schritte entstehen erst im Skript. Ein Formular, das
- * ohne JS gar nichts tut, wäre für den Blueprint („Progressive
- * Enhancement") und für die Barrierefreiheit gleichermaßen falsch.
+ * Ohne JavaScript stehen alle drei Schritte untereinander und das Formular
+ * bleibt abschickbar; die Schritte entstehen erst im Skript (Progressive
+ * Enhancement, Barrierefreiheit).
  */
 import Icon from './ui/Icon.astro';
 
@@ -31,12 +20,9 @@ interface Props {
   readonly page?: string;
   readonly heading?: string;
   /**
-   * Blau hinterlegen statt dunkel.
-   *
-   * Blau ist auf dieser Seite die einzige Farbe und markiert die
-   * Stellen, an denen etwas passieren soll. Das Formular ist eine
-   * davon — auf den Leistungsseiten sogar die einzige, weil dort
-   * kein Abschluss-Aufruf steht.
+   * Blau markiert die Stellen, an denen etwas passieren soll — auf den
+   * Leistungsseiten ist das Formular die einzige, weil dort kein
+   * Abschluss-Aufruf steht.
    */
   readonly blau?: boolean;
 }
@@ -44,17 +30,11 @@ interface Props {
 const { page = 'Unbekannte Seite', heading = 'Projekt anfragen', blau = false } = Astro.props;
 
 /*
- * Die Themen, wie sie in der Mail ankommen — `wert` ist das, was
- * verschickt wird, und darf sich nicht aendern, ohne dass jemand die
- * Auswertung nachzieht.
- *
- * `ikon` und `zeile` kamen am 23.09.2026 dazu, damit die Karten
- * aussehen wie die des Beratungs-Funnels auf beratung.html. Die Zeile
- * ist kein Fuellsatz: Sie sagt, was hinter dem Stichwort steckt —
- * „SEO & GEO" allein weiss ausserhalb der Branche niemand zu deuten.
- *
- * Der Typ `IconName` ist der Sinn der Sache: Ein Tippfehler im
- * Icon-Namen faellt beim Bauen auf, nicht im Browser als leere Stelle.
+ * `wert` ist, was in der Mail ankommt, und darf sich nicht ändern, ohne
+ * dass jemand die Auswertung nachzieht. `zeile` sagt, was hinter dem
+ * Stichwort steckt — „SEO & GEO" allein deutet außerhalb der Branche
+ * niemand. `IconName` lässt einen Tippfehler beim Bauen auffallen statt
+ * als leere Stelle im Browser.
  */
 const topics: readonly { wert: string; ikon: IconName; zeile: string }[] = [
   { wert: 'Barrierefreie Website (BFSG)', ikon: 'accessibility',  zeile: 'Pflicht seit Juni 2025 — wir prüfen und setzen um' },
@@ -78,27 +58,17 @@ const schritte = [
   <div class="lf-inner">
     <h2 id="lf-heading" class="lf-heading">{heading}</h2>
 
-    <!-- Status-Region: Erfolg und Fehler werden hier angesagt. -->
     <div id="lf-status" role="status" aria-live="polite" aria-atomic="true" class="lf-status sr-only"></div>
 
     {/*
-      Ein echtes `action`/`method`, kein reiner Skript-Absender.
-
-      Ohne JavaScript stehen alle drei Schritte untereinander — das Skript ist
-      es, das zwei davon ausblendet — und der Absenden-Knopf schickt ein
-      klassisches POST an denselben Endpunkt. Der antwortet dann mit einer
-      Weiterleitung auf `weiter` statt mit JSON.
-
-      Kein `novalidate` im Markup: Ohne Skript ist die Prüfung des Browsers
-      die einzige, die es vor dem Absenden gibt. Mit Skript wird sie
-      abgeschaltet (unten), weil die eigenen Meldungen genauer sind.
+      Ein echtes `action`/`method`: Ohne JavaScript schickt der Knopf ein
+      klassisches POST, und der Endpunkt antwortet mit einer Weiterleitung
+      auf `weiter` statt mit JSON. Kein `novalidate` im Markup — ohne Skript
+      ist die Prüfung des Browsers die einzige vor dem Absenden.
     */}
     {/*
-      `auf-hell` setzt den hellen Wertesatz des Themas — unabhaengig
-      davon, in welchem Abschnitt das Formular steht. Auf der Startseite
-      liegt es in einem blauen Kontaktblock, auf acht Leistungsseiten in
-      einem blauen Abschluss; hell ist es ab jetzt ueberall, und damit
-      sieht es ueberall gleich aus.
+      `auf-hell` setzt den hellen Wertesatz unabhängig vom Abschnitt, damit
+      das Formular in jedem blauen Block gleich aussieht.
     */}
     <form
       id="lf-form"
@@ -111,33 +81,29 @@ const schritte = [
           Nur seiteneigene Pfade — send.php prüft das noch einmal. */}
       <input type="hidden" name="weiter" value={`${base}danke.html`} />
       <input type="hidden" name="weiter_fehler" value={`${base}formular-fehler.html`} />
-      <!-- Auf welcher Seite wurde das Formular ausgefüllt? Der sprechende
-           Name kommt aus der Seite, die volle Adresse setzt das Skript. -->
+      {/* Der sprechende Name kommt aus der Seite, die volle Adresse setzt
+           das Skript. */}
       <input type="hidden" name="page" value={page} />
       <input type="hidden" name="page_url" id="lf-page-url" value="" />
-      <!-- Zusammengesetzt aus Vor- und Nachname, damit der Mailer unverändert bleibt. -->
+      {/* Zusammengesetzt aus Vor- und Nachname, damit der Mailer unverändert bleibt. */}
       <input type="hidden" name="name" id="lf-name-combined" value="" />
-      <!-- Spam: Zeitstempel (wird per JS gesetzt) -->
       <input type="hidden" name="form_started" id="lf-started" value="" />
-      <!-- Signierter Zeitstempel vom Server. Er wird erst geholt, wenn
-           jemand den letzten Schritt erreicht — ein Aufruf je Anfrage
-           statt einer je Seitenaufruf. -->
+      {/* Signierter Zeitstempel vom Server, erst im letzten Schritt geholt —
+           ein Aufruf je Anfrage statt je Seitenaufruf. */}
       <input type="hidden" name="ts_server" id="lf-ts" value="" />
       <input type="hidden" name="ts_sig" id="lf-ts-sig" value="" />
-      <!-- Zwei Honigtöpfe, absichtlich unterschiedlich versteckt: `hp_email`
-           per `display: none`, `_gotcha` außerhalb des Bildschirms. Manche
-           Bots erkennen `display: none` und lassen solche Felder aus,
-           andere füllen alles, was sie im Markup finden. Beide sind für
-           Tastatur und Screenreader unerreichbar. -->
+      {/* Zwei Honigtöpfe, absichtlich verschieden versteckt (`display: none`
+           und außerhalb des Bildschirms): Manche Bots lassen das eine aus,
+           andere füllen alles. Beide sind für Tastatur und Screenreader
+           unerreichbar. */}
       <input type="email" name="hp_email" id="lf-hp-email" class="lf-honeypot-none"
         tabindex="-1" autocomplete="off" aria-hidden="true" />
       <input type="text" name="_gotcha" class="lf-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
-      <!-- Beleg, dass jemand das Formular wirklich bedient hat. Ein Bot,
-           der Werte per Skript setzt, löst keine Eingabe-Ereignisse aus. -->
+      {/* Ein Bot, der Werte per Skript setzt, löst keine Eingabe-Ereignisse aus. */}
       <input type="hidden" name="interaktion" id="lf-interaktion" value="0" />
 
-      <!-- Fortschritt. Ohne JS bleibt die Leiste verborgen: Sie würde einen
-           Schritt behaupten, den es dann nicht gibt. -->
+      {/* Ohne JS bleibt die Leiste verborgen: Sie behauptete Schritte, die es
+           dann nicht gibt. */}
       <div class="lf-progress" id="lf-progress" hidden>
         <ol class="lf-progress__list">
           {schritte.map((s) => (
@@ -155,7 +121,6 @@ const schritte = [
         </div>
       </div>
 
-      <!-- Schritt 1: Anliegen -->
       <div id="lf-step-1" class="lf-step" data-step="1">
         <p class="lf-step__zaehler" data-step-count>Schritt 1 von 3</p>
         <h3 class="lf-step__title">Worum geht es?</h3>
@@ -175,9 +140,9 @@ const schritte = [
                   <span class="lf-topic__zeile">{t.zeile}</span>
                 </span>
                 {/*
-                  Das Kaestchen bleibt, anders als im Funnel: Dort waehlt
-                  man EINES, hier mehrere. Ohne sichtbares Kaestchen
-                  saehe eine Mehrfachauswahl aus wie eine einfache.
+                  Das Kästchen bleibt, anders als im Funnel: Hier wählt man
+                  mehrere, und ohne Kästchen sähe die Mehrfachauswahl aus
+                  wie eine einfache.
                 */}
                 <span class="lf-topic__box" aria-hidden="true"><Icon name="check" size={14} /></span>
               </label>
@@ -187,7 +152,6 @@ const schritte = [
             Bitte wählen Sie mindestens ein Thema aus.
           </span>
 
-          <!-- Sonstiges-Freitext (erscheint bei Auswahl „Sonstiges") -->
           <div id="lf-other-field" class="lf-other" hidden>
             <label for="lf-other-text" class="lf-label">Bitte beschreiben Sie Ihr Anliegen kurz</label>
             <textarea id="lf-other-text" name="anliegen_text" class="lf-control lf-textarea" rows="3"
@@ -206,7 +170,6 @@ const schritte = [
         </div>
       </div>
 
-      <!-- Schritt 2: Nachricht -->
       <div id="lf-step-2" class="lf-step" data-step="2">
         <p class="lf-step__zaehler" data-step-count>Schritt 2 von 3</p>
         <h3 class="lf-step__title">Was sollen wir wissen?</h3>
@@ -238,7 +201,6 @@ const schritte = [
         </div>
       </div>
 
-      <!-- Schritt 3: Kontaktdaten -->
       <div id="lf-step-3" class="lf-step" data-step="3">
         <p class="lf-step__zaehler" data-step-count>Schritt 3 von 3</p>
         <h3 class="lf-step__title">Wohin dürfen wir antworten?</h3>
@@ -278,8 +240,8 @@ const schritte = [
             <span aria-hidden="true">*</span>
             <span class="sr-only">(Pflichtfeld)</span>
           </label>
-          <!-- autocapitalize und spellcheck aus: iOS schreibt sonst den
-               ersten Buchstaben der Adresse groß und unterringelt sie. -->
+          {/* autocapitalize und spellcheck aus: iOS schreibt sonst den
+               ersten Buchstaben der Adresse groß und unterringelt sie. */}
           <input type="email" id="lf-email" name="email" class="lf-control"
             autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next"
             required aria-required="true" aria-describedby="lf-email-error" />
@@ -312,10 +274,8 @@ const schritte = [
           </div>
         </div>
 
-        <!-- Rechenprobe. Die Aufgabe entsteht erst im Browser: Stünde sie
-             im ausgelieferten HTML, wäre es für alle Besucher dieselbe und
-             ein Bot müsste sie genau einmal lernen. Bis das Skript sie
-             gesetzt hat, bleibt der Block verborgen. -->
+        {/* Die Aufgabe entsteht erst im Browser: Stünde sie im HTML, wäre sie
+             für alle dieselbe, und ein Bot lernte sie einmal. */}
         <div class="lf-group lf-rechnung" id="lf-rechnung" hidden>
           <label for="lf-rechenprobe" class="lf-label">
             Sicherheitsfrage: Wie viel ist <span id="lf-rechnung-frage">…</span>?
@@ -345,7 +305,6 @@ const schritte = [
       </div>
     </form>
 
-    <!-- Bestätigung: ersetzt das Formular nach dem Absenden. -->
     <div id="lf-danke" class="lf-danke" hidden>
       <span class="lf-danke__marke" aria-hidden="true"><Icon name="check" size={28} /></span>
       <h3 class="lf-danke__title">Anfrage ist raus.</h3>
@@ -381,9 +340,8 @@ const schritte = [
     // drei Blöcke untereinander und ließen sich in einem Rutsch ausfüllen.
     if (fortschritt) fortschritt.hidden = false;
 
-    // Echte Bedienung mitschreiben. Kein Bewegungsprofil, keine
-    // Speicherung, keine Auswertung von Inhalten: Es zählt nur, ob
-    // überhaupt eine Eingabe stattgefunden hat.
+    // Es zählt nur, ob überhaupt eine Eingabe stattgefunden hat — kein
+    // Bewegungsprofil, keine Auswertung von Inhalten.
     const interaktion = document.getElementById('lf-interaktion') as HTMLInputElement | null;
     let bedient = false;
     for (const ereignis of ['pointerdown', 'keydown', 'input'] as const) {
@@ -393,10 +351,7 @@ const schritte = [
       }, { once: true, passive: true });
     }
 
-    // ---- Rechenprobe ------------------------------------------------
-    // Zwei einstellige Zahlen, Summe höchstens 18 — lösbar im Kopf, ohne
-    // Stift, ohne Nachdenken. crypto.getRandomValues statt Math.random:
-    // kostet nichts und ist die Gewohnheit, die man behalten will.
+    // Zwei einstellige Zahlen: lösbar im Kopf, ohne Nachdenken.
     const rechnung = document.getElementById('lf-rechnung');
     const rechnungFrage = document.getElementById('lf-rechnung-frage');
     const rechenprobe = document.getElementById('lf-rechenprobe') as HTMLInputElement | null;
@@ -440,7 +395,6 @@ const schritte = [
       el.scrollIntoView({ block: 'start', behavior: langsam.matches ? 'auto' : 'smooth' });
     }
 
-    /** Formular gegen die Bestätigung tauschen. */
     function zeigeDanke(): void {
       form.hidden = true;
       if (!danke) return;
@@ -575,29 +529,20 @@ const schritte = [
         titel.setAttribute('tabindex', '-1');
         titel.focus({ preventScroll: true });
 
-        // Und dann sichtbar machen. Ohne das steht der Kopf des neuen
-        // Schritts auf dem Telefon außerhalb des Bildes: Der Knopf
-        // „Weiter" sitzt am Ende eines langen Schritts, der neue Schritt
-        // beginnt weit darüber. Gemessen bei 390 × 664: Der Zähler lag
-        // nach dem Wechsel bei y = −263, die Fortschrittsleiste bei
-        // −347. Man landete mitten im nächsten Schritt und sah nicht,
-        // dass sich überhaupt etwas geändert hat.
-        //
-        // Angesteuert wird die Leiste, nicht der Titel: Sie ist die
-        // Antwort auf „wo bin ich". `scroll-padding-top` am <html>
-        // hält den klebenden Header frei.
+        // Den Kopf des neuen Schritts sichtbar machen: Auf dem Telefon sitzt
+        // „Weiter" am Ende eines langen Schritts, der neue beginnt weit
+        // darüber, und man sähe nicht, dass sich etwas geändert hat.
+        // Angesteuert wird die Leiste — sie beantwortet „wo bin ich".
         hinScrollen(fortschritt ?? titel);
       }
     }
 
-    // „Sonstiges" blendet das Freitextfeld ein.
     const sonstigesSchalter = form.querySelector<HTMLInputElement>('[data-topic="other-trigger"] input');
     const sonstigesFeld = document.getElementById('lf-other-field');
     sonstigesSchalter?.addEventListener('change', () => {
       if (sonstigesFeld) sonstigesFeld.hidden = !sonstigesSchalter.checked;
     });
 
-    // Sobald ein Thema angehakt wird, verschwindet die Beanstandung.
     for (const box of form.querySelectorAll<HTMLInputElement>('input[name="interesse[]"]')) {
       box.addEventListener('change', () => {
         const meldung = document.getElementById('lf-topics-error');
@@ -608,13 +553,10 @@ const schritte = [
     }
 
     /**
-     * Signierten Zeitstempel beim Endpunkt abholen.
-     *
      * Im Browser lässt sich jeder Zeitwert setzen; die Signatur entsteht
-     * mit einem Geheimnis, das nur auf dem Server liegt. Schlägt der Abruf
-     * fehl — Endpunkt nicht erreichbar, Netz weg —, bleibt es beim
-     * unsignierten Wert aus dem Formular. Lieber eine schwächere Schranke
-     * als ein Formular, das sich nicht absenden lässt.
+     * mit einem Geheimnis auf dem Server. Schlägt der Abruf fehl, bleibt
+     * es beim unsignierten Wert — lieber eine schwächere Schranke als ein
+     * Formular, das sich nicht absenden lässt.
      */
     let zeitstempelGeholt = false;
     /** Trennt die erreichte Grenze vom echten Fehler — die Meldungen unterscheiden sich. */
@@ -656,10 +598,9 @@ const schritte = [
       btn.addEventListener('click', () => zeige(Number(btn.dataset.prev)));
     }
 
-    // Enter in einem Eingabefeld löst sonst das Absenden aus, weil der
-    // einzige Submit-Knopf in Schritt 3 sitzt — auf dem Telefon heißt die
-    // Taste dort oft „Los". In den Schritten davor führt sie jetzt weiter.
-    // In einem mehrzeiligen Feld bleibt Enter ein Zeilenumbruch.
+    // Enter löst sonst das Absenden aus, weil der einzige Submit-Knopf in
+    // Schritt 3 sitzt. In den Schritten davor führt es weiter; in einem
+    // mehrzeiligen Feld bleibt es ein Zeilenumbruch.
     form.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
       const ziel = e.target as HTMLElement | null;
@@ -671,12 +612,9 @@ const schritte = [
     });
 
     /*
-      Ab hier übernimmt das Skript.
-
       `novalidate` erst jetzt: Ohne Skript ist die Prüfung des Browsers die
-      einzige vor dem Absenden. `data-js` schaltet im Stylesheet um — die
-      Schrittzähler und die Weiter-Knöpfe ergeben nur Sinn, wenn es Schritte
-      gibt.
+      einzige. `data-js` blendet Schrittzähler und Weiter-Knöpfe ein, die nur
+      mit Schritten Sinn ergeben.
     */
     form.setAttribute('novalidate', 'novalidate');
     form.dataset.js = 'an';
@@ -686,10 +624,9 @@ const schritte = [
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Honigtopf gefüllt: Der Absender bekommt den ganz normalen
-      // Dankeblock zu sehen, gesendet wird nichts. Ein Bot, der eine
-      // Fehlermeldung bekäme, wüsste, dass er aufgeflogen ist, und
-      // probierte es beim nächsten Mal ohne das Feld.
+      // Honigtopf gefüllt: Der Absender sieht den normalen Dankeblock,
+      // gesendet wird nichts. Eine Fehlermeldung verriete dem Bot, was ihn
+      // verraten hat.
       for (const name of ['hp_email', '_gotcha']) {
         const topf = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
         if (topf && isHoneypotFilled(topf.value)) {
@@ -731,13 +668,9 @@ const schritte = [
         statusEl.className = 'lf-status sr-only';
       }
 
-      // Object.fromEntries behält bei mehrfach vorkommenden Namen nur den
-      // letzten Wert. Bei „interesse[]" ging damit alles außer dem zuletzt
-      // angehakten Thema verloren — wer drei Themen wählte, verschickte
-      // eines. Mehrfachwerte werden deshalb zusammengefasst statt
-      // überschrieben, und zwar als Text: Der Mailer bekam an dieser Stelle
-      // schon immer eine Zeichenkette, ein Array wäre eine Änderung an
-      // seinem Eingang.
+      // Object.fromEntries behielte bei „interesse[]" nur den letzten Wert.
+      // Mehrfachwerte werden als Text zusammengefasst, weil der Mailer an
+      // dieser Stelle eine Zeichenkette erwartet.
       const daten: Record<string, FormDataEntryValue | string> = {};
       for (const [schluessel, wert] of new FormData(form)) {
         const vorhanden = daten[schluessel];
@@ -753,10 +686,8 @@ const schritte = [
           body: JSON.stringify(daten),
         });
         if (!res.ok) {
-          // „Es ist ein Fehler aufgetreten" ist bei einer erreichten
-          // Grenze schlicht falsch: Es ist kein Fehler, und ein erneuter
-          // Versuch hilft sofort auch nicht. Der Text muss sagen, was
-          // los ist und was zu tun ist.
+          // Eine erreichte Grenze ist kein Fehler, und ein sofortiger neuer
+          // Versuch hilft nicht — der Text muss sagen, was zu tun ist.
           const grund = await res
             .json()
             .then((a: { fehler?: string }) => a.fehler ?? '')
@@ -777,10 +708,8 @@ const schritte = [
                 + 'Bitte warten Sie einen Moment oder schreiben Sie uns direkt an mail@dk-dk.de.'
               : 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an mail@dk-dk.de.';
           statusEl.className = 'lf-status lf-status--error';
-          // Sonst steht die Meldung am Kopf des Formulars, während der
-          // Nutzer unten auf dem Absenden-Knopf steht. Auf dem Telefon
-          // gemessen: 418 px oberhalb des Bildrands — für ihn ist einfach
-          // nichts passiert.
+          // Sonst steht die Meldung am Kopf des Formulars, weit über dem
+          // Absenden-Knopf — auf dem Telefon außerhalb des Bildes.
           hinScrollen(statusEl);
           statusEl.setAttribute('tabindex', '-1');
           statusEl.focus({ preventScroll: true });
@@ -799,10 +728,8 @@ const schritte = [
   .lf-section {
     padding-block: var(--raum-abschnitt);
   }
-  /* Derselbe Kasten wie jeder andere Abschnitt, damit die Überschrift
-     auf derselben linken Kante steht (vorher 384 statt 174 px). Die
-     Lesebreite des Formulars bleibt erhalten — sie sitzt jetzt am
-     Formular selbst, nicht am Abschnitt. */
+  /* Derselbe Kasten wie jeder Abschnitt, damit die Überschrift auf
+     derselben linken Kante steht. Die Lesebreite sitzt am Formular. */
   .lf-inner {
     max-width: var(--container-max);
     margin-inline: auto;
@@ -811,16 +738,12 @@ const schritte = [
   .lf-form {
     max-width: var(--container-narrow);
   }
-  /* Das Formular steht als eigene Fläche auf dem Seitengrund. Vorher lief
-     es ohne Rahmen im Text mit und sah aus wie ein weiterer Abschnitt —
-     nichts sagte „hier passiert etwas". Der feine Anlauf an der Oberkante
-     nimmt die Akzentfarbe des Fortschrittsbalkens auf. */
-  /* Der Grund ist der gedaempfte Ton, nicht Weiss — die Karten darauf
-     sind weiss. Stuende beides auf Weiss, traege allein ein Rahmen von
-     #dcdcdc die Trennung: 1,4:1 gegen den Grund, also unter den 3:1,
-     die WCAG 1.4.11 fuer die Umrisse von Bedienelementen verlangt.
-     Genauso haelt es der Beratungs-Funnel, und deshalb sieht es dort
-     richtig aus. */
+  /* Eine eigene Fläche, damit das Formular nicht wie ein weiterer
+     Abschnitt aussieht. Der Anlauf an der Oberkante nimmt die Farbe des
+     Fortschrittsbalkens auf. */
+  /* Der Grund ist gedämpft, weil die Karten darauf weiß sind — auf Weiß
+     trüge allein der Rahmen die Trennung, mit 1,4:1 unter den 3:1 von
+     WCAG 1.4.11. */
   .lf-form {
     position: relative;
     padding: 2rem;
@@ -885,7 +808,6 @@ const schritte = [
     display: none;
   }
 
-  /* Honeypot: visuell unsichtbar, für Hilfstechnik versteckt. */
   .lf-honeypot {
     position: absolute;
     width: 1px;
@@ -984,14 +906,10 @@ const schritte = [
 
   /* ---- Schritte --------------------------------------------------- */
   /*
-    Ohne JavaScript stehen alle drei Schritte untereinander. Dann sind ein
-    Zähler („Schritt 1 von 3") und ein Weiter-Knopf, der nichts tut, keine
-    Hilfe, sondern eine Irreführung. Beide erscheinen erst, wenn das Skript
-    das Formular übernommen hat (`data-js`).
-
-    Gezielt die Schritt-Knöpfe, nicht ihre Leiste: Der Absenden-Knopf sitzt in
-    derselben Leiste, und ohne ihn wäre das Formular ohne JavaScript zwar
-    vollständig sichtbar, aber nicht abschickbar.
+    Zähler und Weiter-Knöpfe erst mit Skript (`data-js`) — ohne Schritte
+    wären sie Irreführung. Gezielt die Schritt-Knöpfe, nicht ihre Leiste:
+    Dort sitzt auch der Absenden-Knopf, ohne den das Formular ohne
+    JavaScript nicht abschickbar wäre.
   */
   .lf-form:not([data-js]) .lf-step__zaehler,
   .lf-form:not([data-js]) [data-next],
@@ -1068,10 +986,8 @@ const schritte = [
     margin-left: 0.375rem;
   }
 
-  /* Karten wie im Beratungs-Funnel auf beratung.html: Icon links,
-     Titel, Erklärzeile darunter. Dieselbe Rasterweite (15rem) und
-     derselbe Abstand, damit beide Formulare nebeneinander gehalten
-     gleich aussehen — nicht nur ungefähr. */
+  /* Karten wie im Beratungs-Funnel, mit derselben Rasterweite und
+     demselben Abstand, damit beide Formulare gleich aussehen. */
   .lf-topics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
@@ -1337,19 +1253,14 @@ const schritte = [
   }
 
   @media (max-width: 560px) {
-    /* Waagerecht knapper als senkrecht: Der Beratungs-Funnel auf
-       beratung.html hat keinen Kasten um seine Karten, seine Karten
-       messen am Telefon deshalb die vollen 342 px. Hier tragen sie
-       zusaetzlich das Polster des Kastens. Mit 0,75 rem statt 1,25 rem
-       liegen beide bei 318 gegen 342 px — der Rest ist der Kasten
-       selbst, und der ist Absicht: Er traegt den hellen Grund, auf dem
-       das Formular auch in einem blauen Abschnitt steht. */
+    /* Waagerecht knapper als senkrecht, damit die Karten trotz des
+       Kastenpolsters fast so breit sind wie im Funnel (der keinen Kasten
+       hat). Der Kasten trägt den hellen Grund im blauen Abschnitt. */
     .lf-form {
       padding: 1.25rem 0.75rem;
     }
-    /* Enger stellen statt weglassen: Bei 390 px bleiben je Spalte rund
-       90 px für den Text, „Nachricht" braucht bei 13 px etwa 62 px. Die
-       Namen sind die halbe Auskunft der Leiste. */
+    /* Enger stellen statt weglassen: Die Namen sind die halbe Auskunft
+       der Leiste, und bei 390 px passen sie noch. */
     .lf-progress__item {
       gap: var(--rinne-1);
     }

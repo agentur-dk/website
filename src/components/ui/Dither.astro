@@ -1,44 +1,33 @@
 ---
 /**
- * Dither.astro — eine gerasterte Fläche.
+ * Eine gerasterte Fläche, im Browser aus einer Formel gezeichnet
+ * (src/lib/dither.ts) — sie kostet den Pfad zur Formel statt eines PNG.
+ * Ausnahmslos dekorativ (`aria-hidden`); wo sie etwas zeigt, beschriftet
+ * der Container.
  *
- * Rendert nur das <canvas>; gezeichnet wird im Browser aus einer Formel
- * (src/lib/dither.ts). Es lädt kein Bild und liegt keins im Repository:
- * Eine Fläche kostet den Pfad zur Formel, nicht 200 kB PNG.
- *
- * Die Fläche ist ausnahmslos dekorativ und trägt `aria-hidden="true"`.
- * Wo sie inhaltlich etwas zeigt, beschriftet der umgebende Container.
- *
- * Bewegung: Die Schleife hält an, sobald die Fläche aus dem Bild läuft,
- * und sie hält an, wenn der Bewegungs-Schalter im Footer auf „pausiert"
- * steht oder das Betriebssystem `prefers-reduced-motion` meldet. Dann
- * bleibt ein Standbild stehen — WCAG 2.2.2 verlangt genau das, und ein
- * Schalter, der eine Animation stehen lässt, wäre eine Lüge.
+ * Die Schleife hält an, wenn die Fläche aus dem Bild läuft, der
+ * Bewegungs-Schalter auf „pausiert" steht oder `prefers-reduced-motion`
+ * gilt. Dann steht ein Standbild (WCAG 2.2.2).
  */
 import type { FieldName } from '../../lib/dither';
 
 interface Props {
-  /** Welche Formel gezeichnet wird. */
   readonly field: FieldName;
   /**
-   * Auswahl statt fester Formel: Aus dieser Liste wird beim ersten Aufruf
-   * eines Besuchs eine gezogen und für die Dauer der Sitzung behalten.
-   * `field` ist dann die Rückfallebene ohne JavaScript oder Speicher.
+   * Aus dieser Liste wird je Besuch eine Formel gezogen; `field` ist die
+   * Rückfallebene ohne JavaScript oder Speicher.
    */
   readonly pool?: readonly FieldName[];
   /** Schlüssel, unter dem die Wahl in der Sitzung liegt. */
   readonly poolKey?: string;
   /** Kantenlänge einer Rasterzelle in CSS-Pixeln; größer = grober = billiger. */
   readonly cell?: number;
-  /** Bilder pro Sekunde. Diese Bewegungen sind langsam; 16 genügt, und
-   *  jedes Bild kostet einen kompletten Rasterdurchlauf auf dem
-   *  Hauptthread. Gemessen: 24 fps auf der Hero-Kugel ließen die
-   *  Skriptzeit auf gedrosseltem Mobilgerät von 24 ms auf 362 ms steigen
-   *  und drückten den Lighthouse-Wert von 100 auf 98. */
+  /** Die Bewegungen sind langsam, 16 fps genügen. Jedes Bild kostet einen
+   *  vollen Rasterdurchlauf auf dem Hauptthread — 24 fps kosteten auf
+   *  gedrosseltem Mobilgerät Lighthouse-Punkte. */
   readonly fps?: number;
   /** 'fein' nimmt die 8×8-Matrix — weichere Verläufe, weniger Struktur. */
   readonly raster?: 'kraeftig' | 'fein';
-  /** Zusätzliche Klassen (Maske, Deckkraft, Positionierung). */
   readonly class?: string;
 }
 
@@ -75,18 +64,10 @@ const { field, pool, poolKey = 'hero', cell = 3, fps = 16, raster = 'kraeftig', 
   const STANDBILD = 1600; // Zeitpunkt des Standbilds — ein Moment mit Struktur.
 
   /**
-   * Eine Formel je Besuch, nicht je Aufruf.
-   *
-   * sessionStorage überlebt Neuladen und Blättern innerhalb desselben
-   * Tabs, endet aber mit ihm — genau das ist „ein Besuch". localStorage
-   * hielte die Wahl monatelang fest, ein Cookie ginge an den Server.
-   *
-   * Math.random ist hier in Ordnung: Es läuft im Browser, nicht beim
-   * Bauen. Die ausgelieferte Datei bleibt für alle gleich.
-   *
-   * Ist der Speicher gesperrt (privater Modus, strenge Einstellungen),
-   * fällt die Wahl bei jedem Aufruf neu — dann wechselt das Bild eben
-   * beim Neuladen. Kein Grund, die Seite deshalb ohne Fläche zu zeigen.
+   * Eine Formel je Besuch: sessionStorage endet mit dem Tab — localStorage
+   * hielte die Wahl monatelang, ein Cookie ginge an den Server.
+   * Math.random läuft im Browser, die ausgelieferte Datei bleibt gleich.
+   * Ist der Speicher gesperrt, wechselt das Bild eben beim Neuladen.
    */
   function waehle(canvas: HTMLCanvasElement): FieldName {
     const fest = (canvas.dataset.field ?? 'wave') as FieldName;
@@ -134,7 +115,6 @@ const { field, pool, poolKey = 'hero', cell = 3, fps = 16, raster = 'kraeftig', 
       f.gezeichnet = true;
     }
 
-    /** Steht die Bewegung? Schalter im Footer oder Systemeinstellung. */
     function angehalten(): boolean {
       return reduziert.matches || document.documentElement.dataset.motion === 'paused';
     }
@@ -161,11 +141,9 @@ const { field, pool, poolKey = 'hero', cell = 3, fps = 16, raster = 'kraeftig', 
       handle = 0;
     }
 
-    // Gezeichnet wird erst, wenn eine Fläche in Sichtweite kommt — nicht
-    // beim Laden. Alle neun Flächen der Startseite auf einmal zu rastern
-    // kostete auf gedrosseltem Mobilgerät genug Hauptthread, um den
-    // Lighthouse-Wert von 100 auf 98 zu drücken. 120 px Vorlauf, damit
-    // eine Fläche beim Hereinscrollen nicht sichtbar anspringt.
+    // Gezeichnet wird erst in Sichtweite: Alle Flächen der Startseite beim
+    // Laden zu rastern kostete auf Mobilgeräten Lighthouse-Punkte. 120 px
+    // Vorlauf, damit eine Fläche beim Hereinscrollen nicht anspringt.
     const sicht = new IntersectionObserver(
       (eintraege) => {
         for (const e of eintraege) {
@@ -210,11 +188,9 @@ const { field, pool, poolKey = 'hero', cell = 3, fps = 16, raster = 'kraeftig', 
     document.addEventListener('dk:motionchange', neuBewerten);
     reduziert.addEventListener('change', neuBewerten);
 
-    // Die Schleife startet erst nach `load`. Bis dahin steht das Standbild,
-    // das der Beobachter beim Sichtbarwerden gezeichnet hat — sichtbar ist
-    // also von der ersten Sekunde an dasselbe Bild. Ohne diese Bremse fällt
-    // jeder Rasterdurchlauf in das Fenster, in dem der Browser den ersten
-    // Inhalt zeichnet, und verschiebt ihn nach hinten.
+    // Die Schleife startet erst nach `load`, sonst fallen Rasterdurchläufe
+    // in das Fenster, in dem der Browser den ersten Inhalt zeichnet. Bis
+    // dahin steht dasselbe Standbild.
     if (document.readyState === 'complete') neuBewerten();
     else window.addEventListener('load', neuBewerten, { once: true });
   }

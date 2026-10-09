@@ -1,36 +1,14 @@
 ---
 /**
- * Unsere Marken — was wir für uns selbst aufgebaut haben.
+ * Unsere Marken. Die Startseite belegt Reichweite in vier Sätzen; diese
+ * Seite zeigt, wie eine Marke entsteht — Idee, Bausteine, Jahre —, damit
+ * man den Aufwand sieht und nicht nur das Ergebnis.
  *
- * ── Warum diese Seite ─────────────────────────────────────────────────
- * Auf der Startseite steht DU BIST GRIECHE in vier Sätzen als Beleg.
- * Das reicht, um zu sagen „wir können Reichweite"; es reicht nicht, um
- * zu zeigen, WIE eine Marke entsteht. Diese Seite zeigt die Teile: die
- * Idee, die Bausteine, die Jahre. Ein Interessent soll den Aufwand
- * sehen, nicht nur das Ergebnis.
- *
- * ── Woher die Angaben stammen ─────────────────────────────────────────
- * Nichts hier ist geschätzt.
- *
- *   750.000 Follower · 15.000 Streams je Folge · seit 2015
- *     aus website-referenzen.docx (Stand 21.09.2026), dieselbe Quelle
- *     wie in EigeneProjekte.astro. Was dort als unbelegt markiert war,
- *     steht auch hier nicht.
- *
- *   Podcastname, Themenfelder
- *     aus den Suchdaten der Marke (GA4/Search Console, Ausfuhr vom
- *     28.08.2026): der Pfad `podcast-der-satz-des-pitagyros` und die
- *     Suchanfragen, über die Menschen tatsächlich auf der Seite landen.
- *
- *   aposocial: Claim „Ihre tägliche Dosis Social Media"
- *     aus dem WordPress-Export der Seite (21.07.2025).
- *
- * ── Die Lücken ────────────────────────────────────────────────────────
- * Was nur Daniel weiß, steht als sichtbare Lücke im Text (.luecke) und
- * nicht als plausible Erfindung. Das betrifft vor allem den
- * Podcast-Folgenlink, die Newsletter-Angaben und die Frage, ob
- * aposocial als eigene Marke oder als Kundenmarke geführt wird — dazu
- * widersprechen sich die bestehenden Seiten (siehe unten).
+ * Nichts ist geschätzt. Quellen: Zahlen aus website-referenzen.docx (wie
+ * EigeneProjekte.astro), Podcastname und Themenfelder aus den Suchdaten
+ * der Marke, der aposocial-Claim aus dem WordPress-Export. Was nur wir
+ * selbst wissen können, steht als sichtbare Lücke (.luecke) statt als
+ * plausible Erfindung.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
@@ -42,18 +20,14 @@ import Icon from '../components/ui/Icon.astro';
 
 const base = import.meta.env.BASE_URL;
 
-/**
- * Die beiden Marken in einer Zeile — das Erste, was man sieht.
- * `bausteine` zählt, was unten im Markensystem steht; `seit` ist belegt.
- */
+/** `bausteine` zählt, was im Markensystem steht; `seit` ist belegt. */
 const marken = [
   {
     id: 'dbg',
     logo: 'du-bist-grieche.svg',
     eigenfarben: true,
-    // Quadratisch (1:1) — bei gleicher Höhe wie eine breite Wortmarke
-    // wirkt sie wie eine Briefmarke. Dieselbe Abwägung steht in
-    // kunden.ts neben der Logoleiste.
+    // Quadratisch wirkt bei gleicher Höhe wie eine breite Wortmarke
+    // wie eine Briefmarke (dieselbe Abwägung wie in kunden.ts).
     logoHoehe: '4.25rem',
     name: 'DU BIST GRIECHE',
     seit: 2015,
@@ -75,13 +49,8 @@ const marken = [
 const JAHR_HEUTE = 2026;
 
 /**
- * Nur, was belegt ist.
- *
- * Für Website (2015) und Shop (2026) steht das Jahr in der geprüften
- * Quelle. Für Agora, Podcast, Newsletter und Kanäle steht es nirgends —
- * und ein geschätztes Jahr auf einer Zeitleiste ist keine Schätzung
- * mehr, sondern eine Behauptung. Sie fehlen deshalb, sichtbar benannt
- * im Kasten darunter.
+ * Nur belegte Jahre: Ein geschätztes Jahr auf einer Zeitleiste ist eine
+ * Behauptung. Was fehlt, benennt der Kasten darunter.
  */
 const MEILENSTEINE: Record<number, string> = {
   2015: 'Erste Zeile',
@@ -89,12 +58,8 @@ const MEILENSTEINE: Record<number, string> = {
 };
 
 /**
- * Das Markensystem, nach Aufgabe gruppiert.
- *
- * Sechs Kacheln nebeneinander zeigen sechs Dinge. Drei Gruppen zeigen,
- * WIE sie zusammenhängen: Eine Marke zieht an, bindet und erlöst — und
- * erst das macht aus Einzelteilen ein System. Genau das war auf der
- * ersten Fassung dieser Seite nicht zu sehen.
+ * Nach Aufgabe gruppiert: Sechs Kacheln zeigen sechs Dinge, drei Gruppen
+ * zeigen, wie sie zusammenhängen — eine Marke zieht an, bindet, erlöst.
  */
 const dbgSystem = [
   {
@@ -123,7 +88,6 @@ const dbgSystem = [
   },
 ] as const;
 
-/** Wonach Menschen suchen, wenn sie auf der Plattform landen. */
 const dbgThemen = [
   'Griechische Namenstage',
   'Griechische Nachnamen',
@@ -131,7 +95,6 @@ const dbgThemen = [
   'Identitätsformate („Welcher griechische Gott bin ich?")',
 ];
 
-/** Die Chronik — wie aus einer Idee eine Marke wurde. */
 const dbgChronik = [
   { jahr: '2015', text: 'Start als Inhalteseite. Kein Auftraggeber, kein Budget von außen, kein Gesellschafter — die Arbeit läuft vor, der Ertrag kommt später oder gar nicht.' },
   { jahr: 'Die Jahre danach', text: 'Täglich veröffentlichen. Das ist der ganze Trick und zugleich der Teil, den fast alle unterschätzen: Reichweite entsteht aus Wiederholung, nicht aus Kampagnen.' },
@@ -170,9 +133,7 @@ const dbgChronik = [
           selbst riskiert haben — mit eigenem Geld, ohne Briefing und ohne
           Rückfahrkarte.
         </p>
-        <!-- Beide Marken auf einen Blick: Marke, Spanne, Umfang.
-             Vorher standen hier zwei Knöpfe — die sagten nichts über
-             das, was dahintersteht. -->
+        {/* Beide Marken auf einen Blick: Marke, Spanne, Umfang. */}
         <ul class="markenliste" role="list">
           {marken.map((m) => (
             <li class="markenkarte">
@@ -239,7 +200,7 @@ const dbgChronik = [
       </div>
     </section>
 
-    <!-- ══════════════════ DU BIST GRIECHE ══════════════════ -->
+    {/* ══════════════════ DU BIST GRIECHE ══════════════════ */}
     <section id="dbg" class="section" aria-labelledby="dbg-heading">
       <div class="container">
         <p class="section__label">Marke 01 · seit 2015</p>
@@ -249,11 +210,9 @@ const dbgChronik = [
           Aufgebaut ohne Auftraggeber, ohne Budget von außen, auf eigenes Risiko.
         </p>
 
-        <!-- Die Spanne als Fläche, nicht als Satz.
-             Zwölf Jahresblöcke, lückenlos gefüllt: Das ist der Beleg für
-             Ausdauer, den eine Zahl allein nicht liefert. Die beiden
-             Marken darunter im selben Maßstab — so sieht man, dass die
-             eine doppelt so lange läuft wie die andere. -->
+        {/* Die Spanne als Fläche: Lückenlos gefüllte Jahresblöcke belegen
+             Ausdauer, wie es eine Zahl nicht kann. Beide Marken im selben
+             Maßstab, damit man die Längen vergleicht. */}
         <div class="leiste">
           <ol class="leiste__jahre" role="list" aria-label="Veröffentlichungsjahre">
             {Array.from({ length: JAHR_HEUTE - 2015 + 1 }, (_, i) => 2015 + i).map((jahr) => {
@@ -345,24 +304,14 @@ const dbgChronik = [
           ))}
         </div>
 
-        <!--
-          Die erste Folge, hörbar auf der Seite.
-
-          Der Podigee-Player ist ein Dritter: Er lädt ein Skript von
-          player.podigee-cdn.net und holt seine Einstellungen von
-          dersatzdespitagyros.podigee.io. Beides überträgt die IP-Adresse
-          des Besuchers. Vor der Einwilligung darf das nicht passieren
-          (§ 25 TDDDG), deshalb steht das Skript als `type="text/plain"`
-          im Markup — der Browser führt es gar nicht erst aus. Erst wenn
-          der Zweck „einbettungen" angenommen ist, trägt CookieConsent es
-          nach. Das hängt nicht daran, dass unser eigenes Skript richtig
-          läuft.
-
-          Solange es gesperrt ist, steht hier kein leerer Kasten, sondern
-          eine Erklärung, ein Knopf, der die Auswahl öffnet, und ein
-          gewöhnlicher Link auf die Folge. Die Inhalte bleiben ohne
-          Einwilligung erreichbar — sonst wäre die Wahl keine.
-        -->
+        {/*
+          Der Podigee-Player lädt von Dritten und überträgt die IP-Adresse,
+          deshalb steht das Skript als `type="text/plain"` im Markup und
+          läuft erst nach Einwilligung in „einbettungen" (§ 25 TDDDG) —
+          unabhängig davon, ob unser eigenes Skript funktioniert. Bis dahin
+          stehen Erklärung, Auswahlknopf und ein gewöhnlicher Link da: Ohne
+          Einwilligung erreichbare Inhalte, sonst wäre die Wahl keine.
+        */}
         <figure class="folge">
           <figcaption class="folge__kopf">
             <span class="folge__reihe">Der Satz des Pitagyros · Folge 1 · 32:19</span>
@@ -422,7 +371,7 @@ const dbgChronik = [
 
     <DitherBand field="pulse" label="aposocial" cell={4} />
 
-    <!-- ══════════════════ aposocial ══════════════════ -->
+    {/* ══════════════════ aposocial ══════════════════ */}
     <section id="aposocial" class="section section--hell" aria-labelledby="apo-heading">
       <div class="container">
         <p class="section__label">Marke 02 · seit 2021</p>
@@ -519,8 +468,7 @@ const dbgChronik = [
 </BaseLayout>
 
 <style>
-  /* Fließtext in den Markenabschnitten. Die Grade kommen aus der Leiter,
-     die Zeilenlänge aus dem Maß — beides siehe tokens/typography.css. */
+  /* Grade aus der Leiter, Zeilenlänge aus dem Maß (tokens/typography.css). */
   .marke__text {
     font-size: var(--dk-schrift-text);
     line-height: var(--dk-leading-body);
@@ -536,9 +484,8 @@ const dbgChronik = [
     margin-bottom: var(--rinne-2);
   }
 
-  /* Die Chronik: eine Zeitleiste, die ohne Jahreszahlen-Optik auskommt.
-     Der senkrechte Strich links ist die Zeit, die Einträge sind die
-     Schritte darauf. */
+  /* Der senkrechte Strich ist die Zeit, die Einträge sind die Schritte
+     darauf. */
   .chronik {
     list-style: none;
     margin: var(--rinne-6) 0 0;
@@ -581,10 +528,8 @@ const dbgChronik = [
     max-width: var(--dk-measure-body);
   }
 
-  /* Eine offene Stelle, die als solche zu erkennen ist.
-     Lieber eine sichtbare Lücke als eine plausible Erfindung — was hier
-     steht, weiß nur Daniel, und geraten wäre es eine Behauptung über
-     sein eigenes Geschäft. */
+  /* Eine offene Stelle, die als solche zu erkennen ist — geraten wäre es
+     eine Behauptung über das eigene Geschäft. */
   .marke__nachtrag {
     margin: var(--rinne-6) 0 0;
     padding: var(--rinne-4);
@@ -611,10 +556,8 @@ const dbgChronik = [
   }
 
   /* ── Die beiden Marken im Kopf ──────────────────────────────────────
-     Zwei Karten statt zweier Knöpfe. Wer die Seite öffnet, sieht sofort
-     beide Marken, ihre Spanne und ihren Umfang — das war der Punkt, an
-     dem die erste Fassung scheiterte: Sie behauptete Breite, statt sie
-     zu zeigen. */
+     Zwei Karten statt zweier Knöpfe, damit man Spanne und Umfang sofort
+     sieht, statt dass die Seite Breite nur behauptet. */
   .markenliste {
     list-style: none;
     margin: var(--rinne-6) 0 0;
@@ -713,10 +656,8 @@ const dbgChronik = [
     gap: var(--rinne-1);
     min-width: 0;
   }
-  /* Ruhiger Grundton, damit die Leiste nicht schreit: #6c6c6c erreicht
-     auf #101010 gemessen 3,62 : 1 und liegt damit über der Schwelle für
-     grafische Objekte. Die belegten Jahre stehen im Akzent und heben
-     sich dadurch ab — das ist die Bewegung, die man sehen soll. */
+  /* Ruhiger Grundton (#6c6c6c, 3,62:1 auf #101010 — über der Schwelle
+     für grafische Objekte); die belegten Jahre stehen im Akzent. */
   .leiste__block {
     display: block;
     width: 100%;
@@ -726,12 +667,9 @@ const dbgChronik = [
   }
   .leiste__jahr--punkt .leiste__block { background: var(--color-accent); }
   .leiste__jahr--punkt .leiste__zahl { color: var(--color-text); }
-  /* Die Beschriftung steht über dem Block, nicht neben ihm — sonst
-     schiebt sie bei zwölf Spalten die ganze Leiste über den Rand.
-     Gemessen bei 390 px: 395 px Dokumentbreite, also eine waagerechte
-     Bildlaufleiste auf jedem Telefon. Deshalb absolut positioniert und
-     unter 48 rem ganz weg; dort trägt die Legende darunter dieselbe
-     Information, nur lesbar. */
+  /* Die Beschriftung steht absolut über dem Block: Daneben schöbe sie
+     zwölf Spalten über den Rand (waagerechtes Scrollen am Telefon).
+     Unter 48 rem trägt die Legende darunter dieselbe Information. */
   .leiste__jahr { position: relative; }
   .leiste__marke {
     position: absolute;
@@ -786,10 +724,8 @@ const dbgChronik = [
   }
 
   /* ── Das Markensystem ───────────────────────────────────────────────
-     Drei Gruppen statt sechs gleicher Kacheln. Die Gruppierung ist die
-     Aussage: Eine Marke zieht an, bindet und erlöst. Sechs Kacheln
-     nebeneinander zeigen sechs Dinge; drei Gruppen zeigen, wie sie
-     zusammenhängen. */
+     Drei Gruppen statt sechs gleicher Kacheln — die Gruppierung ist die
+     Aussage. */
   .system {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
@@ -841,13 +777,9 @@ const dbgChronik = [
   }
 
   /* ── Die eingebettete Folge ─────────────────────────────────────────
-     Der Platzhalter und der Player tauschen die Plätze, sobald die
-     Einwilligung vorliegt. Gesteuert über data-einbettungen am
-     <html>-Element (siehe Consent.astro) — dasselbe Muster wie beim
-     Bewegungsschalter.
-
-     Ausgangszustand ist „Platzhalter sichtbar": Wer ohne Skript liest,
-     bekommt die Erklärung und den Link, nicht eine leere Fläche. */
+     Platzhalter und Player tauschen über data-einbettungen am <html>
+     (siehe Consent.astro). Ausgangszustand ist der Platzhalter, damit
+     ohne Skript Erklärung und Link stehen statt einer leeren Fläche. */
   .folge {
     margin: var(--rinne-6) 0 0;
     padding: var(--rinne-5);

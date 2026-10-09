@@ -23,7 +23,6 @@ const base = import.meta.env.BASE_URL;
 
     <DitherBand field="orbit" label="Leistungen" cell={3} />
 
-    <!-- Page Header -->
     <div class="page-header container">
       <nav aria-label="Breadcrumb" class="breadcrumb">
         <ol class="breadcrumb__list">
@@ -35,14 +34,12 @@ const base = import.meta.env.BASE_URL;
       <p class="page-header__lead">Von BFSG-barrierefreien WordPress-Websites über SEO &amp; GEO bis zu KI-Services: Alle Leistungen der agentur dk im Überblick.</p>
     </div>
 
-    <!-- Unsere Schwerpunkte -->
     <section class="schwerpunkte-section section" aria-labelledby="schwerpunkte-heading-l">
       <div class="container">
         <p class="schwerpunkte-section__eyebrow">Was wir tun</p>
         <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading-l">Digitale Lösungen mit Schwerpunkt</h2>
         <p class="schwerpunkte-section__lead">Neben unserem vollständigen Leistungsspektrum haben wir zwei Kernbereiche, in denen wir besonders tiefes Know-how und nachgewiesene Ergebnisse vorweisen können.</p>
         <div class="schwerpunkte-grid">
-          <!-- Karte A -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
               <Icon name="briefcase-business" size={48} strokeWidth={1.5} />
@@ -51,7 +48,6 @@ const base = import.meta.env.BASE_URL;
             <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
             <a href={`${base}website-leasing.html`} class="btn btn--outline schwerpunkt-card__link">Mehr zum Website-Leasing</a>
           </article>
-          <!-- Karte B -->
           <article class="schwerpunkt-card" data-reveal>
             <div class="schwerpunkt-card__icon" aria-hidden="true">
               <Icon name="accessibility" size={48} strokeWidth={1.5} />
@@ -64,8 +60,6 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-
-    <!-- Orientierung: Ausgangslage → passende Leistung -->
     <section class="section section--hell" aria-labelledby="orientation-heading">
       <div class="container">
         <h2 class="section-title" id="orientation-heading">Welche Leistung passt zu Ihrer Situation?</h2>
@@ -142,14 +136,12 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <!-- Services Grid Section -->
     <DitherBand field="dunes" label="Alle Leistungen" cell={4} />
 
     <section class="services section">
       <div class="container">
         <ul class="services__grid" role="list">
 
-          <!-- Card 1: Barrierefreie Websites -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">01</span>
             <div class="card__icon">
@@ -162,7 +154,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}bfsg-wordpress-website-agentur.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Barrierefreie Websites (BFSG)</span></a>
           </li>
 
-          <!-- Card 2: WordPress-Entwicklung -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">02</span>
             <div class="card__icon">
@@ -175,7 +166,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}wordpress-entwicklung.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über WordPress-Entwicklung</span></a>
           </li>
 
-          <!-- Card 3: SEO & GEO -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">03</span>
             <div class="card__icon">
@@ -188,7 +178,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}seo-geo.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über SEO und GEO</span></a>
           </li>
 
-          <!-- Card 4: Online-Marketing -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">04</span>
             <div class="card__icon">
@@ -201,7 +190,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}online-marketing.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Online-Marketing</span></a>
           </li>
 
-          <!-- Card 5: Corporate Design -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">05</span>
             <div class="card__icon">
@@ -214,7 +202,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}corporate-design.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Corporate Design</span></a>
           </li>
 
-          <!-- Card 6: KI-Services -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">06</span>
             <div class="card__icon">
@@ -227,7 +214,6 @@ const base = import.meta.env.BASE_URL;
             <a href={`${base}ki-services.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über KI-Services</span></a>
           </li>
 
-          <!-- Card 7: Social Recruiting -->
           <li class="service-card" data-reveal>
             <span class="service-card__number" aria-hidden="true">07</span>
             <div class="card__icon">
@@ -244,7 +230,6 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <!-- Closing CTA -->
     <CtaSection
       title="Bereit, Ihr Projekt zu starten?"
       text="Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden."
@@ -258,11 +243,8 @@ const base = import.meta.env.BASE_URL;
 </BaseLayout>    <FaqAccordion slug="leistungen" />
 
   <style>
-    /* Orientierungsabschnitt: Ausgangslage links, Antwort rechts.
-       Als <dl> ausgezeichnet, weil genau das die Struktur ist —
-       Begriff und zugehörige Erläuterung. Screenreader kündigen die
-       Paare dadurch als Liste an, und Parser lesen die Zuordnung
-       verlässlich, was der Zitierfähigkeit in KI-Antworten zugutekommt. */
+    /* Als <dl>, weil es Begriff und Erläuterung sind: Screenreader kündigen
+       die Paare als Liste an, und Parser lesen die Zuordnung verlässlich. */
     .orientation__lead {
       max-width: 62ch;
       margin: 0 auto var(--spacing-10);

@@ -1,46 +1,20 @@
 ---
 /**
- * Karriereseite der agentur dk.
+ * Karriereseite, nach dem Muster unserer Personalgewinnungs-Seiten
+ * (freut-sich-auf-mich.de): Auftakt · Stellen · Vorteile · Arbeitsplatz ·
+ * Ablauf · Auf einen Blick · Fragen · Bewerbung.
  *
- * ── Die Vorlage ───────────────────────────────────────────────────────
- * Gebaut nach dem Muster unserer eigenen Personalgewinnungs-Seiten
- * (freut-sich-auf-mich.de, siehe ~/Claude-Projekte/Code/). Die
- * Abschnittsfolge dort ist erprobt und wird hier übernommen:
+ * Diese Seite duzt, der Rest siezt: Hier liest eine Bewerberin, keine
+ * Auftraggeberin, und in der Personalgewinnung ist das Du üblich. (Der
+ * duzende Leistungs-Check der Startseite ist dagegen ein Fehler.)
  *
- *   Auftakt · Stellen · Vorteile · Arbeitsplatz · Ablauf ·
- *   Auf einen Blick · Fragen · Bewerbung
- *
- * ── Die Anrede ────────────────────────────────────────────────────────
- * Diese Seite duzt, der Rest der Website siezt. Das ist kein Versehen,
- * sondern eine Entscheidung: Hier liest eine Bewerberin, nicht eine
- * Auftraggeberin. In der Personalgewinnung ist das Du der Normalfall,
- * und die s-k-Seite führt es genauso.
- *
- * Nicht zu verwechseln mit dem Leistungs-Check im Hero der Startseite —
- * der duzt Kundschaft und ist deshalb ein Fehler, kein Register.
- *
- * ── Was hier NICHT steht ──────────────────────────────────────────────
- * Die Regel aus dem s-k-Projekt gilt hier genauso, und sie ist auf
- * einer Karriereseite noch schärfer: Eine Bewerberin liest jeden Satz
- * als Zusage.
- *
- * Also: keine erfundenen Stellen, keine erfundene Vier-Tage-Woche, kein
- * erfundenes Homeoffice, keine Gehaltsspanne, keine Urlaubstage. Nichts
- * davon ist im Projekt belegt. Wo es fehlt, steht ein sichtbar
- * gekennzeichneter Platzhalter (.luecke) und nicht ein plausibler Satz.
- *
- * Belegt und deshalb verwendet:
- *   Anschrift, Südstadt, Erreichbarkeit  aus site.config.ts und Impressum
- *   „Fünf Menschen in Köln, die seit     aus Kernteam.astro
- *    Jahren zusammenarbeiten"
- *   „Kurze Wege, ein Ansprechpartner"    aus Kernteam.astro / index.astro
- *   Die Leistungen                        aus site.config.ts
- *   Die Bürofotos                         aus src/assets/buero/
- *   Eigene Marken                         aus marken.astro
- *
- * tests/jobs-inhalt.test.ts führt die Wendungen, die hier nicht stehen
- * dürfen — nach demselben Muster wie tests/inhalt.test.ts im
- * s-k-Projekt.
+ * Eine Bewerberin liest jeden Satz als Zusage. Deshalb keine erfundenen
+ * Stellen, Arbeitszeiten, Homeoffice-, Gehalts- oder Urlaubsangaben —
+ * wo etwas fehlt, steht ein sichtbarer Platzhalter (.luecke). Verwendet
+ * wird nur Belegtes: Anschrift und Erreichbarkeit (site.config.ts,
+ * Impressum), Team und „kurze Wege" (Kernteam.astro), Leistungen,
+ * Bürofotos (src/assets/buero/), eigene Marken (marken.astro).
+ * src/lib/jobs-inhalt.test.ts hält die verbotenen Wendungen fest.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
@@ -56,9 +30,8 @@ import bueroRaum from '../assets/buero/besprechungsraum.jpg';
 const base = import.meta.env.BASE_URL;
 
 /**
- * Was die Arbeit hier ausmacht — ausschließlich aus dem, was die
- * Website ohnehin über die Arbeitsweise sagt. Das sind Tatsachen über
- * den Betrieb, keine Zusagen über Konditionen.
+ * Nur, was die Website ohnehin über die Arbeitsweise sagt — Tatsachen
+ * über den Betrieb, keine Zusagen über Konditionen.
  */
 const arbeitsweise = [
   {
@@ -83,7 +56,6 @@ const arbeitsweise = [
   },
 ] as const;
 
-/** Die Auftraggeber, die auf der Website belegt sind. */
 const referenzen = ['Bundesministerium für Familie, Senioren, Frauen und Jugend', 'TARGOBANK', 'Berufsförderungswerke'];
 
 /** Auf einen Blick — jede Zeile steht so schon auf der Website. */
@@ -94,7 +66,6 @@ const aufEinenBlick = [
   { was: 'Wofür',         wert: 'Websites, Online-Marketing, KI-Lösungen' },
 ];
 
-/** Fragen, die sich aus dem Belegten beantworten lassen. */
 const fragen = [
   {
     frage: 'Wo genau ist das Büro?',
@@ -134,7 +105,6 @@ const fragen = [
       </div>
     </nav>
 
-    <!-- ── Auftakt ────────────────────────────────────────────────── -->
     <section class="section section--hero" aria-labelledby="hero-heading">
       <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="mesh" cell={3} fps={12} /></div>
       <div class="container">
@@ -154,20 +124,15 @@ const fragen = [
 
     <DitherBand field="drift" label="Arbeiten bei agentur dk" cell={4} />
 
-    <!-- ── Stellen ────────────────────────────────────────────────── -->
     <section id="stellen" class="section section--hell" aria-labelledby="stellen-heading">
       <div class="container">
         <p class="section__label">Offene Stellen</p>
         <h2 id="stellen-heading" class="section__heading">Hierfür suchen wir dich</h2>
 
-        <!--
-          Hier stehen bewusst keine Stellen.
-
-          Eine erfundene Stellenanzeige ist kein Platzhaltertext — darauf
-          bewirbt sich jemand. Welche Stellen offen sind, weiß nur die
-          Agentur; im Projekt steht dazu nichts. Der Kasten bleibt, bis
-          die Angaben da sind.
-        -->
+        {/*
+          Bewusst keine Stellen: Auf eine erfundene Stellenanzeige bewirbt
+          sich jemand. Der Kasten bleibt, bis die Angaben da sind.
+        */}
         <div class="marke__nachtrag">
           <span class="luecke">Fehlt: die offenen Stellen</span>
           <p class="jobs__luecketext">
@@ -190,7 +155,6 @@ const fragen = [
       </div>
     </section>
 
-    <!-- ── Wie hier gearbeitet wird ───────────────────────────────── -->
     <section class="section" aria-labelledby="arbeit-heading">
       <div class="container">
         <p class="section__label">Wie hier gearbeitet wird</p>
@@ -220,7 +184,6 @@ const fragen = [
       </div>
     </section>
 
-    <!-- ── Arbeitsplatz ───────────────────────────────────────────── -->
     <section class="section section--hell" aria-labelledby="ort-heading">
       <div class="container">
         <p class="section__label">Dein Arbeitsplatz</p>
@@ -241,7 +204,6 @@ const fragen = [
       </div>
     </section>
 
-    <!-- ── Auf einen Blick ────────────────────────────────────────── -->
     <section class="section" aria-labelledby="blick-heading">
       <div class="container">
         <p class="section__label">Auf einen Blick</p>
@@ -263,7 +225,6 @@ const fragen = [
       </div>
     </section>
 
-    <!-- ── Fragen ─────────────────────────────────────────────────── -->
     <section class="section section--hell" aria-labelledby="fragen-heading">
       <div class="container">
         <p class="section__label">Fragen und Antworten</p>
@@ -290,7 +251,6 @@ const fragen = [
       </div>
     </section>
 
-    <!-- ── Bewerben ───────────────────────────────────────────────── -->
     <section id="bewerben" class="section section--blau" aria-labelledby="bewerben-heading">
       <div class="container">
         <p class="section__label">Bewerbung</p>
@@ -335,7 +295,6 @@ const fragen = [
     gap: var(--rinne-4);
   }
 
-  /* Vier Kacheln zur Arbeitsweise. */
   .jobs__karten {
     list-style: none;
     margin: var(--rinne-6) 0 0;
@@ -362,7 +321,6 @@ const fragen = [
     color: var(--color-text-muted);
   }
 
-  /* Die Bürofotos: drei gleich hohe Bilder nebeneinander. */
   .jobs__bilder {
     margin-top: var(--rinne-6);
     display: grid;
@@ -378,7 +336,6 @@ const fragen = [
     border: 1px solid var(--color-border);
   }
 
-  /* Auf einen Blick: Begriff und Wert in zwei Spalten. */
   .jobs__blick {
     margin: var(--rinne-6) 0 0;
     max-width: 44rem;
@@ -474,11 +431,8 @@ const fragen = [
     color: var(--color-text-muted);
   }
 
-  /* Eine offene Stelle im Text, die als solche zu erkennen ist.
-     Dieselbe Behandlung wie auf der Markenseite; die Klassen sind dort
-     gekapselt und deshalb hier noch einmal gesetzt. Auf einer
-     Karriereseite wiegt die Regel schwerer als sonst: Eine Bewerberin
-     liest jeden Satz als Zusage. */
+  /* Eine offene Stelle, die als solche zu erkennen ist. Die Klassen der
+     Markenseite sind dort gekapselt, deshalb hier noch einmal. */
   .marke__nachtrag {
     margin: var(--rinne-6) 0 0;
     padding: var(--rinne-4);

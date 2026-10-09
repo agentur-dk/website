@@ -1,23 +1,14 @@
 ---
 /**
- * Der Weg ins Erstgespräch — fünf Fragen, dann Termin.
+ * Der Weg ins Erstgespräch — fünf Fragen, dann Termin. Ein Formular
+ * verlangt zuerst, was am meisten kostet (Name, Firma, Mail), und dort
+ * brechen Unsichere ab. Hier sind vier von fünf Schritten ein Klick;
+ * getippt wird erst nach vier Entscheidungen.
  *
- * ── Warum als Funnel und nicht als Formular ───────────────────────────
- * Ein Formular verlangt als Erstes, was am meisten kostet: Name, Firma,
- * Mailadresse. Wer noch unsicher ist, bricht dort ab. Dieser Weg dreht
- * die Reihenfolge um — vier der fünf Schritte sind ein einziger Klick,
- * getippt wird erst, wenn jemand schon vier Entscheidungen getroffen
- * hat. Das ist der ganze Trick an dieser Bauform.
- *
- * ── Ohne JavaScript ───────────────────────────────────────────────────
- * Dann stehen alle Schritte untereinander auf einem Bildschirm und der
- * Knopf schickt ein klassisches POST an denselben Endpunkt. Kein
- * `novalidate` im Markup: Ohne Skript ist die Browserprüfung die
- * einzige vor dem Absenden. Mit Skript wird sie abgeschaltet, weil die
- * eigenen Meldungen genauer sind.
- *
- * Gebaut wie LeadForm.astro, nur mit Klickkarten statt Textfeldern —
- * derselbe Endpunkt, dieselben Honigtöpfe, dieselbe Zeitschranke.
+ * Ohne JavaScript stehen alle Schritte untereinander und der Knopf schickt
+ * ein klassisches POST; kein `novalidate` im Markup, weil dann die
+ * Browserprüfung die einzige ist. Endpunkt, Honigtöpfe und Zeitschranke
+ * wie in LeadForm.astro.
  */
 import { FORM_ENDPOINT, siteConfig } from '../config/site.config';
 import Icon from './ui/Icon.astro';
@@ -29,13 +20,12 @@ interface Props {
 }
 const { page = 'Erstgespräch' } = Astro.props;
 
-/* Die Fragen. Reihenfolge ist Absicht: vom Anliegen (leicht) über die
-   Lage (ehrlich) zum Ziel (konkret) und zur Dringlichkeit (qualifiziert).
-   Erst danach die Person. */
+/* Die Reihenfolge ist Absicht: vom Anliegen (leicht) über die Lage
+   (ehrlich) zum Ziel (konkret) und zur Dringlichkeit — erst danach die
+   Person. */
 interface Option {
   readonly wert: string;
-  /* Der Typ ist der Sinn der Zeile: Ein Tippfehler im Icon-Namen faellt
-     damit beim Bauen auf und nicht im Browser als leere Stelle. */
+  /* Der Typ lässt einen Tippfehler im Icon-Namen beim Bauen auffallen. */
   readonly ikon: IconName;
   readonly zeile: string;
 }
@@ -108,7 +98,6 @@ const schritte: readonly {
       und auch dann nur so viele, wie für eine Antwort nötig sind.
     </p>
 
-    <!-- Ansage für Screenreader: Schrittwechsel, Fehler, Erfolg. -->
     <div id="fn-status" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
     <form
@@ -118,16 +107,10 @@ const schritte: readonly {
       data-endpoint={FORM_ENDPOINT}
     >
       <input type="hidden" name="weiter" value={`${base}danke.html`} />
-      {/* Die Feldnamen sind NICHT frei wählbar. `send.php` wertet
-          `page`, `form_started`, `message`, `website_url` und die
-          Namensfelder unter genau diesen Bezeichnungen aus; alles
-          Weitere reicht es als Zusatzzeile in die Mail durch.
-
-          `form_started` ist der gefährlichste davon: Fehlt es bei einer
-          JSON-Anfrage, ruft der Endpunkt `stillVerwerfen()` — die
-          Anfrage verschwindet ohne Fehler, ohne Protokoll, ohne dass
-          der Absender etwas merkt. Ein falsch benanntes Feld hätte hier
-          jede einzelne Anfrage aus diesem Funnel gekostet. */}
+      {/* Die Feldnamen sind nicht frei wählbar: `send.php` wertet `page`,
+          `form_started`, `message`, `website_url` und die Namensfelder unter
+          genau diesen Namen aus. Fehlt `form_started` bei einer JSON-Anfrage,
+          verwirft der Endpunkt sie still — ohne dass der Absender etwas merkt. */}
       <input type="hidden" name="page" value={page} />
       <input type="hidden" name="page_url" id="fn-url" value="" />
 
@@ -140,13 +123,11 @@ const schritte: readonly {
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
       </div>
 
-      {/* Zeitschranke: Der Endpunkt verwirft alles, was in weniger als
-          drei Sekunden zurückkommt. Ohne Skript bleibt das Feld leer —
-          dann greifen die Honigtöpfe und die Sperre pro Stunde, und der
-          klassische POST-Weg kommt durch. */}
+      {/* Der Endpunkt verwirft alles unter drei Sekunden. Ohne Skript bleibt
+          das Feld leer; dann greifen Honigtöpfe und Stundensperre. */}
       <input type="hidden" name="form_started" id="fn-gestartet" value="" />
 
-      <!-- Fortschritt: ohne Skript unsichtbar, weil dann alles auf einmal dasteht. -->
+      {/* Ohne Skript unsichtbar, weil dann alles auf einmal dasteht. */}
       <ol class="funnel__fortschritt" id="fn-fortschritt" hidden aria-label="Fortschritt">
         {[1, 2, 3, 4, 5].map((n) => (
           <li class="funnel__punkt" data-punkt={n} aria-current={n === 1 ? 'step' : undefined}>
@@ -175,13 +156,8 @@ const schritte: readonly {
                 />
                 <span class="fkarte__inhalt">
                   {/*
-                    Das Icon ist Beiwerk, kein Inhalt: Es steht schon als
-                    Wort daneben. `Icon.astro` setzt deshalb ohnehin
-                    `aria-hidden` — vorgelesen wird nur der Titel und die
-                    Zeile darunter.
-
-                    Als `{/* … *\/}` und nicht als HTML-Kommentar: Der
-                    stand sonst neunzehnmal im ausgelieferten Dokument.
+                    Das Icon ist Beiwerk — `Icon.astro` setzt `aria-hidden`,
+                    vorgelesen werden Titel und Zeile.
                   */}
                   <span class="fkarte__ikon"><Icon name={o.ikon} size={20} /></span>
                   <span class="fkarte__text">
@@ -360,11 +336,8 @@ const schritte: readonly {
     border-color: var(--color-accent);
     box-shadow: inset 0 0 0 1px var(--color-accent);
   }
-  /* Das Icon sitzt auf der Oberkante der Ueberschrift, nicht auf der
-     Mitte der Karte: Sonst wandert es, sobald eine Erklaerzeile
-     umbricht, und die Reihe steht nicht mehr auf einer Linie.
-     `flex: 0 0 auto` haelt es quadratisch, auch wenn der Titel lang
-     ist. */
+  /* Das Icon sitzt auf der Oberkante der Überschrift, nicht auf der
+     Kartenmitte — sonst wandert es, sobald eine Erklärzeile umbricht. */
   .fkarte__ikon {
     flex: 0 0 auto;
     display: grid; place-items: center;

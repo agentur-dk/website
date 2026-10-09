@@ -8,7 +8,6 @@ const currentPath = Astro.url.pathname;
 
 <header class="site-header">
   <div class="site-header__inner">
-    <!-- Logo -->
     <a
       href={`${base}`}
       class="site-logo"
@@ -18,7 +17,6 @@ const currentPath = Astro.url.pathname;
       <span class="u-sr-only">— zur Startseite</span>
     </a>
 
-    <!-- Mobile toggle -->
     <button
       type="button"
       id="nav-toggle"
@@ -30,7 +28,6 @@ const currentPath = Astro.url.pathname;
       <Icon name="menu" size={24} />
     </button>
 
-    <!-- Primary navigation -->
     <nav id="nav-menu" aria-label="Hauptnavigation">
       <ul role="list" class="nav-list">
         <li>
@@ -41,7 +38,6 @@ const currentPath = Astro.url.pathname;
           >Start</a>
         </li>
 
-        <!-- Leistungen dropdown -->
         <li class="nav-item--dropdown">
           <a
             href={`${base}leistungen.html`}
@@ -130,7 +126,6 @@ const currentPath = Astro.url.pathname;
     gap: var(--rinne-4);
   }
 
-  /* Logo */
   .site-logo {
     display: flex;
     flex-direction: column;
@@ -154,7 +149,6 @@ const currentPath = Astro.url.pathname;
     letter-spacing: 0.08em;
   }
 
-  /* Mobile toggle */
   .nav-toggle {
     display: none;
     background: none;
@@ -164,7 +158,6 @@ const currentPath = Astro.url.pathname;
     padding: 0.5rem;
   }
 
-  /* Nav list */
   .nav-list {
     display: flex;
     align-items: center;
@@ -174,7 +167,6 @@ const currentPath = Astro.url.pathname;
     padding: 0;
   }
 
-  /* Nav links */
   .nav-link {
     display: block;
     padding: 0.5rem 0.75rem;
@@ -192,7 +184,6 @@ const currentPath = Astro.url.pathname;
     background-color: var(--color-surface-alt);
   }
 
-  /* Dropdown trigger */
   .nav-link--dropdown {
     display: flex;
     align-items: center;
@@ -206,7 +197,6 @@ const currentPath = Astro.url.pathname;
     flex-shrink: 0;
   }
 
-  /* Dropdown container */
   .nav-item--dropdown {
     position: relative;
   }
@@ -240,7 +230,6 @@ const currentPath = Astro.url.pathname;
     background-color: var(--color-surface-alt);
   }
 
-  /* CTA button */
   .nav-cta {
     display: inline-flex;
     align-items: center;
@@ -260,7 +249,6 @@ const currentPath = Astro.url.pathname;
     background-color: var(--color-primary-hover);
   }
 
-  /* Mobile styles */
   @media (max-width: 768px) {
     .nav-toggle {
       display: block;
@@ -315,14 +303,12 @@ const currentPath = Astro.url.pathname;
   const leistungenBtn = document.getElementById('leistungen-btn');
   const leistungenDropdown = document.getElementById('leistungen-dropdown');
 
-  // Mobile toggle
   toggle?.addEventListener('click', () => {
     const expanded = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(!expanded));
     if (menu) menu.classList.toggle('is-open', !expanded);
   });
 
-  // Leistungen dropdown
   leistungenBtn?.addEventListener('click', (e) => {
     e.preventDefault();
     const expanded = leistungenBtn.getAttribute('aria-expanded') === 'true';
@@ -330,7 +316,6 @@ const currentPath = Astro.url.pathname;
     if (leistungenDropdown) leistungenDropdown.hidden = expanded;
   });
 
-  // Close dropdown on outside click
   document.addEventListener('click', (e) => {
     if (leistungenDropdown && leistungenBtn && !leistungenBtn.contains(e.target as Node) && !leistungenDropdown.contains(e.target as Node)) {
       leistungenDropdown.hidden = true;
@@ -338,7 +323,6 @@ const currentPath = Astro.url.pathname;
     }
   });
 
-  // Close dropdown on Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && leistungenDropdown) {
       leistungenDropdown.hidden = true;

@@ -1,44 +1,18 @@
 ---
 /**
- * Einwilligungsbanner — CookieConsent (vanilla-cookieconsent, MIT).
+ * Einwilligungsbanner — CookieConsent (vanilla-cookieconsent, MIT), nach
+ * der agenturweiten Regel in `~/Claude-Projekte/CLAUDE.md`.
  *
- * Verbindlich für alle Webprojekte; die Regel steht in
- * `~/Claude-Projekte/CLAUDE.md`. Abgelöst wurden nacheinander ein
- * handgeschriebener Banner und SimpleCMP — die Entscheidung fiel auf
- * Messwerten, nicht auf Bekanntheit:
+ * Über npm statt als abgelegtes Bundle, damit `npm update` die Fassung
+ * nachzieht. Kein CDN: Der Banner darf nicht selbst der erste Aufruf an
+ * einen Dritten vor der Einwilligung sein. Blockiert wird über das Markup
+ * (`type="text/plain"` mit `data-category`) — das hält auch, wenn unser
+ * eigener Code nicht läuft.
  *
- *   Bundle       SimpleCMP 58 kB gepackt  →  CookieConsent 14 kB
- *   Lighthouse   30/32 Läufe ≥ 99         →  31/32, index mobil 96 → 100
- *   axe-core     0 Verstöße               →  0 Verstöße
- *   Bezug        selbst gebaut            →  npm, Fassung in package.json
- *
- * **Über npm, nicht als abgelegtes Bundle.** Die Fassung steht in
- * package.json, `npm update` zieht sie nach, Astro bündelt nur das
- * Gebrauchte. SimpleCMP hatte weder npm-Paket noch fertige Bundles; das
- * Bundle dort war selbst gebaut und ohne Fassungsverwaltung.
- *
- * **Blockiert wird über das Markup.** Das Google-Tag steht als
- * `type="text/plain"` mit `data-category` im Dokument; ohne Einwilligung
- * führt der Browser es gar nicht erst aus. Das hängt nicht daran, dass
- * unser eigener Code richtig läuft — der strengere Weg.
- *
- * **Kein CDN.** Ein Aufruf an jsdelivr überträgt die IP jedes Besuchers an
- * einen Dritten, und zwar *bevor* eine Einwilligung vorliegt. Genau das
- * soll dieser Banner verhindern; er darf nicht selbst der erste Verstoß
- * sein. Dieselbe Begründung, aus der reCAPTCHA ausgeschlossen ist und die
- * Schriften lokal liegen.
- *
- * **Die deutschen Texte stehen hier**, nicht im Paket — CookieConsent
- * liefert keine mit. Das ist die bessere Aufteilung: Die Wortwahl gehört
- * zur Seite.
- *
- * **Auf jeder Seite, auch auf Datenschutz und Impressum.** Sonst fehlt der
- * Knopf zum Ändern ausgerechnet dort, wohin die Datenschutzerklärung zum
- * Widerruf verweist. Der Banner selbst erscheint ohnehin nur, solange
- * nichts entschieden ist.
- *
- * `anonymize_ip` bleibt — die Datenschutzerklärung sagt es zu, und ein
- * Werkzeugwechsel ist kein Anlass, eine Zusage fallen zu lassen.
+ * Die deutschen Texte stehen hier, weil die Wortwahl zur Seite gehört. Der
+ * Banner läuft auf jeder Seite, auch auf Datenschutz und Impressum, sonst
+ * fehlte der Knopf zum Ändern genau dort, wohin der Widerruf verweist.
+ * `anonymize_ip` bleibt, weil die Datenschutzerklärung es zusagt.
  */
 const GA_ID = 'G-KJ0TV1QCMB';
 ---
@@ -57,16 +31,15 @@ const GA_ID = 'G-KJ0TV1QCMB';
     `gtag('js',new Date());gtag('config','${GA_ID}',{anonymize_ip:true});`}
 ></script>
 
-<!--
+{/*
   Kein `define:vars`: Astro macht daraus ein Inline-Skript ohne Modultyp,
-  und die `import`-Zeilen brechen mit »Cannot use import statement outside
-  a module«. Im Browser gemessen, im Markup nicht zu sehen. Der Basispfad
-  kommt deshalb über import.meta.env, das Vite beim Bauen einsetzt.
--->
+  und die `import`-Zeilen brechen. Der Basispfad kommt deshalb über
+  import.meta.env.
+*/}
 <script>
   import * as CookieConsent from 'vanilla-cookieconsent';
-  // Die Festlegungen, an denen die Wirksamkeit haengt, stehen einmal
-  // fuer alle Projekte in @dk/basis — nicht je Projekt abgeschrieben.
+  // Die Festlegungen, an denen die Wirksamkeit hängt, stehen einmal für
+  // alle Projekte in @dk/basis.
   import { erzeugeKonfiguration } from '../lib/einwilligung-basis';
   import 'vanilla-cookieconsent/dist/cookieconsent.css';
 
@@ -74,10 +47,8 @@ const GA_ID = 'G-KJ0TV1QCMB';
   let vorher = false;
 
   /*
-   * Der Zustand hängt als data-einbettungen am <html>-Element — dasselbe
-   * Muster wie data-motion beim Bewegungsschalter. So kann CSS den
-   * Platzhalter wegnehmen, sobald der Player laden darf, ohne dass dafür
-   * Skript im Markup der Seite stehen muss.
+   * Der Zustand hängt als data-einbettungen am <html> (wie data-motion),
+   * damit CSS den Platzhalter wegnehmen kann, sobald der Player laden darf.
    */
   function merkeEinbettungen(): void {
     document.documentElement.dataset.einbettungen =
@@ -89,7 +60,7 @@ const GA_ID = 'G-KJ0TV1QCMB';
 
     manageScriptTags: true,
     autoClearCookies: true,
-    // Der Banner soll auch in der Messung erscheinen; sonst saehe die
+    // Der Banner soll auch in der Messung erscheinen, sonst sähe die
     // Leistungsmessung besser aus als die Wirklichkeit.
     hideFromBots: false,
 
@@ -99,14 +70,9 @@ const GA_ID = 'G-KJ0TV1QCMB';
         autoClear: { cookies: [{ name: /^_ga/ }, { name: '_gid' }, { name: '_gat' }] },
       },
       /*
-       * Eingebettete Inhalte, derzeit nur der Podcast-Player auf
-       * /marken.html.
-       *
-       * Ein eigener Zweck, nicht unter „Statistik" mitgeführt: Wer der
-       * Reichweitenmessung zustimmt, hat damit nicht einem Player
-       * zugestimmt, der die IP-Adresse an einen anderen Anbieter
-       * überträgt. Die Einwilligung muss granular je Dienst sein — steht
-       * so in der Projektregel und folgt aus Art. 4 Nr. 11 DSGVO.
+       * Ein eigener Zweck, nicht unter „Statistik": Wer der Messung
+       * zustimmt, hat nicht einem Player zugestimmt, der die IP an einen
+       * anderen Anbieter überträgt (granular je Dienst, Art. 4 Nr. 11 DSGVO).
        */
       einbettungen: {},
     },
@@ -186,20 +152,13 @@ const GA_ID = 'G-KJ0TV1QCMB';
   });
 
   /*
-   * Beim Widerruf neu laden.
-   *
-   * `autoClearCookies` nimmt die Cookies weg — mehr nicht. Ein bereits
-   * geladenes Google-Tag hängt im Speicher, hat seine Zuhörer gesetzt und
-   * sendet weiter bis zum Neuladen. Der Widerruf wäre sonst folgenlos, und
-   * genau das darf er nicht sein (Art. 7 Abs. 3 DSGVO).
-   *
-   * Nur beim Wegnehmen, nicht beim Erteilen: Beim Erteilen trägt
-   * CookieConsent das Skript selbst nach, dafür braucht es kein Neuladen.
+   * Beim Widerruf neu laden: `autoClearCookies` nimmt nur die Cookies weg,
+   * ein geladenes Google-Tag sendet bis zum Neuladen weiter — der Widerruf
+   * wäre sonst folgenlos (Art. 7 Abs. 3 DSGVO). Beim Erteilen nicht nötig,
+   * dort trägt CookieConsent das Skript selbst nach.
    */
-  // Widerruf von überall — Art. 7 Abs. 3 DSGVO verlangt, dass das
-  // Zurücknehmen so leicht ist wie das Erteilen.
-  // Zwei Wege, absichtlich: der Knopf in der Fußzeile jeder Seite und ein
-  // Anker, auf den die Datenschutzerklärung im Fließtext verweisen kann.
+  // Widerruf so leicht wie das Erteilen (Art. 7 Abs. 3 DSGVO): der Knopf
+  // in jeder Fußzeile und ein Anker für die Datenschutzerklärung.
   for (const a of document.querySelectorAll(
     '[data-consent-oeffnen], a[href="#datenschutz-einstellungen"]',
   )) {
