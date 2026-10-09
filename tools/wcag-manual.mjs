@@ -35,6 +35,36 @@ const TEXT_SPACING = `* { line-height: 1.5 !important; letter-spacing: 0.12em !i
 const findings = [];
 const add = (sc, page, detail) => findings.push({ sc, page, detail });
 
+/**
+ * Den Einwilligungsdialog schließen, bevor gemessen wird.
+ *
+ * Bis zum 09.10.2026 maß diese Prüfung mit OFFENEM Dialog. Der Dialog
+ * sperrt die Seite (`disablePageInteraction`) und setzt dafür
+ * `overflow: hidden` an <html> — damit meldet `scrollWidth` immer die
+ * Fensterbreite, egal was dahinter übersteht. Gemessen an der
+ * Startseite bei 320 px:
+ *
+ *   Dialog offen       scrollWidth 320   „unauffällig"
+ *   Dialog geschlossen scrollWidth 354   Überlauf
+ *
+ * Der Reflow-Test war damit seit Einführung des Dialogs für jede Seite
+ * blind. Ein Besucher sieht die Seite nach seiner Wahl, also misst die
+ * Prüfung sie auch so. Gewählt wird „Nur notwendige": Das lädt nichts
+ * nach und verändert die Seite am wenigsten.
+ *
+ * Gibt zurück, ob ein Dialog da war — der wird vorher selbst geprüft.
+ */
+async function einwilligungSchliessen(page) {
+  const dialog = page.locator('#cc-main .cm');
+  if (!(await dialog.count()) || !(await dialog.first().isVisible())) return false;
+  const knopf = page.locator('#cc-main button[data-role="necessary"]').first();
+  if (await knopf.count()) {
+    await knopf.click();
+    await page.waitForFunction(() => !document.documentElement.classList.contains('show--consent'));
+  }
+  return true;
+}
+
 const browser = await chromium.launch();
 
 for (const name of pages) {
@@ -49,6 +79,7 @@ for (const name of pages) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: 900 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
+    await einwilligungSchliessen(page);
     /* Stellt sicher, dass auf dem Port wirklich diese Website antwortet
        (siehe lib/richtige-seite.mjs). */
     if (!projektGeprueft) { await pruefeProjekt(page, url); projektGeprueft = true; }
@@ -125,6 +156,17 @@ for (const name of pages) {
     const ctx = await browser.newContext({ viewport: { width: 320, height: 640 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
+    // Der Dialog zuerst, für sich: Solange er offen ist, ist ER die Seite.
+    const dialogRand = await page.evaluate(() => {
+      const d = document.querySelector('#cc-main .cm');
+      if (!d || !d.offsetParent) return null;
+      const r = d.getBoundingClientRect();
+      return { links: Math.round(r.left), rechts: Math.round(r.right) };
+    });
+    if (dialogRand && (dialogRand.links < 0 || dialogRand.rechts > 320)) {
+      add('1.4.10 Reflow', name, `Einwilligungsdialog ragt bei 320px über den Rand (${dialogRand.links}–${dialogRand.rechts}px)`);
+    }
+    await einwilligungSchliessen(page);
     const overflow = await page.evaluate(() => {
       const doc = document.documentElement;
       const bad = [];
@@ -154,6 +196,7 @@ for (const name of pages) {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
+    await einwilligungSchliessen(page);
     const clipped = await page.evaluate((css) => {
       const style = document.createElement('style');
       style.textContent = css;
@@ -178,6 +221,7 @@ for (const name of pages) {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
+    await einwilligungSchliessen(page);
     const small = await page.evaluate(() => {
       const bad = [];
       const sel = 'a[href], button, input:not([type=hidden]), select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -210,13 +254,19 @@ for (const name of pages) {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
+    await einwilligungSchliessen(page);
     const obscured = await page.evaluate(async () => {
       const header = document.querySelector('.site-header');
       if (!header) return [];
       const bad = [];
       const targets = [...document.querySelectorAll('main [id]')].slice(0, 25);
       for (const t of targets) {
-        t.scrollIntoView();
+        // `instant`, nicht der Vorgabewert: Die Seite scrollt weich
+        // (scroll-behavior: smooth), und einen Frame nach dem Start steht
+        // das Ziel mitten in der Animation. So entstand am 09.10.2026 der
+        // Befund „#funnel, Oberkante -99px" — beim echten Klick auf den
+        // Sprunglink steht der Abschnitt bei 80px, voll sichtbar.
+        t.scrollIntoView({ block: 'start', behavior: 'instant' });
         await new Promise((r) => requestAnimationFrame(r));
         const hb = header.getBoundingClientRect();
         const tb = t.getBoundingClientRect();
