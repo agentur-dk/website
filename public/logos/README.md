@@ -50,6 +50,21 @@ Es gibt Marken, von denen im Netz nur ein JPG existiert. Dann wird der
 Hintergrund freigestellt und die Zeichnung auf Weiß gebracht, das
 Ergebnis liegt als PNG hier (`ahk-spanien.png`).
 
+Zweiter Fall: `generalkonsulat-hellenische-republik.png`. Das Wappen
+liegt nur als Rastergrafik vor. Bis zum 29.09.2026 in 700 × 741 px und
+153 KB — angezeigt wird es mit 77 × 81 CSS-px. Es war die größte Datei
+der ganzen Startseite, dreieinhalbmal so schwer wie das HTML.
+
+Neu gerechnet auf 230 × 244 px (dreifache Anzeigegröße für hochauflösende
+Telefone) und nur noch als Alphamaske: Die Leiste färbt jedes Logo ohne
+`eigeneFarben` über `brightness(0) invert(1)` weiß, die Farbinformation
+im PNG war also Ballast. Ergebnis 17 KB. Der Kontrast der kräftigsten
+Striche ist aus der Datei nachgerechnet: vorher 7,54 : 1, nachher
+7,63 : 1 auf #101010.
+
+Faustregel für jedes weitere PNG hier: **höchstens dreifache
+Anzeigegröße**, und ohne eigene Farben nur die Maske.
+
 Das ist die zweitbeste Lösung und soll auch so aussehen: Ein PNG wird
 beim Skalieren weich, wiegt ein Vielfaches und lässt sich nicht
 nachfärben. Wo es geht, die Vektorfassung beim Kunden anfragen — die

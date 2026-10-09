@@ -2,8 +2,14 @@
 #
 # Lädt den Endpunkt auf den goneo-Webspace.
 #
-#   bash formular/hochladen.sh liste     nur ansehen, nichts ändern
-#   bash formular/hochladen.sh           hochladen
+#   bash formular/hochladen.sh liste         nur ansehen, nichts ändern
+#   bash formular/hochladen.sh               Skript, client.js, .htaccess
+#   bash formular/hochladen.sh --mit-konfig  dazu die Konfiguration
+#
+# Die Konfiguration auf dem Server gilt für ALLE Vorschau-Projekte. Liegt
+# dort schon eine, bleibt sie ohne --mit-konfig unangetastet: Eine
+# abweichende lokale Fassung könnte einen gültigen Zugangsschlüssel durch
+# einen alten ersetzen und den Versand für jedes Projekt kappen.
 #
 # ZUGANGSDATEN: stehen in ~/.netrc und werden von curl direkt von dort
 # gelesen. Sie erscheinen nie auf der Kommandozeile, nie in der
@@ -95,6 +101,22 @@ if [ "${1:-}" = "liste" ]; then
     echo "$ordner/:"
     ftp -s "ftp://$HOST/$ordner/" 2>/dev/null | sed 's/^/  /' || echo "  (nicht vorhanden oder nicht lesbar)"
   done
+
+  # Ein nicht hochgeladener Stand fällt sonst niemandem auf: Der Endpunkt
+  # antwortet weiter, nur mit dem alten Verhalten.
+  echo
+  echo "Abgleich mit dem Repo:"
+  for datei in send.php client.js .htaccess; do
+    lokal=$(wc -c < "$hier/$datei" 2>/dev/null | tr -d ' ')
+    fern=$(fern_groesse "$FERN_SKRIPT/$datei")
+    if [ -z "$fern" ]; then
+      printf '  ✗ %-12s fehlt auf dem Server\n' "$datei"
+    elif [ "$lokal" = "$fern" ]; then
+      printf '  ✓ %-12s gleich groß (%s Byte)\n' "$datei" "$lokal"
+    else
+      printf '  ✗ %-12s weicht ab: Server %s, Repo %s Byte — hochladen?\n' "$datei" "$fern" "$lokal"
+    fi
+  done
   exit 0
 fi
 
@@ -170,11 +192,18 @@ for datei in send.php client.js .htaccess; do
   uebertragen "$hier/$datei" "$FERN_SKRIPT" "$datei" || fehler=1
 done
 
-if [ -f "$hier/config.php" ]; then
+mit_konfig=0
+for arg in "$@"; do [ "$arg" = "--mit-konfig" ] && mit_konfig=1; done
+vorhanden=$(fern_groesse "$FERN_KONFIG/formular-config.php")
+
+if [ ! -f "$hier/config.php" ]; then
+  echo "  config.php fehlt — erst 'bash formular/einrichten.sh' ausführen." >&2
+elif [ -n "$vorhanden" ] && [ "$mit_konfig" -ne 1 ]; then
+  printf '  %-16s bleibt auf dem Server (%s Byte) — ersetzen nur mit --mit-konfig\n' \
+    "config.php" "$vorhanden"
+else
   printf '  %-16s → /%s/  ' "config.php" "$FERN_KONFIG"
   uebertragen "$hier/config.php" "$FERN_KONFIG" "formular-config.php" || fehler=1
-else
-  echo "  config.php fehlt — erst 'bash formular/einrichten.sh' ausführen." >&2
 fi
 
 echo

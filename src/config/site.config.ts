@@ -63,6 +63,15 @@ export const path = (slug: string): string =>
 /** Baut aus einem Seiten-Slug eine absolute URL für Canonical/JSON-LD. */
 export const absolute = (slug: string): string => `${SITE_URL}${path(slug)}`;
 
+/**
+ * Absolute URL einer Datei aus public/, mit Basispfad.
+ *
+ * Adressen nie aus SITE_URL allein bauen: In der Vorschau liegt die Seite
+ * unter /website/, und ohne Basispfad zeigen sie dort ins Leere.
+ */
+export const datei = (pfad: string): string =>
+  `${SITE_URL}${BASE_PATH}${pfad.replace(/^\//, '')}`;
+
 export const siteConfig = {
   name:        'agentur dk',
   legalName:   'agentur dk – design & kommunikation',

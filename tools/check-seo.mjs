@@ -53,6 +53,21 @@ const titles = new Map(), descs = new Map();
  * verloren hat. Ohne diese Umkehrung könnte die Sperre unbemerkt aufreißen.
  */
 const staging = /name="robots" content="noindex/.test(readFileSync(join(DIST, 'index.html'), 'utf8'));
+
+/** Die gebaute Startadresse samt Basispfad, abgelesen am Canonical — nicht aus der Konfiguration, weil geprüft wird, was ausgeliefert wird. */
+const HEIM = readFileSync(join(DIST, 'index.html'), 'utf8')
+  .match(/<link rel="canonical" href="([^"]*)"/i)?.[1] ?? '';
+
+/** Liefert den Grund, wenn eine eigene absolute Adresse auf nichts im Build zeigt — sonst null. Gesetzt heißt nicht erreichbar. */
+function zeigtInsLeere(url) {
+  if (!HEIM || !url.startsWith('http')) return null;
+  const heimHost = new URL(HEIM).origin;
+  if (!url.startsWith(heimHost)) return null;
+  if (!url.startsWith(HEIM)) return `liegt außerhalb der Website (${HEIM})`;
+  let rest = decodeURIComponent(url.slice(HEIM.length).split('#')[0].split('?')[0]);
+  if (rest === '' || rest.endsWith('/')) rest += 'index.html';
+  return existsSync(join(DIST, rest)) ? null : `Datei fehlt im Build (${rest})`;
+}
 if (staging) {
   console.log('Indexierungssperre ist aktiv — es wird geprüft, dass sie lückenlos greift.\n');
 }
@@ -111,6 +126,10 @@ for (const file of files) {
   for (const prop of ['og:title', 'og:description', 'og:url', 'og:image', 'og:site_name']) {
     if (!html.includes(`property="${prop}"`)) fail(file, `${prop} fehlt`);
   }
+  for (const m of html.matchAll(/<meta (?:property|name)="(og:image|twitter:image|og:url)" content="([^"]*)"/gi)) {
+    const grund = zeigtInsLeere(unescape(m[2]));
+    if (grund) fail(file, `${m[1]} ${m[2]} — ${grund}`);
+  }
 
   // ---- robots ----
   const robots = html.match(/<meta name="robots" content="([^"]*)"/i)?.[1] ?? '';
@@ -125,6 +144,18 @@ for (const file of files) {
     let data;
     try { data = JSON.parse(ld); }
     catch (e) { fail(file, `JSON-LD nicht parsebar: ${e.message}`); }
+    if (data) {
+      // Jede eigene Adresse im JSON-LD muss auf etwas Existierendes zeigen.
+      for (const m of ld.matchAll(/"(url|item|image|contentUrl)":\s*"([^"]+)"/g)) {
+        const grund = zeigtInsLeere(m[2]);
+        if (grund) fail(file, `JSON-LD ${m[1]} ${m[2]} — ${grund}`);
+      }
+      for (const m of ld.matchAll(/"@id":\s*"([^"#]+)#/g)) {
+        if (m[1].startsWith(new URL(HEIM || 'https://x').origin) && !m[1].startsWith(HEIM)) {
+          fail(file, `JSON-LD @id ${m[1]} liegt außerhalb der Website (${HEIM})`);
+        }
+      }
+    }
     if (data) {
       if (!Array.isArray(data['@graph'])) fail(file, 'JSON-LD ohne @graph');
       else {

@@ -11,13 +11,13 @@
    und LLM-Parser Seite, Anbieter und Leistung als einen Graphen
    lesen statt als lose Einzelobjekte.
    ============================================================ */
-import { siteConfig, absolute, SITE_URL, pageBySlug, type PageEntry } from '../config/site.config';
+import { siteConfig, absolute, datei, pageBySlug, type PageEntry } from '../config/site.config';
 import { faqFor } from '../data/faq';
 
 type Json = Record<string, unknown>;
 
-export const ORG_ID     = `${SITE_URL}/#organization`;
-export const WEBSITE_ID = `${SITE_URL}/#website`;
+export const ORG_ID     = `${absolute('')}#organization`;
+export const WEBSITE_ID = `${absolute('')}#website`;
 
 const { contact } = siteConfig;
 
@@ -28,9 +28,9 @@ export function organizationSchema(): Json {
     '@id': ORG_ID,
     name: siteConfig.legalName,
     alternateName: siteConfig.name,
-    url: `${SITE_URL}/`,
-    logo: { '@type': 'ImageObject', url: `${SITE_URL}/${siteConfig.ogImage}` },
-    image: `${SITE_URL}/${siteConfig.ogImage}`,
+    url: absolute(''),
+    logo: { '@type': 'ImageObject', url: datei(siteConfig.ogImage) },
+    image: datei(siteConfig.ogImage),
     description: siteConfig.description,
     foundingDate: String(siteConfig.foundingYear),
     founder: { '@type': 'Person', name: siteConfig.founder },
@@ -72,7 +72,7 @@ export function websiteSchema(): Json {
   return {
     '@type': 'WebSite',
     '@id': WEBSITE_ID,
-    url: `${SITE_URL}/`,
+    url: absolute(''),
     name: siteConfig.name,
     inLanguage: 'de-DE',
     publisher: { '@id': ORG_ID },
@@ -95,7 +95,7 @@ export function breadcrumbSchema(slug: string): Json | null {
     '@type': 'BreadcrumbList',
     '@id': `${absolute(slug)}#breadcrumb`,
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Startseite', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 1, name: 'Startseite', item: absolute('') },
       ...trail.map((p, i) => ({
         '@type': 'ListItem',
         position: i + 2,

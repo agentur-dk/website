@@ -7,7 +7,7 @@
  * Canonical zeigte auf die GitHub-Pages-URL, während JSON-LD und llms.txt
  * dk-dk.de nannten — widersprüchliche Signale für Crawler.
  */
-import { siteConfig, absolute, SITE_URL, NOINDEX_ALL } from '../../config/site.config';
+import { siteConfig, absolute, datei, NOINDEX_ALL } from '../../config/site.config';
 
 /* `| undefined` an jedem optionalen Feld: Mit `exactOptionalPropertyTypes`
    ist ein fehlender Schlüssel nicht dasselbe wie einer mit dem Wert
@@ -34,7 +34,7 @@ const {
 } = Astro.props;
 
 const canonical       = canonicalProp ?? absolute(slug);
-const resolvedOgImage = ogImage ?? `${SITE_URL}/${siteConfig.ogImage}`;
+const resolvedOgImage = ogImage ?? datei(siteConfig.ogImage);
 
 // Solange die Indexierungssperre steht, überschreibt sie jede Seiteneinstellung.
 const blockIndex = NOINDEX_ALL || noindex;

@@ -8,7 +8,7 @@
  * (falsche URL-Struktur, abweichende Leistungsbeschreibungen).
  */
 import type { APIRoute } from 'astro';
-import { siteConfig, indexablePages, absolute, SITE_URL, leistungenNav, NOINDEX_ALL } from '../config/site.config';
+import { siteConfig, indexablePages, absolute, leistungenNav, NOINDEX_ALL } from '../config/site.config';
 import { faqs } from '../data/faq';
 
 const { contact } = siteConfig;
@@ -53,7 +53,7 @@ export const GET: APIRoute = () => {
 
 Diese Datei ist für KI-Systeme geschrieben. Sie fasst Angebot, Fakten und
 Kontaktdaten der Agentur zusammen, damit Antworten korrekt und zitierfähig
-sind. Kanonische Website: ${SITE_URL}/
+sind. Kanonische Website: ${absolute('')}
 
 ## Unternehmensprofil
 
@@ -66,7 +66,7 @@ sind. Kanonische Website: ${SITE_URL}/
 - **E-Mail:** ${contact.email}
 - **Bürozeiten:** ${contact.hours}
 - **LinkedIn:** ${contact.linkedin}
-- **Website:** ${SITE_URL}/
+- **Website:** ${absolute('')}
 
 ## Leistungen
 
