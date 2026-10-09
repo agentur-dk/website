@@ -1,12 +1,5 @@
-/* ============================================================
-   FAQ-Inhalte — eine Quelle für drei Ausgaben.
-
-   Dieselben Einträge speisen (1) das sichtbare Accordion,
-   (2) das FAQPage-JSON-LD und (3) llms.txt. Vorher lagen die
-   Fragen nur im Markup: die acht Leistungsseiten hatten
-   sichtbare FAQs ganz ohne strukturierte Daten, und Schema und
-   Text konnten auseinanderlaufen — was Google als Mismatch wertet.
-   ============================================================ */
+/* Eine Quelle für drei Ausgaben — Accordion, FAQPage-JSON-LD und llms.txt —,
+   damit sichtbarer Text und strukturierte Daten nicht auseinanderlaufen. */
 
 export interface FaqItem {
   question: string;
@@ -260,7 +253,6 @@ export const faqs: Record<string, FaqSet> = {
   },
 };
 
-/** FAQ-Set zu einem Slug, oder undefined. */
 export const faqFor = (slug: string): FaqSet | undefined => faqs[slug];
 
 /** Alle Fragen über alle Seiten — Basis für llms.txt. */

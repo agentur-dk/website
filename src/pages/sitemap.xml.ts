@@ -1,8 +1,4 @@
-/**
- * Generierte sitemap.xml — Quelle ist das Seitenregister in site.config.ts.
- * Ersetzt die frühere handgepflegte Datei, die mit den echten URLs
- * auseinandergelaufen war.
- */
+/** sitemap.xml aus dem Seitenregister in site.config.ts. */
 import type { APIRoute } from 'astro';
 import { indexablePages, absolute, NOINDEX_ALL } from '../config/site.config';
 import { pageLastModified } from '../lib/lastmod';

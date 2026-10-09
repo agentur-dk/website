@@ -1,15 +1,8 @@
 /**
- * Der Freigabevorbehalt muss auch halten.
- *
- * ── Warum es diesen Test gibt ─────────────────────────────────────────
- * „website-referenzen.docx" warnt in der dritten Zeile: Keine Referenz
- * ist vom Kunden freigegeben, und ein Name auf unserer Website ist eine
- * Veröffentlichung über ihn. Ein Kommentar dazu hilft nicht — er wird
- * überlesen, spätestens von dem, der in einem halben Jahr die
- * Indexierungssperre aufhebt.
- *
- * Deshalb prüft dieser Test die Mechanik selbst: Sobald die Seite live
- * geht, darf kein unfreigegebener Kundenname mehr im HTML stehen.
+ * Der Freigabevorbehalt muss mechanisch halten: Ein Kundenname auf der
+ * Website ist eine Veröffentlichung über ihn, und ein Hinweis im Kommentar
+ * überliest spätestens, wer die Indexierungssperre aufhebt. Sobald die
+ * Seite live geht, darf kein unfreigegebener Name mehr im HTML stehen.
  */
 import { describe, it, expect } from 'vitest';
 import { referenzen, sichtbareReferenzen, zeigtUnfreigegebenes } from '../data/referenzen';

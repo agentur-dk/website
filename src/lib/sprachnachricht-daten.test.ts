@@ -1,19 +1,8 @@
 /**
- * Hält Aufnahme und Transkript zusammen.
- *
- * ── Der Anlass ───────────────────────────────────────────────────────
- * Am 23.09.2026 wurde die Datei auf „Über uns“ gegen eine andere
- * getauscht — 8 Sekunden statt 33 —, und der Text darunter blieb
- * stehen. Fünf Absätze aus einer Aufnahme, die dort niemand mehr hört.
- * Aufgefallen ist es, weil jemand zufällig hinsah.
- *
- * ── Was dieser Test kann und was nicht ───────────────────────────────
- * Er kann NICHT prüfen, ob ein Transkript wiedergibt, was gesprochen
- * wird. Das kann nur ein Mensch.
- *
- * Er kann erzwingen, dass ein Mensch hinsieht: Wer eine Datei tauscht,
- * ändert ihre Größe, und die steht im Datensatz daneben. Ein Tausch
- * ohne Blick aufs Transkript wird rot statt still falsch.
+ * Hält Aufnahme und Transkript zusammen. Ob ein Transkript wiedergibt, was
+ * gesprochen wird, prüft nur ein Mensch — der Test erzwingt, dass er
+ * hinsieht: Ein Tausch der Datei ändert ihre Größe, und die steht im
+ * Datensatz daneben.
  */
 import { describe, it, expect } from 'vitest';
 import { statSync, existsSync } from 'node:fs';
@@ -58,18 +47,10 @@ describe('Sprachnachrichten', () => {
   }
 
   /*
-   * Die Sperre gegen eine Aufnahme ohne Wortlaut.
-   *
-   * WCAG 1.2.1 ist Stufe A: Zu reinem Ton MUSS eine gleichwertige
-   * Textalternative da sein. Etwas, das nicht ausgeliefert werden darf,
-   * gehoert nicht in die Zustaendigkeit der Aufmerksamkeit, sondern in
-   * einen Test.
-   *
-   * „Ueber uns" zeigt zusaetzlich einen ehrlichen Zwischenstand, wenn
-   * die Liste leer ist. Das ist keine Dopplung: Der Test greift beim
-   * Ausliefern, der Zwischenstand beim Entwickeln — `npm run dev`
-   * fuehrt keine Tests aus, und in der Minute zwischen neuer Datei und
-   * eingetragenem Text soll die Seite trotzdem nichts Falsches sagen.
+   * WCAG 1.2.1 (Stufe A): Zu reinem Ton muss eine Textalternative da sein.
+   * Was nicht ausgeliefert werden darf, gehört in einen Test. Der ehrliche
+   * Zwischenstand auf „Über uns" ist keine Dopplung — er greift unter
+   * `npm run dev`, wo keine Tests laufen.
    */
   for (const [name, a] of AUFNAHMEN) {
     it(`${name} hat eine Textalternative (WCAG 1.2.1, Stufe A)`, () => {

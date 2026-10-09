@@ -1,11 +1,7 @@
 /**
- * Generierte llms.txt nach der llmstxt.org-Konvention.
- *
- * Zweck: KI-Systeme sollen die Agentur korrekt und zitierfähig
- * beschreiben können, ohne HTML parsen zu müssen. Inhalte kommen aus
- * demselben Seitenregister und denselben FAQ-Daten wie die Website —
- * die frühere handgepflegte Datei war bereits inhaltlich veraltet
- * (falsche URL-Struktur, abweichende Leistungsbeschreibungen).
+ * llms.txt nach llmstxt.org, damit KI-Systeme die Agentur zitierfähig
+ * beschreiben können, ohne HTML zu parsen. Erzeugt aus Seitenregister und
+ * FAQ-Daten, damit sie nicht hinter der Website zurückbleibt.
  */
 import type { APIRoute } from 'astro';
 import { siteConfig, indexablePages, absolute, leistungenNav, NOINDEX_ALL } from '../config/site.config';

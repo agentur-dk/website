@@ -32,14 +32,9 @@ describe('Indexierungssperre', () => {
     });
 
     it('lässt das Seitenregister unangetastet, damit das Aufheben ein Einzeiler bleibt', () => {
-      // Die Sperre wirkt in der Ausgabe, nicht in den Daten. Wären hier
-      // Seiten entfernt worden, müsste man sie beim Live-Schalten
-      // wieder von Hand eintragen.
-      //
-      // Geprüft wird deshalb nicht die Anzahl — die ändert sich mit jeder
-      // neuen Seite und sagt nichts —, sondern die Substanz: Es gibt
-      // indexierbare Seiten im Register, und die einzigen Ausnahmen sind
-      // die, die auch nach dem Live-Schalten welche bleiben.
+      // Die Sperre wirkt in der Ausgabe, nicht im Register — sonst müssten
+      // die Seiten beim Live-Schalten von Hand zurück. Geprüft wird deshalb
+      // die Substanz, nicht die Anzahl.
       expect(indexablePages.length).toBeGreaterThan(0);
       expect(pages.length).toBeGreaterThan(indexablePages.length);
       expect(dauerhaftAusgenommen(pages)).toEqual(DAUERHAFT_OHNE_INDEX);

@@ -1,18 +1,8 @@
 /**
- * Erzeugtes site.webmanifest.
- *
- * ── Warum erzeugt und nicht als Datei in public/ ─────────────────────
- * Weil `start_url` und `scope` den Basispfad brauchen. Eine feste Datei
- * zeigte mit `/` auf die Wurzel der Domain — bei einer Installation in einem
- * Unterverzeichnis (Vorschau!) also am eigenen Auftritt vorbei. Genau dieser
- * Fehler ist in AGORA aufgetreten und dort dokumentiert.
- *
- * ── Warum überhaupt ──────────────────────────────────────────────────
- * Niemand legt eine Agenturseite auf den Startbildschirm. Das Manifest steht
- * trotzdem im Kanon des Blueprints, und zwar für den unspektakulären Teil:
- * Name und Farbe, wenn ein Browser die Seite anheftet, teilt oder in einer
- * Leseansicht zeigt. Eine PWA wird daraus nicht — es gibt keinen Service
- * Worker, und das ist Absicht.
+ * Erzeugt statt in public/, weil `start_url` und `scope` den Basispfad
+ * brauchen — eine feste Datei zeigte in einer Vorschau im Unterverzeichnis
+ * an der eigenen Seite vorbei. Das Manifest liefert Name und Farbe fürs
+ * Anheften und Teilen; eine PWA wird daraus absichtlich nicht.
  */
 import type { APIRoute } from 'astro';
 import { siteConfig, BASE_PATH } from '../config/site.config';
@@ -34,9 +24,7 @@ export const GET: APIRoute = () =>
            Wer sie anheftet, soll sie im Browser bekommen, mit Adresszeile. */
         display: 'browser',
         background_color: '#121212',
-        /* Derselbe Wert wie das `theme-color` im BaseLayout. Zwei Stellen
-           mit einer Farbe laufen auseinander — deshalb steht sie hier neben
-           dem Kommentar, der darauf zeigt. */
+        /* Muss mit `theme-color` im BaseLayout übereinstimmen. */
         theme_color: '#121212',
         icons: [
           {

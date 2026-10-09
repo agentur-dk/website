@@ -1,19 +1,8 @@
 /**
- * Die Prüfwerkzeuge dürfen keine Seite übersehen.
- *
- * ── Warum es diesen Test gibt ─────────────────────────────────────────
- * `a11y.mjs`, `wcag-manual.mjs` und `lighthouse.mjs` führen je eine
- * eigene, von Hand gepflegte Seitenliste. Das sind drei Wahrheiten neben
- * der einen in `site.config.ts` — und als am 21.09.2026 die Seite
- * „beratung" dazukam, fehlte sie in allen dreien. Die Prüfungen liefen
- * weiter grün und meldeten „0 Verstöße auf 16 Seiten", während 19 Seiten
- * gebaut wurden. Eine grüne Prüfung, die eine Seite gar nicht ansieht,
- * ist schlimmer als eine rote: Sie erzeugt Vertrauen, das sie nicht
- * einlöst.
- *
- * Der Test vergleicht deshalb die drei Listen gegen das Seitenregister.
- * Ausgenommen sind nur Seiten, die absichtlich nicht im Index stehen und
- * keinen eigenen Inhalt tragen (Danke-, Fehler-Seiten).
+ * Die Prüfwerkzeuge dürfen keine Seite übersehen. `a11y.mjs`,
+ * `wcag-manual.mjs` und `lighthouse.mjs` führen eigene Seitenlisten; eine
+ * grüne Prüfung, die eine neue Seite gar nicht ansieht, erzeugt Vertrauen,
+ * das sie nicht einlöst. Deshalb der Abgleich gegen das Seitenregister.
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';

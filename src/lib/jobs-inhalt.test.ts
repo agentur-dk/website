@@ -2,25 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 
 /**
- * Was auf der Karriereseite nicht behauptet werden darf.
- *
- * Übernommen aus dem s-k-Projekt (freut-sich-auf-mich.de), wo dieselbe
- * Prüfung neun Wendungen führt. Dort steht auch der Grund, und er wiegt
- * hier schwerer als auf jeder anderen Seite dieser Website:
- *
- *   „Solche Sätze sind gefährlicher als offensichtlich Erfundenes:
- *    Sie klingen wie eine Zusage, und eine Bewerberin liest sie als
- *    Versprechen."
- *
- * Eine Marketingaussage, die zu weit geht, kostet Glaubwürdigkeit. Eine
- * Arbeitsbedingung, die zu weit geht, bringt jemanden dazu, seine
- * Stelle zu kündigen. Deshalb steht auf der Seite nur, was im Projekt
- * belegt ist — Anschrift, Teamgröße, Erreichbarkeit, Leistungen,
- * Auftraggeber — und alles Übrige bleibt ein sichtbarer Platzhalter.
- *
- * Wird eine dieser Angaben bestätigt, gehört sie aus dieser Liste
- * heraus und mit ihrer Quelle auf die Seite. Der Test ist die Hürde
- * davor, nicht ein Verbot für immer.
+ * Was auf der Karriereseite nicht behauptet werden darf. Eine Arbeits-
+ * bedingung, die zu weit geht, liest eine Bewerberin als Zusage — und
+ * kündigt womöglich dafür. Deshalb steht dort nur, was im Projekt belegt
+ * ist; alles Übrige bleibt ein sichtbarer Platzhalter. Wird eine Angabe
+ * bestätigt, gehört sie mit ihrer Quelle aus dieser Liste auf die Seite.
  */
 const SEITE = readFileSync('src/pages/jobs.astro', 'utf8');
 
@@ -28,14 +14,9 @@ const SEITE = readFileSync('src/pages/jobs.astro', 'utf8');
 const text = SEITE.replace(/\/\*[\s\S]*?\*\//g, '').replace(/<!--[\s\S]*?-->/g, '');
 
 /**
- * Der Text ohne die Lücken-Kästen.
- *
- * In einem Kasten mit der Überschrift „Fehlt: …" stehen die Wörter, die
- * auf der Seite fehlen — „Homeoffice", „Urlaubstage", „Gehaltsspanne".
- * Genau dort sind sie richtig: Der Satz bestreitet sie, er verspricht
- * sie nicht. Die Wortprüfung läuft deshalb gegen alles AUSSER diesen
- * Kästen; dass die Kästen als solche gekennzeichnet sind, prüft der
- * Test darunter.
+ * In den Kästen „Fehlt: …" stehen die gesuchten Wörter zu Recht — der Satz
+ * bestreitet sie, statt sie zu versprechen. Dass die Kästen als Lücke
+ * gekennzeichnet sind, prüft ein eigener Test.
  */
 const ohneLuecken = text.replace(
   /<div class="marke__nachtrag[^"]*">[\s\S]*?<\/div>/g,
@@ -91,8 +72,7 @@ describe('Karriereseite: keine unbelegten Zusagen', () => {
   });
 
   it('duzt durchgehend und siezt nicht versehentlich', () => {
-    // Der Registerwechsel gegenüber dem Rest der Website ist Absicht
-    // (siehe Kopfkommentar). Ein „Sie" dazwischen wäre keiner.
+    // Die Seite duzt mit Absicht; ein „Sie" dazwischen wäre ein Versehen.
     const nurText = text.replace(/<[^>]+>/g, ' ');
     expect(nurText).not.toMatch(/\bIhre Bewerbung\b/);
     expect(nurText).not.toMatch(/\bSie sich\b/);

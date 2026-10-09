@@ -40,11 +40,8 @@ export function isSpamSubmit(startedAt: number, now: number, minMs = SPAM_MIN_MS
 }
 
 /**
- * Prüft die Antwort auf die Rechenaufgabe.
- *
- * Absichtlich nachsichtig beim Format: Leerzeichen, ein Plus davor oder
- * ein Komma statt Punkt sollen nicht zur Ablehnung führen. Wer „ 11 "
- * eintippt, hat die Aufgabe gelöst.
+ * Absichtlich nachsichtig beim Format: Wer „ 11 ", „+11" oder ein Komma
+ * statt Punkt eintippt, hat die Aufgabe gelöst.
  */
 export function validateMathAnswer(a: number, b: number, answer: string): boolean {
   const roh = answer.trim().replace(',', '.').replace(/^\+/, '');

@@ -12,7 +12,6 @@ import { FELDER, ZEITSCHRANKE_MS, felderMit, feldnamen } from './schema';
 const markup = readFileSync(new URL('../../components/LeadForm.astro', import.meta.url), 'utf8');
 const endpunkt = readFileSync(new URL('../../../formular/send.php', import.meta.url), 'utf8');
 
-/* Nur das Formular selbst, ohne Skript und Stylesheet darunter. */
 const formular = markup.slice(markup.indexOf('<form'), markup.indexOf('</form>'));
 
 /* `<Icon name="check">` ist kein Formularfeld. Die Komponente steht mitten im

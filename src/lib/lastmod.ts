@@ -1,12 +1,7 @@
 /**
- * Letztes Änderungsdatum einer Seite — aus der Git-Historie.
- *
- * `lastmod` in der Sitemap ist für Google nur dann ein Signal, wenn es
- * stimmt; ein bei jedem Build neu gesetztes Datum wird ignoriert. Deshalb
- * fragen wir den letzten Commit ab, der die Datei berührt hat.
- *
- * Läuft ausschließlich zur Build-Zeit (Node). Fällt auf das heutige Datum
- * zurück, wenn kein Git-Kontext vorhanden ist (z. B. Tarball-Deploy).
+ * Änderungsdatum einer Seite aus der Git-Historie. Ein bei jedem Build neu
+ * gesetztes `lastmod` ignoriert Google; nur ein stimmendes ist ein Signal.
+ * Ohne Git-Kontext (etwa beim Tarball-Deploy) fällt es auf heute zurück.
  */
 import { execFileSync } from 'node:child_process';
 
