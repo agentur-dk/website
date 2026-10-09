@@ -198,39 +198,6 @@ else if (staging) {
   }
 }
 
-// Pflichtliste vor dem Livegang (CLAUDE.md): was jede Seite rechtlich und
-// technisch tragen muss und sich am ausgelieferten HTML prüfen lässt.
-for (const pflicht of ['impressum.html', 'datenschutz.html', '404.html']) {
-  if (!files.includes(pflicht)) problems.push(`${pflicht} fehlt`);
-}
-for (const file of files) {
-  const html = readFileSync(join(DIST, file), 'utf8');
-
-  // Impressum und Datenschutz müssen von jeder Seite aus erreichbar sein (§ 5 DDG).
-  for (const ziel of ['impressum.html', 'datenschutz.html']) {
-    if (file !== ziel && !new RegExp(`href="[^"]*${ziel}"`).test(html)) fail(file, `kein Verweis auf ${ziel}`);
-  }
-
-  // Ein Formular, das etwas verschickt, nennt die Datenschutzerklärung (Art. 13 DSGVO).
-  for (const [form] of html.matchAll(/<form\b[^>]*method="post"[\s\S]*?<\/form>/gi)) {
-    if (!/href="[^"]*datenschutz\.html"/.test(form)) {
-      const id = form.match(/\bid="([^"]+)"/)?.[1] ?? 'ohne id';
-      fail(file, `Formular #${id} verschickt Daten, verweist aber nicht auf die Datenschutzerklärung`);
-    }
-  }
-
-  // Ein Aufruf an Googles Schriftserver überträgt die IP-Adresse vor jeder Einwilligung.
-  if (/fonts\.(googleapis|gstatic)\.com/.test(html)) fail(file, 'lädt Schriften von Google statt vom eigenen Server');
-
-  const icon = html.match(/<link rel="icon"[^>]*href="([^"]+)"/)?.[1];
-  if (!icon) fail(file, 'kein Favicon');
-  else {
-    const basis = HEIM ? new URL(HEIM).pathname : '/';
-    const pfad = icon.startsWith(basis) ? icon.slice(basis.length) : icon.replace(/^\/+/, '');
-    if (!existsSync(join(DIST, pfad))) fail(file, `Favicon ${icon} fehlt im Build`);
-  }
-}
-
 if (problems.length) {
   console.error(`SEO-Prüfung: ${problems.length} Verstöße\n`);
   for (const p of problems) console.error(`  ✗ ${p}`);

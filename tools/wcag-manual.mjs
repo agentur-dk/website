@@ -145,7 +145,8 @@ for (const name of pages) {
     // Solange der Dialog offen ist, ist er die Seite — also muss er selbst passen.
     const dialogRand = await page.evaluate(() => {
       const d = document.querySelector('#cc-main .cm');
-      if (!d || !d.offsetParent) return null;
+      // Nicht über offsetParent: Für position: fixed ist er immer null.
+      if (!d || d.getBoundingClientRect().width === 0) return null;
       const r = d.getBoundingClientRect();
       return { links: Math.round(r.left), rechts: Math.round(r.right) };
     });
