@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 /**
- * tools/verify-live.mjs — startet den gzip-Server und fährt die drei
- * Prüfungen, die einen laufenden Server brauchen: axe-core, die manuellen
- * WCAG-Kriterien und Lighthouse.
- *
- * Eigener Port, damit ein parallel laufender Dev-Server nicht kollidiert.
+ * Startet den gzip-Server und fährt die drei Prüfungen, die einen laufenden
+ * Server brauchen: axe-core, die manuellen WCAG-Kriterien und Lighthouse.
+ * Eigener Port, damit ein laufender Entwicklungsserver nicht kollidiert.
  */
 import { spawn } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';

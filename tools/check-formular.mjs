@@ -1,23 +1,11 @@
 #!/usr/bin/env node
 /**
- * Jedes Formular muss die Feldnamen benutzen, die der Endpunkt kennt.
+ * Jedes Formular muss die Feldnamen benutzen, die der Endpunkt kennt. Fehlt
+ * dort ein ausgewertetes Feld, verwirft er eine JSON-Anfrage still — kein
+ * Fehler, kein Protokolleintrag.
  *
- * ── Warum es diese Prüfung gibt ───────────────────────────────────────
- * Am 21.09.2026 bekam der Beratungs-Funnel ein Feld `gestartet` statt
- * `form_started`. Der Endpunkt wertet nur den zweiten Namen aus — und
- * wenn er bei einer JSON-Anfrage fehlt, ruft er `stillVerwerfen()`.
- * Kein Fehler, kein Protokolleintrag, keine Rückmeldung: Die Anfrage
- * wäre einfach verschwunden.
- *
- * ── Warum Werkzeug und nicht Unit-Test ────────────────────────────────
- * Zuerst stand das als vitest-Datei in src/lib/. Lokal lief es, weil
- * `dist/` vom letzten Lauf noch dalag — in der CI laufen die Tests aber
- * VOR dem Build, und dort gibt es das Verzeichnis nicht. Fünf
- * Deployments hintereinander sind daran gescheitert, ohne dass es
- * jemandem auffiel, weil lokal alles grün war.
- *
- * Was das Bauergebnis prüft, gehört zu den Prüfungen nach dem Bau —
- * dorthin, wo auch check-css, check-seo und check-links stehen.
+ * Ein Werkzeug nach dem Bau, kein Unit-Test: In der CI laufen die Tests vor
+ * dem Build, dort gibt es kein dist/.
  *
  *     node tools/check-formular.mjs
  */

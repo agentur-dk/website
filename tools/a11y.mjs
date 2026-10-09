@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 /**
- * tools/a11y.mjs — axe-core Accessibility-Gate (WCAG 2.2 A/AA)
- *
- * Erwartet einen laufenden `npm run preview`.
- * Prüft jede Seite in drei Zuständen: Ausgangszustand, mobiles Menü offen,
- * erstes Accordion offen — statische Scans übersehen sonst genau die
- * Komponenten, die per JS eingeblendet werden.
+ * axe-core-Tor (WCAG 2.2 A/AA). Erwartet einen laufenden Server. Jede Seite
+ * in drei Zuständen — Ausgangszustand, mobiles Menü offen, erstes Akkordeon
+ * offen —, weil statische Scans genau die per JavaScript eingeblendeten Teile
+ * übersehen.
  *
  *   node tools/a11y.mjs [--pages=index,leistungen]
  */
@@ -28,14 +26,10 @@ const argPages = process.argv.find((a) => a.startsWith('--pages='));
 const pages = argPages ? argPages.split('=')[1].split(',') : ALL_PAGES;
 
 /**
- * Die Seite blendet Abschnitte beim Scrollen mit einer Opazitäts-Transition
- * ein. Misst axe mitten in dieser Transition, liest es Mischfarben statt der
- * tatsächlichen und meldet Kontrastwerte wie 1,02 — Text, der in Wahrheit bei
- * 7,4 : 1 liegt. Das ist nicht nur Fehlalarm: eine Prüfung, die zufällig
- * anschlägt, verdeckt irgendwann einen echten Befund.
- *
- * Deshalb vor jeder Messung: Bewegung abschalten, Einblendungen sofort in den
- * Endzustand versetzen, Transitionen auf null.
+ * Mitten in einer Einblend-Transition liest axe Mischfarben und meldet
+ * falsche Kontrastfehler — und eine Prüfung, die zufällig anschlägt,
+ * verdeckt irgendwann einen echten Befund. Deshalb vor jeder Messung
+ * Bewegung aus und alle Einblendungen im Endzustand.
  */
 const SETTLE = `
   *, *::before, *::after {
@@ -65,10 +59,7 @@ const byRule = new Map();
 for (const name of pages) {
   const url = `${ORIGIN}${BASE}${name}.html`;
   await page.goto(url, { waitUntil: 'networkidle' });
-  /* Einmal pro Lauf: Läuft unter dieser Adresse überhaupt dieses
-     Projekt? Siehe lib/richtige-seite.mjs — ein fremder Server auf
-     demselben Port hat schon Befunde geliefert, die es hier gar nicht
-     gab. */
+  /* Läuft unter dieser Adresse überhaupt dieses Projekt? Siehe lib/richtige-seite.mjs. */
   if (geprueft === false) { await pruefeProjekt(page, url); geprueft = true; }
 
   const states = [

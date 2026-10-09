@@ -1,16 +1,13 @@
 #!/usr/bin/env node
 /**
- * tools/wcag-manual.mjs — prüft die WCAG-2.2-Kriterien, die axe-core nicht
- * abdeckt. axe findet je nach Quelle 30–40 % der Verstöße; alles, was von
+ * Prüft die WCAG-2.2-Kriterien, die axe-core nicht abdeckt — alles, was von
  * Layout, Zoom, Fokusreihenfolge oder Zeigergröße abhängt, muss gemessen
- * werden.
- *
- * Geprüft wird:
- *   1.4.10 Reflow           — kein horizontales Scrollen bei 320 px / 400 % Zoom
- *   1.4.12 Textabstand      — kein Inhaltsverlust bei erhöhten Abständen
- *   2.4.11 Fokus nicht verdeckt — sticky Header verdeckt kein fokussiertes Element
- *   2.5.8  Zielgröße        — interaktive Elemente mindestens 24 × 24 px
- *   1.4.3  Text über Raster  — kein Text über einer gerasterten Fläche
+ * werden:
+ *   1.4.10 Reflow               kein horizontales Scrollen bei 320 px / 400 % Zoom
+ *   1.4.12 Textabstand          kein Inhaltsverlust bei erhöhten Abständen
+ *   2.4.11 Fokus nicht verdeckt die klebende Kopfzeile verdeckt kein Fokusziel
+ *   2.5.8  Zielgröße            interaktive Elemente mindestens 24 × 24 px
+ *   1.4.3  Text über Raster     kein Text über einer gerasterten Fläche
  *
  * Voraussetzung: `node tools/serve.mjs` oder `npm run preview` läuft.
  */
@@ -43,32 +40,21 @@ const browser = await chromium.launch();
 for (const name of pages) {
   const url = `${ORIGIN}${BASE}${name}.html`;
 
-  // ---- 1.4.3 Text über einer gerasterten Fläche ------------------------
-  // axe-core kann das nicht finden: Es liest die CSS-Hintergrundfarbe, und
-  // die ist unter einem <canvas> unverändert dunkel. Was das Canvas dorthin
-  // malt, sieht es nicht. Genau so ist es passiert — die Fläche im Footer
-  // lag unter 17 Textelementen, axe meldete null Verstöße.
-  //
-  // Das Kontrastverhältnis allein hilft hier auch nicht weiter: Es setzt
-  // einen gleichmäßigen Grund voraus. Ein 1-Bit-Raster erreicht als
-  // Mittelwert brauchbare Zahlen und ist trotzdem unlesbar, weil zwischen
-  // den Buchstaben Pixel aufblitzen. Deshalb wird nicht gerechnet, sondern
-  // die Überlappung selbst untersagt.
-  // Zwei Breiten, weil die Flächen umbrechen: Die Kugel im Kopf steht am
-  // Desktop neben dem Satz und rutscht darunter, sobald die Zweispaltigkeit
-  // fällt. Ein Durchlauf bei 1440 allein hätte das nie gesehen.
+  // WCAG 1.4.3, Text über einer gerasterten Fläche: axe-core liest nur die
+  // CSS-Hintergrundfarbe und sieht nicht, was ein <canvas> darüber malt. Ein
+  // Kontrastwert hilft auch nicht — ein 1-Bit-Raster ist im Mittel brauchbar
+  // und trotzdem unlesbar. Deshalb ist die Überlappung selbst untersagt,
+  // geprüft in zwei Breiten, weil die Flächen umbrechen.
   for (const breite of [1440, 390]) {
     const ctx = await browser.newContext({ viewport: { width: breite, height: 900 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
-    /* Siehe lib/richtige-seite.mjs: Am 22.09.2026 lief auf Port 4321
-       ein fremdes Projekt, und dessen Befunde sahen aus wie eigene —
-       inklusive Klassen (`p.slug`), die es hier gar nicht gibt. */
+    /* Stellt sicher, dass auf dem Port wirklich diese Website antwortet
+       (siehe lib/richtige-seite.mjs). */
     if (!projektGeprueft) { await pruefeProjekt(page, url); projektGeprueft = true; }
-    // Bis ans Seitenende scrollen, damit jede Fläche gezeichnet wurde —
-    // gezeichnet wird erst beim Sichtbarwerden. `scroll-behavior: smooth`
-    // muss dafür aus: Sonst animiert jeder Sprung, 60 ms reichen nicht, und
-    // die Schleife kommt über die ersten 200 px nicht hinaus.
+    // Flächen werden erst beim Sichtbarwerden gezeichnet, also bis ans Ende
+    // scrollen — ohne `scroll-behavior: smooth`, sonst kommt die Schleife
+    // über die ersten Pixel nicht hinaus.
     await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' });
     await page.evaluate(async () => {
       const schritt = window.innerHeight * 0.8;
@@ -84,14 +70,9 @@ for (const name of pages) {
       if (!flaechen.length) return [];
 
       /**
-       * Deckt ein Element zwischen Text und Fläche den Text ab?
-       *
-       * Nur Vorfahren *unterhalb* des gemeinsamen Vorfahren können das:
-       * Alles ab dem gemeinsamen Vorfahren aufwärts malt hinter dem
-       * Canvas, weil das Canvas selbst darin liegt. Ohne diese Grenze
-       * schirmt <body> mit seiner Hintergrundfarbe jeden Text ab und die
-       * Prüfung findet nie etwas — genau so ist sie beim ersten Versuch
-       * an der Gegenprobe gescheitert.
+       * Nur Vorfahren unterhalb des gemeinsamen Vorfahren können den Text
+       * abdecken; alles darüber malt hinter dem Canvas. Ohne diese Grenze
+       * schirmt <body> jeden Text ab, und die Prüfung findet nie etwas.
        */
       const abgeschirmt = (el, canvas) => {
         let gemeinsam = el;
@@ -139,7 +120,7 @@ for (const name of pages) {
     await ctx.close();
   }
 
-  // ---- 1.4.10 Reflow bei 320 px ----------------------------------------
+  // WCAG 1.4.10 Reflow bei 320 px
   {
     const ctx = await browser.newContext({ viewport: { width: 320, height: 640 } });
     const page = await ctx.newPage();
@@ -150,7 +131,6 @@ for (const name of pages) {
       if (doc.scrollWidth > doc.clientWidth + 1) {
         document.querySelectorAll('body *').forEach((el) => {
           const r = el.getBoundingClientRect();
-          // Elemente, die über den Viewport hinausragen und selbst nicht scrollen
           if (r.width > 0 && (r.right > doc.clientWidth + 1 || r.left < -1)) {
             const cs = getComputedStyle(el);
             if (cs.overflowX === 'visible' && cs.position !== 'fixed') {
@@ -169,7 +149,7 @@ for (const name of pages) {
     await ctx.close();
   }
 
-  // ---- 1.4.12 Textabstand ----------------------------------------------
+  // WCAG 1.4.12 Textabstand
   {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await ctx.newPage();
@@ -183,7 +163,6 @@ for (const name of pages) {
         // Absichtlich nur für Screenreader sichtbare Elemente sind per
         // Definition auf 1px geklemmt — kein Inhaltsverlust.
         if (el.closest('.u-sr-only, .sr-only')) return;
-        // Abgeschnittener Text: Inhalt größer als der Kasten, ohne Scrollmöglichkeit
         if (el.scrollHeight > el.clientHeight + 2 && getComputedStyle(el).overflowY === 'hidden') {
           bad.push(`${el.tagName.toLowerCase()}: "${el.textContent.trim().slice(0, 40)}"`);
         }
@@ -194,7 +173,7 @@ for (const name of pages) {
     await ctx.close();
   }
 
-  // ---- 2.5.8 Zielgröße --------------------------------------------------
+  // WCAG 2.5.8 Zielgröße
   {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await ctx.newPage();
@@ -204,7 +183,7 @@ for (const name of pages) {
       const sel = 'a[href], button, input:not([type=hidden]), select, textarea, [tabindex]:not([tabindex="-1"])';
       document.querySelectorAll(sel).forEach((el) => {
         const r = el.getBoundingClientRect();
-        if (r.width === 0 || r.height === 0) return;              // unsichtbar
+        if (r.width === 0 || r.height === 0) return;
         if (getComputedStyle(el).display === 'inline') return;    // Ausnahme „inline" in 2.5.8
         // Nicht bedienbare bzw. für AT verborgene Elemente sind keine Ziele:
         // Honeypots (tabindex=-1 + aria-hidden) und visuell versteckte
@@ -226,7 +205,7 @@ for (const name of pages) {
     await ctx.close();
   }
 
-  // ---- 2.4.11 Fokus nicht verdeckt --------------------------------------
+  // WCAG 2.4.11 Fokus nicht verdeckt
   {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     const page = await ctx.newPage();
@@ -235,7 +214,6 @@ for (const name of pages) {
       const header = document.querySelector('.site-header');
       if (!header) return [];
       const bad = [];
-      // Zu jedem Sprungziel scrollen und prüfen, ob der sticky Header es abdeckt.
       const targets = [...document.querySelectorAll('main [id]')].slice(0, 25);
       for (const t of targets) {
         t.scrollIntoView();

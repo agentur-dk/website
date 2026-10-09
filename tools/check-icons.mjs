@@ -1,23 +1,14 @@
 #!/usr/bin/env node
 /**
- * tools/check-icons.mjs — hält das Icon-Verzeichnis als einzige Quelle.
- *
- * Vorher standen 37 <svg>-Blöcke direkt im Markup, viele davon mehrfach
- * derselbe Pfad in leicht abweichender Schreibweise: der Haken vier Mal,
- * das BFSG-Symbol vier Mal, der Aktenkoffer drei Mal. Wer eines änderte,
- * änderte es an einer Stelle und übersah drei. Zwei Zeichenstile liefen
- * nebeneinander -- gefüllte Material-Symbole neben Lucide-Konturen -- und
- * fünf SVGs trugen kein aria-hidden, standen also als leere Grafik im
- * Screenreader.
- *
- * Seither gilt: Pfad in src/lib/icons.ts, Ausgabe über Icon.astro.
- * Diese Prüfung liest den Quelltext und meldet
+ * Hält src/lib/icons.ts als einzige Quelle für Icons, ausgegeben über
+ * Icon.astro — damit ein Symbol an einer Stelle geändert wird und jedes
+ * gebaute <svg> aria-hidden trägt. Gemeldet werden
  *   1. jedes <svg> außerhalb von Icon.astro,
  *   2. Einträge, die kein reiner Pfad-String sind,
  *   3. eine nicht alphabetische Reihenfolge,
- *   4. Icons, die niemand mehr benutzt,
+ *   4. Icons, die niemand benutzt,
  *   5. <Icon name="..."> ohne Eintrag im Verzeichnis,
- * und -- wenn dist/ vorliegt -- jedes gebaute <svg> ohne aria-hidden.
+ * und, wenn dist/ vorliegt, jedes gebaute <svg> ohne aria-hidden.
  */
 import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { join, relative } from 'path';
@@ -29,7 +20,6 @@ const KOMPONENTE  = 'src/components/ui/Icon.astro';
 
 const befunde = [];
 
-/** Alle Dateien unter einem Verzeichnis, gefiltert nach Endung. */
 function dateien(wurzel, endungen) {
   const treffer = [];
   for (const eintrag of readdirSync(wurzel)) {
@@ -40,7 +30,6 @@ function dateien(wurzel, endungen) {
   return treffer;
 }
 
-// --- Verzeichnis einlesen -------------------------------------------------
 if (!existsSync(VERZEICHNIS)) {
   console.error(`✗ ${VERZEICHNIS} fehlt.`);
   process.exit(1);
@@ -58,7 +47,6 @@ if (eintraege.length === 0) {
   befunde.push(`${VERZEICHNIS}: keine Icon-Einträge gefunden — Format geändert?`);
 }
 
-// 2. Jeder Wert ist ein reiner Pfad im 24x24-Raster.
 for (const { name, d } of eintraege) {
   if (!/^[Mm]/.test(d)) {
     befunde.push(`${VERZEICHNIS}: "${name}" beginnt nicht mit einem Moveto (M/m)`);
@@ -71,7 +59,6 @@ for (const { name, d } of eintraege) {
   }
 }
 
-// 3. Alphabetische Reihenfolge.
 const namen = eintraege.map((e) => e.name);
 const sortiert = [...namen].sort();
 for (let i = 0; i < namen.length; i++) {
@@ -83,15 +70,9 @@ for (let i = 0; i < namen.length; i++) {
   }
 }
 
-// --- Quelltext absuchen ---------------------------------------------------
 /*
- * Testdateien bleiben draussen.
- *
- * Sie enthalten Muster, die wie eine Verwendung aussehen — ein Test, der
- * prüft, dass `<Icon name="…">` NICHT als Formularfeld zählt, trägt genau
- * diese Zeichenkette. Der Prüfer meldete daraufhin ein Icon namens
- * `([a-zA-Z_]…)`. Geprüft wird, was ausgeliefert wird, nicht was über die
- * Auslieferung geschrieben steht.
+ * Testdateien bleiben draußen: Sie enthalten Muster wie `<Icon name="…">`
+ * als Zeichenkette und würden sonst als Verwendung zählen.
  */
 const quellen = dateien(SRC, ['.astro', '.ts']).filter((d) => !d.endsWith('.test.ts'));
 const benutzt = new Set();
@@ -106,7 +87,6 @@ for (const datei of quellen) {
     .replace(/^\s*\/\/.*$/gm, '')
     .replace(/<!--[\s\S]*?-->/g, '');
 
-  // 1. Kein <svg> außerhalb der Komponente.
   if (rel !== KOMPONENTE) {
     if (/<svg[\s>]/.test(ohneKommentare)) {
       const zeile = inhalt.split('\n').findIndex((z) => /<svg[\s>]/.test(z)) + 1;
@@ -117,7 +97,6 @@ for (const datei of quellen) {
   for (const m of ohneKommentare.matchAll(/<Icon\b[^>]*\bname="([^"]+)"/g)) benutzt.add(m[1]);
 }
 
-// 5. Jeder benutzte Name existiert.
 for (const name of benutzt) {
   if (!namen.includes(name)) {
     befunde.push(`<Icon name="${name}" /> hat keinen Eintrag in ${VERZEICHNIS}`);
@@ -125,24 +104,11 @@ for (const name of benutzt) {
 }
 
 /*
- * Dynamisch gesetzte Namen: `<Icon name={o.ikon} />`.
- *
- * Die Suche oben findet nur `name="literal"`. Der Beratungs-Funnel setzt
- * seine Icons aber aus einer Datenliste — dort steht der Name als
- * `ikon: 'globe'` im Datensatz, nie im Markup. Zehn Icons galten deshalb
- * als unbenutzt, obwohl ihre Pfade im ausgelieferten HTML standen.
- *
- * Statt das Muster zu erweitern (und beim naechsten Schreibweise wieder
- * danebenzuliegen), wird hier die einzige verlaessliche Quelle gefragt:
- * das gebaute HTML. Steht der Pfad eines Icons darin, benutzt es jemand.
- *
- * Nur HINZUFUEGEN, nie wegnehmen: Ein veraltetes dist/ soll keine
- * Verwendung vortaeuschen, die es im Quelltext nicht mehr gibt — aber
- * es soll auch keine melden, die es sehr wohl gibt.
- *
- * Ein Tippfehler im dynamischen Namen faellt dadurch nicht hier auf,
- * sondern frueher: Die Datenliste ist auf `IconName` typisiert, und
- * `astro check` kennt jeden erlaubten Wert.
+ * Dynamisch gesetzte Namen (`<Icon name={o.ikon} />`) findet die Suche oben
+ * nicht. Verlässlich ist nur das gebaute HTML: Steht der Pfad eines Icons
+ * darin, wird es benutzt. Nur hinzufügen, nie wegnehmen — ein veraltetes
+ * dist/ soll keine Verwendung vortäuschen. Tippfehler im dynamischen Namen
+ * fängt die Typisierung auf `IconName`.
  */
 if (existsSync(DIST)) {
   const gebaut = readdirSync(DIST)
@@ -154,14 +120,12 @@ if (existsSync(DIST)) {
   }
 }
 
-// 4. Kein Eintrag ohne Verwendung.
 for (const name of namen) {
   if (!benutzt.has(name)) {
     befunde.push(`${VERZEICHNIS}: "${name}" wird nirgends benutzt`);
   }
 }
 
-// --- Gegenprobe im gebauten HTML -----------------------------------------
 let gebauteIcons = 0;
 if (existsSync(DIST)) {
   for (const seite of readdirSync(DIST).filter((f) => f.endsWith('.html'))) {

@@ -1,20 +1,7 @@
 /**
- * Prüft, ob unter der Test-URL wirklich DIESES Projekt läuft.
- *
- * ── Warum es das gibt ─────────────────────────────────────────────────
- * Am 22.09.2026 meldete `wcag-manual.mjs` sechs Befunde auf „index",
- * darunter Elemente mit Klassen, die es in diesem Projekt gar nicht
- * gibt (`p.slug`). Die Suche danach kostete zwei Runden — bis sich
- * herausstellte, dass auf Port 4321 ein ganz anderes Projekt lief.
- * Das Werkzeug hatte eine fremde Website gemessen und die Ergebnisse
- * ohne jeden Zweifel als eigene ausgegeben.
- *
- * Das ist die gefährlichste Sorte Messfehler: Die Zahlen sehen echt
- * aus, sie sind nur von etwas anderem. Man repariert dann an der
- * falschen Stelle — oder hält für Bestand, was in Wahrheit gar nicht
- * existiert.
- *
- * Die Prüfung kostet einen Seitenaufruf und schließt das aus.
+ * Prüft, ob unter der Test-URL wirklich dieses Projekt läuft. Belegt ein
+ * fremdes Projekt den Port, sehen dessen Befunde aus wie eigene, und man
+ * repariert an der falschen Stelle. Kostet einen Seitenaufruf.
  */
 
 /**

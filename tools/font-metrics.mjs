@@ -1,20 +1,15 @@
 #!/usr/bin/env node
 /**
- * tools/font-metrics.mjs — misst Fallback-Metriken pro Schriftschnitt.
+ * Misst Fallback-Metriken je Schriftschnitt, damit der Schriftwechsel keinen
+ * Layoutsprung erzeugt. Ein Fallback je Familie reicht nicht: Space Grotesk
+ * 400 läuft rund 10 % schmaler als Arial, 700 dagegen breiter — ein
+ * gemeinsames size-adjust trifft nur einen Schnitt.
  *
- * Der verbleibende CLS entstand beim Font-Swap. Ein einzelner Fallback je
- * Familie reicht dafür nicht: Space Grotesk 400 ist rund 10 % schmaler als
- * Arial, Space Grotesk 700 dagegen 0,5 % breiter. Ein gemeinsames
- * size-adjust kann nur einen der beiden Schnitte treffen — der andere
- * springt weiter. Deshalb wird je genutztem Gewicht eine eigene
- * Fallback-Face erzeugt.
- *
- * Gemessen wird auf der laufenden Preview-Seite, weil dort dieselben
+ * Gemessen wird auf der laufenden Vorschau, weil dort dieselben
  * @font-face-Regeln gelten wie in Produktion.
  *
- * Voraussetzung: `npm run preview` läuft.
- *   node tools/font-metrics.mjs            # nur messen
- *   node tools/font-metrics.mjs --write    # global.css aktualisieren
+ *   node tools/font-metrics.mjs            nur messen
+ *   node tools/font-metrics.mjs --write    global.css aktualisieren
  */
 import { chromium } from 'playwright';
 import { readFileSync, writeFileSync } from 'fs';

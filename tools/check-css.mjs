@@ -1,16 +1,9 @@
 #!/usr/bin/env node
 /**
- * tools/check-css.mjs — findet Klassen im HTML, für die es keine CSS-Regel gibt.
- *
- * Solche Klassen sind fast immer Tippfehler oder Reste eines Refactorings:
- * das Element sieht dann anders aus als gedacht, ohne dass etwas kaputtgeht.
- *
- * Die frühere Fassung las nur dist/_astro/*.css und pflegte daneben eine
- * über hundert Zeilen lange Allowlist aller komponenten-scoped Klassen —
- * die veraltete zwangsläufig. Seit das CSS inline ausgeliefert wird, steht
- * ohnehin alles im HTML: hier werden externe Dateien und <style>-Blöcke
- * gemeinsam ausgewertet, wodurch die Allowlist auf das schrumpft, was
- * wirklich erst zur Laufzeit entsteht.
+ * Findet Klassen im HTML, für die es keine CSS-Regel gibt — meist Tippfehler
+ * oder Reste eines Umbaus, die ein Element still anders aussehen lassen.
+ * Externe Dateien und <style>-Blöcke werden gemeinsam ausgewertet, weil das
+ * CSS inline ausgeliefert wird.
  */
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
@@ -29,11 +22,9 @@ const RUNTIME_ONLY = new Set([
 ]);
 
 /**
- * Klassen ohne eigene CSS-Regel, die es bewusst gibt: reine
- * JavaScript-Anker oder Strukturhaken, deren Aussehen vollständig von
- * Eltern- oder Kindregeln kommt. Jeder Eintrag braucht eine Begründung —
- * ohne die wächst so eine Liste zu dem zu, was sie hier vorher war:
- * über hundert Zeilen, die niemand mehr prüft.
+ * Klassen ohne eigene Regel, die es bewusst gibt: JavaScript-Anker oder
+ * Strukturhaken, deren Aussehen von Eltern- oder Kindregeln kommt. Jeder
+ * Eintrag braucht eine Begründung, sonst wächst die Liste unbemerkt.
  */
 const NO_STYLE_BY_DESIGN = new Map([
   ['bfsg-back-btn',      'JS-Anker: Zurück-Navigation im BFSG-Check'],
@@ -45,9 +36,8 @@ const NO_STYLE_BY_DESIGN = new Map([
   ['ueber-grid__text',   'Layout kommt von .ueber-grid'],
   ['cta-section__text',   'Rasterzelle, Optik kommt von .cta-section__grid'],
   ['cta-section__direct', 'Gruppiert die drei Telefonzeilen, Optik kommt von deren Regeln'],
-  // Fremdklasse: Der Podigee-Player sucht selbst danach. Sie gehört nicht
-  // uns, und eine eigene Regel dafür wäre eine Behauptung über fremden
-  // Code. Ihre Optik bringt der Player mit, sobald er laden darf.
+  // Fremdklasse, nach der der Podigee-Player selbst sucht; seine Optik bringt
+  // er mit. Eine eigene Regel wäre eine Behauptung über fremden Code.
   ['podigee-podcast-player', 'Haken des Podigee-Players (Fremdcode), Optik kommt vom Player selbst'],
 ]);
 
@@ -66,7 +56,6 @@ if (!existsSync(DIST)) {
 
 const htmlFiles = readdirSync(DIST).filter((f) => f.endsWith('.html'));
 
-// ---- CSS einsammeln: externe Dateien und Inline-Blöcke -------------------
 let css = '';
 const astroDir = join(DIST, '_astro');
 if (existsSync(astroDir)) {

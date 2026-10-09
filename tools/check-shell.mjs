@@ -1,15 +1,9 @@
 #!/usr/bin/env node
 /**
- * Findet in den Shell-Skripten Konstrukte, die bash 3.2 nicht kennt.
- *
- * Warum: macOS liefert bis heute bash 3.2 aus (Lizenzgründe), und die
- * Skripte hier werden als `bash formular/…` auf genau dieser bash
- * gestartet. `${var,,}` etwa ist eine Erweiterung aus bash 4 und
- * scheitert dort mit »bad substitution« — mitten im Lauf, nachdem der
- * Nutzer schon eine Frage beantwortet hat.
- *
- * `bash -n` hilft nicht: Gegengeprüft, es lässt `${x,,}` anstandslos
- * durch und meldet den Fehler erst bei der Ausführung.
+ * Findet in den Shell-Skripten Konstrukte, die bash 3.2 nicht kennt. macOS
+ * liefert bash 3.2 aus, und die Skripte laufen als `bash formular/…` genau
+ * dort; `${var,,}` etwa scheitert erst zur Laufzeit, und `bash -n` lässt es
+ * durch.
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';

@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * tools/check-links.mjs
- * Walks dist/**\/*.html and checks that every internal href/src resolves.
- * Exits with code 1 if broken links are found.
+ * Prüft, dass jedes interne href/src im gebauten dist/ auflöst.
+ * Exit-Code 1 bei kaputten Links.
  */
 import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
 import { resolve, dirname, join } from 'path';
@@ -16,7 +15,6 @@ if (!existsSync(distDir)) {
   process.exit(1);
 }
 
-// Collect all dist files
 function walkDir(dir, files = []) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
@@ -28,7 +26,6 @@ function walkDir(dir, files = []) {
 
 const allFiles = new Set(walkDir(distDir));
 
-// Parse hrefs and srcs from HTML
 function extractLinks(html) {
   const links = [];
   const patterns = [
@@ -47,15 +44,12 @@ function extractLinks(html) {
 }
 
 function resolveLink(link, htmlFilePath) {
-  // Skip external links, mailto, tel, anchors, data URIs
   if (/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(link)) return null;
 
-  // Absolute path (starts with /) — strip the /website/ base prefix if present
   if (link.startsWith('/')) {
     const stripped = link.replace(/^\/website(?=\/|$)/, '') || '/';
     return join(distDir, stripped);
   }
-  // Relative path
   return resolve(dirname(htmlFilePath), link);
 }
 
@@ -73,7 +67,6 @@ for (const htmlFile of htmlFiles) {
     const resolved = resolveLink(link, htmlFile);
     if (!resolved) continue;
 
-    // Check with and without trailing slash / index.html
     const candidates = [
       resolved,
       resolved + '/index.html',

@@ -1,32 +1,17 @@
 #!/usr/bin/env node
 /**
- * tools/check-typo.mjs — hält die Leiter als einzige Quelle für
- * Schriftgrade, senkrechten Rhythmus und Rinnen.
- *
- * Vorher standen im Quelltext 205 font-size-Deklarationen mit
- * 69 verschiedenen Werten, darunter 18 handgeschriebene clamp().
- * Im Browser gemessen ergab das 44 Schriftgrade auf acht Seiten --
- * drei Viertel aller Textstellen lagen neben der eigenen Skala.
- * Sichtbar wurde es an den Überschriften: h1 maß 81,6 / 62,4 / 56 px
- * je nach Seite, h2 sogar 12 / 58,8 / 46,8 / 35,2 / 19,2 px. Auf
- * projekte.html waren h2 und h3 gleich groß.
- *
- * Kein Mensch hätte das gefunden, indem er Dateien liest. Ein Skript
- * findet es in Sekunden und jedes Mal gleich. Deshalb prüft diese
- * Datei den QUELLTEXT -- nicht den Browser -- auf:
+ * Hält die Typoleiter als einzige Quelle für Schriftgrade, Abschnittspolster
+ * und Rinnen. Geprüft wird der Quelltext, nicht der Browser:
  *
  *   1. jede font-size, die keinen Token nennt,
  *   2. jedes padding-block an einem Abschnitt, das keinen Takt nennt,
  *   3. jede gap, die keine Rinne nennt,
- *   4. neue clamp() für Schriftgrade (die Leiter bringt ihre eigenen mit),
- *   5. Token-Namen, die es gar nicht gibt (Tippfehler laufen sonst
- *      still ins Leere, weil CSS unbekannte Variablen ignoriert).
+ *   4. eigene clamp() für Schriftgrade — die Leiter bringt ihre mit,
+ *   5. unbekannte Token-Namen, die CSS sonst stillschweigend ignoriert.
  *
- * Erlaubt ist genau eine Ausnahme, und sie ist benannt: der
- * Sprachnachrichten-Block in mono.css bildet auf ausdrückliche
- * Anweisung eine WhatsApp-Blase 1:1 nach und setzt dafür px-Grade.
- * Jede weitere Ausnahme muss hier eingetragen und dort begründet
- * werden -- das ist die Hürde, die vorher fehlte.
+ * Ausnahmen stehen in AUSNAHMEN und brauchen eine Begründung im CSS.
+ *
+ *   node tools/check-typo.mjs
  */
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
@@ -61,11 +46,9 @@ const RINNEN = ['--rinne-1', '--rinne-2', '--rinne-3', '--rinne-4', '--rinne-5',
                 '--dk-rinne-4', '--dk-rinne-5', '--dk-rinne-6', '--dk-rinne-spalte'];
 
 /**
- * Die eine erlaubte Ausnahme.
- * Sie gilt nur für Selektoren, die mit .sn beginnen -- die WhatsApp-
- * Nachbildung. Ein Eintrag hier ohne Begründung in der CSS-Datei ist
- * eine stillschweigende Ausnahme und damit genau das, was diese
- * Prüfung verhindern soll.
+ * Die eine erlaubte Ausnahme: die WhatsApp-Nachbildung (.sn…), die auf
+ * Vorgabe die Grade des Originals trägt. Jeder neue Eintrag braucht eine
+ * Begründung in der CSS-Datei, sonst ist er eine stille Ausnahme.
  */
 const AUSNAHMEN = [
   { selektor: /\.sn(__|\b)/, grund: 'WhatsApp-Nachbildung, Grade aus der Vorgabe (siehe mono.css)' },
@@ -75,11 +58,8 @@ const AUSNAHMEN = [
 const VERHAELTNIS = /^\s*(\d*\.?\d+)(em|%)\s*$/;
 
 /**
- * Innenabstände von Bauteilen sind kein Abschnittsrhythmus.
- * Die Grenze liegt bei 2rem: Darunter polstert etwas sich selbst --
- * eine Fußzeilenleiste, eine Brotkrume, eine Zelle. Darüber setzt
- * jemand einen Abstand zwischen zwei Abschnitten, und der gehört
- * in den Takt.
+ * Unter 2rem polstert ein Bauteil sich selbst (Zelle, Leiste, Brotkrume);
+ * darüber trennt jemand Abschnitte, und das gehört in den Takt.
  */
 function kleinesPolster(wert) {
   const zahlen = wert.match(/(\d*\.?\d+)(rem|em|px)/g) || [];
@@ -102,7 +82,6 @@ function dateien(wurzel, endungen) {
   return treffer;
 }
 
-/** Der Selektor, in dessen Block eine Position liegt. */
 function selektorBei(text, pos) {
   const treffer = text.slice(0, pos).match(/([^{};]*)\{[^{}]*$/);
   return treffer ? treffer[1].trim() : '';
@@ -116,7 +95,6 @@ function zeileBei(text, pos) {
   return text.slice(0, pos).split('\n').length;
 }
 
-/** Eine Eigenschaft gegen eine Liste erlaubter Token prüfen. */
 function pruefen({ text, datei, muster, erlaubt, was, ueberspringen }) {
   for (const m of text.matchAll(muster)) {
     const wert = m[m.length - 1].trim();
@@ -140,8 +118,7 @@ for (const datei of dateien(SRC, ['.css', '.astro'])) {
     muster: /font-size:\s*([^;}\n]+);/g,
     erlaubt: GRADE,
     was: 'Schriftgrad',
-    // `1.2em` an einem <sup> ist ein Verhältnis zum Elterngrad, kein
-    // eigener Grad -- das darf und soll relativ bleiben.
+    // Ein em-Wert an einem <sup> ist ein Verhältnis zum Elterngrad, kein eigener Grad.
     ueberspringen: (w) => VERHAELTNIS.test(w) || w === 'inherit',
   });
 
@@ -150,7 +127,6 @@ for (const datei of dateien(SRC, ['.css', '.astro'])) {
     muster: /padding-block:\s*([^;}\n]+);/g,
     erlaubt: TAKTE,
     was: 'Abschnittspolster',
-    // Kleine Innenabstände (Chips, Zellen, Knöpfe) sind kein Rhythmus.
     ueberspringen: (w) => kleinesPolster(w) || w.includes('calc(') || w.includes('--rinne'),
   });
 
@@ -162,9 +138,8 @@ for (const datei of dateien(SRC, ['.css', '.astro'])) {
     ueberspringen: (w) => w === '0' || w === 'inherit' || w.endsWith('px') && parseFloat(w) <= 4,
   });
 
-  // Neue handgeschriebene clamp() für Schriftgrade: Die Leiter bringt
-  // ihre drei fließenden Grade selbst mit. Ein viertes wäre eine
-  // vierte Meinung darüber, wie Schrift mitwächst.
+  // Die Leiter bringt ihre fließenden Grade selbst mit; ein weiteres clamp()
+  // wäre eine zweite Meinung darüber, wie Schrift mitwächst.
   for (const m of text.matchAll(/font-size:\s*clamp\(/g)) {
     const selektor = selektorBei(text, m.index);
     if (istAusgenommen(selektor)) continue;
@@ -172,8 +147,8 @@ for (const datei of dateien(SRC, ['.css', '.astro'])) {
     befunde.push(`${datei}:${zeileBei(text, m.index)} — eigenes clamp() für einen Schriftgrad; die Leiter hat drei fließende Grade`);
   }
 
-  // Tippfehler in Token-Namen: CSS schluckt eine unbekannte Variable
-  // stillschweigend und fällt auf den geerbten Wert zurück.
+  // CSS ignoriert eine unbekannte Variable stillschweigend — ein Tippfehler
+  // fiele sonst nie auf.
   const bekannt = new Set([...GRADE, ...TAKTE, ...RINNEN]);
   for (const m of text.matchAll(/var\((--(?:dk-)?(?:schrift|raum|rinne|font-size)[a-z0-9-]*)/g)) {
     if (bekannt.has(m[1])) continue;

@@ -1,14 +1,8 @@
 #!/usr/bin/env node
 /**
- * tools/og-image.mjs — erzeugt public/images/og-image-website.png
- *
- * Das bisherige Bild war 1536×1024 (3:2). Social-Karten und Google
- * erwarten 1.91:1 — bei 3:2 wird oben und unten beschnitten. Außerdem
- * fehlte jedes Markenzeichen, obwohl das Bild in jeder Vorschau und in
- * KI-Zitatkarten auftaucht.
- *
- * Gerendert wird mit den echten Schriften und Farben der Website, damit
- * das Bild nicht auseinanderläuft, wenn Tokens sich ändern.
+ * Erzeugt public/images/og-image-website.png im Seitenverhältnis 1,91 : 1,
+ * das Social-Karten und Google erwarten. Gerendert mit den echten Schriften
+ * und Farben der Website, damit das Bild nicht von den Tokens abweicht.
  *
  *   node tools/og-image.mjs
  */

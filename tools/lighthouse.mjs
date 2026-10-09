@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 /**
- * tools/lighthouse.mjs — Lighthouse-Gate für Performance / A11y / Best Practices / SEO
+ * Lighthouse-Tor für Performance, Barrierefreiheit, Best Practices und SEO.
+ * Startet keinen Server; erwartet einen unter LH_ORIGIN (Vorgabe
+ * http://localhost:4321/).
  *
- * Startet keinen Server: erwartet einen laufenden `npm run preview`
- * (Default http://localhost:4321/).
- *
- * Aufruf:
- *   node tools/lighthouse.mjs                 # alle Seiten, mobile + desktop
- *   node tools/lighthouse.mjs --pages=index   # nur einzelne Seiten
- *   node tools/lighthouse.mjs --form=desktop  # nur ein Formfaktor
+ *   node tools/lighthouse.mjs                 alle Seiten, mobil + Desktop
+ *   node tools/lighthouse.mjs --pages=index   nur einzelne Seiten
+ *   node tools/lighthouse.mjs --form=desktop  nur ein Formfaktor
  *
  * Exit-Code 1, sobald eine Kategorie unter THRESHOLD liegt.
  */
@@ -18,9 +16,8 @@ import { writeFileSync, mkdirSync, readFileSync } from 'fs';
 
 /**
  * 99 statt 100: Lighthouse misst Performance in einer VM mit schwankender
- * Last, die letzte Punktzahl ist Rauschen. Sechs Mobile-Seiten pendelten
- * zwischen 99 und 100 und legten das Gate lahm, ohne dass sich am Code
- * etwas geändert hätte. Für einen härteren Lauf: LH_THRESHOLD=100.
+ * Last, der letzte Punkt ist Rauschen. Für einen härteren Lauf:
+ * LH_THRESHOLD=100.
  */
 const THRESHOLD = Number(process.env.LH_THRESHOLD ?? 99);
 const ORIGIN = process.env.LH_ORIGIN ?? 'http://localhost:4321';
@@ -34,21 +31,15 @@ const ALL_PAGES = [
 ];
 
 /**
- * Kategorien, die auf einzelnen Seiten begründet nicht 100 erreichen können.
- * Die 404-Seite trägt bewusst `noindex` — Lighthouse wertet das als
- * `is-crawlable`-Fehler und zieht die SEO-Wertung auf 66. Das ist korrektes
- * Verhalten, kein Mangel, und darf das Gate nicht blockieren.
+ * Kategorien, die einzelne Seiten begründet nicht erreichen: Die 404-Seite
+ * trägt bewusst `noindex`, was Lighthouse als SEO-Fehler wertet.
  */
 const EXEMPT = { '404': ['seo'] };
 
 /**
- * Solange die Indexierungssperre steht, trägt jede Seite `noindex` und
- * verfehlt damit zwangsläufig die volle SEO-Wertung. Erkannt wird das am
- * ausgelieferten Build, nicht an der Konfiguration.
- *
- * Alle übrigen SEO-Kriterien werden weiter geprüft — die Ausnahme betrifft
- * ausschließlich die Gesamtwertung der Kategorie, damit das Gate während
- * der Sperre nicht dauerhaft rot steht.
+ * Während der Indexierungssperre verfehlt jede Seite die volle SEO-Wertung.
+ * Ausgenommen ist nur die Gesamtwertung dieser Kategorie, damit das Tor nicht
+ * dauerhaft rot steht; erkannt wird die Sperre am Build.
  */
 const stagingHtml = readFileSync('dist/index.html', 'utf8');
 const STAGING = /name="robots" content="noindex/.test(stagingHtml);

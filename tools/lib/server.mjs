@@ -1,15 +1,7 @@
 /**
- * tools/lib/server.mjs — ein eigener Server für eine einzelne Prüfung.
- *
- * Die älteren Prüfungen (a11y, lighthouse) erwarten einen Server auf
- * Port 4321, den jemand vorher gestartet hat. Das hat am 24.09.2026
- * zweiunddreißig falsche Nullen erzeugt: Auf 4321 lief ein Server eines
- * ganz anderen Projekts, seit sechzehn Tagen, und beantwortete die
- * meisten Seiten mit 404. Lighthouse meldete daraufhin Wertungen von
- * 0 — was wie ein Einbruch der Seite aussieht und keiner war.
- *
- * Wer selbst einen Port zieht, kann das nicht passieren. Port 0 heißt
- * „irgendeiner, der frei ist"; das Betriebssystem sucht ihn aus.
+ * Ein eigener Server für eine einzelne Prüfung, auf einem freien Port. Ein
+ * fest vereinbarter Port kann von einem fremden Projekt belegt sein, dessen
+ * Antworten dann wie eigene Befunde aussehen.
  */
 import { createServer } from 'node:http';
 import { createReadStream, existsSync, statSync } from 'node:fs';

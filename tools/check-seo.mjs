@@ -1,18 +1,12 @@
 #!/usr/bin/env node
 /**
- * tools/check-seo.mjs — SEO-Regressionsprüfung auf dem gebauten dist/.
- *
- * Ersetzt das frühere check-meta.mjs, das Titel und Beschreibungen nur
- * gegen einen eingefrorenen Snapshot der Altsite verglich. Der Snapshot
- * konservierte damit auch dessen Fehler — unter anderem acht Titel über
- * der SERP-Grenze. Hier wird stattdessen gegen Regeln geprüft.
- *
- * Geprüft wird je Seite:
+ * SEO-Regeln, geprüft auf dem gebauten dist/ — gegen Regeln statt gegen einen
+ * Schnappschuss, der auch dessen Fehler festschreiben würde. Je Seite:
  *   · Title vorhanden, eindeutig, ≤ 60 Zeichen
  *   · Description vorhanden, eindeutig, 70–155 Zeichen
  *   · genau ein <h1>, nicht leer
  *   · Canonical absolut und auf die eigene URL zeigend
- *   · og:title/description/url/image vollständig
+ *   · Open Graph vollständig, eigene Adressen zeigen auf Dateien im Build
  *   · JSON-LD parsebar, mit @graph, ohne unaufgelöste @id-Referenzen
  *   · keine doppelten Überschriftentexte derselben Ebene
  *
@@ -45,12 +39,9 @@ const files = readdirSync(DIST).filter((f) => f.endsWith('.html'));
 const titles = new Map(), descs = new Map();
 
 /**
- * Ist die Indexierungssperre aktiv? Wird am Build abgelesen statt aus der
- * Konfiguration importiert — geprüft wird, was tatsächlich ausgeliefert wird.
- *
- * Im gesperrten Zustand kehrt sich die Prüfrichtung um: dann ist nicht mehr
- * ein versehentliches `noindex` der Fehler, sondern eine Seite, die es
- * verloren hat. Ohne diese Umkehrung könnte die Sperre unbemerkt aufreißen.
+ * Am Build abgelesen statt aus der Konfiguration, weil geprüft wird, was
+ * ausgeliefert wird. Während der Sperre kehrt sich die Prüfrichtung um:
+ * Dann ist eine Seite ohne `noindex` der Fehler.
  */
 const staging = /name="robots" content="noindex/.test(readFileSync(join(DIST, 'index.html'), 'utf8'));
 
@@ -76,7 +67,6 @@ for (const file of files) {
   const html = readFileSync(join(DIST, file), 'utf8');
   const noindex = staging || NOINDEX.has(file);
 
-  // ---- Title ----
   const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1];
   if (!title) fail(file, 'kein <title>');
   else {
@@ -86,7 +76,6 @@ for (const file of files) {
     titles.set(t, file);
   }
 
-  // ---- Description ----
   const desc = html.match(/<meta name="description" content="([^"]*)"/i)?.[1];
   if (!desc) fail(file, 'keine meta description');
   else {
@@ -97,12 +86,10 @@ for (const file of files) {
     descs.set(d, file);
   }
 
-  // ---- H1 ----
   const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)].map((m) => text(m[1]));
   if (h1s.length !== 1) fail(file, `${h1s.length} <h1> (genau 1 erwartet)`);
   if (h1s[0] !== undefined && h1s[0].length < 3) fail(file, 'leeres <h1>');
 
-  // ---- Doppelte Überschriften gleicher Ebene ----
   for (const level of ['h2', 'h3']) {
     const seen = new Map();
     for (const m of html.matchAll(new RegExp(`<${level}[^>]*>([\\s\\S]*?)</${level}>`, 'gi'))) {
@@ -113,7 +100,6 @@ for (const file of files) {
     }
   }
 
-  // ---- Canonical ----
   const canonical = html.match(/<link rel="canonical" href="([^"]*)"/i)?.[1];
   if (!canonical) fail(file, 'kein Canonical');
   else {
@@ -122,7 +108,6 @@ for (const file of files) {
     if (!canonical.endsWith(expected)) fail(file, `Canonical zeigt auf ${canonical}, erwartet …${expected}`);
   }
 
-  // ---- Open Graph ----
   for (const prop of ['og:title', 'og:description', 'og:url', 'og:image', 'og:site_name']) {
     if (!html.includes(`property="${prop}"`)) fail(file, `${prop} fehlt`);
   }
@@ -131,13 +116,11 @@ for (const file of files) {
     if (grund) fail(file, `${m[1]} ${m[2]} — ${grund}`);
   }
 
-  // ---- robots ----
   const robots = html.match(/<meta name="robots" content="([^"]*)"/i)?.[1] ?? '';
   if (noindex && !robots.includes('noindex')) fail(file, 'sollte noindex sein, ist es aber nicht');
   if (!noindex && robots.includes('noindex')) fail(file, 'ist versehentlich auf noindex gesetzt');
   if (staging && !robots.includes('nofollow')) fail(file, 'noindex ohne nofollow während der Sperre');
 
-  // ---- JSON-LD ----
   const ld = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   if (!ld) fail(file, 'kein JSON-LD');
   else {
@@ -145,7 +128,6 @@ for (const file of files) {
     try { data = JSON.parse(ld); }
     catch (e) { fail(file, `JSON-LD nicht parsebar: ${e.message}`); }
     if (data) {
-      // Jede eigene Adresse im JSON-LD muss auf etwas Existierendes zeigen.
       for (const m of ld.matchAll(/"(url|item|image|contentUrl)":\s*"([^"]+)"/g)) {
         const grund = zeigtInsLeere(m[2]);
         if (grund) fail(file, `JSON-LD ${m[1]} ${m[2]} — ${grund}`);
@@ -176,19 +158,14 @@ for (const file of files) {
   }
 }
 
-// ---- Sitemap ----
 const sitemap = existsSync(join(DIST, 'sitemap.xml')) ? readFileSync(join(DIST, 'sitemap.xml'), 'utf8') : '';
 const robotsTxt = existsSync(join(DIST, 'robots.txt')) ? readFileSync(join(DIST, 'robots.txt'), 'utf8') : '';
 const llmsTxt = existsSync(join(DIST, 'llms.txt')) ? readFileSync(join(DIST, 'llms.txt'), 'utf8') : '';
 
 /*
- * Der Marker `[KI]` darf nie ausgeliefert werden.
- *
- * Er steuert die Kennzeichnung KI-erzeugter Bilder (src/lib/images.ts) und
- * wird beim Rendern abgetrennt. Steht er im HTML, ist ein Bild an der
- * Kennzeichnung vorbeigelaufen — dann fehlt die sichtbare Angabe, die
- * Art. 50 der KI-Verordnung verlangt, und stattdessen steht Kauderwelsch im
- * Alternativtext.
+ * Der Marker `[KI]` steuert die Kennzeichnung KI-erzeugter Bilder und wird
+ * beim Rendern abgetrennt. Steht er im HTML, ist ein Bild an der nach
+ * Art. 50 KI-Verordnung nötigen Kennzeichnung vorbeigelaufen.
  */
 for (const seite of readdirSync(DIST, { recursive: true })) {
   if (typeof seite !== 'string' || !seite.endsWith('.html')) continue;

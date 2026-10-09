@@ -1,21 +1,12 @@
 #!/usr/bin/env node
 /**
- * tools/subset-fonts.mjs — erzeugt public/fonts/ aus fonts-src/.
+ * Erzeugt public/fonts/ aus fonts-src/: verkleinert jeden Schnitt auf die
+ * Zeichen im gebauten dist/ plus einen Grundvorrat. Die vollen Latin-Subsets
+ * konkurrieren auf langsamen Verbindungen mit dem HTML und verzögern den
+ * ersten Inhalt; der Grundvorrat ist die Reserve für künftige Texte, damit
+ * ein neues Zeichen nicht im Fallback erscheint.
  *
- * Die Seite lädt sechs Schriftschnitte. Auf der von Lighthouse simulierten
- * mobilen Verbindung konkurrieren die rund 141 kB mit dem HTML und drücken
- * den First Contentful Paint. Die Latin-Subsets von Google Fonts enthalten
- * dabei hunderte Zeichen, die eine deutschsprachige Agenturseite nie
- * verwendet.
- *
- * Verkleinert wird auf: alle Zeichen, die im gebauten dist/ vorkommen,
- * plus einen festen Grundvorrat (vollständiges ASCII, deutsche Umlaute,
- * typografische Satzzeichen, Währungen). Der Grundvorrat ist die Reserve
- * für künftige Texte — ohne ihn würde ein neu eingefügtes „œ" im Fallback
- * erscheinen.
- *
- * Originale bleiben in fonts-src/. public/fonts/ wird mitversioniert,
- * damit CI ohne diesen Schritt bauen kann.
+ * public/fonts/ wird mitversioniert, damit CI ohne diesen Schritt baut.
  *
  *   npm run build && node tools/subset-fonts.mjs
  */
@@ -47,7 +38,6 @@ if (!existsSync(DIST)) {
   process.exit(1);
 }
 
-// Zeichenvorrat aus dem gebauten HTML einsammeln.
 const chars = new Set(BASELINE);
 for (const f of readdirSync(DIST).filter((f) => /\.(html|txt|xml)$/.test(f))) {
   for (const ch of readFileSync(join(DIST, f), 'utf8')) chars.add(ch);

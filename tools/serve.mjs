@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 /**
- * tools/serve.mjs — statischer Server für dist/, der GitHub Pages nachbildet.
- *
- * `astro preview` liefert unkomprimiert aus. Lighthouse misst dann eine
- * FCP, die es in Produktion nie gibt: GitHub Pages sendet gzip, wodurch
- * die eingebettete CSS von 128 kB auf rund 27 kB schrumpft. Für belastbare
- * Zahlen muss lokal genauso ausgeliefert werden.
+ * Statischer Server für dist/, der GitHub Pages nachbildet. `astro preview`
+ * liefert unkomprimiert aus, und Lighthouse mäße dann einen ersten Inhalt,
+ * den es in Produktion nie gibt — GitHub Pages sendet gzip.
  *
  *   node tools/serve.mjs [port]
  */

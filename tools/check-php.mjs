@@ -1,19 +1,12 @@
 #!/usr/bin/env node
 /**
- * Findet Funktionsaufrufe in den PHP-Dateien des Formulars, für die es
- * keine Definition gibt.
+ * Findet Funktionsaufrufe in den PHP-Dateien des Formulars, für die es keine
+ * Definition gibt. `php -l` prüft nur die Syntax; ein Aufruf einer fehlenden
+ * Funktion fällt erst zur Laufzeit auf — als Abbruch mit HTTP 500, den nicht
+ * einmal der Fehlerhaken protokollieren kann.
  *
- * Warum es diese Prüfung gibt: `php -l` prüft nur die Syntax. Ein Aufruf
- * einer nicht existierenden Funktion ist syntaktisch tadellos und fällt
- * erst zur Laufzeit auf — dort dann als fataler Abbruch mit leerer
- * Antwort und HTTP 500. Genau das ist passiert: Ein Umbau hat die
- * Definition von `protokolliere()` mitgelöscht, weil sie zwischen den
- * beiden ersetzten Anweisungen stand. Vier Aufrufe liefen ins Leere,
- * darunter der im Haken für fatale Fehler — der Ausfall konnte sich
- * also nicht einmal selbst protokollieren.
- *
- * Die Liste der eingebauten Funktionen kommt von PHP selbst, damit sie
- * nicht gepflegt werden muss.
+ * Die eingebauten Funktionen liefert PHP selbst, damit die Liste nicht
+ * gepflegt werden muss.
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -50,9 +43,8 @@ for (const name of readdirSync(ORDNER).filter((f) => f.endsWith('.php'))) {
     [...quelle.matchAll(/\bfunction\s+([A-Za-z_]\w*)\s*\(/g)].map((m) => m[1].toLowerCase())
   );
 
-  // Zeichenketten leeren, aber die Zeilenstruktur erhalten. Ohne das
-  // meldete der Prüfer deutschen Fließtext: »übernommen (Grenze« sieht
-  // nach einem Aufruf von bernommen() aus, weil das ü kein \w ist.
+  // Zeichenketten leeren, Zeilen erhalten: Deutscher Fließtext wie
+  // »übernommen (« sähe sonst nach einem Aufruf aus, weil ü kein \w ist.
   const entschaerft = quelle.replace(
     /'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/gs,
     (treffer) => treffer.replace(/[^\n]/g, ' ')

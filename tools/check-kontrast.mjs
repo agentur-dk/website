@@ -1,29 +1,9 @@
 #!/usr/bin/env node
 /**
- * tools/check-kontrast.mjs — misst jede gerasterte Fläche gegen ihren Grund.
- *
- * Am 25.09.2026 fiel auf, dass die Flächen in den Kartenköpfen der
- * Startseite unsichtbar waren. Der Grund stand in dither.ts: Die Punkte
- * wurden fest in #f3f3f3 gezeichnet. Auf dunklem Grund war das richtig,
- * auf den weißen Karten zeichnete es Weiß auf Weiß.
- *
- * Gemessen an den ausgelieferten Pixeln:
- *   vorher   Muster rgb(220,220,220) auf Weiß   1,37 : 1
- *   nachher  Muster rgb(148,148,148) auf Weiß   3,03 : 1
- *
- * Seither nimmt das Raster `currentColor`. Damit entscheidet das CSS über
- * den Kontrast, und zwar dort, wo man sieht, worauf die Fläche liegt.
- *
- * Diese Prüfung rechnet nach, was dabei herauskommt: Sie öffnet jede
- * Seite, sucht jedes [data-dither], multipliziert die Opazitäten der
- * ganzen Elternkette, mischt die Punktfarbe über den ersten
- * undurchsichtigen Grund darunter und vergleicht.
- *
- * Die Schwelle ist 3 : 1 — die Schwelle aus WCAG 1.4.11 für grafische
- * Objekte. Für eine rein schmückende Fläche wäre sie verhandelbar; eine
- * Fläche, die man nicht sieht, ist aber keine Gestaltung, sondern
- * Rechenzeit. Auf ausdrückliche Anweisung vom 25.09.2026: dieses
- * Kontrastverhältnis nie wieder.
+ * Misst jede gerasterte Fläche gegen ihren Grund: Opazitäten der ganzen
+ * Elternkette, gemischt über den ersten undurchsichtigen Grund darunter,
+ * gegen die Schwelle aus WCAG 1.4.11 (3 : 1). Auch Schmuckflächen müssen
+ * sie erreichen — eine Fläche, die man nicht sieht, ist keine Gestaltung.
  *
  *   node tools/check-kontrast.mjs
  */
@@ -73,10 +53,8 @@ for (const datei of seiten) {
       }, 30);
     });
   });
-  // Warten, bis wirklich jede Fläche gerastert ist — nicht eine feste
-  // Zeitspanne hoffen. Unter Last (npm run verify startet reichlich
-  // Browser) meldete die feste Wartezeit sonst eine leere Leinwand als
-  // Befund, und ein Wächter, der flackert, ist schlimmer als keiner.
+  // Auf jede Fläche warten statt auf eine feste Zeit: Unter Last meldete
+  // eine feste Wartezeit leere Leinwände als Befund.
   await page.waitForFunction(() => {
     const alle = [...document.querySelectorAll('canvas[data-dither]')];
     if (!alle.length) return true;
@@ -112,14 +90,8 @@ for (const datei of seiten) {
         if (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) { grund = bg; break; }
         el = el.parentElement;
       }
-      // Die GEZEICHNETE Farbe, nicht die berechnete `color`.
-      //
-      // Der erste Entwurf dieser Prüfung las getComputedStyle(c).color und
-      // rechnete aus, was herauskommen SOLLTE. Zur Gegenprobe wurde die
-      // alte Fassung von dither.ts wiederhergestellt — die Prüfung meldete
-      // weiter „alles in Ordnung", obwohl die Fläche wieder unsichtbar war.
-      // Sie maß die Absicht im CSS, nicht das Ergebnis auf der Leinwand.
-      // Jetzt zählt sie die Pixel, die tatsächlich im Canvas stehen.
+      // Die gezeichneten Pixel, nicht die berechnete `color`: Geprüft wird,
+      // was auf der Leinwand steht, nicht die Absicht im CSS.
       let gezeichnet = null;
       try {
         const ctx = c.getContext('2d', { willReadFrequently: true });

@@ -1,20 +1,10 @@
 #!/usr/bin/env node
 /**
- * tools/check-cta.mjs — verhindert zwei Verlaufsflaechen auf Stoss.
- *
- * Der Footer traegt --gradient-footer. Trug der Abschnitt unmittelbar
- * darueber denselben Verlauf, lief er ueber beide Flaechen durch und fing
- * an der Grenze neu an: eine sichtbare Naht quer ueber die Seite. Genau
- * das war auf index, leistungen, projekte und ueber-uns der Fall, weil
- * .closing-cta, .content-cta und CtaSection.astro alle den Footer-Verlauf
- * benutzten.
- *
- * Die Regel lautet seither: der Verlauf gehoert allein dem Footer.
- * Diese Pruefung liest das gebaute HTML, sucht den letzten Abschnitt vor
- * <footer> und meldet, wenn eine seiner Klassen den Verlauf traegt.
- * Ein Verlauf weiter oben auf der Seite (z. B. .content-cta mitten im
- * Text auf website-leasing) bleibt erlaubt -- dort stossen die Flaechen
- * nicht aneinander.
+ * Der Verlauf gehört allein dem Footer: Trägt der Abschnitt unmittelbar
+ * darüber denselben Verlauf, läuft er über beide Flächen und beginnt an der
+ * Grenze neu — eine sichtbare Naht quer über die Seite. Gemeldet wird, wenn
+ * der letzte Abschnitt vor <footer> ihn trägt; weiter oben bleibt er
+ * erlaubt, dort stoßen die Flächen nicht aneinander.
  */
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
@@ -26,7 +16,6 @@ if (!existsSync(DIST)) {
   process.exit(1);
 }
 
-/** Gesamtes CSS einer Seite: eingebettete <style>-Blöcke und externe Dateien. */
 function cssVonSeite(html) {
   let css = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)]
     .map((m) => m[1])
@@ -41,7 +30,6 @@ function cssVonSeite(html) {
   return css;
 }
 
-/** Klassen, deren Regel den Footer-Verlauf setzt. */
 function verlaufsKlassen(css) {
   const treffer = new Set();
   for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
@@ -52,7 +40,6 @@ function verlaufsKlassen(css) {
   return treffer;
 }
 
-/** Klassen des letzten <section> vor </main> bzw. <footer>. */
 function letzterAbschnitt(html) {
   const grenze = html.search(/<footer[\s>]/i);
   if (grenze < 0) return null;
