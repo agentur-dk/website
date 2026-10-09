@@ -1,29 +1,20 @@
 /* ============================================================
-   Monochrome Bildsprache
-   Liegt getrennt von global.css, obwohl inzwischen alle 16 Seiten
-   sie laden. Der Grund ist nicht mehr die Dateigröße, sondern die
-   Lesbarkeit: Hier steht, was diese Bildsprache ausmacht, und nur
-   das. Der Import sitzt in BaseLayout.astro.
-
-   Analyse dahinter:
-   docs/superpowers/specs/2026-08-30-mummentum-analyse.md
+   Monochrome Bildsprache — getrennt von global.css, damit hier nur
+   steht, was diese Bildsprache ausmacht. Import in BaseLayout.astro.
+   Analyse: docs/superpowers/specs/2026-08-30-mummentum-analyse.md
    ============================================================ */
 
 /* ============================================================
    Monochrome Bildsprache (.theme-mono)
 
-   Überschrieben werden die --color-*-Namen, nicht die --dk-*.
-   Grund: Ein Custom Property wird dort aufgelöst, wo es
-   *deklariert* ist. `--color-bg-light: var(--dk-color-bg-light)`
-   steht im @theme-Block auf :root — die Substitution passiert
-   also an :root, und ein --dk-Wert weiter unten im Baum kommt
-   nie an. Nachgemessen: mit --dk-Override blieb .section--light
-   auf rgb(245,246,248) stehen.
+   Überschrieben werden die --color-*-Namen, nicht die --dk-*: Ein
+   Custom Property wird dort aufgelöst, wo es deklariert ist — im
+   @theme-Block auf :root —, und ein --dk-Wert weiter unten im Baum
+   käme nie an.
 
-   Hierarchie entsteht aus Grad, Helligkeit und Laufweite, nicht
-   aus Farbe. Blau bleibt als einziger Akzent für Knöpfe, Links
-   und Fokus — sonst verlöre die Marke ihre Farbe.
-   Kontraste gegen #101010 nachgerechnet:
+   Hierarchie entsteht aus Grad, Helligkeit und Laufweite, nicht aus
+   Farbe. Blau bleibt der einzige Akzent für Knöpfe, Links und Fokus.
+   Kontraste gegen #101010:
      #f3f3f3 17,3:1 · #9c9c9c 6,97:1 · #5090d0 5,69:1
    Weiß auf #1C60AD: 6,31:1.
    ============================================================ */
@@ -40,11 +31,9 @@
   --color-accent:        #5090d0;
   --color-primary-light: #5090d0;
 
-  /* Die -on-light-Tokens bleiben, obwohl auf einer monochromen Seite keine
-     Sektion mehr .section--light trägt: Mehrere Regeln greifen direkt auf
-     sie zu, etwa .schwerpunkte-section__heading mit
-     `color: var(--color-text-on-light)`. Ohne diese Zeilen stand dort
-     #14171c auf #101010 — 1,05:1, von axe-core prompt gemeldet. */
+  /* Die -on-light-Tokens bleiben, weil Regeln wie
+     .schwerpunkte-section__heading direkt darauf zugreifen — ohne sie
+     stünde dort Fast-Schwarz auf Schwarz. */
   --color-bg-light:            #0b0b0b;
   --color-surface-light:       #141414;
   --color-surface-alt-light:   #191919;
@@ -58,10 +47,8 @@
   --color-success-on-light:    #6dbf78;
   --dk-color-decor-on-light:   #3a3a3a;
 
-
-  /* Kein Verlauf mehr: Der Footer trägt eine gerasterte Fläche.
-     Die Deklaration bleibt, damit tools/check-cta.mjs weiter
-     greift — die Prüfung liest die Regel, nicht den Farbwert. */
+  /* Der Footer trägt eine gerasterte Fläche statt eines Verlaufs. Die
+     Deklaration bleibt, weil tools/check-cta.mjs die Regel liest. */
   --gradient-footer:        linear-gradient(to bottom, #0b0b0b, #0b0b0b);
   --color-on-gradient:      #f3f3f3;
   --color-text-on-gradient: #9c9c9c;
@@ -82,27 +69,17 @@
    ============================================================ */
 
 /* ------------------------------------------------------------
-   Eine Regel je Ebene
-
-   Bis zum 24.09.2026 bestimmte die KLASSE den Grad, nicht die
-   Ebene. Ergebnis, im Browser gemessen: h1 in 81,6 / 62,4 / 56 px
-   je nach Seite, h2 in 57 / 40 / 28 / 19 / 17 / 13 px. Auf
-   projekte.html waren h2 und h3 gleich groß — zwischen den Ebenen
-   lag kein Unterschied mehr, und das ist der Sinn einer Ebene.
-
-   Jetzt gilt die Ebene, und die Klasse nur noch dort, wo sie
-   ausdrücklich etwas anderes meint (ein Fußzeilen-Etikett zum
-   Beispiel ist ein h2, aber keine Abschnittsüberschrift).
+   Eine Regel je Ebene: Die Ebene bestimmt den Grad, nicht die Klasse.
+   Eine Klasse nur dort, wo sie ausdrücklich etwas anderes meint (ein
+   Fußzeilen-Etikett ist ein h2, aber keine Abschnittsüberschrift).
 
      h1   der Gegenstand der Seite
      h2   ein Abschnitt darin
      h3   ein Block im Abschnitt — Karte, Frage, Schritt
      h4   eine Zwischenüberschrift im Fließtext
 
-   Die eine Ausnahme ist die Startseite: Ihr h1 trägt den
-   Hero-Grad. Sie ist die Haustür, die übrigen Seiten sind
-   Räume — und diese Ausnahme steht hier, statt sich über
-   zwanzig Klassen zu verteilen.
+   Die eine Ausnahme: Das h1 der Startseite trägt den Hero-Grad. Sie
+   ist die Haustür, die übrigen Seiten sind Räume.
    ------------------------------------------------------------ */
 .theme-mono h1,
 .theme-mono h2,
@@ -188,12 +165,10 @@
   max-width: 22ch;
 }
 
-/* Die Unterseiten setzen ihre Überschriften mit eigenen Klassen. Ohne
-   diesen Block liefen sie weiter in 700 und mit der alten Laufweite —
-   die Bildsprache hätte nur auf der Startseite gegriffen. Die Zeilenlänge
-   in ch hält den Satz außerdem aus der rechten Spalte heraus, in der die
-   Kopf-Fläche steht; ohne sie lag die Überschrift auf zwei Seiten über
-   dem Raster. */
+/* Die Unterseiten setzen Überschriften mit eigenen Klassen; ohne diesen
+   Block griffe die Bildsprache nur auf der Startseite. Die Zeilenlänge in
+   ch hält den Satz aus der rechten Spalte heraus, in der die Kopf-Fläche
+   steht. */
 .theme-mono .page-header__title,
 .theme-mono .section__headline {
   font-weight: 400;
@@ -234,14 +209,9 @@
   flex-shrink: 0;
 }
 
-/* Silbentrennung im Displaygrad.
-   global.css setzt `hyphens: auto` auf alle Überschriften. Bei 14 px hält
-   das eine Zeile zusammen, bei 68 px zerlegt es „Online-Marketing" zu
-   „Online-Mar-keting" — mitten im Wort, quer über eine Zeile, die man aus
-   zehn Metern liest.
-   Abgeschaltet wird es aber erst ab 640 px: Auf einem 320-px-Schirm passt
-   „Datenschutzerklärung" ohne Trennung nicht in den Viewport, und die
-   Reflow-Prüfung meldet zu Recht eine waagerechte Bildlaufleiste. */
+/* Keine Silbentrennung im Displaygrad — bei 68 px zerreißt sie Wörter
+   quer über eine Zeile. Erst ab 640 px: Darunter passt
+   „Datenschutzerklärung" ohne Trennung nicht in den Viewport (Reflow). */
 @media (min-width: 640px) {
   .theme-mono .hero__headline,
   .theme-mono .section-title,
@@ -286,14 +256,9 @@
   color: var(--color-text-muted);
 }
 
-/* Knöpfe und Navigation bleiben bewusst unangetastet.
-   Sie hatten hier kurzzeitig Monospace, Versalien und Pillenform — das
-   ging über das hinaus, was für die Bildsprache verabredet war ("Mono nur
-   für Mikro-Labels"), und die Pillenform widersprach zusätzlich der
-   Vorgabe im @theme-Block, dass UI-Elemente eckig bleiben. Die Knöpfe
-   setzen also weiter in Manrope 700 mit --radius-md, die Navigation in
-   Manrope 500 gemischt. Monospace bleibt den Etiketten vorbehalten:
-   Rubriken, Zählern, Footer-Überschriften und den CTA-Labels. */
+/* Knöpfe und Navigation bleiben unangetastet: Mono ist nur für
+   Mikro-Labels verabredet (Rubriken, Zähler, Footer-Überschriften,
+   CTA-Labels), und UI-Elemente bleiben eckig. */
 
 /* --- Flächen ------------------------------------------------ */
 
@@ -366,9 +331,8 @@
               linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   mask-composite: intersect;
 }
-/* Der Streifen steht IM Polster, also muss das Polster um seine Höhe
-   wachsen — sonst liegt die Rubrik darin. Abgeleitet statt geraten:
-   der weite Takt plus eine Rinne. Ergibt dieselben 136 px wie vorher. */
+/* Der Streifen steht im Polster, also wächst das Polster um seine
+   Höhe: der weite Takt plus eine Rinne. */
 .theme-mono .section--hero:has(.hero-flaeche--band) {
   padding-top: calc(var(--raum-abschnitt-weit) + var(--rinne-4));
 }
@@ -383,7 +347,7 @@
   mask-composite: intersect;
 }
 /* Dasselbe unten, eine Rinne mehr, weil der Sockel höher ist als der
-   Streifen. Ergibt dieselben 144 px wie vorher. */
+   Streifen. */
 .theme-mono .section--hero:has(.hero-flaeche--sockel) {
   padding-bottom: calc(var(--raum-abschnitt-weit) + var(--rinne-5));
 }
@@ -405,11 +369,9 @@
   --kugel: clamp(340px, calc((100vw - 760px) * 1.4), 820px);
 
   position: absolute;
-  /* Vom oberen Rand aus gesetzt, nicht mittig. Mittig hieße top: 50% —
-     und damit hinge die Position an der Höhe des Hero. Die ändert sich,
-     sobald die Webfonts einspringen und die Überschrift anders umbricht;
-     die Kugel rutschte dabei um gut 60 px. Lighthouse maß dafür
-     CLS 0,061 und zog die Startseite von 100 auf 98. */
+  /* Vom oberen Rand aus gesetzt, nicht mittig: Mittig hinge die Position
+     an der Höhe des Hero, und die ändert sich, wenn die Webfonts
+     einspringen — die Kugel rutschte und kostete CLS. */
   top: 4rem;
   right: calc(var(--kugel) / -3);
   bottom: auto;
@@ -433,14 +395,11 @@
   }
 }
 
-/* Footer-Fläche: ein Streifen an der Oberkante, über dem kein Text steht.
-   Vorher lag sie über der unteren Footer-Hälfte und damit unter 17
-   Textelementen. Rechnerisch bestand das sogar — #d4d4d4 auf den hellen
-   Rasterpixeln kommt auf 5,35:1 —, aber das Kontrastverhältnis unterstellt
-   einen gleichmäßigen Grund. Ein 1-Bit-Raster direkt unter der Zeile
-   zerstört die Lesbarkeit trotzdem, und axe-core kann das nicht sehen: Es
-   liest die CSS-Hintergrundfarbe, nicht das, was ein Canvas dorthin malt.
-   tools/wcag-manual.mjs prüft seither die Überlappung selbst. */
+/* Footer-Fläche nur als Streifen an der Oberkante, über dem kein Text
+   steht. Ein 1-Bit-Raster unter einer Zeile zerstört die Lesbarkeit auch
+   bei rechnerisch gutem Kontrast — und axe-core sieht es nicht, weil es
+   die CSS-Farbe liest, nicht das Canvas. tools/wcag-manual.mjs prüft die
+   Überlappung. */
 .theme-mono .footer__flaeche {
   position: absolute;
   inset: 0 0 auto 0;
@@ -449,10 +408,9 @@
   pointer-events: none;
   mask-image: linear-gradient(to bottom, black 30%, transparent);
 }
-/* Platz für den Streifen: Der Footer-Inhalt beginnt sonst mittendrin.
+/* Platz für den Streifen, sonst beginnt der Footer-Inhalt mittendrin.
    Doppelte Klasse, weil die scoped Regel in Footer.astro dieselbe
-   Spezifität hat — mit einfacher Klasse blieb das Polster bei 4rem und
-   der Streifen lag wieder über der Logozeile. */
+   Spezifität hat. */
 .theme-mono.theme-mono .site-footer__inner {
   padding-top: 9.5rem;
 }
@@ -485,13 +443,10 @@
 }
 
 /* --- Reichweite gegen Komponenten-Styles -------------------- */
-/* Astro kapselt Komponenten-Styles mit einem Attribut-Selektor; eine
-   Regel wie `.cta-section__title[data-astro-cid-…]` erreicht (0,2,0)
-   und schlägt `.theme-mono h2` mit (0,1,1). Die doppelt notierte
-   Klasse hebt die Regel hier auf (0,2,1) — dasselbe Ergebnis wie
-   !important, aber überschreibbar und ohne Kettenreaktion.
-   Nachgemessen: ohne diese Zeile blieben Footer-Überschriften und
-   der Abschluss-CTA in 700 stehen. */
+/* Astro kapselt Komponenten-Styles mit einem Attribut-Selektor;
+   `.cta-section__title[data-astro-cid-…]` (0,2,0) schlägt
+   `.theme-mono h2` (0,1,1). Die doppelt notierte Klasse hebt die Regel
+   auf (0,2,1) — wirkt wie !important, bleibt aber überschreibbar. */
 .theme-mono.theme-mono :is(h1, h2, h3, h4, h5, h6) {
   font-weight: 400;
 }
@@ -515,37 +470,22 @@
 /* ============================================================
    Die helle Fläche
 
-   Die Seite bestand aus 21 dunklen Abschnitten und einem hellen —
-   und der eine war es nur dem Namen nach: `.section--light` gibt es,
-   aber das Mono-Thema flacht oben alle -light-Tokens auf Dunkel ab
-   (`--color-bg-light: #0b0b0b`). Gemessen im ausgelieferten HTML.
+   Statt einer neuen Farbe wird die vorhandene Palette umgekehrt —
+   ein Creme oder ein zweiter Akzent bräche mit „Hierarchie aus Grad,
+   Helligkeit und Laufweite, nicht aus Farbe". #f3f3f3 ist der
+   Textwert der dunklen Seite, #101010 ihr Grund.
 
-   Statt einer neuen Farbe wird die vorhandene Palette **umgekehrt**.
-   Das Thema sagt selbst, worauf es beruht: „Hierarchie entsteht aus
-   Grad, Helligkeit und Laufweite, nicht aus Farbe." Ein warmes Creme
-   oder ein zweiter Akzent wäre ein Bruch damit; dieselben zwei Werte
-   getauscht ist keiner. #f3f3f3 ist der Textwert der dunklen Seite,
-   #101010 ihr Grund.
-
-   Kontraste nachgerechnet, nicht geschätzt:
-     #101010 auf #f3f3f3  17,15:1   (spiegelbildlich zur dunklen Seite)
+     #101010 auf #f3f3f3  17,15:1
      #565656 auf #f3f3f3   6,61:1
      #1C60AD auf #f3f3f3   5,69:1
      #8a8a8a auf #f3f3f3   3,11:1   (tragende Kanten)
 
-   Der Akzent muss wechseln: #5090d0 erreicht auf #f3f3f3 nur 3,03:1
-   und fällt damit durch. #1C60AD steht ohnehin in der Palette.
+   Der Akzent wechselt, weil #5090d0 auf #f3f3f3 nur 3,03:1 erreicht.
    ============================================================ */
-/* Zwei Eingaenge, ein Wertesatz.
-
-   `.section--hell` faerbt einen ganzen Abschnitt. `.auf-hell` setzt
-   NUR die Werte — fuer etwas, das auf einem beliebigen Grund steht und
-   trotzdem hell sein soll. Das Anfrageformular ist genau so ein Fall:
-   Es liegt auf der Startseite in einem blauen Abschnitt und auf acht
-   Leistungsseiten ebenso, soll aber ueberall gleich aussehen.
-
-   Abgeschrieben waere der zweite Satz eine zweite Wahrheit — sie liefe
-   auseinander, sobald jemand eine Farbe aendert. */
+/* Zwei Eingänge, ein Wertesatz: `.section--hell` färbt einen Abschnitt,
+   `.auf-hell` setzt nur die Werte — für etwas, das auf beliebigem Grund
+   hell sein soll, wie das Anfrageformular in blauen Abschnitten.
+   Abgeschrieben liefe der zweite Satz auseinander. */
 .theme-mono .section--hell,
 .theme-mono .auf-hell {
   --color-bg:            #f3f3f3;
@@ -590,16 +530,9 @@
 }
 
 /* ============================================================
-   Drei Vorteile nebeneinander statt untereinander
-
-   Die Karten standen als Spalte über die volle Breite, der Text
-   füllte davon knapp die Hälfte — die Zeilenlänge ist bewusst auf
-   38 Zeichen begrenzt, die Karte war es nicht. Das Ergebnis war
-   eine leere rechte Hälfte über drei Karten hinweg.
-
-   Nebeneinander stimmt beides: Die Zeilenlänge bleibt, wo sie
-   gehört, und die Fläche wird gefüllt. Ab 900 px, darunter bleibt
-   die Spalte richtig.
+   Drei Vorteile nebeneinander: Die Zeilenlänge ist auf 38 Zeichen
+   begrenzt, die Karte nicht — untereinander bliebe die rechte Hälfte
+   leer. Unter 900 px ist die Spalte richtig.
    ============================================================ */
 @media (min-width: 900px) {
   .theme-mono .usp-list {
@@ -679,20 +612,19 @@
 /* ============================================================
    Die blaue Fläche
 
-   Blau ist auf dieser Seite die einzige Farbe — bisher nur für
-   Knöpfe, Links und Fokus. Als ganze Fläche markiert es die
-   Stellen, an denen etwas passieren soll: den Abschluss-Aufruf,
-   das Formular. Deshalb bleibt es sparsam. Wären es fünf blaue
-   Abschnitte, hieße keiner mehr „hier".
+   Blau ist die einzige Farbe der Seite. Als Fläche markiert es die
+   Stellen, an denen etwas passieren soll — Abschluss-Aufruf und
+   Formular —, und bleibt deshalb sparsam: Bei fünf blauen
+   Abschnitten hieße keiner mehr „hier".
 
-   Kontraste nachgerechnet auf #1C60AD:
+   Kontraste auf #1C60AD:
      #ffffff  6,31:1   Fließtext und Überschriften
      #cfe0f2  4,69:1   Gedämpftes — knapp über der Schwelle,
-                       deshalb kein hellerer Ton als dieser
+                       deshalb kein hellerer Ton
      Knopf: #14477f auf Weiß  9,39:1
 
-   Rahmen kommen als weiße Deckschicht, nicht als eigener Farbwert:
-   Ein aufgehellter Blauton erreicht gegen den Grund nur 1,7–2,0:1.
+   Rahmen als weiße Deckschicht: Ein aufgehellter Blauton erreicht
+   gegen den Grund nur 1,7–2,0:1.
    ============================================================ */
 .theme-mono .section--blau {
   --color-bg:            #1C60AD;
@@ -719,27 +651,18 @@
   color: var(--color-text);
 }
 
-/* Kein doppelter Rinnenabstand.
-
-   `.lf-inner` bringt seine eigenen 1,5 rem mit — richtig, solange das
-   Formular einen ganzen Abschnitt fuellt (acht Leistungsseiten). Auf
-   der Startseite steckt es aber in einem `.container`, der die Rinne
-   schon setzt: Aus 342 px wurden 294, und die Auswahlkarten waren dort
-   268 statt 316 px breit. Dasselbe Formular, zwei Breiten.
-
-   Die Regel steht hier und nicht im Bauteil: Astro bindet jeden
-   Selektor an sein Bauteil, und `.container` kommt darin nicht vor —
-   eine dort geschriebene Regel traefe nie. */
+/* Kein doppelter Rinnenabstand: `.lf-inner` bringt eigene 1,5 rem mit,
+   die richtig sind, wenn das Formular einen Abschnitt füllt — in einem
+   `.container` wäre es sonst schmaler als anderswo. Die Regel steht hier,
+   weil Astro Selektoren ans Bauteil bindet und `.container` darin nicht
+   vorkommt. */
 .theme-mono .container .lf-inner { padding-inline: 0; }
 
-/* Was AUF hellem Grund steht, hoert nicht auf den blauen Abschnitt.
-
-   Ohne diese Regel stuende der weisse Knopf des blauen Abschnitts auf
-   der weissen Karte des Formulars — weiss auf weiss. Die doppelte
-   Klasse ist Absicht: `.theme-mono .section--blau .btn--primary` misst
-   (0,3,0), `.theme-mono .auf-hell.auf-hell .btn--primary` misst (0,4,0)
-   und gewinnt unabhaengig von der Reihenfolge im Bauteil. Eine Regel,
-   die nur wegen ihrer Stellung gewinnt, bricht beim naechsten Umbau. */
+/* Was auf hellem Grund steht, hört nicht auf den blauen Abschnitt —
+   sonst stünde dessen weißer Knopf auf der weißen Formularkarte. Die
+   doppelte Klasse (0,4,0) gewinnt gegen
+   `.theme-mono .section--blau .btn--primary` (0,3,0) unabhängig von der
+   Reihenfolge; ein Sieg nur durch Stellung bräche beim nächsten Umbau. */
 .theme-mono .section--blau .auf-hell.auf-hell .btn--primary {
   background: var(--color-accent);
   color: #ffffff;
@@ -806,14 +729,10 @@
 /* ============================================================
    Das Kernteam und das Büro
 
-   Die Seite sprach bis hierher nur in der Wir-Form über sich
-   selbst. Ein Gesicht und eine Anschrift sagen mehr über eine
-   kleine Agentur als drei Absätze darüber, dass sie klein ist.
-
-   Das Porträt steht links und bleibt klein: Es ist der
-   Ansprechpartner, nicht das Thema. Rechts die Liste, wer sonst
-   dabei ist — als Aufzählung, nicht als Kartenraster, weil fünf
-   Karten mehr Apparat wären als Inhalt.
+   Ein Gesicht und eine Anschrift sagen über eine kleine Agentur mehr
+   als drei Absätze darüber, dass sie klein ist. Das Porträt bleibt
+   klein — es ist der Ansprechpartner, nicht das Thema. Die übrigen
+   als Aufzählung, weil fünf Karten mehr Apparat wären als Inhalt.
    ============================================================ */
 .theme-mono .team {
   display: grid;
@@ -936,17 +855,12 @@
 .theme-mono .buero__bild--gross { grid-column: 1 / -1; }
 
 /* ============================================================
-   Das Porträt mit Abspielknopf auf „Über uns“
+   Das Porträt mit Abspielknopf auf „Über uns"
 
    Ein Gesicht mit Knopf sagt ohne Beschriftung, dass hier jemand
-   spricht. Der Knopf sitzt unten rechts auf dem Rand des runden
-   Bildes — halb darauf, halb daneben. Mitten im Gesicht verdeckte
-   er das, was er ankündigt.
-
-   Er ist hier das **einzige** Bedienelement: Die Chatblase der
-   Startseite kommt auf dieser Seite nicht noch einmal vor. Deshalb
-   ein echter `<button>` mit Beschriftung und nicht, wie vorher, ein
-   Zeichen ohne Funktion neben einer Blase, die die Arbeit tat.
+   spricht. Der Knopf sitzt auf dem Rand des runden Bildes; mitten im
+   Gesicht verdeckte er, was er ankündigt. Er ist hier das einzige
+   Bedienelement, deshalb ein echter `<button>` mit Beschriftung.
    ============================================================ */
 .theme-mono .team__bild {
   position: relative;
@@ -955,14 +869,9 @@
   max-width: 10rem;
 }
 
-/* Die Mitte des Knopfes liegt auf dem Kreisrand: Bei einem Kreis mit
-   Mittelpunkt (50 %, 50 %) trifft die 45-Grad-Richtung nach unten
-   rechts den Rand bei 50 % + 50 % · √½ ≈ 85,4 %. Die krummen Zahlen
-   sind gerechnet, nicht geschoben.
-
-   Die 2,75 rem Durchmesser haben einen zweiten Grund: Die Karte hat
-   1,5 rem Innenabstand, und der Knopf ragt mit der Hälfte davon
-   (1,375 rem) heraus. Größer, und er stieße an den Kartenrand. */
+/* Die Mitte des Knopfes liegt auf dem Kreisrand: Die 45-Grad-Richtung
+   trifft ihn bei 50 % + 50 % · √½ ≈ 85,4 %. Mehr als 2,75 rem
+   Durchmesser, und er stieße an den Kartenrand (1,5 rem Innenabstand). */
 .theme-mono .team__play {
   position: absolute;
   left: 85.4%;
@@ -1079,13 +988,10 @@
 /* ============================================================
    Die Sprachnachricht im Chatfenster
 
-   Ein Ausschnitt aus einem Messenger-Verlauf, mitten auf einer
-   sonst monochromen Seite. Der Bruch ist Absicht: Die Form soll
-   auf den ersten Blick erkennbar sein, und sie ist es nur in
-   ihren eigenen Farben. Eine Blase in Schwarzweiß wäre eine
-   Blase — diese hier ist eine Sprachnachricht.
+   Ein Messenger-Ausschnitt mitten auf der monochromen Seite. Der Bruch
+   ist Absicht: Die Form ist nur in ihren eigenen Farben auf den ersten
+   Blick als Sprachnachricht erkennbar.
 
-   Farben und Maße nach Vorgabe:
      Fläche      #E5DDD5, Kritzelmuster #D1C7BD
      Blase       #E7FFDB, 12 px Radius, Zipfel oben links
      Absender    #075E54, 13 px, halbfett
@@ -1093,7 +999,7 @@
      Balken      #8696A0 ungehört, Punkt #007AFF
      Zeiten      #667781, 11 px
 
-   Kontraste nachgerechnet gegen #E7FFDB:
+   Kontraste gegen #E7FFDB:
      #111B21 Text      16,8:1
      #075E54 Absender   6,9:1
      #667781 Zeiten     4,6:1
@@ -1101,20 +1007,12 @@
 .theme-mono .sn-wrap { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
 
 /* ============================================================
-   Der Abschnitt „Wer fuer Sie arbeitet" auf der Startseite
+   „Wer für Sie arbeitet" auf der Startseite
 
-   Untereinander: Text, Nachricht, Knopf. Erst hoeren, dann
-   weitergehen — der Knopf steht deshalb hinter der Nachricht und
-   nicht davor.
-
-   Ab 900 px nebeneinander: links Text und Knopf untereinander,
-   rechts die Nachricht ueber beide Zeilen. Nebeneinander, weil
-   beides dasselbe sagt — der Text behauptet kurze Wege, die
-   Stimme belegt sie.
-
-   Die Abstaende kommen aus dem Raster, nicht aus Aussenabstaenden
-   der Felder: Sonst addierten sich zwei Werte, die beide fuer sich
-   richtig aussehen.
+   Untereinander: Text, Nachricht, Knopf — erst hören, dann weiter.
+   Ab 900 px nebeneinander, weil beides dasselbe sagt: Der Text
+   behauptet kurze Wege, die Stimme belegt sie. Die Abstände kommen
+   aus dem Raster, damit sich keine zwei Außenabstände addieren.
    ============================================================ */
 .theme-mono .kt {
   display: grid;
@@ -1156,20 +1054,11 @@
 /* ============================================================
    Die eine erlaubte Ausnahme von der Leiter
 
-   Alles zwischen hier und dem Ende des Sprachnachrichten-Blocks
-   setzt Schriftgrade in px statt über die Token: 13 px für den
-   Absender, 11 px für Zeit und Dauer, 14 px für das Transkript.
-
-   Der Grund ist die Vorgabe selbst. Die Sprachnachricht bildet
-   eine WhatsApp-Blase nach, und zwar auf ausdrückliche Anweisung
-   1:1 — mit den Farben, Maßen und Graden des Originals. Ein Grad
-   aus unserer Leiter wäre hier nicht konsequenter, sondern
-   falsch: Die Nachbildung lebt davon, dass man sie wiedererkennt.
-
-   tools/check-typo.mjs kennt genau diese Ausnahme und lässt sie
-   nur für Selektoren zu, die mit .sn beginnen. Jede weitere
-   Ausnahme muss dort eingetragen und hier begründet werden —
-   das ist die Hürde, die es vorher nicht gab.
+   Bis zum Ende des Sprachnachrichten-Blocks stehen Grade in px: Die
+   Blase bildet das Messenger-Original 1:1 nach und lebt davon, dass
+   man es wiedererkennt. tools/check-typo.mjs lässt diese Ausnahme nur
+   für Selektoren mit .sn zu; jede weitere muss dort eingetragen und
+   hier begründet werden.
    ============================================================ */
 
 /* Das Fenster. Das Kritzelmuster ist eine eigene Zeichnung, kein
@@ -1299,10 +1188,8 @@
   pointer-events: none;
 }
 
-/* #667781 ist die Farbe aus der Vorgabe, erreicht auf der Blase aber
-   nur 4,36:1 — unter der Schwelle von 4,5:1, die fuer 11-px-Text gilt.
-   Im Browser gemessen, nicht geschaetzt. #5f7080 liegt bei 4,79:1 und
-   ist vom Original nicht zu unterscheiden. */
+/* #667781 aus der Vorlage erreicht auf der Blase nur 4,36:1 (11-px-Text
+   braucht 4,5:1). #5f7080 kommt auf 4,79:1 und sieht gleich aus. */
 .theme-mono .sn__zeiten {
   display: flex;
   justify-content: space-between;
@@ -1343,13 +1230,10 @@
 
 .theme-mono .sn__quelle { display: none; }
 
-/* Das Transkript sitzt in der Blase, hinter einem Aufklapper — wie im
-   Messenger. Zugeklappt eine Zeile, aufgeklappt der Wortlaut unter
-   einer Haarlinie.
-
-   WCAG 1.2.1 ist damit erfuellt: Gefordert ist eine **verfuegbare**
-   Textalternative, keine dauernd sichtbare. Sie steht im Dokument und
-   traegt eine sichtbare, tastaturbedienbare Schaltflaeche. */
+/* Das Transkript sitzt hinter einem Aufklapper, wie im Messenger.
+   WCAG 1.2.1 verlangt eine verfügbare Textalternative, keine dauernd
+   sichtbare — sie steht im Dokument hinter einer tastaturbedienbaren
+   Schaltfläche. */
 .theme-mono .sn__transkript {
   margin-top: 0.35rem;
   border-top: 1px solid rgb(17 27 33 / 0.1);
@@ -1395,30 +1279,11 @@
 .theme-mono .sn__worte p:last-child { margin-bottom: 0; }
 
 /* ── Die Blase füllt das Fenster, auf jeder Breite ─────────────────
-   Bis zum 24.09.2026 galt das nur untereinander: Am Schreibtisch stand
-   die Blase links am Zipfel und war so breit wie ihr Inhalt — 226 px in
-   einem 328 px breiten Fenster, und rechts davon eine leere Fläche
-   Tapete. Gemessen, nicht geschätzt: 1280 px Bildschirm, Fenster 384 px,
-   Wellenform 111 px.
-
-   Auf ausdrückliche Anweisung gilt jetzt überall, was vorher nur das
-   Telefon tat: 90 Prozent des Fensters, mittig. Der Zipfel bleibt oben
-   links — eingehend ist eingehend.
-
-   Damit die Blase dabei nicht hohl wird, wächst die Wellenform mit: Die
-   Spur nimmt den freien Platz (`flex: 1`), und die 25 Balken verteilen
-   sich darin (`space-between`) statt links zusammenzustehen. Ihre
-   Breite bleibt bei 2,5 px — es wächst der Abstand, nicht der Balken.
-   Genau so hält es der Messenger auch.
-
-   Der Fortschritt rechnet weiter richtig: Der Punkt sitzt auf einem
-   Prozentsatz der Spur, und die Einfärbung vergleicht die Nummer des
-   Balkens mit dem Anteil — beides kennt keine Pixel.
-
-   Und das Aufklappen des Transkripts verschiebt nichts mehr: Vorher
-   sprang die Blase dabei von ihrer Inhaltsbreite auf 100 Prozent
-   (gemessen 279 → 310 px) und verlor ihre Mitte. Jetzt steht die Breite
-   vorher fest. */
+   90 Prozent, mittig; der Zipfel bleibt oben links — eingehend ist
+   eingehend. Damit die Blase nicht hohl wird, nimmt die Spur den freien
+   Platz und verteilt die Balken darin; es wächst der Abstand, nicht der
+   Balken. Weil die Breite vorher feststeht, verschiebt das Aufklappen
+   des Transkripts nichts. */
 .theme-mono .kt__nachricht .sn {
   width: 90%;
   margin-inline: auto;
@@ -1429,17 +1294,15 @@
 /* ============================================================
    Die Ankunft
 
-   Ablauf nach Vorgabe:
      0,00–0,40 s  Blase gleitet 20 px herauf, blendet ein
      0,30–0,50 s  federt einmal nach
      0,50–1,20 s  Bild springt auf, Knopf pulst einmal,
                   Balken wachsen von links nach rechts
      ab 1,20 s    steht
 
-   Ausgangszustand ist unsichtbar — aber nur, solange die Klasse
-   `kommt-an` überhaupt gesetzt werden kann. Wer Bewegung abgestellt
-   hat, bekommt `ist-da` und damit sofort das Endbild. Ohne diese
-   Trennung wäre die Nachricht für ihn unsichtbar.
+   Unsichtbar ist der Ausgangszustand nur, solange `kommt-an` gesetzt
+   werden kann. Wer Bewegung abgestellt hat, bekommt `ist-da` und sofort
+   das Endbild — sonst bliebe die Nachricht für ihn unsichtbar.
    ============================================================ */
 .theme-mono .sn-chat.kommt-an .sn {
   animation: sn-ankunft 0.5s cubic-bezier(0.22, 1.2, 0.36, 1) both;
@@ -1497,17 +1360,9 @@
   .theme-mono .sn-chat:not(.kommt-an):not(.ist-da) .sn { opacity: 1; }
 }
 
-/* Zweiter Weg zum Endbild, falls das Skript nicht laeuft.
-   Normalerweise setzt es bei abgeschalteter Bewegung die Klasse
-   `ist-da`, und die genuegt — im Browser nachgeprueft, mit echtem
-   Klick auf den Pausenknopf: data-motion="paused", Klasse `ist-da`,
-   Blase sichtbar.
-
-   Die Regel steht hier trotzdem, fuer den Fall, dass das Skript
-   ausfaellt: Dann bliebe die Nachricht sonst unsichtbar. Die `:not()`
-   sind mituebernommen, weil die Versteck-Regel
-   `.theme-mono .sn-chat:not(.kommt-an):not(.ist-da) .sn` mit (0,5,0)
-   sonst gewinnt. */
+/* Zweiter Weg zum Endbild, falls das Skript ausfällt — sonst bliebe die
+   Nachricht unsichtbar. Die `:not()` sind nötig, weil die Versteck-Regel
+   mit (0,5,0) sonst gewinnt. */
 html[data-motion="paused"] .theme-mono .sn-chat .sn__portraet,
 html[data-motion="paused"] .theme-mono .sn-chat .sn__knopf,
 html[data-motion="paused"] .theme-mono .sn-chat .sn__balken,

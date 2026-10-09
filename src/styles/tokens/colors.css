@@ -1,8 +1,7 @@
 /* ============================================================
-   Design Tokens — Colors
-   Quelle: DESIGN_GUIDE.md + global.css @theme
-   Variablen-Präfix: --dk- (verhindert Zirkularreferenzen
-   mit dem @theme-Block in global.css)
+   Design Tokens — Farben
+   Präfix --dk-, damit der @theme-Block in global.css nicht auf sich
+   selbst verweist.
    ============================================================ */
 :root {
   /* Dark theme — Hintergründe */
@@ -18,10 +17,8 @@
   --dk-color-text:                #e8e8e8;
   --dk-color-text-muted:          #a8a8a8;
   --dk-color-text-faint:          #909090;
-  /* Dekorative Großziffern auf Karten. Eigenes Token, weil hier vorher
-     ein Rahmen-Token als Textfarbe diente: --color-border erreicht auf
-     hellem Grund nur 1,41:1 und lag damit unter der Schwelle von 3:1,
-     die für Text ab 24px fett gilt. */
+  /* Dekorative Großziffern auf Karten: ein eigenes Token, weil Rahmen-
+     farben als Text auf hellem Grund unter 3:1 liegen. */
   --dk-color-decor:               #4a4a4a;
   --dk-color-text-inverse:        #121212;
 

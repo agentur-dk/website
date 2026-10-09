@@ -75,10 +75,9 @@
 
 /* ============================================================
    Umbruchverhalten — deutsche Komposita
-   „Datenschutzerklärung" ist als Wort breiter als ein 320px-Viewport
-   und erzwang horizontales Scrollen (WCAG 1.4.10 Reflow). Silbentrennung
-   greift, weil <html lang="de"> gesetzt ist; overflow-wrap fängt den Rest
-   (URLs, E-Mail-Adressen) ab.
+   Lange Wörter wie „Datenschutzerklärung" sind breiter als 320 px
+   (WCAG 1.4.10 Reflow). Silbentrennung greift dank <html lang="de">,
+   overflow-wrap fängt URLs und E-Mail-Adressen ab.
    ============================================================ */
 h1, h2, h3, h4, h5, h6 {
   hyphens: auto;
@@ -90,9 +89,8 @@ p, li, dd, dt, address, figcaption {
 
 /* ============================================================
    TAILWIND v4 @theme — Design Tokens
-   Werte kommen aus src/styles/tokens/*.css (--dk-* Prefix).
-   Getrenntes Mapping verhindert Zirkularreferenzen und hält
-   die Token-Dateien als Single Source of Truth.
+   Werte aus src/styles/tokens/*.css (--dk-*); das getrennte Mapping
+   verhindert Zirkularreferenzen.
    ============================================================ */
 @theme {
   /* Colors — dark theme */
@@ -135,9 +133,7 @@ p, li, dd, dt, address, figcaption {
   --font-body:    var(--dk-font-body);
   --font-mono:    var(--dk-font-mono);
 
-  /* Schriftgrade — die Leiter, nach Aufgabe benannt.
-     Siehe tokens/typography.css: ein Verhältnis, ein Anker,
-     je Grad genau eine Aufgabe. */
+  /* Schriftgrade — nach Aufgabe benannt, siehe tokens/typography.css. */
   --font-size-klein:    var(--dk-schrift-klein);
   --font-size-karte:    var(--dk-schrift-karte);
   --font-size-text:     var(--dk-schrift-text);
@@ -229,11 +225,8 @@ html {
 
 body {
   font-family: var(--font-body);
-  /* Bis zum 01.09.2026 stand hier keine Groesse. Der Fliesstext lief damit
-     auf dem Browser-Standard von 16px, und zwar ueberall dort, wo eine
-     Komponente nichts eigenes setzt — Antworten, Karten, FAQ-Text. Die
-     Skala in tokens/typography.css galt fuer diese Texte schlicht nicht.
-     Jetzt haengt der Fliesstext an ihr und waechst mit ihr. */
+  /* Der Fließtext hängt an der Skala, damit Komponenten ohne eigene
+     Größe nicht auf den Browser-Standard von 16 px fallen. */
   font-size: var(--font-size-base);
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -348,10 +341,8 @@ a:not([class]):focus-visible {
   /* ----------------------------------------------------------
      Sections
      ---------------------------------------------------------- */
-  /* Der senkrechte Rhythmus, Stand 24.09.2026: zwei Takte statt fünf.
-     Die Modifikatoren --sm und --lg bleiben als Namen bestehen, damit
-     kein Markup angefasst werden muss — sie zeigen jetzt beide auf
-     einen der zwei Takte. Siehe tokens/spacing.css. */
+  /* Zwei Takte, siehe tokens/spacing.css. --sm und --lg bleiben als
+     Namen, damit kein Markup angefasst werden muss. */
   .section {
     padding-block: var(--raum-abschnitt);
   }
@@ -382,9 +373,8 @@ a:not([class]):focus-visible {
     border: 2px solid transparent;
     cursor: pointer;
     transition: background-color 250ms ease, border-color 250ms ease, color 250ms ease, opacity 250ms ease;
-    /* Kein nowrap: mit Versalien und 0.06em Sperrung überschritten lange
-       deutsche Labels bei 320px die Viewport-Breite und erzwangen
-       horizontales Scrollen (WCAG 1.4.10 Reflow). */
+    /* Kein nowrap: Lange Versal-Labels würden bei 320 px die Breite
+       sprengen (WCAG 1.4.10 Reflow). */
     max-width: 100%;
     text-align: center;
     text-wrap: balance;
@@ -616,9 +606,8 @@ a:not([class]):focus-visible {
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
-  /* Eigene, abgedunkelte Kachelfarben: --color-success (2.3:1) und
-     --color-accent (3.4:1) rissen mit weißer Schrift das 4.5:1-Minimum
-     nach WCAG 1.4.3. Die Werte hier liegen alle über 5:1. */
+  /* Eigene, abgedunkelte Kachelfarben: --color-success und
+     --color-accent erreichen mit weißer Schrift kein 4,5:1 (WCAG 1.4.3). */
   .case-card__visual--blue    { background-color: #1C60AD; }
   .case-card__visual--green   { background-color: #2b7a4b; }
   .case-card__visual--purple  { background-color: #412848; }
@@ -632,12 +621,9 @@ a:not([class]):focus-visible {
     display: flex;
     flex-direction: column;
     gap: var(--rinne-1);
-    /* Ohne `min-width: 0` schrumpft ein Flex-Kind nicht unter seine
-       min-content-Breite — und die bestimmt das längste Wort ohne
-       Umbruchstelle. Seit im Link die Domain steht
-       (`koelner-physio-kollektiv.de`) statt „Projekt ansehen", trug die
-       Karte bei 320 px 23 px über den Rand: horizontaler Scrollbalken
-       auf dem Telefon, WCAG 1.4.10. */
+    /* Ohne `min-width: 0` schrumpft das Flex-Kind nicht unter das längste
+       Wort — eine Domain im Link trüge die Karte bei 320 px über den
+       Rand (WCAG 1.4.10). */
     min-width: 0;
   }
   .case-card__tag {
@@ -711,12 +697,9 @@ a:not([class]):focus-visible {
   .case-card__link:hover {
     color: var(--color-text);
   }
-  /* `minmax(0, 1fr)` statt `1fr`: Ohne das steht die Spalte auf
-     `min-width: auto` und kann nicht unter die min-content-Breite
-     ihres Inhalts schrumpfen. Bei 320 px lief die Startseite deshalb
-     auf 354 px — der lange Projektlink passte nicht, und die ganze
-     Seite bekam eine waagerechte Bildlaufleiste. Gemessen, nicht
-     vermutet: Die Karte war 310 px breit in einem 272-px-Kasten. */
+  /* `minmax(0, 1fr)` statt `1fr`: Sonst bestimmt der lange Projektlink
+     die Mindestbreite der Spalte, und bei 320 px scrollt die ganze Seite
+     waagerecht. */
   .case-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -748,13 +731,9 @@ a:not([class]):focus-visible {
   }
 
   /* ----------------------------------------------------------
-     Abschluss-CTA
-     Die Regeln .closing-cta* standen frueher hier und trugen
-     --gradient-footer. Sie lagen auf index, leistungen und projekte
-     unmittelbar ueber dem Footer, der denselben Verlauf traegt --
-     zwei Verlaeufe auf Stoss, mit sichtbarer Naht dazwischen.
-     Ersetzt durch components/CtaSection.astro. Der Verlauf gehoert
-     jetzt allein dem Footer; tools/check-cta.mjs haelt das fest.
+     Abschluss-CTA: components/CtaSection.astro. Der Verlauf gehört
+     allein dem Footer — zwei Verläufe auf Stoß zeigen eine Naht;
+     tools/check-cta.mjs hält das fest.
      ---------------------------------------------------------- */
 
   /* ----------------------------------------------------------
@@ -1029,11 +1008,8 @@ a:not([class]):focus-visible {
   }
 
   /* Text links in content */
-  /* .text-link war fest auf helle Abschnitte verdrahtet: --color-primary-on-light
-     (#1c60ad) erreicht auf dem dunklen Grund nur 2,97:1 und verfehlt damit
-     WCAG 1.4.3 deutlich. Die Klasse richtet sich jetzt nach dem Abschnitt,
-     in dem sie steht — sonst wird jede künftige Verwendung auf Dunkel zur
-     stillen Barriere. */
+  /* .text-link richtet sich nach dem Abschnitt: --color-primary-on-light
+     erreicht auf dunklem Grund nur 2,97:1 (WCAG 1.4.3). */
   .text-link {
     color: var(--color-primary-light);   /* 5,57:1 auf --color-bg */
     text-decoration: underline;
@@ -1406,7 +1382,6 @@ a:not([class]):focus-visible {
     margin: 0 0 0.5rem;
   }
 
-
   /* ----------------------------------------------------------
      Checklist (problem/benefit sections)
      ---------------------------------------------------------- */
@@ -1649,16 +1624,14 @@ a:not([class]):focus-visible {
   }
   /* Visual color variants */
   .case-card__visual--indigo  { background-color: #474078; }
-  /* #c25a00 lag mit weißer Schrift bei 4,42:1 und damit knapp unter dem
-     AA-Minimum von 4,5:1. Die übrigen sieben Varianten liegen darüber. */
+  /* Abgedunkelt, damit auch diese Variante mit weißer Schrift 4,5:1
+     erreicht. */
   .case-card__visual--orange  { background-color: #b85400; }
   .case-card__visual--rose    { background-color: #9f1239; }
   .case-card__visual--slate   { background-color: #475569; }
 
   /* ----------------------------------------------------------
-     Page-level semantic section identifiers (index + leistungen)
-     These classes are used as section identifiers and don't add
-     visual styles beyond their section/container parents.
+     Abschnittskennungen (index + leistungen), ohne eigene Optik
      ---------------------------------------------------------- */
   .schwerpunkte-section,
   .services,
@@ -1867,12 +1840,8 @@ a:not([class]):focus-visible {
 
 /* ============================================================
    @layer utilities — Container-Override
-   Tailwind v4 generiert eine eigene .container-Utility im
-   utilities-Layer (max-width: 80rem bei großen Viewports).
-   Da utilities > components, überschreibt diese unsere
-   Komponenten-Definition. Der folgende Block stellt sicher,
-   dass unsere Werte im selben Layer (utilities) deklariert
-   sind und damit zuverlässig greifen.
+   Tailwind v4 erzeugt eine eigene .container-Utility, und utilities
+   schlägt components. Deshalb stehen unsere Werte im selben Layer.
    ============================================================ */
 @layer utilities {
   .container {

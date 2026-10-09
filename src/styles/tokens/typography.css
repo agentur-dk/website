@@ -1,39 +1,23 @@
 /* ============================================================
    Design Tokens — Typografie
-   Schriften: lokal gehostet (public/fonts/*.woff2), kein CDN.
-   Metric-Fallbacks reduzieren CLS bis die eigenen Fonts laden.
+   Schriften lokal (public/fonts/*.woff2), kein CDN. Die Metric-
+   Fallbacks halten das Layout stabil, bis die Schriften geladen sind.
    ============================================================ */
 :root {
   /* Font-Familien */
   --dk-font-display: 'Space Grotesk', 'Space Grotesk Fallback', 'Manrope', sans-serif;
   --dk-font-body:    'Manrope', 'Manrope Fallback', 'Space Grotesk', sans-serif;
-  /* System-Monospace statt Webfont: Roboto Mono wurde ausschließlich auf der
-     404-Seite verwendet — 80 Zeichen auf der gesamten Site, wofür drei
-     Schriftdateien im Repository lagen und eine geladen wurde. */
+  /* System-Monospace statt Webfont: Für die wenigen Zeichen in Mono
+     lohnt keine eigene Schriftdatei. */
   --dk-font-mono:    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
                      'Liberation Mono', 'Courier New', monospace;
 }
 
 /* ============================================================
-   Die Leiter
-   Umbau am 24.09.2026, auf ausdrückliche Anweisung: eine Skala,
-   keine Ausnahmen.
-
-   Vorher standen im Quelltext 205 font-size-Deklarationen mit
-   69 verschiedenen Werten, davon 18 handgeschriebene clamp().
-   Im Browser gemessen ergab das 44 Schriftgrößen auf acht
-   Seiten — drei Viertel aller Textstellen lagen neben der
-   damaligen Token-Skala. Sichtbar wurde es an den Überschriften:
-   h1 maß 81,6 / 62,4 / 56 px je nach Seite, h2 sogar
-   12 / 58,8 / 46,8 / 35,2 / 19,2 px. Auf projekte.html waren h2
-   und h3 gleich groß — zwischen den Ebenen lag kein Unterschied
-   mehr.
-
-   Jetzt: ein Verhältnis (1,2), ein Anker (der Fließtext mit
-   19,2 px), und jede Stufe trägt genau eine Aufgabe. Der Name
-   sagt die Aufgabe, nicht die Größe — wer „die nächstkleinere"
-   sucht, erfindet eine neue Zahl; wer „Kartentext" sucht, findet
-   die eine richtige.
+   Die Leiter: ein Verhältnis (1,2), ein Anker (Fließtext 19,2 px),
+   je Stufe genau eine Aufgabe. Der Name sagt die Aufgabe, nicht die
+   Größe — wer „Kartentext" sucht, findet die eine richtige Zahl,
+   statt eine neue zu erfinden.
 
      Stufe  -1    13,33 px    klein
      Stufe   0    16,00 px    karte
@@ -46,15 +30,10 @@
      Stufe   7    57,33 px    titel-1
      Stufe   9    82,56 px    hero
 
-   Überschriften überspringen je eine Stufe. Das ist Absicht:
-   Zwischen zwei Textgraden reicht ein Schritt von 1,2 — zwischen
-   zwei Überschriftenebenen sieht man ihn nicht mehr.
-
-   Die drei fließenden Grade sind gerechnet, nicht geschätzt:
-   sie laufen linear zwischen 390 px und 1440 px Fensterbreite.
-   Auf dem Telefon treffen sie fast genau die bisherigen Werte
-   (Hero 47,8 statt 46,8 · Seitentitel 39,8 statt 38,4), am
-   Schreibtisch vereinheitlichen sie, was vorher auseinanderlief.
+   Überschriften überspringen je eine Stufe: Zwischen zwei
+   Überschriftenebenen sieht man einen Schritt von 1,2 nicht mehr.
+   Die fließenden Grade laufen linear zwischen 390 und 1440 px
+   Fensterbreite.
    ============================================================ */
 :root {
   --dk-schrift-klein:    0.8333rem;  /* 13,3 px */
@@ -81,15 +60,11 @@
 
 /* ============================================================
    Laufweite, Durchschuss, Zeilenlänge
-   Zwei gegenläufige Kurven: Große Grade laufen enger und
-   stehen dichter, kleine laufen weiter und stehen luftiger.
-   Mono-Etiketten sind die einzige Sperrung ins Positive —
-   ohne sie zerfällt ein Versalsatz bei 13px.
-
-   Jede Laufweite hängt an einem Grad, nicht an einem Bauteil.
-   Vorher standen 26 verschiedene letter-spacing-Werte im
-   Quelltext, die meisten frei gewählt.
-   Analyse dahinter: docs/superpowers/specs/2026-08-30-mummentum-analyse.md
+   Große Grade laufen enger und stehen dichter, kleine weiter und
+   luftiger. Mono-Etiketten sind die einzige positive Sperrung —
+   ohne sie zerfällt ein Versalsatz bei 13 px. Jede Laufweite hängt
+   an einem Grad, nicht an einem Bauteil.
+   Analyse: docs/superpowers/specs/2026-08-30-mummentum-analyse.md
    ============================================================ */
 :root {
   --dk-tracking-hero:     -0.04em;   /* 83 px */
@@ -113,9 +88,8 @@
   --dk-leading-tight:   1.25;
   --dk-leading-body:    1.65;
 
-  /* Zeilenlänge in Zeichen statt in Pixeln: bleibt beim Zoomen richtig.
-     --dk-measure-body gilt für jeden Fließtext, auch in den
-     Referenzkarten — dort lief er vorher über 105 Zeichen. */
+  /* Zeilenlänge in Zeichen statt Pixeln, damit sie beim Zoomen stimmt.
+     Gilt für jeden Fließtext, auch in den Referenzkarten. */
   --dk-measure-display: 20ch;
   --dk-measure-title:   20ch;
   --dk-measure-lead:    56ch;

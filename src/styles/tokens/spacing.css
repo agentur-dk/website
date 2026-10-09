@@ -35,26 +35,15 @@
   --dk-transition-slow: 400ms ease;
 
   /* ------------------------------------------------------------
-     Der senkrechte Rhythmus
-     Umbau am 24.09.2026, auf ausdrückliche Anweisung.
-
-     Vorher trugen die Abschnitte fünf verschiedene Polster:
-     80/80, 56/56, 40/48, 0/80 und 80/112 — im Browser gemessen,
-     nicht im Quelltext gezählt. Der Rhythmus ist die stillste
-     Qualität einer Seite; mit fünf Takten hat sie keinen.
-
-     Jetzt zwei, und beide haben einen Grund:
+     Der senkrechte Rhythmus: zwei Takte statt beliebig vieler.
        normal  jeder Abschnitt
-       weit    der Hero und der Abschluss — die beiden Stellen,
-               an denen die Seite anfängt und aufhört
+       weit    Hero und Abschluss — wo die Seite anfängt und aufhört
      ------------------------------------------------------------ */
   --dk-raum-abschnitt:      clamp(3.5rem, 6.2vw, 5rem);   /* 56 → 80 px */
   --dk-raum-abschnitt-weit: clamp(5rem, 8.6vw, 7rem);     /* 80 → 112 px */
 
   /* ------------------------------------------------------------
-     Die Rinnen
-     41 verschiedene gap-Werte standen im Quelltext. Sechs Stufen
-     decken sie ab; alles dazwischen rastet auf die nächste ein.
+     Die Rinnen: sechs Stufen, alles dazwischen rastet ein.
      ------------------------------------------------------------ */
   --dk-rinne-1: 0.5rem;   /*  8 px — Wortabstände, Zeilen in einer Liste */
   --dk-rinne-2: 0.75rem;  /* 12 px — Symbol und Beschriftung */
