@@ -36,23 +36,9 @@ const findings = [];
 const add = (sc, page, detail) => findings.push({ sc, page, detail });
 
 /**
- * Den Einwilligungsdialog schließen, bevor gemessen wird.
- *
- * Bis zum 09.10.2026 maß diese Prüfung mit OFFENEM Dialog. Der Dialog
- * sperrt die Seite (`disablePageInteraction`) und setzt dafür
- * `overflow: hidden` an <html> — damit meldet `scrollWidth` immer die
- * Fensterbreite, egal was dahinter übersteht. Gemessen an der
- * Startseite bei 320 px:
- *
- *   Dialog offen       scrollWidth 320   „unauffällig"
- *   Dialog geschlossen scrollWidth 354   Überlauf
- *
- * Der Reflow-Test war damit seit Einführung des Dialogs für jede Seite
- * blind. Ein Besucher sieht die Seite nach seiner Wahl, also misst die
- * Prüfung sie auch so. Gewählt wird „Nur notwendige": Das lädt nichts
- * nach und verändert die Seite am wenigsten.
- *
- * Gibt zurück, ob ein Dialog da war — der wird vorher selbst geprüft.
+ * Schließt den Einwilligungsdialog vor dem Messen: Offen setzt er
+ * `overflow: hidden` an <html>, und `scrollWidth` meldet dann jeden
+ * Überlauf als Fensterbreite. „Nur notwendige", weil das nichts nachlädt.
  */
 async function einwilligungSchliessen(page) {
   const dialog = page.locator('#cc-main .cm');
@@ -156,7 +142,7 @@ for (const name of pages) {
     const ctx = await browser.newContext({ viewport: { width: 320, height: 640 } });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
-    // Der Dialog zuerst, für sich: Solange er offen ist, ist ER die Seite.
+    // Solange der Dialog offen ist, ist er die Seite — also muss er selbst passen.
     const dialogRand = await page.evaluate(() => {
       const d = document.querySelector('#cc-main .cm');
       if (!d || !d.offsetParent) return null;
@@ -261,11 +247,8 @@ for (const name of pages) {
       const bad = [];
       const targets = [...document.querySelectorAll('main [id]')].slice(0, 25);
       for (const t of targets) {
-        // `instant`, nicht der Vorgabewert: Die Seite scrollt weich
-        // (scroll-behavior: smooth), und einen Frame nach dem Start steht
-        // das Ziel mitten in der Animation. So entstand am 09.10.2026 der
-        // Befund „#funnel, Oberkante -99px" — beim echten Klick auf den
-        // Sprunglink steht der Abschnitt bei 80px, voll sichtbar.
+        // `instant`: Die Seite scrollt weich, und einen Frame später stünde
+        // das Ziel noch mitten in der Animation.
         t.scrollIntoView({ block: 'start', behavior: 'instant' });
         await new Promise((r) => requestAnimationFrame(r));
         const hb = header.getBoundingClientRect();
