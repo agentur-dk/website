@@ -1,16 +1,9 @@
-/* ============================================================
-   Schema.org-Bausteine (JSON-LD).
-
-   Vorher stand JSON-LD als handgeschriebener String-Block in jeder
-   Seite — mit hartkodierten Domains und ohne Verknüpfung zwischen
-   den Entitäten. Hier entstehen die Graphen aus der zentralen
-   Konfiguration und den FAQ-Daten, sodass Domain, Kontaktdaten und
-   Fragetexte nur an einer Stelle gepflegt werden.
-
-   Alle Knoten hängen über @id am Organization-Knoten, damit Google
-   und LLM-Parser Seite, Anbieter und Leistung als einen Graphen
-   lesen statt als lose Einzelobjekte.
-   ============================================================ */
+/*
+ * Schema.org-Bausteine (JSON-LD), erzeugt aus der zentralen Konfiguration und
+ * den FAQ-Daten. Alle Knoten hängen über @id am Organization-Knoten, damit
+ * Suchmaschinen und Sprachmodelle Seite, Anbieter und Leistung als einen
+ * Graphen lesen.
+ */
 import { siteConfig, absolute, datei, pageBySlug, type PageEntry } from '../config/site.config';
 import { faqFor } from '../data/faq';
 
@@ -67,7 +60,6 @@ export function organizationSchema(): Json {
   };
 }
 
-/** Website-Knoten. */
 export function websiteSchema(): Json {
   return {
     '@type': 'WebSite',

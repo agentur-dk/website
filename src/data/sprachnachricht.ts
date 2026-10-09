@@ -1,34 +1,20 @@
 /**
- * Die Sprachnachrichten: Datei, Wellenform und Wortlaut — an einer Stelle.
- *
- * ── Warum das zusammen steht ──────────────────────────────────────────
- * Eine Aufnahme ohne ihr Transkript ist nach WCAG 1.2.1 unvollständig,
- * ein Transkript ohne seine Aufnahme ist eine Behauptung. Am 23.09.2026
- * ist genau das passiert: Die Datei auf „Über uns“ wurde gegen eine
- * andere getauscht, der Text darunter blieb stehen — fünf Absätze aus
- * 33 Sekunden unter einer Aufnahme von 8.
- *
- * Deshalb liegen sie jetzt in **einem** Objekt, und `bytes` hält beides
- * zusammen: `sprachnachricht.test.ts` liest die echte Datei und
- * vergleicht. Wer eine Aufnahme tauscht, ohne das Transkript anzufassen,
- * bekommt einen roten Test statt einer stillen Falschaussage.
- *
- * Was der Test NICHT kann: prüfen, ob der Text wirklich das wiedergibt,
- * was gesprochen wird. Das kann nur ein Mensch. Er kann aber erzwingen,
- * dass jemand hinsieht — und das ist der ganze Unterschied zwischen
- * einem Fehler, der auffällt, und einem, der monatelang steht.
+ * Die Sprachnachrichten: Datei, Wellenform und Wortlaut an einer Stelle. Eine
+ * Aufnahme ohne Transkript ist nach WCAG 1.2.1 unvollständig, ein Transkript
+ * ohne seine Aufnahme eine Behauptung. `bytes` hält beides zusammen:
+ * `sprachnachricht-daten.test.ts` vergleicht mit der echten Datei, und wer
+ * eine Aufnahme tauscht, ohne das Transkript anzufassen, bekommt einen roten
+ * Test. Ob der Text das Gesprochene wiedergibt, prüft nur ein Mensch — der
+ * Test erzwingt, dass jemand hinsieht.
  */
 
 export interface Aufnahme {
   /** Pfad unter `public/`, zugleich die Adresse relativ zur Basis-URL. */
   readonly datei: string;
   /**
-   * Die Dateigröße in Bytes — der Fingerabdruck.
-   *
-   * Nicht als Optimierung, sondern als Sperre: Sie steht hier, damit ein
-   * Tausch der Datei auffällt. Ein Hash wäre genauer und für diesen Zweck
-   * nicht besser — zwei verschiedene Aufnahmen treffen einander nicht auf
-   * das Byte genau.
+   * Dateigröße in Bytes als Fingerabdruck, damit ein Tausch der Datei
+   * auffällt. Ein Hash wäre nicht besser: Zwei Aufnahmen treffen einander
+   * nicht auf das Byte.
    */
   readonly bytes: number;
   /** Länge in Sekunden, aus der Datei gelesen (`ffprobe`), abgerundet. */
@@ -62,27 +48,19 @@ export const LANG: Aufnahme = {
 };
 
 /**
- * Die kurze Begrüßung — „Über uns“, am Knopf neben dem Porträt.
- *
- * Es ist **keine** Kürzung der langen Aufnahme, sondern eine eigene:
- * 8,256 Sekunden gegen 32,832, und die Lautstärkeprofile korrelieren mit
- * r = +0,11 gegen den Anfang und r = +0,26 gegen das Ende der langen
- * Fassung — also gar nicht. Gemessen mit ffmpeg über 8-kHz-Mono-PCM,
- * nicht geschätzt. Sie braucht darum ihr eigenes Transkript.
+ * Die kurze Begrüßung — „Über uns", am Knopf neben dem Porträt. Eine eigene
+ * Aufnahme, keine Kürzung der langen (8,3 gegen 32,8 Sekunden, die
+ * Lautstärkeprofile korrelieren nicht), und braucht darum ihr eigenes
+ * Transkript.
  */
 export const KURZ: Aufnahme = {
   datei: 'audio/daniel-kontelis-begruessung-kurz.mp3',
   bytes: 155279,
   dauerSekunden: 8,
   /*
-   * Acht Sekunden, ein Atemzug — deshalb ein Absatz und nicht drei.
-   * Vom Sprecher selbst geliefert (23.09.2026).
-   *
-   * Die Anführungszeichen um „Termin vereinbaren“ stehen nicht im Ton,
-   * sondern im Text: Gesprochen ist die Beschriftung eines Knopfes vom
-   * Satz zu unterscheiden, gelesen nicht. Sie machen sichtbar, was die
-   * Stimme betont — genau das ist die Aufgabe einer Textalternative.
-   * Der Knopf steht in derselben Karte, direkt darunter.
+   * Ein Atemzug, deshalb ein Absatz. Die Anführungszeichen um „Termin
+   * vereinbaren" machen sichtbar, was die Stimme betont: die Beschriftung
+   * des Knopfes direkt darunter.
    */
   transkript: [
     'Danke, dass Sie sich über uns informieren. Wir freuen uns, Sie kennenzulernen. Ein Klick auf „Termin vereinbaren“ und wir hören uns in den kommenden Tagen.',
@@ -90,15 +68,10 @@ export const KURZ: Aufnahme = {
 };
 
 /**
- * Die Wellenform der langen Aufnahme — gemessen, nicht gemalt.
- *
- * 25 Balken. Je Balken der Effektivwert über seinen Abschnitt, abgebildet
- * auf 20–100 Prozent der Spurhöhe: Der Effektivwert entspricht dem, was
- * man hört; die Untergrenze hält eine Sprechpause als schmalen Strich
- * sichtbar, statt sie verschwinden zu lassen.
- *
- * Erzeugt aus der Datei mit ffmpeg (8 kHz, mono, 16 Bit). Wird die
- * Aufnahme getauscht, gehört diese Liste neu erzeugt — sonst zeigt der
- * Balken eine Stimme, die nicht mehr spricht. Der Test hält das fest.
+ * Die Wellenform der langen Aufnahme, aus der Datei erzeugt (ffmpeg, 8 kHz,
+ * mono, 16 Bit). Je Balken der Effektivwert seines Abschnitts — das
+ * entspricht dem Gehörten —, abgebildet auf 20–100 % der Spurhöhe, damit
+ * eine Pause als schmaler Strich sichtbar bleibt. Bei einer neuen Aufnahme
+ * neu erzeugen; der Test hält das fest.
  */
 export const WELLENFORM = [100, 94, 73, 86, 81, 82, 64, 83, 83, 86, 75, 79, 63, 82, 66, 94, 75, 67, 95, 68, 89, 85, 95, 91, 54] as const;

@@ -1,25 +1,15 @@
-/* ============================================================
-   Site-Konfiguration — zentrale Datenquelle.
-
-   Alles, was mehr als einmal auftaucht (Domain, Kontaktdaten,
-   Navigation, Seitenregister), steht hier. Sitemap, robots.txt,
-   llms.txt, Canonicals, Breadcrumbs und JSON-LD werden daraus
-   generiert — so können sie nicht mehr auseinanderlaufen.
-   ============================================================ */
+/*
+ * Zentrale Datenquelle: Alles, was mehr als einmal auftaucht (Domain,
+ * Kontaktdaten, Navigation, Seitenregister), steht hier. Sitemap, robots.txt,
+ * llms.txt, Canonicals, Breadcrumbs und JSON-LD werden daraus erzeugt, damit
+ * sie nicht auseinanderlaufen.
+ */
 
 /**
- * Adresse des Formular-Endpunkts.
- *
- * Nicht dk-dk.de: Die Website liegt auf GitHub Pages und liefert nur
- * Dateien aus, dort kann nichts geprüft und nichts versendet werden.
- *
- * `vorschau.dk-dk.de` gibt es auf dem goneo-Webspace bereits — mit
- * gültigem Zertifikat, mit Apache, und dort liegen ohnehin schon die
- * Vorschau-Projekte. Ein Endpunkt für alle: Ein neues Projekt braucht
- * nur einen Eintrag in `erlaubte_herkunft` der config.php, keinen
- * eigenen Token.
- *
- * Code und Anleitung: formular/
+ * Formular-Endpunkt auf vorschau.dk-dk.de (goneo, Apache), weil GitHub Pages
+ * nur Dateien ausliefert. Ein Endpunkt für alle Vorschau-Projekte: Ein neues
+ * Projekt braucht nur einen Eintrag in `erlaubte_herkunft`. Code und
+ * Anleitung: formular/
  */
 export const FORM_ENDPOINT = 'https://vorschau.dk-dk.de/formular/send.php';
 
@@ -29,26 +19,16 @@ export const SITE_URL = (import.meta.env.SITE ?? 'https://dk-dk.de').replace(/\/
 /** Pfad-Präfix, unter dem die Seite ausgeliefert wird ('/' bei Custom Domain). */
 export const BASE_PATH = import.meta.env.BASE_URL ?? '/';
 
-/* ------------------------------------------------------------
-   Indexierungssperre
-   ------------------------------------------------------------
-   Solange die Seite nicht fertig ist, soll sie weder in
-   Suchergebnissen auftauchen noch von KI-Systemen eingelesen
-   werden. Der Schalter unten wirkt an allen vier Stellen
-   gleichzeitig: Meta-Robots, robots.txt, sitemap.xml und llms.txt.
-
-   ZUM LIVE-SCHALTEN: INDEXIERUNG_ERLAUBT auf true setzen.
-   Für einen einzelnen Build genügt `SITE_INDEXABLE=true npm run build`.
-
-   Wichtig zum Zusammenspiel: Suchmaschinen dürfen weiterhin
-   crawlen. Ein `Disallow: /` würde verhindern, dass Google das
-   `noindex` überhaupt zu sehen bekommt — die URL könnte dann
-   trotzdem als reiner Link im Index landen, sobald irgendwo
-   jemand darauf verweist. Das `noindex` im Seitenkopf ist das
-   wirksame Signal, und dafür muss die Seite abrufbar sein.
-   KI-Crawler werden dagegen hart ausgesperrt: sie werten kein
-   `noindex` aus, für sie zählt nur die robots.txt.
-   ------------------------------------------------------------ */
+/*
+ * Indexierungssperre — wirkt zugleich auf Meta-Robots, robots.txt,
+ * sitemap.xml und llms.txt. Zum Live-Schalten INDEXIERUNG_ERLAUBT auf true
+ * setzen; für einen einzelnen Build genügt `SITE_INDEXABLE=true npm run build`.
+ *
+ * Suchmaschinen dürfen weiter crawlen: Ein `Disallow: /` verhinderte, dass
+ * sie das `noindex` sehen, und die URL könnte als reiner Link im Index
+ * landen. KI-Crawler werden dagegen ausgesperrt, weil sie `noindex` nicht
+ * auswerten.
+ */
 const INDEXIERUNG_ERLAUBT = false;
 
 /** true, solange die Seite aus Suchergebnissen herausgehalten wird. */
@@ -112,11 +92,11 @@ export interface NavItem {
   external?: boolean;
 }
 
-/* ------------------------------------------------------------
-   Seitenregister — Quelle für Sitemap, llms.txt und Breadcrumbs.
-   `priority`/`changefreq` steuern die Sitemap, `parent` den
-   Breadcrumb-Pfad, `summary` die llms.txt-Zeile.
-   ------------------------------------------------------------ */
+/*
+ * Seitenregister — Quelle für Sitemap, llms.txt und Breadcrumbs.
+ * `priority`/`changefreq` steuern die Sitemap, `parent` den Breadcrumb-Pfad,
+ * `summary` die llms.txt-Zeile.
+ */
 export interface PageEntry {
   slug:       string;
   label:      string;
@@ -216,13 +196,11 @@ export const leistungenNav: NavItem[] = pages
   .filter((p) => p.parent === 'leistungen')
   .map((p) => ({ href: p.slug, label: p.label }));
 
-/** Footer: Leistungen inklusive Übersichtsseite */
 export const footerLeistungenNav: NavItem[] = [
   { href: 'leistungen', label: 'Alle Leistungen' },
   ...leistungenNav,
 ];
 
-/** Footer: Unternehmen */
 export const footerUnternehmenNav: NavItem[] = [
   { href: 'ueber-uns',        label: 'Über uns'                   },
   { href: 'marken',           label: 'Unsere Marken'              },
@@ -233,7 +211,6 @@ export const footerUnternehmenNav: NavItem[] = [
   { href: 'datenschutz',      label: 'Datenschutz'                },
 ];
 
-/** Footer-Leiste: rechtliche Links */
 export const footerLegalNav: NavItem[] = [
   { href: 'impressum',        label: 'Impressum'       },
   { href: 'datenschutz',      label: 'Datenschutz'     },

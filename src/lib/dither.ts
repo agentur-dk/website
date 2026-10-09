@@ -1,28 +1,20 @@
 /**
  * 1-Bit-Dithering für die Flächen dieser Website.
  *
- * Die Flächen sehen aus wie ein Zeichenraster, sind aber keins: Gezeichnet
- * wird auf ein absichtlich winziges Canvas — ein Canvas-Pixel entspricht
- * `cell` CSS-Pixeln — und der Browser skaliert es mit
+ * Gezeichnet wird auf ein absichtlich winziges Canvas — ein Canvas-Pixel
+ * entspricht `cell` CSS-Pixeln — und der Browser skaliert es mit
  * `image-rendering: pixelated` hoch. Ein 1200 px breites Band rechnet bei
- * `cell: 3` also nur 400 Spalten.
+ * `cell: 3` nur 400 Spalten.
  *
  * Aus dem Grauwert eines Feldes wird per Bayer-Schwellenmatrix ein
- * Schwarz-Weiß-Entscheid: `an = wert > matrix[y % n][x % n]`. Das ist
- * geordnetes Dithering — dieselbe Technik, mit der Bilder auf 1-Bit-Displays
- * kamen. Kein WebGL, keine Bibliothek, keine Bilddatei.
+ * Schwarz-Weiß-Entscheid (`an = wert > matrix[y % n][x % n]`): geordnetes
+ * Dithering ohne WebGL, Bibliothek oder Bilddatei. Die Felder sind reine
+ * Funktionen (x, y, Breite, Höhe, Zeit) → 0…1 und damit ohne Browser
+ * prüfbar.
  *
- * Die Felder sind reine Funktionen (x, y, Breite, Höhe, Zeit) → 0…1 und
- * damit ohne Browser prüfbar; src/lib/dither.test.ts tut das.
- *
- * Zur Herkunft: Die Bayer-Matrix ist ein Standard aus der Drucktechnik —
- * dieselben 16 bzw. 64 Zahlen stehen in jeder Implementierung geordneten
- * Ditherings. Die Felder darunter sind dagegen eigene Konstruktionen. Eine
- * erste Fassung hatte die Formeln der Seite nachgebaut, an der wir uns
- * gestalterisch orientiert haben; das war zu nah. Was hier steht, bewegt
- * sich anders: Moiré aus gedrehten Gittern statt überlagerter Sinusbänder,
- * zwei interferierende Ringquellen statt einer, fallende Spalten statt
- * waagerechter Fäden.
+ * Die Bayer-Matrix ist ein Standard der Drucktechnik; die Felder sind
+ * eigene Konstruktionen und bewusst keine Nachbildung der gestalterischen
+ * Vorlage.
  */
 
 /** Grauwert an einer Rasterstelle. Rückgabe außerhalb 0…1 wird geklemmt. */
@@ -94,24 +86,15 @@ export function valueNoise(x: number, y: number, seed = 0): number {
 /**
  * Denkender Kern — die Fläche im Kopf der Startseite.
  *
- * Drei Bewegungen, alle langsam und mit teilerfremden Perioden, damit sich
- * der Gesamteindruck erst nach Minuten wiederholt und man keine Schleife
- * sieht:
+ * Drei langsame Bewegungen mit teilerfremden Perioden, damit sich der
+ * Eindruck erst nach Minuten wiederholt: Das Adergeflecht wandert in
+ * Kugelkoordinaten (eine Umdrehung rund 78 s), der Kern atmet (Radius 18 s,
+ * Helligkeit 21 s), und ein Hof aus Punkten weitet und schließt sich (30 s)
+ * und dreht gegenläufig.
  *
- *  1. Der Kern dreht sich. Nicht die Kugel — das Adergeflecht auf ihrer
- *     Oberfläche wandert in Kugelkoordinaten, wie die Landmassen auf einem
- *     Globus. Eine Umdrehung dauert rund 78 Sekunden.
- *  2. Der Kern atmet: Radius ±2,5 % in 18 s, Helligkeit der Adern in 21 s.
- *  3. Ein Hof aus Punkten weitet sich vom Rand nach außen und zieht sich
- *     wieder zusammen — 30 s hin, 30 s zurück. Die Punkte sitzen auf
- *     Ringen, die beim Ausatmen auseinanderrücken; gleichzeitig dreht der
- *     ganze Hof gegenläufig zum Kern, sehr langsam.
- *
- * Der Hof ist nicht als Partikelliste gerechnet, sondern als Feld: Statt
- * die Punkte zu bewegen, wird der Abstand vor der Prüfung durch den
- * Atemfaktor geteilt. Für jeden Bildpunkt bleibt es damit bei etwas
- * Trigonometrie — eine Liste mit tausend Partikeln müsste pro Frame
- * durchlaufen werden.
+ * Der Hof ist ein Feld, keine Partikelliste: Statt Punkte zu bewegen, wird
+ * der Abstand durch den Atemfaktor geteilt — je Bildpunkt etwas
+ * Trigonometrie statt tausend Partikel je Frame.
  */
 const brain: Field = (x, y, w, h, t) => {
   const atem = Math.sin(t * 0.00035);          // Kern, ~18 s
@@ -128,9 +111,8 @@ const brain: Field = (x, y, w, h, t) => {
     // Den Abstand zurückrechnen, statt die Punkte zu verschieben.
     const r0 = aussen / (0.55 + 0.45 * (0.5 + 0.5 * weite));
     if (r0 > 1) return 0.012;
-    // Weniger, dafür breitere Ringe und mehr Punkte je Ring: Das liest
-    // sich als geordneter Hof. Mit dünnen Ringen und wenigen Punkten
-    // sahen die Treffer aus wie verstreute Sprenkel.
+    // Wenige breite Ringe mit vielen Punkten lesen sich als geordneter Hof,
+    // dünne Ringe mit wenigen Punkten als verstreute Sprenkel.
     const ringe = linie(r0 * 4, 6);
     const punkte = linie(winkel * 34 - t * 0.00005, 5);
     return 0.012 + 0.9 * ringe * punkte * (1 - r0);
@@ -312,20 +294,12 @@ const lattice: Field = (x, y, w, h, t) => {
 };
 
 /**
- * Atmender Schwarm. Punkte auf einem polaren Gitter, das mit Rauschen
- * verzogen ist, damit es nicht als Gitter zu erkennen ist. Die ganze
- * Wolke weitet sich und zieht sich wieder zusammen — 28 Sekunden hin,
- * 28 zurück — und dreht dabei sehr langsam.
+ * Atmender Schwarm. Punkte auf einem polaren Gitter, mit Rauschen verzogen,
+ * damit es nicht als Gitter erkennbar ist. Die Wolke weitet sich und zieht
+ * sich zusammen (28 s hin, 28 s zurück) und dreht dabei sehr langsam.
  *
- * Bewegt werden nicht die Punkte, sondern die Abfrage: Der Abstand wird
- * vor der Prüfung durch den Atemfaktor geteilt. Damit kostet der Schwarm
- * pro Bildpunkt dasselbe wie ein Verlauf, statt eine Partikelliste je
- * Frame zu durchlaufen.
- *
- * Vorgänger an dieser Stelle war eine Doppelspirale. Sie las sich im
- * 1-Bit-Raster nicht: Ein Strang wird dort waagerecht, wo die Windung
- * umkehrt, und genau diese Kehren tragen im Raster am meisten Fläche —
- * das Bild bestand aus liegenden Strichen statt aus einer Spirale.
+ * Bewegt wird die Abfrage, nicht die Punkte: Der Abstand wird durch den
+ * Atemfaktor geteilt, das kostet je Bildpunkt so viel wie ein Verlauf.
  */
 const swarm: Field = (x, y, w, h, t) => {
   const aussen = Math.min(w, h) * 0.46;
@@ -339,9 +313,8 @@ const swarm: Field = (x, y, w, h, t) => {
   if (r1 > 1) return 0.014;
 
   const winkel = Math.atan2(dy, dx) / (Math.PI * 2) + t * 0.00004;
-  // Weichere Schwellen als beim ersten Versuch: Mit 8 und 6 blieben nur
-  // vereinzelte Pixel übrig, und neben `brain` oder `lattice` sah die
-  // Fläche leer aus.
+  // Weiche Schwellen — härtere lassen nur vereinzelte Pixel übrig, und die
+  // Fläche wirkt neben `brain` oder `lattice` leer.
   const ringe = linie(r1 * 8.5 + 0.35 * valueNoise(winkel * 22, r1 * 6, 5), 5);
   const speichen = linie(winkel * 52 + 0.6 * valueNoise(r1 * 9, winkel * 16, 17), 4);
   const kern = 0.5 * Math.pow(Math.max(0, 1 - r1 * 3.4), 3);
@@ -393,30 +366,19 @@ export interface PaintOptions {
   /** Gelöschte Pixel transparent lassen, statt sie zu füllen. */
   transparent?: boolean;
   /**
-   * Farbe der gesetzten Pixel als [r, g, b].
-   *
-   * Ohne Angabe wird die berechnete `color` des Canvas genommen, also
-   * `currentColor`. Das ist keine Bequemlichkeit, sondern die Stelle, an
-   * der der Kontrast entschieden wird — und die gehört ins CSS, wo man
-   * sieht, worauf die Fläche liegt.
-   *
-   * Vorher stand hier fest [243, 243, 243]. Auf dunklem Grund war das
-   * richtig; auf den weißen Karten der Startseite zeichnete es Weiß auf
-   * Weiß. Gemessen am 25.09.2026: 1,04 : 1. Der dunkelste Punkt im ganzen
-   * Kartenkopf war die Rahmenlinie mit 1,37 : 1 — vom Muster selbst war
-   * nichts zu sehen.
+   * Farbe der gesetzten Pixel als [r, g, b]. Ohne Angabe gilt die berechnete
+   * `color` des Canvas (`currentColor`): Der Kontrast wird im CSS
+   * entschieden, wo man sieht, worauf die Fläche liegt — eine feste Farbe
+   * ist auf einem der Gründe unsichtbar.
    */
   rgb?: readonly [number, number, number];
 }
 
 /**
  * Die berechnete Textfarbe eines Elements als [r, g, b].
- *
- * `getComputedStyle().color` liefert immer `rgb()` oder `rgba()`, nie einen
- * Namen oder ein Kürzel — deshalb reicht das Auslesen der ersten drei
- * Zahlen. Liefert es wider Erwarten nichts Lesbares, bleibt es beim
- * hellen Ton: Die meisten Flächen dieser Website liegen auf Dunkel, und
- * ein zu heller Punkt ist dort sichtbar, ein zu dunkler nicht.
+ * `getComputedStyle().color` liefert immer `rgb()`/`rgba()`, daher reichen
+ * die ersten drei Zahlen. Im Zweifel bleibt es hell: Die meisten Flächen
+ * liegen auf Dunkel, wo ein zu heller Punkt sichtbar bleibt.
  */
 function textfarbe(el: HTMLElement): [number, number, number] {
   const zahlen = getComputedStyle(el).color.match(/\d+(?:\.\d+)?/g);

@@ -1,23 +1,16 @@
 /**
- * Referenzen — mit Freigabevorbehalt.
+ * Referenzen mit Freigabevorbehalt: Ein Name auf unserer Website ist eine
+ * Veröffentlichung über den Kunden und braucht seine Freigabe.
  *
- * ── Warum hier ein Schalter steht ─────────────────────────────────────
- * „website-referenzen.docx" (Stand 21.09.2026) beginnt mit dem Satz:
- * Keine dieser Referenzen ist vom jeweiligen Kunden freigegeben. Ein
- * Name auf unserer Website ist eine Veröffentlichung über ihn.
+ * Ein Kommentar wird überlesen, deshalb entscheidet `freigegeben`, gekoppelt
+ * an die Indexierungssperre, ob ein Fall ins HTML kommt:
  *
- * Ein Kommentar, der daran erinnert, hilft nicht — er wird überlesen.
- * Deshalb entscheidet `freigegeben` darüber, ob ein Fall überhaupt ins
- * HTML kommt, und zwar gekoppelt an die Indexierungssperre:
- *
- *   Seite gesperrt (Vorschau)  →  auch unfreigegebene Fälle, sichtbar
- *                                 als „Freigabe ausstehend" markiert
+ *   Seite gesperrt (Vorschau)  →  auch unfreigegebene Fälle, als
+ *                                 „Freigabe ausstehend" markiert
  *   Seite live                 →  ausschließlich freigegebene Fälle
  *
- * Damit kann niemand versehentlich einen Kundennamen veröffentlichen,
- * der noch nicht zugestimmt hat — auch nicht, wenn er diese Datei nie
- * gelesen hat. Wer eine Freigabe einholt, setzt `freigegeben: true` und
- * trägt daneben ein, von wem und wann.
+ * Wer eine Freigabe einholt, setzt `freigegeben: true` und notiert daneben,
+ * von wem und wann.
  */
 import { NOINDEX_ALL } from '../config/site.config';
 
@@ -37,13 +30,8 @@ export interface Referenz {
   /** Schlagwort für die Karte. */
   tag: string;
   /**
-   * Dither-Muster für die Bildfläche.
-   *
-   * Vorher stand dort das Schlagwort als „Initialen" — ein Feld, das
-   * für Kürzel wie „BMBFSFJ" gebaut war. „Gesundheit" wurde darin zu
-   * „ESUNDHE". Statt den Text zu kürzen, trägt die Fläche jetzt
-   * dasselbe Muster wie die Porträts im Kernteam: Es behauptet nichts
-   * und ist trotzdem unverwechselbar.
+   * Dither-Muster für die Bildfläche — es behauptet nichts und ist trotzdem
+   * unverwechselbar, anders als ein gekürztes Schlagwort.
    */
   feld: 'pulse' | 'drift' | 'fade' | 'brain';
   /**
@@ -130,12 +118,9 @@ export const referenzen: Referenz[] = [
 ];
 
 /**
- * Was auf der Seite erscheinen darf.
- *
- * Solange die Indexierungssperre steht, ist die Seite eine Vorschau für
- * uns selbst — dort dürfen auch unfreigegebene Fälle stehen, damit man
- * sieht, wie es aussehen wird. Sobald sie live geht, bleiben nur die
- * freigegebenen übrig, ohne dass jemand daran denken muss.
+ * Was auf der Seite erscheinen darf: In der Vorschau auch unfreigegebene
+ * Fälle, damit man das Ergebnis sieht; live nur die freigegebenen, ohne dass
+ * jemand daran denken muss.
  */
 export const sichtbareReferenzen = (): Referenz[] =>
   NOINDEX_ALL ? referenzen : referenzen.filter((r) => r.freigegeben);

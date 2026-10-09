@@ -1,22 +1,12 @@
 /**
- * Das Datenmodell des Lead-Formulars.
+ * Das Datenmodell des Lead-Formulars — die Kontrolle, nicht die Quelle der
+ * Darstellung. Die Feldnamen stehen auch im Markup (`LeadForm.astro`) und im
+ * Endpunkt (`formular/send.php`); `schema.test.ts` hält alle drei zusammen.
+ * Ein umbenanntes Feld landete sonst unbemerkt als „Sonstiges" in der Mail.
  *
- * ── Warum es das gibt ────────────────────────────────────────────────
- * Die Feldnamen standen an zwei Stellen: im Markup (`LeadForm.astro`) und im
- * Endpunkt (`formular/send.php`, Konstante `INTERN`). Zwei Listen, kein
- * Abgleich. Wer eines umbenennt, benennt es in jeder eingehenden E-Mail um —
- * und auffallen würde es dem, der die Mail liest, Wochen später, ohne Hinweis
- * auf die Ursache. Schlimmer noch: Ein Feld, das der Endpunkt nicht kennt,
- * landet als „Sonstiges" im Anhang statt in seiner Zeile.
- *
- * Hier stehen sie einmal. `src/lib/forms/schema.test.ts` hält alle drei
- * Stellen zusammen: Markup, Endpunkt und dieses Modell.
- *
- * ── Warum das Formular nicht daraus erzeugt wird ─────────────────────
- * Bei einem einzigen Formular wäre ein Erzeuger schwerer zu lesen als das
- * Markup, das er ersetzt — die Felder tragen Beschreibungen, Fehlermeldungen,
- * Fluchten im Raster und eine Rechenprobe. Das Modell ist die **Kontrolle**,
- * nicht die Quelle der Darstellung.
+ * Das Formular wird nicht daraus erzeugt: Bei einem einzigen Formular mit
+ * Beschreibungen, Fehlermeldungen und Rechenprobe wäre ein Erzeuger schwerer
+ * zu lesen als das Markup.
  */
 
 /** Die drei Schritte, in der Reihenfolge des Formulars. */
@@ -46,21 +36,17 @@ export interface Feld {
 }
 
 export const FELDER: readonly Feld[] = [
-  /* ── Schritt 1: Worum geht es? ────────────────────────────────────── */
   { name: 'interesse[]', art: 'angabe', schritt: 1, pflicht: false },
   { name: 'anliegen_text', art: 'angabe', schritt: 1, pflicht: false },
 
-  /* ── Schritt 2: Was sollen wir wissen? ────────────────────────────── */
   { name: 'message', art: 'angabe', schritt: 2, pflicht: true },
 
-  /* ── Schritt 3: Wer sind Sie? ─────────────────────────────────────── */
   { name: 'vorname', art: 'angabe', schritt: 3, pflicht: true },
   { name: 'nachname', art: 'angabe', schritt: 3, pflicht: true },
   { name: 'email', art: 'angabe', schritt: 3, pflicht: true },
   { name: 'firma', art: 'angabe', schritt: 3, pflicht: false },
   { name: 'website_url', art: 'angabe', schritt: 3, pflicht: false },
 
-  /* ── Technik ──────────────────────────────────────────────────────── */
   /* Aus Vor- und Nachname zusammengesetzt, damit der Endpunkt unverändert
      bleiben konnte, als das Formular die beiden trennte. */
   { name: 'name', art: 'technik', schritt: null, pflicht: false },
@@ -74,7 +60,6 @@ export const FELDER: readonly Feld[] = [
   { name: 'weiter', art: 'technik', schritt: null, pflicht: false },
   { name: 'weiter_fehler', art: 'technik', schritt: null, pflicht: false },
 
-  /* ── Fallen ───────────────────────────────────────────────────────── */
   { name: 'hp_email', art: 'falle', schritt: null, pflicht: false },
   { name: '_gotcha', art: 'falle', schritt: null, pflicht: false },
 ];

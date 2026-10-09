@@ -1,14 +1,8 @@
 /**
- * Kundenliste für die Vertrauensleiste auf der Startseite.
- *
- * Vorher standen die sechs Namen zwölfmal von Hand im HTML (einmal sichtbar,
- * einmal für den zweiten Durchlauf der Schleife). Zwei Listen, die niemand
- * synchron hält, sind die gleiche Fehlerquelle, die zuletzt drei Kopien
- * desselben CTA-Blocks entstehen ließ — deshalb hier eine Quelle.
- *
- * Bildmarken kommen als SVG nach `public/logos/`. Fehlt die Datei, setzt die
- * Leiste den Namen als Wortmarke — die Seite bleibt also vollständig, auch
- * solange noch nicht alle Dateien da sind. Siehe public/logos/README.md.
+ * Kundenliste für die Vertrauensleiste auf der Startseite — eine Quelle statt
+ * Namen von Hand im HTML. Bildmarken liegen als SVG in `public/logos/`; fehlt
+ * eine Datei, setzt die Leiste den Namen als Wortmarke. Siehe
+ * public/logos/README.md.
  */
 
 export interface Kunde {
@@ -22,15 +16,9 @@ export interface Kunde {
   logo?: string;
 
   /**
-   * Hat diese Marke eine eigene Fallstudie auf der Startseite?
-   *
-   * Dann erscheint sie NICHT im Logostreifen. Vorher stand sie zweimal auf
-   * derselben Seite — einmal als Bildmarke, einmal als Überschrift der
-   * Fallstudie. Zweimal derselbe Name wirkt nicht doppelt so überzeugend,
-   * sondern nach kurzer Liste.
-   *
-   * Die Aufteilung dahinter: Der Streifen zeigt die Breite, die Fallstudie
-   * zeigt die Tiefe. Jeder Name macht eine Sache, keiner beides.
+   * Hat diese Marke eine eigene Fallstudie auf der Startseite? Dann fehlt sie
+   * im Logostreifen: Der Streifen zeigt die Breite, die Fallstudie die Tiefe,
+   * und derselbe Name zweimal wirkt nach kurzer Liste.
    */
   fallstudie?: boolean;
 
@@ -42,13 +30,10 @@ export interface Kunde {
   hoehe?: number;
 
   /**
-   * Gesetzt, wenn die Datei ihre eigenen Farben behalten soll.
-   *
-   * Die Leiste färbt sonst jede Bildmarke weiß. Bei einer zweifarbigen
-   * Marke, deren Form an dem Unterschied hängt — Schrift auf einer
-   * Fläche —, macht dieser Filter aus beiden Tönen einen weißen Klotz.
-   * Der Text ist die Begründung und steht hier, damit niemand den
-   * Filter später „wieder geradezieht" und die Marke damit zerstört.
+   * Gesetzt, wenn die Datei ihre eigenen Farben behalten soll. Die Leiste
+   * färbt sonst weiß, und eine Marke aus Schrift auf einer Fläche würde zum
+   * weißen Klotz. Der Text ist die Begründung, damit niemand den Filter
+   * „wieder geradezieht".
    */
   eigeneFarben?: string;
 

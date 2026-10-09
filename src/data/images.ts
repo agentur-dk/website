@@ -1,20 +1,11 @@
 /**
  * Das Bildverzeichnis: welche Datei wo hängt, was sie zeigt, woher sie kommt
- * — und ob wir sie zeigen dürfen.
+ * und ob wir sie zeigen dürfen. Bei Kundenmarken zählt die Freigabe — eine
+ * fremde Marke auf der eigenen Website ist Werbung mit dem Namen eines
+ * anderen. `ungeprueft` ist ein ehrlicher Wert: Eine benannte Lücke ist
+ * prüfbar, eine ausgelassene nicht.
  *
- * ── Warum es das gibt ────────────────────────────────────────────────
- * Die Seite trägt zwölf Bilddateien: ein Vorschaubild und elf Kundenmarken.
- * Bei den Marken ist die interessante Angabe nicht die Bildquelle, sondern die
- * **Freigabe**: Eine fremde Wortmarke auf der eigenen Website zu zeigen, ist
- * Werbung mit dem Namen eines anderen. Das ist üblich und meistens gewollt,
- * aber es ist nichts, was man stillschweigend tut.
- *
- * Bis zum 06.09.2026 stand darüber nirgends etwas. Jetzt steht es hier, mit
- * dem ehrlichen Wert `ungeprueft`, wo es niemand mehr weiss. Eine ehrliche
- * Lücke ist prüfbar, eine ausgelassene nicht.
- *
- * `tests/images.test.ts` hält Verzeichnis und Verzeichnisinhalt zusammen:
- * jede Datei einen Eintrag, jeder Eintrag eine Datei.
+ * `src/lib/images.test.ts` hält Verzeichnis und Dateien zusammen.
  */
 
 /** Womit wir das Bild zeigen dürfen. */
@@ -54,11 +45,9 @@ export const BILDER: readonly BildEintrag[] = [
     freigabe: 'eigen',
   },
 
-  /* ── Kundenmarken ─────────────────────────────────────────────────────
-     Alle elf stammen aus laufenden oder abgeschlossenen Projekten; die
-     Dateien kommen aus den Markenhandbüchern der Kunden oder von deren
-     Websites. Ob die Nennung als Referenz vereinbart ist, steht in keinem
-     Vertrag, der hier liegt. Das ist die offene Frage, nicht die Datei. */
+  /* Kundenmarken: Die Dateien stammen aus Markenhandbüchern oder Websites der
+     Kunden. Offen ist nicht die Datei, sondern ob die Nennung als Referenz
+     vereinbart ist. */
   marke('bmbfsfj.svg', 'Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend',
     'Ein Bundeswappen ist besonders heikel: § 124 OWiG. Vor dem nächsten Relaunch klären.'),
   marke('targobank.svg', 'TARGOBANK'),

@@ -1,28 +1,17 @@
 /**
- * Die Wiedergabe der Sprachnachricht — einmal geschrieben, zweimal benutzt.
- *
- * Auf der Startseite steckt sie in einer Chatblase mit Wellenform, auf
- * „Über uns" nur in einem Knopf am Porträt. Dieselbe Datei, dasselbe
- * Transkript, zwei Auftritte. Deshalb liegt die Verdrahtung hier und
- * nicht im Bauteil: Zwei Abschriften derselben Logik laufen auseinander,
- * sobald jemand eine davon anfasst.
- *
- * Gemeinsam ist beiden Auftritten nur das Nötigste — ein `<audio>` und
- * ein Knopf. Wellenform, Punkt und Zeitanzeige sind **freiwillig**: Wo
- * sie fehlen, läuft die Wiedergabe trotzdem.
+ * Die Wiedergabe der Sprachnachricht, gemeinsam für beide Auftritte
+ * (Chatblase auf der Startseite, Knopf am Porträt auf „Über uns"), damit die
+ * Logik nicht in zwei Abschriften auseinanderläuft. Gemeinsam ist nur
+ * `<audio>` und Knopf; Wellenform, Punkt und Zeitanzeige sind freiwillig.
  */
 
 /** Ein Element, das eine Sprachnachricht trägt. */
 const TRAEGER = '[data-sprachnachricht]';
 
 /**
- * Die Ankunft: Das Chatfenster gleitet einmal herein, beim ersten
- * Sichtbarwerden, und der Beobachter meldet sich danach ab. Wer
- * zurückscrollt, sieht eine fertige Nachricht — so wie im Messenger.
- *
- * Beide Bewegungsschalter der Seite werden geachtet. In beiden Fällen
- * steht alles sofort fertig da; es fehlt nichts, es bewegt sich nur
- * nichts.
+ * Die Ankunft: Das Chatfenster gleitet beim ersten Sichtbarwerden einmal
+ * herein; wer zurückscrollt, sieht eine fertige Nachricht. Mit abgeschalteter
+ * Bewegung steht alles sofort da.
  */
 export function ankunft(): void {
   const langsam = window.matchMedia('(prefers-reduced-motion: reduce)');
