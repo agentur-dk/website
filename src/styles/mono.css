@@ -524,9 +524,14 @@
 
 /* Der Übergang von Dunkel nach Hell braucht keine Linie — der
    Helligkeitssprung ist die Kante. Eine zusätzliche Trennlinie
-   verdoppelt nur, was das Auge ohnehin sieht. */
+   verdoppelt nur, was das Auge ohnehin sieht.
+
+   `flow-root`, weil ohne oberen Innenabstand der Außenabstand der ersten
+   Überschrift durch den Abschnitt hindurchfällt: Er läge dann außerhalb,
+   und zwischen zwei hellen Abschnitten erschiene ein dunkler Streifen. */
 .theme-mono .section--hell + .section--hell {
   padding-top: 0;
+  display: flow-root;
 }
 
 /* ============================================================

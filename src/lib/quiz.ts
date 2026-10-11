@@ -63,7 +63,7 @@ export const STEP1_OPTIONS: QuizStep1Option[] = [
 
 export const STEP2_CONFIG: Record<string, QuizStep2Config> = {
   mehr_umsatz: {
-    question: 'Was ist dein Hauptziel?',
+    question: 'Was ist Ihr Hauptziel?',
     options: [
       { key: 'anfragen', label: 'Mehr Anfragen generieren' },
       { key: 'shop', label: 'Produkte online verkaufen' },
@@ -71,7 +71,7 @@ export const STEP2_CONFIG: Record<string, QuizStep2Config> = {
     ],
   },
   mitarbeiter: {
-    question: 'Wen suchst du?',
+    question: 'Wen suchen Sie?',
     options: [
       { key: 'fachkraefte', label: 'Fachkräfte & Spezialisten' },
       { key: 'nachwuchs', label: 'Azubis & Nachwuchs' },
@@ -79,7 +79,7 @@ export const STEP2_CONFIG: Record<string, QuizStep2Config> = {
     ],
   },
   sichtbarkeit: {
-    question: 'Wo möchtest du sichtbarer werden?',
+    question: 'Wo möchten Sie sichtbarer werden?',
     options: [
       { key: 'seo', label: 'Google & Suchmaschinen (SEO)' },
       { key: 'geo', label: 'KI-Suchen & AI-Antworten (GEO)' },

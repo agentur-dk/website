@@ -2,9 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import CtaSection from '../components/CtaSection.astro';
 import LeadForm from '../components/LeadForm.astro';
-import StatsStrip from '../components/StatsStrip.astro';
 import LogoStrip from '../components/LogoStrip.astro';
 import { faqs } from '../data/faq';
 import Icon from '../components/ui/Icon.astro';
@@ -12,10 +10,42 @@ import Dither from '../components/ui/Dither.astro';
 import { HERO_FIELDS } from '../lib/dither';
 import DitherBand from '../components/DitherBand.astro';
 import Kernteam from '../components/Kernteam.astro';
-import EigeneProjekte from '../components/EigeneProjekte.astro';
 import { sichtbareReferenzen, zeigtUnfreigegebenes } from '../data/referenzen';
 
 const base = import.meta.env.BASE_URL;
+
+/** Drei Fälle als Spiegel; alle übrigen stehen auf der Projektseite. */
+const referenzenAuswahl = sichtbareReferenzen().slice(0, 3);
+
+/*
+ * `datei` ist zugleich der Schlüssel, über den der Leistungs-Check die
+ * passende Zeile findet: Er verweist auf dieselbe Datei (src/lib/quiz.ts).
+ */
+const leistungen = [
+  { datei: 'website-leasing.html', titel: 'Website-Leasing', neu: true,
+    text: 'Professionelle Website ohne hohe Einmalkosten: monatliche Flatrate, Wartung und Hosting auf Wunsch inklusive.' },
+  { datei: 'bfsg-wordpress-website-agentur.html', titel: 'Barrierefreie Websites (BFSG)',
+    text: 'BFSG- und WCAG-konform, von der Prüfung bis zur Konformitätserklärung. Keine rechtlichen Risiken, sondern echte Zugänglichkeit.' },
+  { datei: 'wordpress-entwicklung.html', titel: 'WordPress-Entwicklung',
+    text: 'Sauberer Code, schnelle Ladezeiten und eine Website, die Ihr Team ohne technisches Vorwissen selbst pflegt.' },
+  { datei: 'seo-geo.html', titel: 'SEO & GEO',
+    text: 'Suchmaschinenoptimierung und Generative Engine Optimization: gefunden werden bei Google und in Antworten von ChatGPT, Gemini und Co.' },
+  { datei: 'online-marketing.html', titel: 'Online-Marketing',
+    text: 'Content, Social Media und E-Mail-Kampagnen, die Ihre Zielgruppe dort erreichen, wo sie sich aufhält. Messbar.' },
+  { datei: 'corporate-design.html', titel: 'Corporate Design',
+    text: 'Logo, Farbwelt und Designsystem für einen Auftritt, der auf allen Kanälen gleich aussieht.' },
+  { datei: 'ki-services.html', titel: 'KI-Services',
+    text: 'Content-Produktion, Prozessautomatisierung und Telefon-Agenten: KI dort, wo sie messbar entlastet.' },
+  { datei: 'social-recruiting.html', titel: 'Social Recruiting',
+    text: 'Fachkräfte über LinkedIn, Meta und Co. gezielt ansprechen, statt auf Bewerbungen zu warten.' },
+];
+
+/* Quelle: Angabe Daniel Kontelis, 11.10.2026. */
+const kennzahlen = [
+  { wert: '20+',  label: 'Jahre Erfahrung' },
+  { wert: '600+', label: 'Projekte umgesetzt' },
+  { wert: '500+', label: 'Kunden betreut' },
+];
 ---
 
 <BaseLayout
@@ -40,7 +70,7 @@ const base = import.meta.env.BASE_URL;
           */}
           <p class="section-label">Digitalagentur aus Köln</p>
           <h1 id="hero-headline" class="hero__headline">Websites, Online-Marketing und KI-Lösungen</h1>
-          <p class="hero__subline">— drei Bausteine, ein Ansprechpartner.</p>
+          <p class="hero__subline">Drei Bausteine, ein Ansprechpartner.</p>
           <div class="hero__actions">
             <a href="#contact" class="btn btn--accent btn--lg">Projekt anfragen</a>
           </div>
@@ -59,9 +89,8 @@ const base = import.meta.env.BASE_URL;
 
     <section class="schwerpunkte-section section section--hell" aria-labelledby="schwerpunkte-heading">
       <div class="container">
-        <p class="schwerpunkte-section__eyebrow">Was wir tun</p>
-        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Drei Bausteine, ein Ansprechpartner</h2>
-        <p class="schwerpunkte-section__lead">Die Website ist der Anfang, nicht das Ziel. Damit aus ihr Anfragen werden, muss sie gefunden werden – und was danach kommt, darf nicht an Ihrem Schreibtisch hängen bleiben.</p>
+        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading">Gebaut, gefunden, entlastet</h2>
+        <p class="schwerpunkte-section__lead">Die Website ist der Anfang, nicht das Ziel. Damit aus ihr Anfragen werden, muss sie gefunden werden, und was danach kommt, darf nicht an Ihrem Schreibtisch hängen bleiben.</p>
         <div class="schwerpunkte-grid">
           <article class="schwerpunkt-card" data-reveal>
             <div class="card-head" aria-hidden="true">
@@ -71,7 +100,7 @@ const base = import.meta.env.BASE_URL;
               <Icon name="briefcase-business" size={48} strokeWidth={1.5} />
             </div>
             <h3 class="schwerpunkt-card__title">Website-Leasing &amp; digitale Sichtbarkeit</h3>
-            <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
+            <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand, planbar und langfristig sicher.</p>
             <a href={`${base}website-leasing.html`} class="btn btn--outline schwerpunkt-card__link">Mehr zum Website-Leasing</a>
           </article>
           <article class="schwerpunkt-card" data-reveal>
@@ -82,7 +111,7 @@ const base = import.meta.env.BASE_URL;
               <Icon name="accessibility" size={48} strokeWidth={1.5} />
             </div>
             <h3 class="schwerpunkt-card__title">Gefunden werden, in Suche und KI</h3>
-            <p class="schwerpunkt-card__text">Wer Sie sucht, soll Sie finden – bei Google und inzwischen auch dort, wo Antworten stehen statt Trefferlisten. Dazu gehört, dass die Seite technisch sauber gebaut ist: barrierefrei nach BFSG, schnell, verständlich für Mensch und Maschine.</p>
+            <p class="schwerpunkt-card__text">Wer Sie sucht, soll Sie finden: bei Google und inzwischen auch dort, wo Antworten stehen statt Trefferlisten. Dazu gehört, dass die Seite technisch sauber gebaut ist: barrierefrei nach BFSG, schnell, verständlich für Mensch und Maschine.</p>
             <a href={`${base}bfsg-wordpress-website-agentur.html#bfsg-check`} class="btn btn--outline schwerpunkt-card__link">BFSG-Check starten</a>
           </article>
           {/* Karte C: Die H1 verspricht drei Bausteine. */}
@@ -94,165 +123,91 @@ const base = import.meta.env.BASE_URL;
               <Icon name="cpu" size={48} strokeWidth={1.5} />
             </div>
             <h3 class="schwerpunkt-card__title">KI, die Arbeit abnimmt</h3>
-            <p class="schwerpunkt-card__text">Ein Assistent, der ans Telefon geht, wenn Sie am Patienten, im Termin oder auf der Baustelle sind. Terminbuchung ohne Rückruf. KI dort, wo sie messbar entlastet – nicht, weil sie gerade alle einbauen.</p>
+            <p class="schwerpunkt-card__text">Ein Assistent, der ans Telefon geht, wenn Sie am Patienten, im Termin oder auf der Baustelle sind. Terminbuchung ohne Rückruf. KI dort, wo sie messbar entlastet, nicht, weil sie gerade alle einbauen.</p>
             <a href={`${base}ki-services.html`} class="btn btn--outline schwerpunkt-card__link">Mehr zu KI-Services</a>
           </article>
         </div>
       </div>
     </section>
 
+    {/*
+      Die Referenzen stehen direkt hinter den Bausteinen: Wer gerade gelesen
+      hat, was wir tun, fragt als Nächstes, für wen. Drei Fälle genügen als
+      Spiegel; die übrigen stehen unter „Projekte".
+    */}
+    <section class="referenzen-section section section--hell" aria-labelledby="referenzen-heading">
+      <div class="container">
+        <h2 class="schwerpunkte-section__heading" id="referenzen-heading">Betriebe wie Ihrer</h2>
+        <p class="schwerpunkte-section__lead">Praxis, Kanzlei, Verwaltung, Selbstständige. Die großen Namen stehen oben in der Leiste, hier stehen die Projekte, in denen Sie sich wiederfinden.</p>
+        {zeigtUnfreigegebenes() && (
+          <p class="referenzen__warnung" role="note">
+            <strong>Nur in der Vorschau sichtbar:</strong> Einzelne Fälle sind noch nicht vom
+            Kunden freigegeben. Sobald die Indexierungssperre fällt, erscheinen ausschließlich
+            freigegebene Referenzen, ohne dass jemand daran denken muss.
+          </p>
+        )}
+        <div class="case-grid">
+          {referenzenAuswahl.map((r) => (
+            <article class="case-card" data-reveal>
+              <div class="case-card__visual case-card__visual--dither" aria-hidden="true">
+                <Dither field={r.feld} cell={3} />
+              </div>
+              <div class="case-card__body">
+                <span class="case-card__tag">{r.einordnung}</span>
+                <h3 class="case-card__title">{r.titel}</h3>
+                <p class="case-card__desc">{r.ergebnis}</p>
+                <p class="case-card__kunde">
+                  <strong>{r.kunde}</strong>
+                  {!r.freigegeben && (
+                    <span class="case-card__vorbehalt"> · Freigabe ausstehend</span>
+                  )}
+                </p>
+                <a href={r.link} class="case-card__link" target="_blank" rel="noopener noreferrer">
+                  {r.link.replace('https://', '')}<span class="u-sr-only"> (öffnet in neuem Tab)</span>&nbsp;→
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div class="referenzen-section__cta">
+          <a href={`${base}projekte.html`} class="btn btn--outline">Alle Projekte ansehen</a>
+          <a href={`${base}marken.html`} class="btn btn--outline">Unsere eigenen Marken</a>
+        </div>
+      </div>
+    </section>
+
+    <DitherBand field="drift" label="Kurze Wege" />
+
     <Kernteam />
 
-    <DitherBand field="drift" label="Leistungen" />
-
-    <section id="services" class="services section section--hell">
+    {/*
+      Ein Verzeichnis statt eines vierten Kartenrasters: Wer hier ankommt,
+      sucht eine bestimmte Leistung und will sie finden, nicht durchblättern.
+      `data-leistung` ist die Datei, auf die der Leistungs-Check verweist;
+      daran markiert er die passende Zeile (Skript unten).
+    */}
+    <section id="services" class="services section section--hell" aria-labelledby="leistungen-heading">
       <div class="container">
-        <p class="section-label" aria-hidden="true">Leistungen</p>
-        <h2 class="section-title">Alle Leistungen im Überblick</h2>
-        <ul class="services__grid" role="list">
-
-          <li class="service-card service-card--featured" data-reveal>
-            <span class="service-card__number" aria-hidden="true">Neu</span>
-            <div class="card__icon">
-              <Icon name="briefcase-business" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">Website-Leasing</h3>
-            <p class="card__body">
-              Professionelle Website ohne hohe Einmalkosten – monatliche Flatrate, Wartung und Hosting auf Wunsch inklusive.
-            </p>
-            <a href={`${base}website-leasing.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Website-Leasing</span></a>
-          </li>
-
-          <li class="service-card" data-reveal>
-            <span class="service-card__number" aria-hidden="true">01</span>
-            <div class="card__icon">
-              <Icon name="accessibility" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">Barrierefreie Websites (BFSG)</h3>
-            <p class="card__body">
-              Wir entwickeln digitale Angebote, die BFSG- und WCAG-konform sind. Von der Prüfung bis zur Konformitätserklärung – alles aus einer Hand. Keine rechtlichen Risiken, sondern echte Zugänglichkeit.
-            </p>
-            <a href={`${base}bfsg-wordpress-website-agentur.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Barrierefreie Websites (BFSG)</span></a>
-          </li>
-
-          <li class="service-card" data-reveal>
-            <span class="service-card__number" aria-hidden="true">02</span>
-            <div class="card__icon">
-              <Icon name="code" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">WordPress-Entwicklung</h3>
-            <p class="card__body">
-              Maßgeschneiderte WordPress-Websites mit sauberem Code, schnellen Ladezeiten und nahtloser Bedienung. Wir bauen Websites, die Ihr Team selbst pflegen kann – ohne technisches Vorwissen.
-            </p>
-            <a href={`${base}wordpress-entwicklung.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über WordPress-Entwicklung</span></a>
-          </li>
-
-          <li class="service-card" data-reveal>
-            <span class="service-card__number" aria-hidden="true">03</span>
-            <div class="card__icon">
-              <Icon name="search-check" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">SEO &amp; GEO</h3>
-            <p class="card__body">
-              Klassische Suchmaschinenoptimierung kombiniert mit Generative Engine Optimization (GEO) für ChatGPT, Google Gemini und Co. Wir sichern Ihre Sichtbarkeit – heute und morgen.
-            </p>
-            <a href={`${base}seo-geo.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über SEO und GEO</span></a>
-          </li>
-
-          <li class="service-card" data-reveal>
-            <span class="service-card__number" aria-hidden="true">04</span>
-            <div class="card__icon">
-              <Icon name="megaphone" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">Online-Marketing</h3>
-            <p class="card__body">
-              Strategisches Online-Marketing, das Ihre Zielgruppe dort erreicht, wo sie sich aufhält. Von Content-Strategie über Social Media bis hin zu E-Mail-Kampagnen – messbar und effizient.
-            </p>
-            <a href={`${base}online-marketing.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Online-Marketing</span></a>
-          </li>
-
-          <li class="service-card" data-reveal>
-            <span class="service-card__number" aria-hidden="true">05</span>
-            <div class="card__icon">
-              <Icon name="palette" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">Corporate Design</h3>
-            <p class="card__body">
-              Ein einheitliches Erscheinungsbild, das Vertrauen schafft. Wir entwickeln Logo, Farbwelt und Designsystem für eine konsistente Markenkommunikation auf allen Kanälen.
-            </p>
-            <a href={`${base}corporate-design.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Corporate Design</span></a>
-          </li>
-
-          <li class="service-card" data-reveal>
-            <span class="service-card__number" aria-hidden="true">06</span>
-            <div class="card__icon">
-              <Icon name="cpu" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">KI-Services</h3>
-            <p class="card__body">
-              KI-gestützte Content-Produktion, Prozessautomatisierung und GEO-Strategien für Ihr Unternehmen. Wir setzen künstliche Intelligenz da ein, wo sie echten Mehrwert bringt.
-            </p>
-            <a href={`${base}ki-services.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über KI-Services</span></a>
-          </li>
-
-          <li class="service-card" data-reveal>
-            <span class="service-card__number" aria-hidden="true">07</span>
-            <div class="card__icon">
-              <Icon name="users" size={32} strokeWidth={1.8} />
-            </div>
-            <h3 class="card__title">Social Recruiting</h3>
-            <p class="card__body">
-              Fachkräfte aktiv über LinkedIn, Meta &amp; Co. ansprechen – mit KI-gestützter Zielgruppenanalyse und Kampagnen, die Bewerbungen bringen. Statt Warten: gezielt finden.
-            </p>
-            <a href={`${base}social-recruiting.html`} class="card__link">Mehr erfahren<span class="u-sr-only"> über Social Recruiting</span></a>
-          </li>
-
+        <h2 class="section-title" id="leistungen-heading">Alle Leistungen im Überblick</h2>
+        <ul class="leistungsindex" role="list">
+          {leistungen.map((l) => (
+            <li class="leistungsindex__zeile" data-leistung={l.datei} data-reveal>
+              <h3 class="leistungsindex__titel">
+                <a href={`${base}${l.datei}`} class="leistungsindex__link">{l.titel}</a>
+                {l.neu && <span class="leistungsindex__neu">Neu</span>}
+              </h3>
+              <p class="leistungsindex__text">{l.text}</p>
+              <p class="leistungsindex__marke" hidden>Passt zu Ihrer Antwort im Leistungs-Check</p>
+              <Icon name="arrow-right" size={20} class="leistungsindex__pfeil" />
+            </li>
+          ))}
         </ul>
       </div>
     </section>
 
-    <section class="why-us section section--hell" aria-label="Warum agentur dk">
+    <section class="process section section--hell" aria-labelledby="vorgehen-heading">
       <div class="container">
-        <p class="section-label" aria-hidden="true">Warum wir</p>
-        <h2 class="section-title">Direkt, persönlich, effizient</h2>
-        <ul class="usp-list" role="list">
-          <li class="usp-card" data-reveal>
-            <div class="usp-card__check" aria-hidden="true">
-              <Icon name="check" size={20} />
-            </div>
-            <div class="usp-card__content">
-              <h3 class="usp-card__title">Kurze Wege</h3>
-              <p class="usp-card__body">Ihre Frage landet dort, wo sie beantwortet wird. Schnelle Entscheidungen sind bei uns normal, kein Abteilungs-Ping-Pong.</p>
-            </div>
-          </li>
-          <li class="usp-card" data-reveal>
-            <div class="usp-card__check" aria-hidden="true">
-              <Icon name="check" size={20} />
-            </div>
-            <div class="usp-card__content">
-              <h3 class="usp-card__title">BFSG-Konformität aus einer Hand</h3>
-              <p class="usp-card__body">Von der Analyse bis zur zertifizierten Umsetzung. Wir begleiten Sie durch den gesamten BFSG-Prozess und liefern rechtssichere Ergebnisse.</p>
-            </div>
-          </li>
-          <li class="usp-card" data-reveal>
-            <div class="usp-card__check" aria-hidden="true">
-              <Icon name="check" size={20} />
-            </div>
-            <div class="usp-card__content">
-              <h3 class="usp-card__title">Köln &amp; deutschlandweit</h3>
-              <p class="usp-card__body">Lokal verwurzelt, digital skalierbar. Wir kennen den Kölner Markt und arbeiten erfolgreich mit Kunden in ganz Deutschland zusammen.</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <DitherBand field="rain" label="Vorgehen" />
-
-    <section class="process section section--hell" aria-label="Unser Vorgehen">
-      <div class="container">
-        <p class="section-label" aria-hidden="true">Unser Vorgehen</p>
-        <h2 class="section-title">So arbeiten wir zusammen</h2>
+        <h2 class="section-title" id="vorgehen-heading">So arbeiten wir zusammen</h2>
         <ol class="process__list" role="list">
           <li class="process__item" data-reveal>
             <div class="process__step-number" aria-hidden="true">1</div>
@@ -279,38 +234,16 @@ const base = import.meta.env.BASE_URL;
             <div class="process__step-number" aria-hidden="true">4</div>
             <div class="process__step-content">
               <h3 class="process__step-title">Wachstum</h3>
-              <p class="process__step-body">Laufende Optimierung und Support. Wir messen, analysieren und verbessern – damit Ihre Website dauerhaft erfolgreich bleibt.</p>
+              <p class="process__step-body">Laufende Optimierung und Support. Wir messen, analysieren und verbessern, damit Ihre Website dauerhaft erfolgreich bleibt.</p>
             </div>
           </li>
         </ol>
-
-          {/*
-            Der Handlungsaufruf steht hier, nicht erst am Seitenende: Wer die
-            vier Schritte gelesen hat, weiß gerade jetzt, worauf er sich
-            einlässt. Nummer, Ort und Zeiten kommen aus derselben Quelle wie
-            die Fußzeile.
-          */}
-          <div class="schritt-cta" data-reveal>
-            <p class="schritt-cta__text">
-              Schritt&nbsp;1 kostet nichts außer einer halben Stunde. Erzählen
-              Sie, was ansteht — wir sagen Ihnen, ob und wie wir helfen können.
-            </p>
-            <div class="schritt-cta__aktionen">
-              <a href="#kontakt" class="btn btn--primary">Gespräch vereinbaren</a>
-              <a href="tel:+4922198655229" class="schritt-cta__direkt">
-                <Icon name="phone" size={16} />
-                <span>+49 221 986 55 229</span>
-              </a>
-            </div>
-            <p class="schritt-cta__zeit">Köln · Mo–Fr 9–18 Uhr</p>
-          </div>
       </div>
     </section>
 
-    <section id="faq" class="faq section section--hell">
+    <section id="faq" class="faq section section--hell" aria-labelledby="faq-heading">
       <div class="container">
-        <p class="section-label" aria-hidden="true">FAQ</p>
-        <h2 class="section-title">Häufige Fragen</h2>
+        <h2 class="section-title" id="faq-heading">Häufige Fragen</h2>
         <div class="accordion">
           {(faqs['']?.items ?? []).map((item, i) => (
             <div class="accordion__item">
@@ -329,15 +262,27 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <EigeneProjekte />
-
-    <DitherBand field="fade" label="Kontakt" />
-
-    <section id="kontakt" class="contact section section--blau" aria-label="Kontakt">
+    {/*
+      Der letzte Abschnitt ist das Ende, nicht ein weiterer Abschnitt: Danach
+      kommt nur die Fußzeile. Die Kennzahlen stehen hier und nicht in einer
+      eigenen Leiste, weil sie an dieser Stelle eine Entscheidung stützen.
+    */}
+    <section id="kontakt" class="contact section section--blau" aria-labelledby="kontakt-heading">
       <div class="container contact__inner">
         <div class="contact__info">
-          <p class="section-label" aria-hidden="true">Kontakt</p>
-          <h2 class="section-title">Projekt anfragen</h2>
+          <h2 class="section-title" id="kontakt-heading">Projekt anfragen</h2>
+          <p class="contact__vorspann">
+            Ein Gespräch kostet nichts außer einer halben Stunde. Erzählen Sie,
+            was ansteht, und wir sagen Ihnen, ob und wie wir helfen können.
+          </p>
+          <dl class="contact__zahlen">
+            {kennzahlen.map((k) => (
+              <div class="contact__zahl">
+                <dt>{k.label}</dt>
+                <dd>{k.wert}</dd>
+              </div>
+            ))}
+          </dl>
           <address class="contact__address">
             <p>
               agentur dk – design &amp; kommunikation<br>
@@ -350,6 +295,7 @@ const base = import.meta.env.BASE_URL;
                 <Icon name="phone" size={16} />
                 +49 221 986 55 229
               </a>
+              <span class="contact__zeit">Mo–Fr 9–18 Uhr</span>
             </p>
             <p>
               <a href="mailto:mail@dk-dk.de" class="contact__link">
@@ -372,73 +318,55 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <section class="referenzen-section section section--hell" aria-labelledby="referenzen-heading">
-      <div class="container">
-        <p class="schwerpunkte-section__eyebrow">Ausgewählte Projekte</p>
-        <h2 class="schwerpunkte-section__heading" id="referenzen-heading">Betriebe wie Ihrer</h2>
-        <p class="schwerpunkte-section__lead">Praxis, Kanzlei, Verwaltung, Selbstständige. Die großen Namen stehen oben in der Leiste — hier stehen die Projekte, in denen Sie sich wiederfinden.</p>
-        {zeigtUnfreigegebenes() && (
-          <p class="referenzen__warnung" role="note">
-            <strong>Nur in der Vorschau sichtbar:</strong> Einzelne Fälle sind noch nicht vom
-            Kunden freigegeben. Sobald die Indexierungssperre fällt, erscheinen ausschließlich
-            freigegebene Referenzen — ohne dass jemand daran denken muss.
-          </p>
-        )}
-        {/* Große Namen stehen in der Logoleiste — hier die Projekte, in denen
-            sich ein Betrieb wiedererkennt („Große als Beweis, kleine als
-            Spiegel"). Unfreigegebene Fälle erscheinen nur in der Vorschau,
-            markiert; mit dem Live-Schalten verschwinden sie von selbst. */}
-        <div class="case-grid">
-          {sichtbareReferenzen().map((r) => (
-            <article class="case-card" data-reveal>
-              <div class="case-card__visual case-card__visual--dither" aria-hidden="true">
-                <Dither field={r.feld} cell={3} />
-              </div>
-              <div class="case-card__body">
-                <span class="case-card__tag">{r.einordnung}</span>
-                <h3 class="case-card__title">{r.titel}</h3>
-                <p class="case-card__desc">{r.ergebnis}</p>
-                <p class="case-card__kunde">
-                  <strong>{r.kunde}</strong>
-                  {!r.freigegeben && (
-                    <span class="case-card__vorbehalt"> · Freigabe ausstehend</span>
-                  )}
-                </p>
-                <a href={r.link} class="case-card__link" target="_blank" rel="noopener noreferrer">
-                  {r.link.replace('https://', '')}<span class="u-sr-only"> (öffnet in neuem Tab)</span>&nbsp;→
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div class="referenzen-section__cta">
-          <a href={`${base}projekte.html`} class="btn btn--outline">Alle Projekte ansehen</a>
-        </div>
-      </div>
-    </section>
-
-    <StatsStrip stats={[
-      { number: "20+", label: "Jahre Erfahrung" },
-      { number: "600+", label: "Projekte umgesetzt" },
-      { number: "500+", label: "Kunden betreut" }
-    ]} />
-
-    <CtaSection
-      title="Bereit für Ihre neue Website?"
-      text="Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden."
-      buttonLabel="Jetzt anfragen"
-      buttonHref="#contact"
-    />
-
   </main>
 
   <Footer mono />
 
+
   <style is:global>
-    .service-card--featured{border-color:var(--color-primary,#1C60AD);background:linear-gradient(135deg,var(--color-surface,#1e1e1e) 0%,rgba(28,96,173,.12) 100%)}
-    .service-card--featured .service-card__number{color:var(--color-primary,#1C60AD);font-size: var(--dk-schrift-klein);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-    .service-card--featured .card__link{color:var(--color-primary-light,#5090d0)}
-    .referenzen-section__cta{text-align:center;margin-top:var(--spacing-10)}
+    .referenzen-section__cta{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--rinne-3);margin-top:var(--spacing-10)}
+
+    /* Leistungsverzeichnis: eine Zeile je Leistung, die ganze Zeile ist
+       Klickfläche. Der Link dehnt sich per ::after über die Zeile, damit
+       es trotzdem genau ein Linkziel mit sprechendem Namen bleibt. */
+    .leistungsindex{list-style:none;margin:0;padding:0;border-top:1px solid var(--color-border)}
+    .leistungsindex__zeile{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--rinne-5);row-gap:var(--rinne-1);padding-block:var(--rinne-4);border-bottom:1px solid var(--color-border)}
+    @media (min-width:900px){
+      .leistungsindex__zeile{grid-template-columns:minmax(14rem,2fr) minmax(0,3fr) auto;align-items:baseline}
+    }
+    .leistungsindex__titel{margin:0;font-size:var(--dk-schrift-vorspann);line-height:1.25}
+    .leistungsindex__link{color:var(--color-text);text-decoration:none}
+    .leistungsindex__link::after{content:"";position:absolute;inset:0}
+    .leistungsindex__link:focus-visible{outline:none}
+    .leistungsindex__link:focus-visible::after{outline:3px solid var(--color-focus);outline-offset:2px}
+    .leistungsindex__zeile:hover .leistungsindex__link{text-decoration:underline;text-underline-offset:.2em}
+    .leistungsindex__neu{display:inline-block;margin-left:var(--rinne-2);padding:.1em .5em;border:1px solid currentColor;font-size:var(--dk-schrift-klein);letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
+    .leistungsindex__text{margin:0;color:var(--color-text-muted);font-size:var(--dk-schrift-karte);max-width:60ch;grid-column:1}
+    @media (min-width:900px){ .leistungsindex__text{grid-column:2} }
+    .leistungsindex__pfeil{grid-column:-2;grid-row:1;align-self:center;color:var(--color-text);transition:transform .2s ease}
+    .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:translateX(4px)}
+    .leistungsindex__marke{margin:0;grid-column:1/-1;font-size:var(--dk-schrift-klein);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
+    /* Vom Leistungs-Check markiert: Balken links plus Textzeile, damit
+       die Markierung nicht nur an einer Farbe hängt. */
+    .leistungsindex__zeile[data-empfohlen]{box-shadow:inset 4px 0 0 var(--color-text);padding-left:var(--rinne-4)}
+    @media (prefers-reduced-motion:no-preference){
+      .leistungsindex__zeile{transition:box-shadow .3s ease,padding-left .3s ease}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .leistungsindex__pfeil{transition:none}
+      .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:none}
+    }
+
+    .contact__vorspann{margin:0 0 var(--rinne-4);font-size:var(--dk-schrift-text);color:var(--color-text);max-width:38ch}
+    .contact__zahlen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--rinne-3);margin:0 0 var(--rinne-5);padding-block:var(--rinne-4);border-block:1px solid var(--color-border)}
+    /* Im Markup erst die Bezeichnung, dann der Wert, damit ein Screenreader
+       „Jahre Erfahrung: 20+" liest; sichtbar steht die Zahl oben. */
+    .contact__zahl{display:grid;grid-template-rows:auto 1fr;gap:var(--rinne-1)}
+    .contact__zahl dd{order:1}
+    .contact__zahl dt{order:2;font-size:var(--dk-schrift-klein);color:var(--color-text-muted);line-height:1.3}
+    .contact__zahl dd{margin:0;font-family:var(--font-display);font-size:var(--dk-schrift-titel-3);line-height:1;color:var(--color-text)}
+    .contact__zeit{display:block;font-size:var(--dk-schrift-klein);color:var(--color-text-muted);padding-left:calc(16px + var(--rinne-1))}
   </style>
 
   <script>
@@ -493,7 +421,23 @@ const base = import.meta.env.BASE_URL;
       return tpl instanceof HTMLTemplateElement ? tpl.content.cloneNode(true) : null;
     }
 
+    /*
+     * Die Antwort oben ändert die Seite darunter: Die passende Zeile im
+     * Leistungsverzeichnis wird markiert, mit Balken und einer Textzeile.
+     * Verschoben wird nichts; die Reihenfolge bleibt, wie man sie gelesen
+     * hat, und ohne Skript fehlt nur die Markierung.
+     */
+    function markiereLeistung(datei: string | null) {
+      document.querySelectorAll<HTMLElement>('[data-leistung]').forEach(function (zeile) {
+        const treffer = datei !== null && zeile.dataset.leistung === datei;
+        zeile.toggleAttribute('data-empfohlen', treffer);
+        const marke = zeile.querySelector<HTMLElement>('.leistungsindex__marke');
+        if (marke) marke.hidden = !treffer;
+      });
+    }
+
     function renderStep1(fromRestart: boolean) {
+      markiereLeistung(null);
       selectedTopic = null;
       selectedDetailLabel = null;
       delete (widget as HTMLElement).dataset.quizTopic;
@@ -505,7 +449,7 @@ const base = import.meta.env.BASE_URL;
 
       const question = document.createElement('p');
       question.className = 'lc-question';
-      question.textContent = 'Was möchtest du erreichen?';
+      question.textContent = 'Was möchten Sie erreichen?';
       step.appendChild(question);
 
       const fieldset = document.createElement('fieldset');
@@ -513,7 +457,7 @@ const base = import.meta.env.BASE_URL;
 
       const legend = document.createElement('legend');
       legend.className = 'u-sr-only';
-      legend.textContent = 'Was möchtest du erreichen?';
+      legend.textContent = 'Was möchten Sie erreichen?';
       fieldset.appendChild(legend);
 
       const grid = document.createElement('div');
@@ -539,7 +483,7 @@ const base = import.meta.env.BASE_URL;
 
       if (fromRestart) {
         focusFirst(step);
-        announce('Leistungs-Check neu gestartet. Schritt 1: Was möchtest du erreichen?');
+        announce('Leistungs-Check neu gestartet. Schritt 1: Was möchten Sie erreichen?');
       }
     }
 
@@ -608,7 +552,9 @@ const base = import.meta.env.BASE_URL;
          statt mit `undefined` weiterzurechnen. */
       const service = SERVICES[selectedTopic];
       if (!service) return;
-      announce('Deine Empfehlung: ' + service.title);
+      const roh = QUIZ_SERVICES[selectedTopic];
+      markiereLeistung(roh ? roh.href : null);
+      announce('Unsere Empfehlung: ' + service.title + '. In der Leistungsübersicht weiter unten ist sie markiert.');
       track({ event: 'quiz_complete', topic: selectedTopic });
 
       const result = document.createElement('div');
