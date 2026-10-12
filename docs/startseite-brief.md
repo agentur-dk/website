@@ -38,8 +38,9 @@ Anrede             Seite in Sie, Leistungs-Check in du
    Deckkraft. Zurückgehalten wird nur am Gipfel, und nur bis der
    Abschnitt steht.
 7. **Eine Welt oder Szenen:** Kapitel. Kein durchgehender Kameraflug,
-   kein Pinning, kein Scroll-Hijacking (siehe BNM-Referenz: „Eigentümer
-   sollen Kontakt aufnehmen, nicht scrollen" gilt für uns genauso).
+   kein Scroll-Hijacking (siehe BNM-Referenz: „Eigentümer sollen Kontakt
+   aufnehmen, nicht scrollen" gilt für uns genauso). Festgehalten wird
+   genau ein Abschnitt, der Gipfel, und nur am Schreibtisch.
 8. **Bestand:** Sprachnachricht, freigegebene Referenzen, Dither-Flächen,
    Kennzahlen 20+/600+/500+ (Angabe Daniel, 11.10.2026). Nichts
    generiert; kie.ai ist ausgeschlossen.
