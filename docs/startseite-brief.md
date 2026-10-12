@@ -33,7 +33,10 @@ Anrede             Seite in Sie, Leistungs-Check in du
    Seite darunter. Wer „Neue Mitarbeiter gewinnen" wählt, findet weiter
    unten in der Übersicht Social Recruiting markiert.
 6. **Abstand zu Premium-Minimal:** redaktionell, schwarz-weiß wie bisher.
-   Keine neue Farbwelt, keine Animation, die Inhalte zurückhält.
+   Keine neue Farbwelt. Bewegung beim Scrollen in reinem CSS (Auftrag
+   12.10.2026: „schlank, ohne Engine"), nur Lage und Ausschnitt, nie die
+   Deckkraft. Zurückgehalten wird nur am Gipfel, und nur bis der
+   Abschnitt steht.
 7. **Eine Welt oder Szenen:** Kapitel. Kein durchgehender Kameraflug,
    kein Pinning, kein Scroll-Hijacking (siehe BNM-Referenz: „Eigentümer
    sollen Kontakt aufnehmen, nicht scrollen" gilt für uns genauso).
@@ -64,6 +67,20 @@ Trennband der Seite davor, weiter Abschnittsabstand.
 
 **„Das ist die Seite, auf der** man hört, wer einem antwortet, bevor man
 irgendetwas ausfüllt."
+
+## Bewegung je Abschnitt
+
+```
+Kopf          Ebenen      Kugel bleibt zurück, Satz scrollt normal
+Bausteine     einblenden  wie bisher (data-reveal)
+Referenzen    aufdecken   Rasterfläche wird von links freigelegt
+Kurze Wege    festhalten  am Schreibtisch gepinnt, Überschrift zeilenweise,
+                          Nachricht fährt herein, dann Zeit zum Hören
+Leistungen    zeichnen    Trennlinie zieht sich unter jede Zeile
+Vorgehen      Stille      keine Bewegung, gewollt
+Fragen        Stille      keine Bewegung
+Anfrage       zählen      20+/600+/500+ zählen hoch
+```
 
 ## Bewusst gestrichen
 
