@@ -2,11 +2,7 @@
 /**
  * Wer am anderen Ende sitzt — als Stimme, nicht als Galerie.
  *
- * ── Was sich am 22.09.2026 geändert hat ───────────────────────────────
- * Vorher standen hier fünf Porträts, vier davon Dither-Flächen als
- * Platzhalter. Auf der Startseite braucht es das Team nicht zweimal:
- * Wer wissen will, wer dazugehört, geht auf „Über uns" — der Knopf
- * dafür steht unten. Hier spricht einer, und das reicht.
+ * Das Team steht auf „Über uns"; hier spricht einer, und das reicht.
  *
  * ── Warum eine Sprachnachricht ────────────────────────────────────────
  * „Kurze Wege" ist eine Behauptung, solange niemand hört, zu wem sie
@@ -25,8 +21,8 @@ const base = import.meta.env.BASE_URL;
 
 ---
 
-<section class="section section--lg section--hell" aria-labelledby="kernteam-heading">
-  <div class="container">
+<section class="kt-buehne section section--lg section--hell" aria-labelledby="kernteam-heading">
+  <div class="container kt-buehne__bild">
     <!--
       Zwei Spalten: links, was zu lesen ist, rechts die Nachricht.
       Nebeneinander, weil beides dasselbe sagt — der Text behauptet
@@ -39,7 +35,7 @@ const base = import.meta.env.BASE_URL;
     <div class="kt">
       <div class="kt__text">
         <p class="section-label">Wer für Sie arbeitet</p>
-        <h2 id="kernteam-heading" class="kt__heading">Kurze Wege heißt: Sie kennen die Leute</h2>
+        <h2 id="kernteam-heading" class="kt__heading"><span class="kt__zeile">Kurze Wege heißt:</span> <span class="kt__zeile">Sie kennen die Leute</span></h2>
         <p class="kt__lead">
           Menschen, die seit Jahren zusammenarbeiten. Ihr Ansprechpartner
           bleibt derselbe.
@@ -86,5 +82,58 @@ const base = import.meta.env.BASE_URL;
     color: var(--color-text-muted);
     max-width: 54ch;
     margin: 0 0 2.5rem;
+  }
+
+  /* Der Höhepunkt der Startseite: Am Schreibtisch bleibt der Abschnitt
+     beim Scrollen stehen, die Überschrift setzt sich Zeile für Zeile
+     zusammen, die Nachricht fährt herein, und danach bleibt Zeit zum
+     Hören. Am Telefon steht er still: Dort wäre ein festgehaltener
+     Bildschirm nur Scrollen ohne Wirkung. Nur Lage und Ausschnitt
+     bewegen sich, nie die Deckkraft.
+
+     Zeitleiste und Bereich stehen in eigenen Regeln mit verdoppelter
+     Klasse: Der Verdichter zöge sie sonst in die Kurzschreibweise
+     `animation`, die Chrome dort nicht annimmt, und nichts liefe. */
+  .kt__zeile { display: block; }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 900px) and (min-height: 640px) {
+      :global(html:not([data-motion="paused"])) .kt-buehne {
+        view-timeline: --kt-buehne block;
+        min-height: 190svh;
+      }
+      :global(html:not([data-motion="paused"])) .kt-buehne__bild {
+        position: sticky;
+        top: 0;
+        min-height: 100svh;
+        display: grid;
+        align-content: center;
+      }
+      :global(html:not([data-motion="paused"])) .kt__zeile {
+        animation: kt-zeile linear both;
+      }
+      :global(html:not([data-motion="paused"])) .kt__zeile.kt__zeile {
+        animation-timeline: --kt-buehne;
+        animation-range: contain 0% contain 22%;
+      }
+      :global(html:not([data-motion="paused"])) .kt__zeile.kt__zeile + .kt__zeile {
+        animation-range: contain 10% contain 32%;
+      }
+      :global(html:not([data-motion="paused"])) .kt :global(.kt__nachricht) {
+        animation: kt-nachricht linear both;
+      }
+      :global(html:not([data-motion="paused"])) .kt :global(.kt__nachricht.kt__nachricht) {
+        animation-timeline: --kt-buehne;
+        animation-range: contain 15% contain 45%;
+      }
+    }
+  }
+  @keyframes kt-zeile {
+    from { clip-path: inset(0 0 100% 0); transform: translateY(0.5em); }
+    to   { clip-path: inset(0 0 -0.2em 0); transform: none; }
+  }
+  @keyframes kt-nachricht {
+    from { clip-path: inset(0 0 0 100%); transform: translateX(12%) scale(0.94); }
+    to   { clip-path: inset(0); transform: none; }
   }
 </style>

@@ -277,9 +277,9 @@ const kennzahlen = [
           </p>
           <dl class="contact__zahlen">
             {kennzahlen.map((k) => (
-              <div class="contact__zahl">
+              <div class="contact__zahl" style={`--sc-ziel: ${parseInt(k.wert, 10)}`}>
                 <dt>{k.label}</dt>
-                <dd>{k.wert}</dd>
+                <dd><span class="contact__zahl-wert">{k.wert}</span></dd>
               </div>
             ))}
           </dl>
@@ -367,6 +367,72 @@ const kennzahlen = [
     .contact__zahl dt{order:2;font-size:var(--dk-schrift-klein);color:var(--color-text-muted);line-height:1.3}
     .contact__zahl dd{margin:0;font-family:var(--font-display);font-size:var(--dk-schrift-titel-3);line-height:1;color:var(--color-text)}
     .contact__zeit{display:block;font-size:var(--dk-schrift-klein);color:var(--color-text-muted);padding-left:calc(16px + var(--rinne-1))}
+
+    /* ============================================================
+       Bewegung beim Scrollen (Dramaturgie: docs/startseite-brief.md).
+       Reines CSS über Scroll-Zeitleisten, kein Skript: Ohne Unterstützung
+       steht die Seite einfach still da. Animiert werden nur Lage und
+       Ausschnitt, nie die Deckkraft, damit Text in jeder Scrollposition
+       seinen vollen Kontrast hat. Aus bei „Bewegung reduzieren" und beim
+       Pausenknopf in der Fußzeile.
+
+       Zeitleiste und Bereich stehen jeweils in einer zweiten Regel mit
+       verdoppelter Klasse: Der Verdichter zöge sie sonst in die
+       Kurzschreibweise `animation`, die Chrome dort nicht annimmt.
+       ============================================================ */
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        /* Kopf: zwei Ebenen, die sich trennen. Die Kugel bleibt zurück,
+           während der Satz normal wegscrollt. Der Satz selbst bewegt sich
+           nicht schneller: Er geriete sonst unter die Kopfleiste, wenn
+           jemand per Tastatur hineinspringt (WCAG 2.4.11). */
+        html:not([data-motion="paused"]) .hero__flaeche { animation: sc-kugel linear both; }
+        html:not([data-motion="paused"]) .hero__flaeche.hero__flaeche {
+          animation-timeline: scroll(root);
+          animation-range: 0 100svh;
+        }
+
+        /* Referenzen: Das Raster wird aufgedeckt wie ein Abzug. */
+        html:not([data-motion="paused"]) .case-card__visual--dither { animation: sc-aufdecken linear both; }
+        html:not([data-motion="paused"]) .case-card__visual--dither.case-card__visual--dither {
+          animation-timeline: view();
+          animation-range: entry 10% cover 35%;
+        }
+
+        /* Verzeichnis: Die Trennlinie zieht sich unter jede Zeile. */
+        html:not([data-motion="paused"]) .leistungsindex__zeile {
+          border-bottom-color: transparent;
+          background: linear-gradient(var(--color-border-strong), var(--color-border-strong)) left bottom / 0% 1px no-repeat;
+          animation: sc-linie linear both;
+        }
+        html:not([data-motion="paused"]) .leistungsindex__zeile.leistungsindex__zeile {
+          animation-timeline: view();
+          animation-range: entry 30% cover 40%;
+        }
+
+        /* Am Ende zählen die Zahlen bis zu ihrem Wert. Der Wert selbst
+           bleibt als Text für Screenreader stehen; die gezählte Fassung
+           ist mit `/ ""` für sie stumm. */
+        html:not([data-motion="paused"]) .contact__zahl-wert {
+          position: absolute; width: 1px; height: 1px; overflow: hidden;
+          clip-path: inset(50%); white-space: nowrap;
+        }
+        html:not([data-motion="paused"]) .contact__zahl dd::before {
+          counter-reset: sc-zahl var(--sc-zahl);
+          content: counter(sc-zahl) "+" / "";
+          animation: sc-zaehlen linear both;
+        }
+        html:not([data-motion="paused"]) .contact__zahl.contact__zahl dd::before {
+          animation-timeline: view();
+          animation-range: entry 40% cover 45%;
+        }
+      }
+    }
+    @property --sc-zahl { syntax: "<integer>"; inherits: false; initial-value: 0; }
+    @keyframes sc-kugel    { to { transform: translateY(30svh) scale(1.12); } }
+    @keyframes sc-aufdecken{ from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+    @keyframes sc-linie    { to { background-size: 100% 1px; } }
+    @keyframes sc-zaehlen  { from { --sc-zahl: 0; } to { --sc-zahl: var(--sc-ziel); } }
   </style>
 
   <script>
