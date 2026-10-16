@@ -1,0 +1,70 @@
+---
+/**
+ * Leistungen als Verzeichnis statt als Kartenraster: eine Zeile je
+ * Eintrag, Titel links, Erklärung daneben. Wer eine bestimmte Leistung
+ * sucht, findet sie so schneller als in sechs gleich aussehenden Karten.
+ *
+ * Mit `href` ist die ganze Zeile Klickfläche; ohne steht sie als reiner
+ * Text, etwa für den Leistungsumfang auf einer Leistungsseite.
+ */
+import Icon from './ui/Icon.astro';
+
+export interface Eintrag {
+  titel: string;
+  text: string;
+  href?: string;
+  neu?: boolean;
+  /** Woran der Leistungs-Check der Startseite die Zeile erkennt. */
+  schluessel?: string;
+}
+
+interface Props {
+  readonly eintraege: Eintrag[];
+  /** Platz für die Markierung aus dem Leistungs-Check (nur Startseite). */
+  readonly mitMarke?: boolean;
+}
+
+const { eintraege, mitMarke = false } = Astro.props;
+---
+
+<ul class="leistungsindex" role="list">
+  {eintraege.map((e) => (
+    <li class:list={['leistungsindex__zeile', !e.href && 'leistungsindex__zeile--text']} data-leistung={e.schluessel} data-reveal>
+      <h3 class="leistungsindex__titel">
+        {e.href ? <a href={e.href} class="leistungsindex__link">{e.titel}</a> : e.titel}
+        {e.neu && <span class="leistungsindex__neu">Neu</span>}
+      </h3>
+      <p class="leistungsindex__text">{e.text}</p>
+      {mitMarke && <p class="leistungsindex__marke" hidden>Passt zu Ihrer Antwort im Leistungs-Check</p>}
+      {e.href && <Icon name="arrow-right" size={20} class="leistungsindex__pfeil" />}
+    </li>
+  ))}
+</ul>
+
+<style is:global>
+  /* Global, weil das Pfeil-Icon aus Icon.astro kommt und kein
+     Scope-Attribut dieser Komponente trägt. */
+  .leistungsindex{list-style:none;margin:0;padding:0;border-top:1px solid var(--color-border)}
+  .leistungsindex__zeile{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--rinne-5);row-gap:var(--rinne-1);padding-block:var(--rinne-4);border-bottom:1px solid var(--color-border)}
+  .leistungsindex__zeile--text{grid-template-columns:minmax(0,1fr)}
+  @media (min-width:900px){
+    .leistungsindex__zeile{grid-template-columns:minmax(14rem,2fr) minmax(0,3fr) auto;align-items:baseline}
+    .leistungsindex__zeile--text{grid-template-columns:minmax(14rem,2fr) minmax(0,3fr)}
+  }
+  .leistungsindex__titel{margin:0;font-size:var(--dk-schrift-vorspann);line-height:1.25}
+  .leistungsindex__link{color:var(--color-text);text-decoration:none}
+  .leistungsindex__link::after{content:"";position:absolute;inset:0}
+  .leistungsindex__link:focus-visible{outline:none}
+  .leistungsindex__link:focus-visible::after{outline:3px solid var(--color-focus);outline-offset:2px}
+  .leistungsindex__zeile:hover .leistungsindex__link{text-decoration:underline;text-underline-offset:.2em}
+  .leistungsindex__neu{display:inline-block;margin-left:var(--rinne-2);padding:.1em .5em;border:1px solid currentColor;font-size:var(--dk-schrift-klein);letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
+  .leistungsindex__text{margin:0;color:var(--color-text-muted);font-size:var(--dk-schrift-karte);max-width:60ch;grid-column:1}
+  @media (min-width:900px){ .leistungsindex__text{grid-column:2} }
+  .leistungsindex__pfeil{grid-column:-2;grid-row:1;align-self:center;color:var(--color-text);transition:transform .2s ease}
+  .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:translateX(4px)}
+  .leistungsindex__marke{margin:0;grid-column:1/-1;font-size:var(--dk-schrift-klein);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  @media (prefers-reduced-motion:reduce){
+    .leistungsindex__pfeil{transition:none}
+    .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:none}
+  }
+</style>

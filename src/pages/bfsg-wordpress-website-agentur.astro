@@ -5,6 +5,7 @@ import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
 import BfsgCheck from '../components/BfsgCheck.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import LeadForm from '../components/LeadForm.astro';
@@ -85,32 +86,16 @@ const base = import.meta.env.BASE_URL;
       <div class="container">
         <p class="section__label">Was wir liefern</p>
         <h2 id="leistungen-heading" class="section__heading">Unser BFSG-Leistungsumfang</h2>
-        <div class="card-grid card-grid--3col">
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Accessibility-Audit</h3>
-            <p class="card__body">Analyse Ihrer bestehenden Website nach EN 301 549 — automatisiert und manuell mit Screenreader und Tastatur.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">WCAG 2.2 AA Umsetzung</h3>
-            <p class="card__body">Technische Korrektur aller identifizierten Barrieren im Theme-Code, in Plugins und in den Inhalten.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Barrierefreiheits-Erklärung</h3>
-            <p class="card__body">Rechtssichere Dokumentation des Konformitätsstatus Ihrer Website nach §12 BFSG inklusive Feedback-Mechanismus.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Tastaturbedienbarkeit</h3>
-            <p class="card__body">Vollständige Tastaturnavigation für alle interaktiven Elemente — Menüs, Formulare, Akkordeons und Modaldialoge.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Screenreader-Optimierung</h3>
-            <p class="card__body">ARIA-Markup, semantische HTML-Struktur und korrektes Fokus-Management für assistive Technologien.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Laufende Überwachung</h3>
-            <p class="card__body">Kontinuierliches Monitoring und Reporting — damit Ihre Website auch nach Updates BFSG-konform bleibt.</p>
-          </article>
-        </div>
+        <Leistungsverzeichnis
+          eintraege={[
+            { titel: "Accessibility-Audit", text: "Analyse Ihrer bestehenden Website nach EN 301 549 — automatisiert und manuell mit Screenreader und Tastatur." },
+            { titel: "WCAG 2.2 AA Umsetzung", text: "Technische Korrektur aller identifizierten Barrieren im Theme-Code, in Plugins und in den Inhalten." },
+            { titel: "Barrierefreiheits-Erklärung", text: "Rechtssichere Dokumentation des Konformitätsstatus Ihrer Website nach §12 BFSG inklusive Feedback-Mechanismus." },
+            { titel: "Tastaturbedienbarkeit", text: "Vollständige Tastaturnavigation für alle interaktiven Elemente — Menüs, Formulare, Akkordeons und Modaldialoge." },
+            { titel: "Screenreader-Optimierung", text: "ARIA-Markup, semantische HTML-Struktur und korrektes Fokus-Management für assistive Technologien." },
+            { titel: "Laufende Überwachung", text: "Kontinuierliches Monitoring und Reporting — damit Ihre Website auch nach Updates BFSG-konform bleibt." },
+          ]}
+        />
       </div>
     </section>
 

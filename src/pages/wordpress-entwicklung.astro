@@ -5,6 +5,7 @@ import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import LeadForm from '../components/LeadForm.astro';
 
@@ -81,33 +82,17 @@ const base = import.meta.env.BASE_URL;
     <!-- SECTION: Leistungen -->
     <section class="section section--hell" aria-labelledby="wp-leistungen">
       <div class="container">
-        <p class="section__label">Leistungen</p>
-        <div class="card-grid card-grid--3col">
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Relaunch &amp; Neuentwicklung</h3>
-            <p class="card__body">WordPress-Aufbau mit barrierefreier Basis, modernem Design und sauberer Technik – ohne Altlasten.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">WooCommerce-Shops</h3>
-            <p class="card__body">Online-Shops mit reibungslosem Checkout, Zahlarten und Bestandsführung – conversion-optimiert aufgebaut.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Performance &amp; Core Web Vitals</h3>
-            <p class="card__body">Ladezeiten-Analyse, Bild-Optimierung, Caching und Server-Tuning für Top-Werte bei Google.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Wartung &amp; Support</h3>
-            <p class="card__body">Updates, Backups, Sicherheit und laufende Pflege – Sie kümmern sich um Ihr Geschäft, wir um Ihre Website.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Landingpages</h3>
-            <p class="card__body">Fokussierte Landingpages mit klarem Ziel: mehr Leads, mehr Anfragen, mehr Umsatz.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">BFSG-Umsetzung</h3>
-            <p class="card__body">Barrierefreie Umsetzung nach WCAG 2.2 AA und EN 301 549 – inklusive Konformitätserklärung.</p>
-          </article>
-        </div>
+        <p class="section__label" id="wp-leistungen">Leistungen</p>
+        <Leistungsverzeichnis
+          eintraege={[
+            { titel: "Relaunch & Neuentwicklung", text: "WordPress-Aufbau mit barrierefreier Basis, modernem Design und sauberer Technik – ohne Altlasten." },
+            { titel: "WooCommerce-Shops", text: "Online-Shops mit reibungslosem Checkout, Zahlarten und Bestandsführung – conversion-optimiert aufgebaut." },
+            { titel: "Performance & Core Web Vitals", text: "Ladezeiten-Analyse, Bild-Optimierung, Caching und Server-Tuning für Top-Werte bei Google." },
+            { titel: "Wartung & Support", text: "Updates, Backups, Sicherheit und laufende Pflege – Sie kümmern sich um Ihr Geschäft, wir um Ihre Website." },
+            { titel: "Landingpages", text: "Fokussierte Landingpages mit klarem Ziel: mehr Leads, mehr Anfragen, mehr Umsatz." },
+            { titel: "BFSG-Umsetzung", text: "Barrierefreie Umsetzung nach WCAG 2.2 AA und EN 301 549 – inklusive Konformitätserklärung." },
+          ]}
+        />
       </div>
     </section>
 
@@ -115,7 +100,7 @@ const base = import.meta.env.BASE_URL;
     <section class="section section--hell" aria-labelledby="wp-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
-        <h2 id="wp-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <h2 id="wp-prozess" class="section__heading">Von der Analyse bis zur Betreuung nach dem Launch</h2>
         <ol class="process-list" role="list">
           <li class="process-list__item" data-reveal>
             <span class="process-list__number" aria-hidden="true">01</span>

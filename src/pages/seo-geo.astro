@@ -5,6 +5,7 @@ import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import LeadForm from '../components/LeadForm.astro';
 
@@ -81,33 +82,17 @@ const base = import.meta.env.BASE_URL;
     <!-- SECTION: Leistungen -->
     <section class="section section--hell" aria-labelledby="seo-leistungen">
       <div class="container">
-        <p class="section__label">Leistungen</p>
-        <div class="card-grid card-grid--3col">
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Technisches SEO</h3>
-            <p class="card__body">Technische Basis: Crawling, Indexierung, Geschwindigkeit, saubere interne Verlinkung.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Content-Optimierung</h3>
-            <p class="card__body">Texte und Strukturen, die Suchintention treffen – und Menschen wie Maschinen überzeugen.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">GEO – Generative Engine Optimization</h3>
-            <p class="card__body">Inhalte so aufbereiten, dass KI-Systeme sie zitieren: klare Antworten, Fakten, Zitate.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Strukturierte Daten</h3>
-            <p class="card__body">Schema.org JSON-LD für Organisation, Services, FAQ und mehr – maschinenlesbar und rich-snippet-fähig.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">llms.txt &amp; KI-Readiness</h3>
-            <p class="card__body">Implementierung von llms.txt und KI-freundlicher Auszeichnung für LLM-Sichtbarkeit.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Lokales SEO</h3>
-            <p class="card__body">Google Business Profile, lokale Daten und regionale Inhalte für Köln, NRW und Umgebung.</p>
-          </article>
-        </div>
+        <p class="section__label" id="seo-leistungen">Leistungen</p>
+        <Leistungsverzeichnis
+          eintraege={[
+            { titel: "Technisches SEO", text: "Technische Basis: Crawling, Indexierung, Geschwindigkeit, saubere interne Verlinkung." },
+            { titel: "Content-Optimierung", text: "Texte und Strukturen, die Suchintention treffen – und Menschen wie Maschinen überzeugen." },
+            { titel: "GEO – Generative Engine Optimization", text: "Inhalte so aufbereiten, dass KI-Systeme sie zitieren: klare Antworten, Fakten, Zitate." },
+            { titel: "Strukturierte Daten", text: "Schema.org JSON-LD für Organisation, Services, FAQ und mehr – maschinenlesbar und rich-snippet-fähig." },
+            { titel: "llms.txt & KI-Readiness", text: "Implementierung von llms.txt und KI-freundlicher Auszeichnung für LLM-Sichtbarkeit." },
+            { titel: "Lokales SEO", text: "Google Business Profile, lokale Daten und regionale Inhalte für Köln, NRW und Umgebung." },
+          ]}
+        />
       </div>
     </section>
 
@@ -115,7 +100,7 @@ const base = import.meta.env.BASE_URL;
     <section class="section section--hell" aria-labelledby="seo-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
-        <h2 id="seo-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <h2 id="seo-prozess" class="section__heading">Vom Audit zur messbaren Sichtbarkeit</h2>
         <ol class="process-list" role="list">
           <li class="process-list__item" data-reveal>
             <span class="process-list__number" aria-hidden="true">01</span>

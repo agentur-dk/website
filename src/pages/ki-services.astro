@@ -5,6 +5,7 @@ import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import LeadForm from '../components/LeadForm.astro';
 
@@ -78,40 +79,24 @@ const base = import.meta.env.BASE_URL;
 
     <section class="section section--hell" aria-labelledby="ki-leistungen">
       <div class="container">
-        <p class="section__label">Leistungen</p>
-        <div class="card-grid card-grid--3col">
-          <article class="card" data-reveal>
-            <h3 class="card__heading">KI-Telefon-Agenten</h3>
-            <p class="card__body">Automatische Annahme, Beantwortung und Weiterleitung von Anrufen – 24/7 verfügbar.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Terminbuchung</h3>
-            <p class="card__body">Kunden buchen Termine selbstständig – per Anruf, Website oder Link.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">KI-Recruiting</h3>
-            <p class="card__body">Zielgruppenanalyse und personalisierte Ansprache für Ihre Stellenanzeigen.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Textoptimierung</h3>
-            <p class="card__body">Webtexte, Kampagnen und Angebote – schneller, konsistenter, besser.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">KI-Readiness</h3>
-            <p class="card__body">Ihre Inhalte für KI-Systeme aufbereiten: llms.txt, Struktur, Zitierfähigkeit.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Beratung &amp; Umsetzung</h3>
-            <p class="card__body">Gemeinsam finden wir heraus, wo KI bei Ihnen echten Nutzen stiftet.</p>
-          </article>
-        </div>
+        <p class="section__label" id="ki-leistungen">Leistungen</p>
+        <Leistungsverzeichnis
+          eintraege={[
+            { titel: "KI-Telefon-Agenten", text: "Automatische Annahme, Beantwortung und Weiterleitung von Anrufen – 24/7 verfügbar." },
+            { titel: "Terminbuchung", text: "Kunden buchen Termine selbstständig – per Anruf, Website oder Link." },
+            { titel: "KI-Recruiting", text: "Zielgruppenanalyse und personalisierte Ansprache für Ihre Stellenanzeigen." },
+            { titel: "Textoptimierung", text: "Webtexte, Kampagnen und Angebote – schneller, konsistenter, besser." },
+            { titel: "KI-Readiness", text: "Ihre Inhalte für KI-Systeme aufbereiten: llms.txt, Struktur, Zitierfähigkeit." },
+            { titel: "Beratung & Umsetzung", text: "Gemeinsam finden wir heraus, wo KI bei Ihnen echten Nutzen stiftet." },
+          ]}
+        />
       </div>
     </section>
 
     <section class="section section--hell" aria-labelledby="ki-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
-        <h2 id="ki-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <h2 id="ki-prozess" class="section__heading">Von der Potenzialanalyse zum laufenden Betrieb</h2>
         <ol class="process-list" role="list">
           <li class="process-list__item">
             <span class="process-list__number" aria-hidden="true">01</span>

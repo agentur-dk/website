@@ -5,6 +5,7 @@ import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import LeadForm from '../components/LeadForm.astro';
 
@@ -78,40 +79,24 @@ const base = import.meta.env.BASE_URL;
 
     <section class="section section--hell" aria-labelledby="cd-leistungen">
       <div class="container">
-        <p class="section__label">Leistungen</p>
-        <div class="card-grid card-grid--3col">
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Logo-Entwicklung</h3>
-            <p class="card__body">Vom Entwurf bis zur Übergabe: alle druck- und webfähigen Dateien inklusive.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Brand Identity</h3>
-            <p class="card__body">Farbwelt, Typografie, Bildsprache und Tonality – das Gesicht Ihrer Marke.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Corporate Design Manual</h3>
-            <p class="card__body">Regelwerk mit Anwendungsbeispielen für Agenturen, Mitarbeiter und Partner.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Gestaltungsvorlagen</h3>
-            <p class="card__body">Briefpapier, Visitenkarten, Präsentationen und Social-Media-Vorlagen aus einem Guss.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Digital-Design</h3>
-            <p class="card__body">UI/UX-Grundlagen und Webdesign, das zur Marke passt – barrierefrei umsetzbar.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Marken-Relaunch</h3>
-            <p class="card__body">Modernisierung bestehender Marken, ohne die Wiedererkennung zu verlieren.</p>
-          </article>
-        </div>
+        <p class="section__label" id="cd-leistungen">Leistungen</p>
+        <Leistungsverzeichnis
+          eintraege={[
+            { titel: "Logo-Entwicklung", text: "Vom Entwurf bis zur Übergabe: alle druck- und webfähigen Dateien inklusive." },
+            { titel: "Brand Identity", text: "Farbwelt, Typografie, Bildsprache und Tonality – das Gesicht Ihrer Marke." },
+            { titel: "Corporate Design Manual", text: "Regelwerk mit Anwendungsbeispielen für Agenturen, Mitarbeiter und Partner." },
+            { titel: "Gestaltungsvorlagen", text: "Briefpapier, Visitenkarten, Präsentationen und Social-Media-Vorlagen aus einem Guss." },
+            { titel: "Digital-Design", text: "UI/UX-Grundlagen und Webdesign, das zur Marke passt – barrierefrei umsetzbar." },
+            { titel: "Marken-Relaunch", text: "Modernisierung bestehender Marken, ohne die Wiedererkennung zu verlieren." },
+          ]}
+        />
       </div>
     </section>
 
     <section class="section section--hell" aria-labelledby="cd-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
-        <h2 id="cd-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <h2 id="cd-prozess" class="section__heading">Von der Markenanalyse zum fertigen Manual</h2>
         <ol class="process-list" role="list">
           <li class="process-list__item">
             <span class="process-list__number" aria-hidden="true">01</span>

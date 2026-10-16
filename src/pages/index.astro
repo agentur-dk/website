@@ -11,6 +11,8 @@ import { HERO_FIELDS } from '../lib/dither';
 import DitherBand from '../components/DitherBand.astro';
 import Kernteam from '../components/Kernteam.astro';
 import ReferenzKarte from '../components/ReferenzKarte.astro';
+import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
+import { leistungen } from '../data/leistungen';
 import { sichtbareReferenzen, zeigtUnfreigegebenes } from '../data/referenzen';
 
 const base = import.meta.env.BASE_URL;
@@ -18,28 +20,6 @@ const base = import.meta.env.BASE_URL;
 /** Drei Fälle als Spiegel; alle übrigen stehen auf der Projektseite. */
 const referenzenAuswahl = sichtbareReferenzen().filter((r) => r.startseite);
 
-/*
- * `datei` ist zugleich der Schlüssel, über den der Leistungs-Check die
- * passende Zeile findet: Er verweist auf dieselbe Datei (src/lib/quiz.ts).
- */
-const leistungen = [
-  { datei: 'website-leasing.html', titel: 'Website-Leasing', neu: true,
-    text: 'Professionelle Website ohne hohe Einmalkosten: monatliche Flatrate, Wartung und Hosting auf Wunsch inklusive.' },
-  { datei: 'bfsg-wordpress-website-agentur.html', titel: 'Barrierefreie Websites (BFSG)',
-    text: 'BFSG- und WCAG-konform, von der Prüfung bis zur Konformitätserklärung. Keine rechtlichen Risiken, sondern echte Zugänglichkeit.' },
-  { datei: 'wordpress-entwicklung.html', titel: 'WordPress-Entwicklung',
-    text: 'Sauberer Code, schnelle Ladezeiten und eine Website, die Ihr Team ohne technisches Vorwissen selbst pflegt.' },
-  { datei: 'seo-geo.html', titel: 'SEO & GEO',
-    text: 'Suchmaschinenoptimierung und Generative Engine Optimization: gefunden werden bei Google und in Antworten von ChatGPT, Gemini und Co.' },
-  { datei: 'online-marketing.html', titel: 'Online-Marketing',
-    text: 'Content, Social Media und E-Mail-Kampagnen, die Ihre Zielgruppe dort erreichen, wo sie sich aufhält. Messbar.' },
-  { datei: 'corporate-design.html', titel: 'Corporate Design',
-    text: 'Logo, Farbwelt und Designsystem für einen Auftritt, der auf allen Kanälen gleich aussieht.' },
-  { datei: 'ki-services.html', titel: 'KI-Services',
-    text: 'Content-Produktion, Prozessautomatisierung und Telefon-Agenten: KI dort, wo sie messbar entlastet.' },
-  { datei: 'social-recruiting.html', titel: 'Social Recruiting',
-    text: 'Fachkräfte über LinkedIn, Meta und Co. gezielt ansprechen, statt auf Bewerbungen zu warten.' },
-];
 
 /* Quelle: Angabe Daniel Kontelis, 11.10.2026. */
 const kennzahlen = [
@@ -170,19 +150,10 @@ const kennzahlen = [
     <section id="services" class="services section section--hell" aria-labelledby="leistungen-heading">
       <div class="container">
         <h2 class="section-title" id="leistungen-heading">Alle Leistungen im Überblick</h2>
-        <ul class="leistungsindex" role="list">
-          {leistungen.map((l) => (
-            <li class="leistungsindex__zeile" data-leistung={l.datei} data-reveal>
-              <h3 class="leistungsindex__titel">
-                <a href={`${base}${l.datei}`} class="leistungsindex__link">{l.titel}</a>
-                {l.neu && <span class="leistungsindex__neu">Neu</span>}
-              </h3>
-              <p class="leistungsindex__text">{l.text}</p>
-              <p class="leistungsindex__marke" hidden>Passt zu Ihrer Antwort im Leistungs-Check</p>
-              <Icon name="arrow-right" size={20} class="leistungsindex__pfeil" />
-            </li>
-          ))}
-        </ul>
+        <Leistungsverzeichnis
+          mitMarke
+          eintraege={leistungen.map((l) => ({ ...l, href: `${base}${l.datei}`, schluessel: l.datei }))}
+        />
       </div>
     </section>
 
@@ -307,36 +278,11 @@ const kennzahlen = [
   <style is:global>
     .referenzen-section__cta{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--rinne-3);margin-top:var(--spacing-10)}
 
-    /* Leistungsverzeichnis: eine Zeile je Leistung, die ganze Zeile ist
-       Klickfläche. Der Link dehnt sich per ::after über die Zeile, damit
-       es trotzdem genau ein Linkziel mit sprechendem Namen bleibt. */
-    .leistungsindex{list-style:none;margin:0;padding:0;border-top:1px solid var(--color-border)}
-    .leistungsindex__zeile{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--rinne-5);row-gap:var(--rinne-1);padding-block:var(--rinne-4);border-bottom:1px solid var(--color-border)}
-    @media (min-width:900px){
-      .leistungsindex__zeile{grid-template-columns:minmax(14rem,2fr) minmax(0,3fr) auto;align-items:baseline}
-    }
-    .leistungsindex__titel{margin:0;font-size:var(--dk-schrift-vorspann);line-height:1.25}
-    .leistungsindex__link{color:var(--color-text);text-decoration:none}
-    .leistungsindex__link::after{content:"";position:absolute;inset:0}
-    .leistungsindex__link:focus-visible{outline:none}
-    .leistungsindex__link:focus-visible::after{outline:3px solid var(--color-focus);outline-offset:2px}
-    .leistungsindex__zeile:hover .leistungsindex__link{text-decoration:underline;text-underline-offset:.2em}
-    .leistungsindex__neu{display:inline-block;margin-left:var(--rinne-2);padding:.1em .5em;border:1px solid currentColor;font-size:var(--dk-schrift-klein);letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
-    .leistungsindex__text{margin:0;color:var(--color-text-muted);font-size:var(--dk-schrift-karte);max-width:60ch;grid-column:1}
-    @media (min-width:900px){ .leistungsindex__text{grid-column:2} }
-    .leistungsindex__pfeil{grid-column:-2;grid-row:1;align-self:center;color:var(--color-text);transition:transform .2s ease}
-    .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:translateX(4px)}
-    .leistungsindex__marke{margin:0;grid-column:1/-1;font-size:var(--dk-schrift-klein);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-
     /* Vom Leistungs-Check markiert: Balken links plus Textzeile, damit
        die Markierung nicht nur an einer Farbe hängt. */
     .leistungsindex__zeile[data-empfohlen]{box-shadow:inset 4px 0 0 var(--color-text);padding-left:var(--rinne-4)}
     @media (prefers-reduced-motion:no-preference){
       .leistungsindex__zeile{transition:box-shadow .3s ease,padding-left .3s ease}
-    }
-    @media (prefers-reduced-motion:reduce){
-      .leistungsindex__pfeil{transition:none}
-      .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:none}
     }
 
     .contact__vorspann{margin:0 0 var(--rinne-4);font-size:var(--dk-schrift-text);color:var(--color-text);max-width:38ch}

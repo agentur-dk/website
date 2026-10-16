@@ -5,6 +5,7 @@ import DitherBand from '../components/DitherBand.astro';
 import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
 import LeadForm from '../components/LeadForm.astro';
 
@@ -81,33 +82,17 @@ const base = import.meta.env.BASE_URL;
     <!-- SECTION: Leistungen -->
     <section class="section section--hell" aria-labelledby="om-leistungen">
       <div class="container">
-        <p class="section__label">Leistungen</p>
-        <div class="card-grid card-grid--3col">
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Google Ads</h3>
-            <p class="card__body">Such- und Display-Kampagnen mit sauberem Tracking und optimiertem Keyword-Set.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Meta &amp; Instagram Ads</h3>
-            <p class="card__body">Social-Kampagnen mit ansprechenden Creatives und präziser Zielgruppenansprache.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">LinkedIn Kampagnen</h3>
-            <p class="card__body">B2B-Marketing und Personalmarketing dort, wo Entscheider unterwegs sind.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Content-Marketing</h3>
-            <p class="card__body">Redaktionspläne, Artikel und Social-Content, die Ihre Expertise zeigen.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">E-Mail-Marketing</h3>
-            <p class="card__body">Newsletter und Automation, die Kunden binden und wieder aktivieren.</p>
-          </article>
-          <article class="card" data-reveal>
-            <h3 class="card__heading">Social Recruiting</h3>
-            <p class="card__body">Mitarbeitergewinnung über zielgenaue Kampagnen – mit KI unterstützt.</p>
-          </article>
-        </div>
+        <p class="section__label" id="om-leistungen">Leistungen</p>
+        <Leistungsverzeichnis
+          eintraege={[
+            { titel: "Google Ads", text: "Such- und Display-Kampagnen mit sauberem Tracking und optimiertem Keyword-Set." },
+            { titel: "Meta & Instagram Ads", text: "Social-Kampagnen mit ansprechenden Creatives und präziser Zielgruppenansprache." },
+            { titel: "LinkedIn Kampagnen", text: "B2B-Marketing und Personalmarketing dort, wo Entscheider unterwegs sind." },
+            { titel: "Content-Marketing", text: "Redaktionspläne, Artikel und Social-Content, die Ihre Expertise zeigen." },
+            { titel: "E-Mail-Marketing", text: "Newsletter und Automation, die Kunden binden und wieder aktivieren." },
+            { titel: "Social Recruiting", text: "Mitarbeitergewinnung über zielgenaue Kampagnen – mit KI unterstützt." },
+          ]}
+        />
       </div>
     </section>
 
@@ -115,7 +100,7 @@ const base = import.meta.env.BASE_URL;
     <section class="section section--hell" aria-labelledby="om-prozess">
       <div class="container">
         <p class="section__label">So arbeiten wir</p>
-        <h2 id="om-prozess" class="section__heading">In vier Schritten zum Ergebnis</h2>
+        <h2 id="om-prozess" class="section__heading">Vom Ziel zur Kampagne, die sich rechnet</h2>
         <ol class="process-list" role="list">
           <li class="process-list__item" data-reveal>
             <span class="process-list__number" aria-hidden="true">01</span>
