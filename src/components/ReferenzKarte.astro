@@ -1,0 +1,45 @@
+---
+/**
+ * Eine Referenz, wie sie auf Startseite, Projekte und „Über uns" steht.
+ * Eine Komponente für alle drei, damit ein Fall überall gleich aussieht und
+ * gleich lautet — vorher pflegte jede Seite ihre eigene Fassung.
+ */
+import Dither from './ui/Dither.astro';
+import type { Referenz } from '../data/referenzen';
+
+interface Props {
+  readonly r: Referenz;
+  /** Element der Karte: `li` in einer Liste, sonst `article`. */
+  readonly als?: 'li' | 'article';
+}
+
+const { r, als = 'article' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const extern = r.link?.startsWith('https://') ?? false;
+const Element = als;
+---
+
+<Element class="case-card" data-reveal data-tags={r.themen.join(' ')}>
+  <div class="case-card__visual case-card__visual--dither" aria-hidden="true">
+    <Dither field={r.feld} cell={3} />
+  </div>
+  <div class="case-card__body">
+    <span class="case-card__tag">{r.einordnung}</span>
+    <h3 class="case-card__title">{r.titel}</h3>
+    <p class="case-card__desc">{r.ergebnis}</p>
+    <p class="case-card__kunde">
+      <strong>{r.kunde}</strong>
+      {!r.freigegeben && <span class="case-card__vorbehalt"> · Freigabe ausstehend</span>}
+    </p>
+    {r.link && extern && (
+      <a href={r.link} class="case-card__link" target="_blank" rel="noopener noreferrer">
+        {r.link.replace('https://', '')}<span class="u-sr-only"> (öffnet in neuem Tab)</span>&nbsp;→
+      </a>
+    )}
+    {r.link && !extern && (
+      <a href={`${base}${r.link}`} class="case-card__link">
+        Mehr dazu<span class="u-sr-only"> über {r.kunde}</span>&nbsp;→
+      </a>
+    )}
+  </div>
+</Element>

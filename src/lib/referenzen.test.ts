@@ -15,11 +15,29 @@ describe('Referenzen stehen unter Freigabevorbehalt', () => {
     }
   });
 
-  it('jeder Eintrag nennt Kunde, Ergebnis und Link', () => {
+  it('jeder Eintrag nennt Kunde und Ergebnis, ein Link führt irgendwohin', async () => {
+    const { existsSync } = await import('node:fs');
     for (const r of referenzen) {
       expect(r.kunde.length, 'Kundenname fehlt').toBeGreaterThan(2);
       expect(r.ergebnis.length, `${r.kunde}: kein Ergebnis`).toBeGreaterThan(40);
-      expect(r.link, `${r.kunde}: Link ohne https`).toMatch(/^https:\/\//);
+      if (!r.link || r.link.startsWith('https://')) continue;
+      const seite = new URL(`../pages/${r.link.replace(/\.html$/, '.astro')}`, import.meta.url);
+      expect(existsSync(seite), `${r.kunde}: ${r.link} gibt es nicht`).toBe(true);
+    }
+  });
+
+  /* Regel vom 16.10.2026: nur echte Kunden mit Namen. Ein Platzhalter wie
+     „Dienstleister B2B" ist nicht nachprüfbar und sieht erfunden aus. */
+  it('kein Fall ist anonymisiert', () => {
+    const platzhalter = /auftraggeber|mittelstand|\bkmu\b|dienstleister|netzwerk|kunde\b/i;
+    for (const r of referenzen) {
+      expect(r.kunde, 'anonymisierter Fall').not.toMatch(platzhalter);
+    }
+  });
+
+  it('jeder Fall ist mindestens einem Filterthema zugeordnet', () => {
+    for (const r of referenzen) {
+      expect(r.themen.length, `${r.kunde}: ohne Thema im Filter unsichtbar`).toBeGreaterThan(0);
     }
   });
 

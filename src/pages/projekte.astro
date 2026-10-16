@@ -4,8 +4,11 @@ import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CtaSection from '../components/CtaSection.astro';
+import ReferenzKarte from '../components/ReferenzKarte.astro';
+import { sichtbareReferenzen, vergebeneThemen, zeigtUnfreigegebenes, THEMEN } from '../data/referenzen';
 
 const base = import.meta.env.BASE_URL;
+const faelle = sichtbareReferenzen();
 ---
 
 <BaseLayout
@@ -46,216 +49,21 @@ const base = import.meta.env.BASE_URL;
             aria-label="Projekte nach Leistung filtern"
           >
             <button type="button" class="chip chip--active" data-filter="all" aria-pressed="true">Alle</button>
-            <button type="button" class="chip" data-filter="WordPress" aria-pressed="false">WordPress</button>
-            <button type="button" class="chip" data-filter="BFSG" aria-pressed="false">BFSG / Barrierefreiheit</button>
-            <button type="button" class="chip" data-filter="SEO" aria-pressed="false">SEO</button>
-            <button type="button" class="chip" data-filter="GEO" aria-pressed="false">GEO</button>
-            <button type="button" class="chip" data-filter="Online-Marketing" aria-pressed="false">Online-Marketing</button>
-            <button type="button" class="chip" data-filter="Corporate-Design" aria-pressed="false">Corporate Design</button>
-            <button type="button" class="chip" data-filter="KI" aria-pressed="false">KI</button>
-            <button type="button" class="chip" data-filter="Social-Recruiting" aria-pressed="false">Social Recruiting</button>
+            {vergebeneThemen().map((t) => (
+              <button type="button" class="chip" data-filter={t} aria-pressed="false">{THEMEN[t]}</button>
+            ))}
           </div>
-          <p class="filter-status" id="filter-status" aria-live="polite" aria-atomic="true">11 Projekte angezeigt</p>
+          <p class="filter-status" id="filter-status" aria-live="polite" aria-atomic="true">{faelle.length} Projekte angezeigt</p>
         </div>
 
-        <ul class="projects-grid" id="projects-grid" role="list">
-
-          <li class="case-card" data-reveal data-tags="BFSG WordPress">
-            <div class="case-card__visual case-card__visual--blue" aria-hidden="true">
-              <span class="case-card__initials">BMBFSFJ</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">Öffentliche Hand</span></li>
-                <li><span class="badge">BFSG</span></li>
-              </ul>
-              <h3 class="case-card__title">Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend</h3>
-              <p class="case-card__meta">Öffentliche Hand · 2025</p>
-              <p class="case-card__desc">Konzeption, Gestaltung und Umsetzung eines deutschlandweiten Eltern-Anfrageportals für Familienhotels. Der Fokus liegt auf sozialschwachen Familien mit Kindern mit Handicap. Herausforderung: neue barrierearme Website und reibungsloser Buchungsprozess für alle.</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="Online-Marketing Social-Recruiting">
-            <div class="case-card__visual case-card__visual--green" aria-hidden="true">
-              <span class="case-card__initials">TARG</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">Finanzdienstleistung</span></li>
-                <li><span class="badge">Social Recruiting</span></li>
-              </ul>
-              <h3 class="case-card__title">TARGOBANK AG</h3>
-              <p class="case-card__meta">Finanzdienstleistung · 2024</p>
-              <p class="case-card__desc">Social-Recruiting-Kampagne für NRW mit Konzeption, Planung und Videodreh. Herausforderung: modernen Recruitingprozess in bestehende Konzernprozesse integrieren.</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="BFSG WordPress">
-            <div class="case-card__visual case-card__visual--purple" aria-hidden="true">
-              <span class="case-card__initials">BFW</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">Bildung</span></li>
-                <li><span class="badge">BFSG / Barrierefreiheit</span></li>
-              </ul>
-              <h3 class="case-card__title">Berufsförderungswerk Düren &amp; Mainz</h3>
-              <p class="case-card__meta">Bildung · 2025</p>
-              <p class="case-card__desc">Konzeption, Gestaltung und Entwicklung einer Website für die Zielgruppe blinde Menschen. Herausforderung: Usability und Design für sehende und blinde Menschen kombinieren.</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="WordPress Corporate-Design Online-Marketing">
-            <div class="case-card__visual case-card__visual--blue" aria-hidden="true">
-              <span class="case-card__initials">TB</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">WordPress</span></li>
-                <li><span class="badge">Corporate Design</span></li>
-                <li><span class="badge">Online-Marketing</span></li>
-              </ul>
-              <h3 class="case-card__title">TARGOBANK (Rahmenvertrag)</h3>
-              <p class="case-card__meta">Finanzdienstleistung · 2024</p>
-              <p class="case-card__desc">
-                Konzeption und Entwicklung mehrerer Corporate-Landingpages im Rahmen eines langfristigen Agenturvertrags. Fokus auf klare Messaging-Hierarchie, Conversion-Optimierung und konsistentes Corporate Design.
-              </p>
-              <p class="case-card__kpi">+45 % Conversion-Rate durch A/B-optimierte Landingpages</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="WordPress BFSG">
-            <div class="case-card__visual case-card__visual--slate" aria-hidden="true">
-              <span class="case-card__initials">ÖA</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">BFSG / Barrierefreiheit</span></li>
-                <li><span class="badge">WordPress</span></li>
-              </ul>
-              <h3 class="case-card__title">Öffentlicher Auftraggeber (Bundesministerium)</h3>
-              <p class="case-card__meta">Öffentliche Hand · 2025</p>
-              <p class="case-card__desc">
-                Vollständiger BFSG-konformer Relaunch eines bundesbehördlichen Webauftritts. Umsetzung nach EN 301 549 und WCAG 2.2 AA inklusive Erstellung der offiziellen Barrierefreiheitserklärung und Konformitätsprüfung.
-              </p>
-              <p class="case-card__kpi">100 % WCAG 2.2 AA Konformität – Prüfung bestanden</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="WordPress SEO GEO Corporate-Design">
-            <div class="case-card__visual case-card__visual--teal" aria-hidden="true">
-              <span class="case-card__initials">DG</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">WordPress</span></li>
-                <li><span class="badge">SEO</span></li>
-                <li><span class="badge">GEO</span></li>
-                <li><span class="badge">Corporate Design</span></li>
-              </ul>
-              <h3 class="case-card__title">DU BIST GRIECHE – eigene Plattform</h3>
-              <p class="case-card__meta">Gastronomie / Eigenprojekt · 2025</p>
-              <p class="case-card__desc">
-                Konzeption, Design und Entwicklung eines eigenständigen Gastronomie-Empfehlungsportals. Vollständige SEO-Architektur, strukturierte Daten und GEO-Strategie für maximale Sichtbarkeit in klassischer und KI-basierter Suche.
-              </p>
-              <p class="case-card__kpi">+180 % organischer Traffic in 6 Monaten</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="WordPress BFSG SEO">
-            <div class="case-card__visual case-card__visual--green" aria-hidden="true">
-              <span class="case-card__initials">AN</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">WordPress</span></li>
-                <li><span class="badge">BFSG / Barrierefreiheit</span></li>
-                <li><span class="badge">SEO</span></li>
-              </ul>
-              <h3 class="case-card__title">Apotheken-Netzwerk</h3>
-              <p class="case-card__meta">Gesundheit / Pharma · 2025</p>
-              <p class="case-card__desc">
-                BFSG-konforme WordPress-Websites für 8 Apothekenstandorte aus einer Hand: einheitliches Design-System, individuelle lokale Anpassungen und vollständige Barrierefreiheitsprüfung für jeden Standort.
-              </p>
-              <p class="case-card__kpi">Alle 8 Standorte pünktlich BFSG-konform – vor Fristablauf</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="WordPress Online-Marketing SEO">
-            <div class="case-card__visual case-card__visual--orange" aria-hidden="true">
-              <span class="case-card__initials">KH</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">WordPress</span></li>
-                <li><span class="badge">Online-Marketing</span></li>
-                <li><span class="badge">SEO</span></li>
-              </ul>
-              <h3 class="case-card__title">KMU Handel</h3>
-              <p class="case-card__meta">Handel / E-Commerce · 2024</p>
-              <p class="case-card__desc">
-                E-Commerce-Relaunch mit WooCommerce, Conversion-Optimierung und integrierter SEO-Strategie. Neuaufbau der Produktkategorien und Einführung einer datengetriebenen Online-Marketing-Kampagne.
-              </p>
-              <p class="case-card__kpi">+120 % E-Commerce-Umsatz im Folgequartal</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="Corporate-Design WordPress KI">
-            <div class="case-card__visual case-card__visual--indigo" aria-hidden="true">
-              <span class="case-card__initials">B2</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">Corporate Design</span></li>
-                <li><span class="badge">WordPress</span></li>
-                <li><span class="badge">KI</span></li>
-              </ul>
-              <h3 class="case-card__title">Dienstleister B2B</h3>
-              <p class="case-card__meta">B2B-Dienstleistung · 2024</p>
-              <p class="case-card__desc">
-                Vollständiges Rebranding inklusive Logoentwicklung, Farbwelt, Designsystem und Umsetzung einer KI-gestützten Content-Strategie. Neue Website als zentrale Vertriebs- und Positionierungsplattform.
-              </p>
-              <p class="case-card__kpi">+38 % Markenwahrnehmung im Wettbewerbsvergleich</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="Social-Recruiting Online-Marketing">
-            <div class="case-card__visual case-card__visual--rose" aria-hidden="true">
-              <span class="case-card__initials">SR</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">Social Recruiting</span></li>
-                <li><span class="badge">Online-Marketing</span></li>
-              </ul>
-              <h3 class="case-card__title">Social-Recruiting-Kampagne (Mittelstand)</h3>
-              <p class="case-card__meta">HR / Recruiting · 2025</p>
-              <p class="case-card__desc">
-                Konzeption und Steuerung einer mehrstufigen Performance-Kampagne zur Fachkräftegewinnung über LinkedIn und Meta. Zielgruppenanalyse, Creatives, A/B-Tests und laufende Optimierung.
-              </p>
-              <p class="case-card__kpi">42 qualifizierte Bewerbungen in 3 Wochen</p>
-            </div>
-          </li>
-
-          <li class="case-card" data-reveal data-tags="SEO GEO WordPress">
-            <div class="case-card__visual case-card__visual--purple" aria-hidden="true">
-              <span class="case-card__initials">GE</span>
-            </div>
-            <div class="case-card__body">
-              <ul class="case-card__tags" role="list" aria-label="Leistungen">
-                <li><span class="badge">SEO</span></li>
-                <li><span class="badge">GEO</span></li>
-                <li><span class="badge">WordPress</span></li>
-              </ul>
-              <h3 class="case-card__title">Lokale GEO-Sichtbarkeitsoffensive</h3>
-              <p class="case-card__meta">Gastgewerbe / Regional · 2025</p>
-              <p class="case-card__desc">
-                Aufbau einer strukturierten Content-Architektur und GEO-Strategie (Generative Engine Optimization) für ein regionales Gastgewerbeunternehmen. Optimierung für ChatGPT, Perplexity und Google Gemini.
-              </p>
-              <p class="case-card__kpi">Top-3-Nennung in ChatGPT-Empfehlungen für die Region</p>
-            </div>
-          </li>
-
+        {zeigtUnfreigegebenes() && (
+          <p class="referenzen__warnung" role="note">
+            <strong>Nur in der Vorschau sichtbar:</strong> Einzelne Fälle sind noch nicht vom
+            Kunden freigegeben und erscheinen live erst nach der Freigabe.
+          </p>
+        )}
+        <ul class="case-grid" id="projects-grid" role="list">
+          {faelle.map((r) => <ReferenzKarte r={r} als="li" />)}
         </ul>
       </div>
     </section>

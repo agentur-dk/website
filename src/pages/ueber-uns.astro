@@ -6,6 +6,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import CtaSection from '../components/CtaSection.astro';
+import ReferenzKarte from '../components/ReferenzKarte.astro';
+import { sichtbareReferenzen } from '../data/referenzen';
 import Icon from '../components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import portraet from '../assets/team/daniel-kontelis.jpg';
@@ -41,7 +43,7 @@ const base = import.meta.env.BASE_URL;
           agentur dk steht für design & kommunikation – und genau das machen wir: Websites, Branding, Marketing und technische Umsetzung aus einer Hand. Kurze Wege, direkt, verbindlich.
         </p>
         <div class="ueber-hero__actions">
-          <a href="#contact" class="btn btn--primary btn--lg">Gespräch vereinbaren</a>
+          <a href={`${base}#contact`} class="btn btn--primary btn--lg">Gespräch vereinbaren</a>
           <a href={`${base}leistungen.html`} class="btn btn--outline btn--lg">Unsere Leistungen</a>
         </div>
       </div>
@@ -62,7 +64,7 @@ const base = import.meta.env.BASE_URL;
               Wir denken ganzheitlich: Design, Technik, Marketing und Branding sind bei uns keine Silos. Ein stimmiges digitales Erscheinungsbild entsteht nur, wenn alle Disziplinen zusammenpassen – das ist unser Anspruch bei jedem Projekt.
             </p>
             <p class="ueber-body">
-              Referenzkunden wie die <strong class="ueber-highlight">TARGOBANK</strong> und das <strong class="ueber-highlight">Bundesministerium für Familie, Senioren, Frauen und Jugend (BMFSFJ)</strong> vertrauen auf unsere Arbeit. Daneben betreiben wir mit <strong class="ueber-highlight">DU BIST GRIECHE</strong> eine eigene digitale Plattform – weil wir nicht nur für Kunden bauen, sondern selbst Produkte entwickeln und betreiben.
+              Referenzkunden wie die <strong class="ueber-highlight">TARGOBANK</strong> und das <strong class="ueber-highlight">Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend (BMBFSFJ)</strong> vertrauen auf unsere Arbeit. Daneben betreiben wir mit <strong class="ueber-highlight">DU BIST GRIECHE</strong> eine eigene digitale Plattform – weil wir nicht nur für Kunden bauen, sondern selbst Produkte entwickeln und betreiben.
             </p>
           </div>
           <div class="ueber-grid__visual" aria-hidden="true">
@@ -282,40 +284,8 @@ const base = import.meta.env.BASE_URL;
         <p class="section__lead">
           Wir arbeiten für Unternehmen und Organisationen, die auf Qualität setzen – von Bundesbehörden bis zu Finanzdienstleistern.
         </p>
-        <ul class="referenz-list" role="list">
-          <li class="referenz-card" data-reveal>
-            <div class="referenz-card__visual referenz-card__visual--blue" aria-hidden="true">
-              <span class="referenz-card__kuerzel">TRG</span>
-            </div>
-            <div class="referenz-card__content">
-              <h3 class="referenz-card__name">TARGOBANK AG</h3>
-              <p class="referenz-card__desc">
-                Digitale Kommunikation und Webprojekte für eine der führenden deutschen Direktbanken. Anforderungen an Datenschutz, Barrierefreiheit und Corporate Design wurden vollständig erfüllt.
-              </p>
-            </div>
-          </li>
-          <li class="referenz-card" data-reveal>
-            <div class="referenz-card__visual referenz-card__visual--green" aria-hidden="true">
-              <span class="referenz-card__kuerzel">BMF</span>
-            </div>
-            <div class="referenz-card__content">
-              <h3 class="referenz-card__name">Bundesministerium BMFSFJ</h3>
-              <p class="referenz-card__desc">
-                Bundesministerium für Familie, Senioren, Frauen und Jugend. Öffentliche Auftraggeber stellen höchste Ansprüche an Barrierefreiheit, Datensouveränität und technische Standards.
-              </p>
-            </div>
-          </li>
-          <li class="referenz-card" data-reveal>
-            <div class="referenz-card__visual referenz-card__visual--purple" aria-hidden="true">
-              <span class="referenz-card__kuerzel">DBG</span>
-            </div>
-            <div class="referenz-card__content">
-              <h3 class="referenz-card__name">DU BIST GRIECHE</h3>
-              <p class="referenz-card__desc">
-                Eigene digitale Plattform, entwickelt und betrieben von agentur dk. Beweis, dass wir nicht nur für andere bauen – sondern selbst Produkte aufbauen und am Leben erhalten.
-              </p>
-            </div>
-          </li>
+        <ul class="case-grid" role="list">
+          {sichtbareReferenzen().filter((r) => r.ueberUns).map((r) => <ReferenzKarte r={r} als="li" />)}
         </ul>
         <div class="referenzen-section__cta">
           <a href={`${base}projekte.html`} class="btn btn--outline">Alle Referenzen ansehen</a>
@@ -327,31 +297,9 @@ const base = import.meta.env.BASE_URL;
       title="Lassen Sie uns zusammenarbeiten."
       text="Kostenloses Erstgespräch, ohne Umwege. Wir hören zu, bevor wir anbieten."
       buttonLabel="Jetzt anfragen"
-      buttonHref="#contact"
-      showPhone={false}
+      buttonHref={`${base}#contact`}
     />
 
-    <section id="contact" class="section" aria-labelledby="contact-heading">
-      <div class="container">
-        <span class="section__label">Kontakt</span>
-        <h2 id="contact-heading" class="section__heading">So erreichen Sie uns</h2>
-        <address class="ueber-contact" style="font-style: normal;">
-          <p class="ueber-contact__item">
-            <strong>agentur dk – design & kommunikation</strong><br />
-            Sachsenring 57 · D-50677 Köln
-          </p>
-          <p class="ueber-contact__item">
-            <a href="tel:+4922198655229" class="contact__link">+49&nbsp;221&nbsp;986&nbsp;55&nbsp;229</a>
-          </p>
-          <p class="ueber-contact__item">
-            <a href="mailto:mail@dk-dk.de" class="contact__link">mail@dk-dk.de</a>
-          </p>
-          <p class="ueber-contact__item ueber-contact__hours">
-            Mo–Fr · 09:00–18:00 Uhr
-          </p>
-        </address>
-      </div>
-    </section>
 
   </main>
 
@@ -471,86 +419,5 @@ const base = import.meta.env.BASE_URL;
     margin: 0;
   }
 
-  .referenz-list {
-    display: grid;
-    gap: var(--rinne-4);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .referenz-card {
-    display: flex;
-    gap: var(--rinne-4);
-    align-items: flex-start;
-    background-color: var(--color-surface-light);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
-    padding: 1.75rem;
-    transition: border-color 250ms ease, box-shadow 250ms ease;
-  }
-  .referenz-card:hover {
-    border-color: var(--color-primary-on-light);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  @media (max-width: 480px) {
-    .referenz-card {
-      flex-direction: column;
-    }
-  }
-  .referenz-card__visual {
-    flex-shrink: 0;
-    width: 64px;
-    height: 64px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .referenz-card__visual--blue   { background-color: var(--color-primary); }
-  .referenz-card__visual--green  { background-color: #2e7d32; }
-  .referenz-card__visual--purple { background-color: #412848; }
-  .referenz-card__kuerzel {
-    font-family: var(--font-display);
-    font-size: var(--dk-schrift-klein);
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.04em;
-    text-align: center;
-    line-height: 1.2;
-  }
-  .referenz-card__content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--rinne-1);
-  }
-  .referenz-card__name {
-    font-family: var(--font-display);
-    font-weight: 700;
-    color: var(--color-text-on-light);
-    margin: 0;
-    line-height: 1.3;
-  }
-  .referenz-card__desc {
-    font-size: var(--dk-schrift-karte);
-    color: var(--color-text-muted-on-light);
-    line-height: 1.65;
-    margin: 0;
-  }
 
-  .ueber-contact {
-    display: flex;
-    flex-direction: column;
-    gap: var(--rinne-3);
-    margin-top: 1.5rem;
-  }
-  .ueber-contact__item {
-    font-size: var(--dk-schrift-karte);
-    color: var(--color-text-muted);
-    line-height: 1.6;
-    margin: 0;
-  }
-  .ueber-contact__hours {
-    color: var(--color-text-faint);
-    font-size: var(--dk-schrift-karte);
-  }
 </style>

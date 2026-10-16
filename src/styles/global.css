@@ -616,17 +616,6 @@ a:not([class]):focus-visible {
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
-  /* Eigene, abgedunkelte Kachelfarben: --color-success und
-     --color-accent erreichen mit weißer Schrift kein 4,5:1 (WCAG 1.4.3). */
-  .case-card__visual--blue    { background-color: #1C60AD; }
-  .case-card__visual--green   { background-color: #2b7a4b; }
-  .case-card__visual--purple  { background-color: #412848; }
-  .case-card__visual--teal    { background-color: #116b7a; }
-  .case-card__initials {
-    font-size: var(--dk-schrift-klein);
-    text-align: center;
-    line-height: 1.2;
-  }
   .case-card__body {
     display: flex;
     flex-direction: column;
@@ -715,30 +704,15 @@ a:not([class]):focus-visible {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--rinne-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
   /* Und die Adresse selbst darf umbrechen. Ein Domainname ist für den
      Browser ein Wort; ohne diese Zeile bestimmt seine Länge die
      Mindestbreite der Karte. */
   .case-card__link {
     overflow-wrap: anywhere;
-  }
-
-  /* ----------------------------------------------------------
-     Badge
-     ---------------------------------------------------------- */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    font-family: var(--font-body);
-    font-size: var(--dk-schrift-klein);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--radius-sm);
-    background-color: rgba(28, 96, 173, 0.1);
   }
 
   /* ----------------------------------------------------------
@@ -1600,46 +1574,6 @@ a:not([class]):focus-visible {
     color: var(--color-text-faint);
     margin: 0;
   }
-
-  /* ----------------------------------------------------------
-     Projects grid (projekte page)
-     ---------------------------------------------------------- */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--rinne-3);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .case-card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--rinne-1);
-    list-style: none;
-    margin: 0 0 0.5rem;
-    padding: 0;
-  }
-  .case-card__kpi {
-    font-size: var(--dk-schrift-karte);
-    font-weight: 600;
-    color: var(--color-accent);
-    border-left: 2px solid var(--color-primary);
-    padding-left: 0.75rem;
-    margin-top: 0.25rem;
-  }
-  .case-card__meta {
-    font-size: var(--dk-schrift-karte);
-    color: var(--color-text-faint);
-    margin: 0;
-  }
-  /* Visual color variants */
-  .case-card__visual--indigo  { background-color: #474078; }
-  /* Abgedunkelt, damit auch diese Variante mit weißer Schrift 4,5:1
-     erreicht. */
-  .case-card__visual--orange  { background-color: #b85400; }
-  .case-card__visual--rose    { background-color: #9f1239; }
-  .case-card__visual--slate   { background-color: #475569; }
 
   /* ----------------------------------------------------------
      Abschnittskennungen (index + leistungen), ohne eigene Optik

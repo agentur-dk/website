@@ -10,12 +10,13 @@ import Dither from '../components/ui/Dither.astro';
 import { HERO_FIELDS } from '../lib/dither';
 import DitherBand from '../components/DitherBand.astro';
 import Kernteam from '../components/Kernteam.astro';
+import ReferenzKarte from '../components/ReferenzKarte.astro';
 import { sichtbareReferenzen, zeigtUnfreigegebenes } from '../data/referenzen';
 
 const base = import.meta.env.BASE_URL;
 
 /** Drei Fälle als Spiegel; alle übrigen stehen auf der Projektseite. */
-const referenzenAuswahl = sichtbareReferenzen().slice(0, 3);
+const referenzenAuswahl = sichtbareReferenzen().filter((r) => r.startseite);
 
 /*
  * `datei` ist zugleich der Schlüssel, über den der Leistungs-Check die
@@ -147,27 +148,7 @@ const kennzahlen = [
           </p>
         )}
         <div class="case-grid">
-          {referenzenAuswahl.map((r) => (
-            <article class="case-card" data-reveal>
-              <div class="case-card__visual case-card__visual--dither" aria-hidden="true">
-                <Dither field={r.feld} cell={3} />
-              </div>
-              <div class="case-card__body">
-                <span class="case-card__tag">{r.einordnung}</span>
-                <h3 class="case-card__title">{r.titel}</h3>
-                <p class="case-card__desc">{r.ergebnis}</p>
-                <p class="case-card__kunde">
-                  <strong>{r.kunde}</strong>
-                  {!r.freigegeben && (
-                    <span class="case-card__vorbehalt"> · Freigabe ausstehend</span>
-                  )}
-                </p>
-                <a href={r.link} class="case-card__link" target="_blank" rel="noopener noreferrer">
-                  {r.link.replace('https://', '')}<span class="u-sr-only"> (öffnet in neuem Tab)</span>&nbsp;→
-                </a>
-              </div>
-            </article>
-          ))}
+          {referenzenAuswahl.map((r) => <ReferenzKarte r={r} />)}
         </div>
         <div class="referenzen-section__cta">
           <a href={`${base}projekte.html`} class="btn btn--outline">Alle Projekte ansehen</a>
