@@ -1,40 +1,39 @@
 # 🎨 Designguide – agentur dk Website (dk-dk.de)
 
 > **Zweck:** Dieser Guide ist die verbindliche Referenz für ALLE neuen Seiten und Weiterentwicklungen der agentur-dk-Website. Beim Bauen neuer Seiten: Guide lesen und umsetzen.
-> **Stand:** 24.09.2026 · Eigenständiges Designsystem der agentur dk
+> **Stand:** 16.10.2026 · Eigenständiges Designsystem der agentur dk
 >
-> **Achtung, Abschnitt 1 ist veraltet.** Die Farbtabelle unten beschreibt
-> die Fassung vor der monochromen Bildsprache (#121212 statt #101010, fette
-> Überschriften statt Gewicht 400). Was tatsächlich ausgeliefert wird, steht
-> in `src/styles/mono.css` und `src/styles/tokens/colors.css`. Die
-> Abschnitte 2 und 3 sind am 24.09.2026 gegen den gebauten Stand geprüft
-> und neu geschrieben.
+> Alle Abschnitte beschreiben den gebauten Stand. Maßgeblich bei einem
+> Widerspruch ist der Code: Farben in `src/styles/mono.css`, Schriftleiter
+> und Abstände in `src/styles/tokens/`.
 
 ---
 
-## 1. Farbpalette (verbindlich)
+## 1. Farbpalette — monochrom, ein Akzent
 
-Nur diese Farben verwenden. Palette: **schwarz, grau, weiß, blau #1C60AD**.
+Schwarz, Grau, Weiß und **ein** Blau. Hierarchie entsteht aus Grad,
+Helligkeit und Laufweite, nicht aus Farbe (Herleitung:
+`docs/superpowers/specs/2026-08-30-mummentum-analyse.md`).
 
-| Token | Wert | Verwendung |
+| Rolle | Dunkel (Grundzustand) | Hell (`.section--hell`) |
 |---|---|---|
-| `--color-bg` | `#121212` | Basis-Hintergrund (dunkel) |
-| `--color-surface` | `#1e1e1e` | Karten, Panels, Footer-Bereiche |
-| `--color-surface-alt` | `#2a2a2a` | Hover, wechselnde Zeilen |
-| `--color-border` | `#333333` | dezente Linien |
-| `--color-border-strong` | `#555555` | stärkere Linien |
-| `--color-text` | `#e8e8e8` | Text auf dunkel (15,7:1 ✓ AAA) |
-| `--color-text-muted` | `#a8a8a8` | Sekundärtext auf dunkel (7,8:1 ✓ AA) |
-| `--color-text-faint` | `#909090` | sehr gedimmt (5,5:1 ✓ AA) |
-| `--color-primary` | `#1C60AD` | Akzent/Buttons/Flächen (weißer Text: 5,8:1 ✓) |
-| `--color-primary-hover` | `#2570C8` | Hover-Zustand Buttons |
-| `--color-primary-light` | `#5090d0` | Links/Text-Akzent auf dunkel (4,8:1 ✓ AA) |
-| `--color-accent` | `#5090d0` | Akzent-Text (Labels, Stats) |
-| `--color-focus` | `#6db3f2` | Fokus-Ring auf dunkel (≈7,5:1 ✓) |
+| Grund | `#101010` | `#f3f3f3` |
+| Fläche, Karte | `#0b0b0b` | `#ffffff` |
+| Fläche abgesetzt | `#141414` | `#eaeaea` |
+| Linie | `#212121` | `#dcdcdc` |
+| tragende Kante | `#3a3a3a` | `#8a8a8a` |
+| Text | `#f3f3f3` | `#101010` |
+| Text gedämpft | `#9c9c9c` | `#565656` |
+| Akzent als Text | `#5090d0` | `#1C60AD` |
 
-**Helle Sektionen** (`section--light`): Hintergrund `#f5f6f8`, Text `#14171c`, Karten `#ffffff`, Links `#1C60AD`. Die Tokens werden per CSS-Variablen-Override im Sektion-Scope gesetzt – Komponenten passen sich automatisch an.
+Das Blau `#1C60AD` ist zugleich Knopf- und Abschlussfläche
+(`.section--blau`). Der Akzent wechselt auf hellem Grund, weil `#5090d0`
+auf `#f3f3f3` nur 3,03 : 1 erreicht.
 
-**Semantisch:** Fehler `#ff9999` (Text) / `#ff6b6b` (UI), Erfolg `#5dbf6a` (dunkel) bzw. `#2e7d32` (hell).
+**Keine weitere Akzentfarbe.** Grün und Rot für Ja/Nein, farbige
+Initialenkästen und ähnliche Einzelfarben sind am 16.10.2026 entfernt
+worden. Einzige benannte Ausnahme: die Sprachnachricht auf der
+Startseite bildet eine WhatsApp-Blase nach und trägt deren Farben.
 
 ## 2. Typografie — eine Leiter, keine Ausnahmen
 
@@ -227,44 +226,60 @@ Hürde, die vorher fehlte.
 
 ## 4. Komponenten
 
-### Buttons
-- `btn--primary`: bg `#1C60AD`, weißer Text, min-height 44px, Mono→Manrope bold uppercase (jetzt Manrope)
-- `btn--accent`: bg `#1C60AD` (Akzent-Blau), weißer Text
-- `btn--outline` / `btn--ghost` / `btn--secondary`: transparent mit Rahmen
-- Fokus-Ring: `outline: 3px solid var(--color-focus)` + offset
-- Pfeil-CTA: Text + „›"/„→" möglich via `.cta-block__actions`
+### Knöpfe
+- `btn--primary` / `btn--accent`: Fläche `#1C60AD`, weiße Schrift, mindestens 44 px hoch
+- `btn--outline` / `btn--secondary`: ohne Fläche, mit Rahmen
+- **Eckig.** Bedienelemente tragen `--radius-md`; `--radius-full` ist nur
+  für Kreise (Porträt, Punkt) da, nicht für Knöpfe oder Filter
+- Fokus: `outline: 3px solid var(--color-focus)` mit Abstand
 
-### Boxen/Karten
-- **Card/Service-Card:** surface, 1px border, padding 32px, Hover: border primary + shadow, große Nummer (01–07) dezent rechts oben
-- **✓/✕ Vergleichsboxen** („Was Sie bekommen / Was Sie vermeiden"): Checkliste mit grünen ✓ (`checklist__item::before`) – Kontrast auf hell `#2e7d32`
-- **Stats-Strip:** große Zahlen (Space Grotesk, Akzentblau) + Label, responsive 2→1 Spalten
-- **Problem→Lösung-Sektionen:** 2-Spalten-Grid, links Text/H2, rechts Checkliste – wie auf den Landingpages
+### Verzeichnis statt Kartenraster
+Leistungen stehen als **Verzeichnis** (`Leistungsverzeichnis.astro`): eine
+Zeile je Eintrag, Titel links, Erklärung daneben, mit Link die ganze Zeile
+als Klickfläche. Die Liste der Leistungen liegt in `src/data/leistungen.ts`
+und speist Startseite und Leistungsübersicht. Sechs gleich aussehende
+Karten nebeneinander sind das Muster, das abgelöst wurde.
 
-### Lead-Formular (verbindliches Muster)
-- **2 Schritte** (keine 3. Seite): ① Anliegen → ② Kontakt
-- **Schritt 1 – Anliegen:** Themen-Checkboxen als auffällige Karten (`.lead-topic`, 24px-Häkchenbox, Hover, `:has(:checked)` = blauer Rahmen) + **letzte Checkbox „Sonstiges"** blendet Freitextfeld ein (`data-other-trigger`/`data-other-field`) + Nachricht-Textarea (Pflicht)
-- **Schritt 2 – Kontakt:** Name (Pflicht), E-Mail (Pflicht), **Website-URL (optional, autocomplete=url)** + Datenschutz-Hinweis (nur Link, KEINE Checkbox)
-- **Seiten-Tracking:** `<input type="hidden" name="page" value="Seitenname">` – jede Seite trägt ihren Namen („Startseite", „WordPress-Entwicklung", …)
-- Fortschrittsanzeige oben (`.form-steps`), Enter = Weiter, Fokus-Management pro Schritt, Validierung mit `aria-invalid` + Fehlermeldungen
+### Referenzen
+Eine Quelle: `src/data/referenzen.ts`, angezeigt über `ReferenzKarte.astro`
+auf Startseite (`startseite`), Projekte (alle, filterbar nach `themen`) und
+Über uns (`ueberUns`). **Nur echte Kunden mit Namen**, jede mit Freigabe
+und Datum; keine anonymisierten Fälle, Zahlen nur mit Nachweis. Die
+Bildfläche ist ein Dither-Raster, keine Initialen, kein Screenshot.
 
-### Spam-Schutz (DSGVO-konform, lightweight, barrierefrei)
-Kein Google ReCaptcha (IP!), keine Third-Party-Cookies. Stattdessen:
-1. **Honeypot:** unsichtbares Feld `_gotcha` (nur Bots füllen es)
-2. **Zeitstempel:** `form_started` (Hidden, per JS gesetzt) – Formular in <2,5 s ausgefüllt = Bot → still verwerfen (keine Fehlermeldung, die Bots trainiert)
-3. Serverseitig (Formspree) landen `page`, `interesse[]`, `anliegen_text` zur Auswertung mit.
+### Ablauf
+`process-list`: vier nummerierte Schritte. Die Überschrift ist je Seite
+eigen („Vom Audit zur messbaren Sichtbarkeit"), nicht dieselbe Formel
+auf jeder Leistungsseite.
 
-## 5. Verläufe & CTA-Block
-- **Footer & CTA:** `linear-gradient(to right bottom, #000000, #281621, #412848, #474078, #1c60ad)` (Kundenwunsch, exakte Stops)
-- Text auf Verlauf aufhellen: Footer-muted `#d4d4d4`, CTA-Titel weiß, Sub `#d4d4d4` (Kontrast auf dem hellen Blau-Ende)
+### Anfrageformular (`LeadForm.astro`)
+- **Drei Schritte:** Anliegen → Nachricht → Kontakt, mit Fortschrittsleiste
+- Ohne JavaScript stehen alle Schritte untereinander und das Formular
+  schickt ein klassisches POST
+- Datenschutzhinweis als Link, keine Einwilligungs-Checkbox
+- Verstecktes Feld `page` mit dem Seitennamen
+- Spamschutz: Honigtopf und Zeitschranke, kein reCAPTCHA (IP-Übertragung)
 
-## 6. Cookie-Banner & Konsens
-- **Zwingendes Modal** (zentriert, Scroll-Lock, Fokus-Trap, `role="dialog" aria-modal`), erst nach Auswahl nutzbar
-- **Ausnahme:** `datenschutz.html` + `impressum.html` – dort kein Popup (per Pfad-Erkennung in main.js)
+## 5. Fußzeile und Abschluss
+- Fußzeile dunkel (`#0b0b0b`) mit gerasterter Fläche als Streifen an der
+  Oberkante, über dem kein Text steht; kein Farbverlauf mehr
+- Abschluss je Seite **einmal**: `CtaSection.astro` auf der blauen Fläche
+  oder das Anfrageformular. Nach dem Abschluss folgt nur die Fußzeile
 
-## 7. Navigation & Footer
-- **Hauptnav:** Start | Leistungen (Dropdown, alle 7) | Referenzen | Barrierefreiheit + CTA „Projekt anfragen"
-- **7 Leistungen:** BFSG (`bfsg-wordpress-website-agentur.html`), WordPress (`wordpress-entwicklung.html`), SEO/GEO (`seo-geo.html`), Online-Marketing (`online-marketing.html`), Social Recruiting (`social-recruiting.html`), Corporate Design (`corporate-design.html`), KI-Services (`ki-services.html`)
-- **Footer:** 4 Spalten (Agentur/Leistungen/Unternehmen/Kontakt), Leistungen verlinken die 7 Seiten
+## 6. Einwilligung
+CookieConsent (`vanilla-cookieconsent`) über `src/lib/einwilligung-basis.ts`,
+Kategorien `necessary`, `analytics`, `einbettungen`. Fremde Einbettungen
+(Podigee-Player) laden erst nach Zustimmung. Regeln und Gegenprobe: globale
+`CLAUDE.md`, Abschnitt *Einwilligung*.
+
+## 7. Navigation
+- **Hauptnavigation:** Start · Leistungen (Aufklappmenü mit allen
+  Leistungsseiten) · Referenzen · Marken · Jobs · Über uns · „Erstgespräch"
+- Aktuelle Seite: `aria-current="page"` am zutreffenden Link. Auf einer
+  Leistungsseite trägt es der Unterpunkt; „Leistungen" ist dort nur
+  sichtbar als Bereich markiert (`nav-link--bereich`)
+- **Fußzeile:** vier Spalten (Agentur, Leistungen, Unternehmen, Kontakt),
+  dazu Impressum, Datenschutz, Barrierefreiheit und „Cookie-Einstellungen"
 
 ## 8. Barrierefreiheit (Pflicht)
 - Kontraste ≥4,5:1 (Text) bzw. ≥3:1 (UI), siehe Farbtabelle
@@ -274,66 +289,27 @@ Kein Google ReCaptcha (IP!), keine Third-Party-Cookies. Stattdessen:
 - `prefers-reduced-motion` respektieren
 
 ## 9. Performance (Pflicht)
-- **EINE CSS-Datei:** `css/site.min.css` (gebündelt aus tokens/base/layout/components/utilities) – nach CSS-Änderung `python3 build-css.py` ausführen
-- Formular-Transitions nur `box-shadow` (keine border-color-Animation = nicht zusammengesetzt)
-- `hero__headline` mit `min-height` (kein CLS durch Typewriter)
-- Fonts lokal + `font-display: swap`, Preload kritischer Fonts
+- CSS wird in jede Seite eingebettet (`inlineStylesheets: 'always'`): ein
+  Roundtrip weniger, auf dem Telefon der entscheidende Punkt (`AUDIT.md` 3.1)
+- Schriften lokal, `font-display: optional`, kritische Schnitte vorgeladen
+- Lighthouse-Schwelle 99 in allen Kategorien, gemessen über `npm run verify`
 
 ## 10. Konsistenz-Pflicht
 Bei jeder Weiterentwicklung oder Wegfall von Bereichen: **Nav, Footer, Startseiten-Karten, Cross-Links, sitemap.xml und llms.txt mit anpassen** (Daniel-Vorgabe, in MEMORY.md verankert).
 
 ---
 
-## 11. Astro-Umsetzung (ab 21.08.2026)
+## 11. Wo was steht
 
-Seit Phase 8 ist der Astro-Stack der einzige produktive Stack. Alle Legacy-Dateien (root-HTML, css/, js/, build-css.py) sind entfernt.
-
-### Seitenstruktur
-
-Neue und bestehende Seiten sind `.astro`-Dateien in `src/pages/`. Die Dateinamen entsprechen exakt den Legacy-URLs (SEO-stabil). Jede Seite verwendet zwingend `BaseLayout.astro` als Layout.
-
-```astro
----
-import BaseLayout from '../layouts/BaseLayout.astro';
----
-<BaseLayout title="Seitentitel – agentur dk" description="Meta-Description">
-  <!-- Seiteninhalt -->
-</BaseLayout>
-```
-
-`BaseLayout` übernimmt: `<head>` mit Meta-Tags, Canonical-Link, Font-Preload, JSON-LD-Slot, Skip-Link und `ConsentBanner`.
-
-### Komponenten-Inventar
-
-| Komponente | Datei | Funktion |
-|---|---|---|
-| Header | `Header.astro` | Nav + Dropdown (7 Leistungen) + CTA |
-| Footer | `Footer.astro` | 4 Spalten, Gradient-Verlauf |
-| CtaSection | `CtaSection.astro` | Abschluss-CTA mit Gradient |
-| ServiceCard | `ServiceCard.astro` | Leistungskarte (Nummer + Icon + Text) |
-| ReferenceCard | `ReferenceCard.astro` | Referenz-Karte (BMFSFJ, TARGOBANK, BFW) |
-| LogoStrip | `LogoStrip.astro` | scrollende Kundenlogo-Leiste |
-| StatsStrip | `StatsStrip.astro` | Kennzahlen-Strip (große Zahlen, Akzentblau) |
-| FaqAccordion | `FaqAccordion.astro` | Akkordeon mit `details`/`summary` |
-| TabNav | `TabNav.astro` | Tab-Navigation (TS-gesteuert) |
-| LeadForm | `LeadForm.astro` | 2-Schritt-Kontaktformular (Honeypot + Zeitstempel + Seiten-Tracking) |
-| BfsgCheck | `BfsgCheck.astro` | Interaktiver BFSG-Selbstcheck (Astro Island) |
-| ConsentBanner | `ConsentBanner.astro` | Cookie-Einwilligungsbanner (Modal, Fokus-Trap) |
-
-### Design-Tokens
-
-Die Tokens aus `css/tokens.css` (Legacy) leben jetzt als Tailwind-`@theme`-Variablen in `src/styles/global.css`. Die Farb- und Typo-Tabellen in Abschnitt 1 und 2 dieses Guides bleiben verbindlich. `tokens.css` existiert nicht mehr — `global.css` ist die alleinige Quelle.
-
-### Interaktive Logik
-
-Alle JavaScript-Logik wurde in `src/lib/` als pure TypeScript-Module extrahiert und ist via vitest vollständig getestet:
-
-| Modul | Inhalt |
+| Was | Datei |
 |---|---|
-| `bfsg-logic.ts` | 4 Fragen, 3 Ergebnis-Pfade, 15 Fußnoten |
-| `quiz.ts` | Sie-Form-Selbstcheck |
-| `consent.ts` | Consent-Verwaltung (localStorage, Pfad-Ausnahmen) |
-| `form-validation.ts` | 2-Schritt-Formular-Validierung, Honeypot, Zeitstempel |
+| Farben der Bildsprache | `src/styles/mono.css` |
+| Schriftleiter, Abstände, Rinnen | `src/styles/tokens/` |
+| Seiten, Navigation, Kontaktdaten | `src/config/site.config.ts` |
+| Leistungen | `src/data/leistungen.ts` |
+| Referenzen | `src/data/referenzen.ts` |
+| FAQ (Akkordeon, JSON-LD, llms.txt) | `src/data/faq.ts` |
+| Dramaturgie der Startseite | `docs/startseite-brief.md` |
 
----
-*Designguide gepflegt von OpenClaw – bei Unklarheiten in MEMORY.md oder dieser Datei nachsehen.*
+Neue Seiten nutzen `BaseLayout.astro` mit `mono`; der Dateiname ist die
+URL. Gate vor jedem Push: `npm run verify`, Exitcode lesen.
