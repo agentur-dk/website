@@ -4,6 +4,11 @@ import Icon from './ui/Icon.astro';
 
 const base        = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
+const aufSeite = (slug: string) => currentPath.endsWith(`/${slug}.html`);
+/* Auf einer Leistungsseite ist „Leistungen" der Bereich, nicht die Seite:
+   `aria-current="page"` trägt dort der Unterpunkt, der Elternpunkt wird
+   nur sichtbar markiert. */
+const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
 ---
 
 <header class="site-header">
@@ -45,7 +50,8 @@ const currentPath = Astro.url.pathname;
             aria-haspopup="true"
             aria-expanded="false"
             aria-controls="leistungen-dropdown"
-            class="nav-link nav-link--dropdown"
+            aria-current={aufSeite('leistungen') ? 'page' : undefined}
+            class:list={['nav-link nav-link--dropdown', imLeistungsbereich && 'nav-link--bereich']}
           >
             Leistungen
             <Icon name="chevron-down" size={14} class="nav-chevron" />
@@ -59,7 +65,7 @@ const currentPath = Astro.url.pathname;
           >
             {leistungenNav.map((l) => (
               <li>
-                <a href={`${base}${l.href}.html`} class="nav-dropdown__link">{l.label}</a>
+                <a href={`${base}${l.href}.html`} class="nav-dropdown__link" aria-current={aufSeite(l.href) ? 'page' : undefined}>{l.label}</a>
               </li>
             ))}
           </ul>
@@ -179,7 +185,8 @@ const currentPath = Astro.url.pathname;
   }
 
   .nav-link:hover,
-  .nav-link[aria-current="page"] {
+  .nav-link[aria-current="page"],
+  .nav-link--bereich {
     color: var(--color-text);
     background-color: var(--color-surface-alt);
   }
@@ -225,9 +232,16 @@ const currentPath = Astro.url.pathname;
     transition: color var(--transition-fast), background-color var(--transition-fast);
   }
 
-  .nav-dropdown__link:hover {
+  .nav-dropdown__link:hover,
+  .nav-dropdown__link[aria-current="page"] {
     color: var(--color-text);
     background-color: var(--color-surface-alt);
+  }
+
+  /* Nicht nur an der Fläche: Der Unterschied zum Hover-Zustand ist sonst
+     nur eine Helligkeitsstufe. */
+  .nav-dropdown__link[aria-current="page"] {
+    box-shadow: inset 3px 0 0 var(--color-primary);
   }
 
   .nav-cta {

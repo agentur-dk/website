@@ -87,6 +87,16 @@ p, li, dd, dt, address, figcaption {
   overflow-wrap: break-word;
 }
 
+/* Keine der beiden Schriften hat einen Kursivschnitt; der Browser würde
+   die Buchstaben sonst nur schräg rechnen. Betonung läuft über den
+   echten Schnitt 600, den es von Manrope gibt. */
+address, em, i, cite, dfn, var {
+  font-style: normal;
+}
+em {
+  font-weight: 600;
+}
+
 /* ============================================================
    TAILWIND v4 @theme — Design Tokens
    Werte aus src/styles/tokens/*.css (--dk-*); das getrennte Mapping
@@ -644,6 +654,7 @@ a:not([class]):focus-visible {
     font-size: var(--dk-schrift-karte);
     color: var(--color-text-muted);
     line-height: 1.65;
+    max-width: var(--dk-measure-body);
     margin: 0;
   }
   /* Dunkel wie die Porträtflächen im Kernteam: Die Dither-Komponente
