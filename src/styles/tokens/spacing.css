@@ -22,7 +22,7 @@
   --dk-radius-none: 0;
   --dk-radius-sm:   2px;
   --dk-radius-md:   4px;
-  --dk-radius-full: 9999px;  /* nur für Pills/Chips erlaubt */
+  --dk-radius-full: 9999px;  /* nur für Kreise (Porträt, Punkt); Bedienelemente bleiben eckig */
 
   /* Schatten */
   --dk-shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.4);
