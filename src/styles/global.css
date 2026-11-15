@@ -376,8 +376,8 @@ a:not([class]):focus-visible {
     font-family: var(--font-body);
     font-weight: 700;
     font-size: var(--dk-schrift-karte);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     text-decoration: none;
     border-radius: var(--radius-md);
     border: 2px solid transparent;
@@ -584,42 +584,46 @@ a:not([class]):focus-visible {
      ---------------------------------------------------------- */
   .case-card {
     display: flex;
-    flex-direction: row;
-    gap: var(--rinne-4);
+    flex-direction: column;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    padding: 1.75rem;
+    overflow: hidden;
     transition: border-color 250ms ease, box-shadow 250ms ease;
   }
   .case-card:hover {
-    border-color: var(--color-primary);
-    box-shadow: var(--shadow-md);
-  }
-  @media (max-width: 600px) {
-    .case-card {
-      flex-direction: column;
-    }
+    border-color: var(--color-border-strong);
+    box-shadow: 0 8px 24px rgb(27 27 31 / 0.08);
   }
   .case-card__visual {
-    flex-shrink: 0;
-    width: 64px;
-    height: 64px;
-    border-radius: var(--radius-md);
+    aspect-ratio: 16 / 10;
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+  .case-card__bild {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+  }
+  .case-card__visual--tag {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
+    align-items: flex-end;
+    padding: 1.5rem;
+    background: var(--color-tint, #E3ECF7);
+    color: #14365F;
     font-weight: 700;
-    font-size: var(--dk-schrift-klein);
-    color: #ffffff;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: var(--dk-schrift-titel-3);
+    line-height: 1.15;
+    letter-spacing: var(--dk-tracking-titel-3);
   }
   .case-card__body {
     display: flex;
     flex-direction: column;
     gap: var(--rinne-1);
+    padding: 1.5rem;
+    flex: 1;
     /* Ohne `min-width: 0` schrumpft das Flex-Kind nicht unter das längste
        Wort — eine Domain im Link trüge die Karte bei 320 px über den
        Rand (WCAG 1.4.10). */
@@ -629,8 +633,8 @@ a:not([class]):focus-visible {
     font-size: var(--dk-schrift-klein);
     font-weight: 600;
     color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-transform: none;
+    letter-spacing: 0;
   }
   .case-card__title {
     font-family: var(--font-display);
@@ -645,14 +649,6 @@ a:not([class]):focus-visible {
     line-height: 1.65;
     max-width: var(--dk-measure-body);
     margin: 0;
-  }
-  /* Dunkel wie die Porträtflächen im Kernteam: Die Dither-Komponente
-     zeichnet mit `--color-bg` als Grund — hell auf hell wäre eine leere
-     Fläche. */
-  .case-card__visual--dither {
-    background: #101010;
-    --color-bg: #101010;
-    overflow: hidden;
   }
   /* Nur in der Vorschau: der Hinweis über der Fallliste. */
   .referenzen__warnung {
@@ -681,7 +677,7 @@ a:not([class]):focus-visible {
     font-size: var(--dk-schrift-klein);
     font-weight: 400;
     color: var(--color-error-text, #b3261e);
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
   }
   .case-card__link {
     /* WCAG 2.5.8: eigenständige Schaltfläche, mindestens 24px hoch. */
@@ -702,7 +698,7 @@ a:not([class]):focus-visible {
      waagerecht. */
   .case-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
     gap: var(--rinne-4);
     list-style: none;
     margin: 0;
@@ -767,8 +763,8 @@ a:not([class]):focus-visible {
     display: block;
     font-size: var(--dk-schrift-klein);
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--color-accent);
     margin-bottom: 0.75rem;
   }
@@ -785,8 +781,8 @@ a:not([class]):focus-visible {
     display: block;
     font-size: var(--dk-schrift-klein);
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--color-primary-on-light);
     margin-bottom: 0.75rem;
   }
@@ -1181,8 +1177,8 @@ a:not([class]):focus-visible {
   .lc-result__tag {
     font-size: var(--dk-schrift-klein);
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--color-accent);
   }
   .lc-result__title {
@@ -1286,7 +1282,7 @@ a:not([class]):focus-visible {
      Section structural patterns (landing pages)
      ---------------------------------------------------------- */
   .section--hero {
-    padding-block: var(--raum-abschnitt-weit);
+    padding-block: var(--raum-abschnitt);
     background-color: var(--color-bg);
   }
   .section--dark {
@@ -1296,8 +1292,8 @@ a:not([class]):focus-visible {
     display: block;
     font-size: var(--dk-schrift-klein);
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--color-accent);
     margin-bottom: 0.75rem;
   }
@@ -1497,8 +1493,8 @@ a:not([class]):focus-visible {
   .content-cta__eyebrow {
     font-size: var(--dk-schrift-klein);
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: rgba(255,255,255,0.65);
   }
   .content-cta__title {
@@ -1565,8 +1561,8 @@ a:not([class]):focus-visible {
   .chip--active,
   .chip[aria-pressed="true"] {
     border-color: var(--color-primary);
-    background-color: rgba(28, 96, 173, 0.12);
-    color: var(--color-primary-light);
+    background-color: var(--color-primary);
+    color: #ffffff;
     font-weight: 600;
   }
   .filter-status {

@@ -1,11 +1,16 @@
 # Porträts für das Kernteam
 
-Hier liegt genau ein Bild, und mehr braucht die Seite im Augenblick
-nicht:
+Hier liegt bisher ein Bild:
 
 | Datei                 | Wo es erscheint                                  |
 |-----------------------|--------------------------------------------------|
-| `daniel-kontelis.jpg` | Sprachnachricht auf der Startseite, Karte auf „Über uns“ |
+| `daniel-kontelis.jpg` | Kopf und Teamliste der Startseite, Sprachnachricht, Karte auf „Über uns“ |
+
+Für Filipos Makkas, Julius Heinisch und Shakil Rifaat stehen auf der
+Startseite Initialen, bis echte Fotos da sind. Ein neues Porträt kommt
+als `vorname-nachname.jpg` hierher und wird in `src/pages/index.astro`
+im Feld `bild` der Teamliste eingetragen — nur mit Einverständnis der
+Person.
 
 **Format:** quadratisch, mindestens 640 × 640 px, JPG oder WebP. Die
 Seite rechnet selbst herunter und stellt auf Graustufen um — also ruhig

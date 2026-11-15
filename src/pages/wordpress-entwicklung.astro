@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RelatedServices from '../components/RelatedServices.astro';
-import DitherBand from '../components/DitherBand.astro';
-import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
@@ -42,7 +40,6 @@ const base = import.meta.env.BASE_URL;
 
     <!-- SECTION: Hero -->
     <section class="section section--hero" aria-labelledby="hero-heading">
-      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="rain" cell={3} fps={16} /></div>
       <div class="container">
         <p class="section__label">WordPress-Entwicklung</p>
         <h1 id="hero-heading" class="section__headline">WordPress-Websites, die verkaufen – und Bestand haben</h1>
@@ -55,7 +52,6 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Problem / Benefits -->
-    <DitherBand field="scan" label="Ausgangslage" cell={4} />
 
     <section class="section section--dark" aria-labelledby="wp-problem">
       <div class="container">
@@ -135,7 +131,6 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Weitere Leistungen -->
-    <DitherBand field="weave" label="Weiter im Thema" cell={4} />
     <RelatedServices
       slugs={['bfsg-wordpress-website-agentur', 'seo-geo', 'online-marketing', 'corporate-design']}
     />

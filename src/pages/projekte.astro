@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CtaSection from '../components/CtaSection.astro';
@@ -23,7 +22,6 @@ const faelle = sichtbareReferenzen();
 
   <main id="main-content">
 
-    <DitherBand field="dunes" label="Referenzen" cell={4} />
 
     <div class="page-header container">
       <nav aria-label="Breadcrumb" class="breadcrumb">
@@ -69,10 +67,11 @@ const faelle = sichtbareReferenzen();
     </section>
 
     <CtaSection
-      title="Ihr Projekt ist das nächste?"
-      text="Erzählen Sie uns von Ihrem Vorhaben – wir melden uns innerhalb von 24 Stunden."
-      buttonLabel="Jetzt anfragen"
-      buttonHref={`${base}#contact`}
+      label="Sichtbarkeits-Check · 30 Minuten · kostenfrei"
+      title="Wo verlieren Sie heute Kunden?"
+      text="Wir sehen uns vorher an, wie man Sie findet, und sagen Ihnen im Gespräch, was Sie als Erstes ändern sollten."
+      buttonLabel="Sichtbarkeits-Check vereinbaren"
+      buttonHref={`${base}beratung.html`}
     />
 
   </main>

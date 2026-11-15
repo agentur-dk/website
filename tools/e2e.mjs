@@ -95,10 +95,10 @@ await page.route('**/formular/send.php**', async (route) => {
   await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
 });
 
-await page.goto(`${ORIGIN}/`, { waitUntil: 'domcontentloaded' });
+await page.goto(`${ORIGIN}/website-leasing.html`, { waitUntil: 'domcontentloaded' });
 
 const formular = page.locator('#lf-form');
-pruefe('das Formular steht auf der Startseite', await formular.count() === 1);
+pruefe('das Formular steht auf der Leistungsseite', await formular.count() === 1);
 
 await page.locator('[data-next="2"]').click();
 pruefe(
@@ -174,7 +174,7 @@ pruefe('der Erfolg wird angesagt',
     await route.fulfill({ status: 303, headers: { location: `${ORIGIN}/danke.html` }, body: '' });
   });
 
-  await seite.goto(`${ORIGIN}/`, { waitUntil: 'domcontentloaded' });
+  await seite.goto(`${ORIGIN}/website-leasing.html`, { waitUntil: 'domcontentloaded' });
 
   pruefe('ohne JavaScript: alle drei Schritte stehen da',
     await seite.locator('#lf-step-1').isVisible()

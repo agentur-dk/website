@@ -19,39 +19,41 @@
    Weiß auf #1C60AD: 6,31:1.
    ============================================================ */
 .theme-mono {
-  --color-bg:            #101010;
-  --color-surface:       #0b0b0b;
-  --color-surface-alt:   #141414;
-  --color-border:        #212121;
-  --color-border-strong: #3a3a3a;
-  --color-text:          #f3f3f3;
-  --color-text-muted:    #9c9c9c;
-  --color-text-faint:    #8a8a8a;
-  --color-decor:         #3a3a3a;
-  --color-accent:        #5090d0;
-  --color-primary-light: #5090d0;
+  --color-bg:            #FBF8F3;
+  --color-surface:       #FFFFFF;
+  --color-surface-alt:   #F1EADF;
+  --color-border:        #8A8478;
+  --color-border-strong: #5F5A50;
+  --color-text:          #1B1B1F;
+  --color-text-muted:    #55534E;
+  --color-text-faint:    #55534E;
+  --color-decor:         #8A8478;
+  --color-accent:        #1C60AD;
+  --color-primary-light: #1C60AD;
+  --color-focus:         #1C60AD;
+  --color-tint:          #E3ECF7;
+  --color-primary:       #1C60AD;
+  --color-primary-hover: #164E8E;
 
   /* Die -on-light-Tokens bleiben, weil Regeln wie
-     .schwerpunkte-section__heading direkt darauf zugreifen — ohne sie
-     stünde dort Fast-Schwarz auf Schwarz. */
-  --color-bg-light:            #0b0b0b;
-  --color-surface-light:       #141414;
-  --color-surface-alt-light:   #191919;
-  --color-border-light:        #212121;
-  --color-border-strong-light: #3a3a3a;
-  --color-text-on-light:       #f3f3f3;
-  --color-text-muted-on-light: #9c9c9c;
-  --color-text-faint-on-light: #8a8a8a;
-  --color-primary-on-light:    #5090d0;
-  --color-focus-on-light:      #6db3f2;
-  --color-success-on-light:    #6dbf78;
-  --dk-color-decor-on-light:   #3a3a3a;
+     .schwerpunkte-section__heading direkt darauf zugreifen. */
+  --color-bg-light:            #FBF8F3;
+  --color-surface-light:       #FFFFFF;
+  --color-surface-alt-light:   #F1EADF;
+  --color-border-light:        #8A8478;
+  --color-border-strong-light: #5F5A50;
+  --color-text-on-light:       #1B1B1F;
+  --color-text-muted-on-light: #55534E;
+  --color-text-faint-on-light: #55534E;
+  --color-primary-on-light:    #1C60AD;
+  --color-focus-on-light:      #1C60AD;
+  --color-success-on-light:    #2e7d32;
+  --dk-color-decor-on-light:   #8A8478;
 
-  /* Der Footer trägt eine gerasterte Fläche statt eines Verlaufs. Die
-     Deklaration bleibt, weil tools/check-cta.mjs die Regel liest. */
-  --gradient-footer:        linear-gradient(to bottom, #0b0b0b, #0b0b0b);
-  --color-on-gradient:      #f3f3f3;
-  --color-text-on-gradient: #9c9c9c;
+  /* Die Deklaration bleibt, weil tools/check-cta.mjs die Regel liest. */
+  --gradient-footer:        linear-gradient(to bottom, #14365F, #14365F);
+  --color-on-gradient:      #FFFFFF;
+  --color-text-on-gradient: #C9D6E8;
 }
 
 /* ============================================================
@@ -87,7 +89,7 @@
 .theme-mono h4,
 .theme-mono h5,
 .theme-mono h6 {
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .theme-mono h1 {
@@ -113,32 +115,21 @@
 
 /* --- Rubrik über der Überschrift ---------------------------- */
 .theme-mono .section-label,
-.theme-mono .schwerpunkte-section__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: var(--rinne-2);
-  font-family: var(--font-mono);
-  font-size: var(--dk-schrift-klein);
-  font-weight: 400;
-  letter-spacing: var(--dk-tracking-mono);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+.theme-mono .schwerpunkte-section__eyebrow,
+.theme-mono .section__label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--dk-schrift-karte);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--color-accent);
   margin-bottom: 0;
-}
-/* Der kurze Strich davor bindet das Etikett an den linken Satzrand. */
-.theme-mono .section-label::before,
-.theme-mono .schwerpunkte-section__eyebrow::before {
-  content: '';
-  width: 1.5rem;
-  height: 1px;
-  background: var(--color-border-strong);
-  flex-shrink: 0;
 }
 
 /* --- Überschriften ------------------------------------------ */
 .theme-mono .hero__headline {
   font-size: var(--dk-schrift-hero);
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: var(--dk-tracking-hero);
   line-height: var(--dk-leading-display);
   max-width: var(--dk-measure-display);
@@ -147,7 +138,7 @@
 }
 .theme-mono .section-title,
 .theme-mono .schwerpunkte-section__heading {
-  font-weight: 400;
+  font-weight: 700;
   line-height: var(--dk-leading-title);
   max-width: var(--dk-measure-title);
   text-wrap: balance;
@@ -160,7 +151,7 @@
 .theme-mono .usp-card__title,
 .theme-mono .schwerpunkt-card__title,
 .theme-mono .wert-card__title {
-  font-weight: 400;
+  font-weight: 700;
   line-height: var(--dk-leading-tight);
   max-width: 22ch;
 }
@@ -171,42 +162,22 @@
    steht. */
 .theme-mono .page-header__title,
 .theme-mono .section__headline {
-  font-weight: 400;
+  font-weight: 700;
   line-height: var(--dk-leading-title);
   max-width: var(--dk-measure-title);
   text-wrap: balance;
 }
 
 .theme-mono .section__heading {
-  font-weight: 400;
+  font-weight: 700;
   line-height: var(--dk-leading-title);
   max-width: 22ch;
   text-wrap: balance;
 }
 
 .theme-mono .section__subheading {
-  font-weight: 400;
+  font-weight: 700;
   line-height: var(--dk-leading-tight);
-}
-
-/* Rubriken der Unterseiten: dieselbe Behandlung wie .section-label. */
-.theme-mono .section__label {
-  display: flex;
-  align-items: center;
-  gap: var(--rinne-2);
-  font-family: var(--font-mono);
-  font-size: var(--dk-schrift-klein);
-  font-weight: 400;
-  letter-spacing: var(--dk-tracking-mono);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-.theme-mono .section__label::before {
-  content: '';
-  width: 1.5rem;
-  height: 1px;
-  background: var(--color-border-strong);
-  flex-shrink: 0;
 }
 
 /* Keine Silbentrennung im Displaygrad — bei 68 px zerreißt sie Wörter
@@ -251,7 +222,7 @@
 .theme-mono .service-card__number {
   font-family: var(--font-mono);
   font-size: var(--dk-schrift-klein);
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: var(--dk-tracking-mono);
   color: var(--color-text-muted);
 }
@@ -260,186 +231,12 @@
    Mikro-Labels verabredet (Rubriken, Zähler, Footer-Überschriften,
    CTA-Labels), und UI-Elemente bleiben eckig. */
 
-/* --- Flächen ------------------------------------------------ */
-
-/* Kopfbild einer Karte: die gerasterte Fläche liegt unter einem
-   Verlauf, damit die Kartenfarbe nach unten hin übernimmt. */
-.theme-mono .card-head {
-  position: relative;
-  height: 8rem;
-  overflow: hidden;
-  border-bottom: 1px solid var(--color-border);
-}
-.theme-mono .card-head__flaeche {
-  opacity: 0.45;
-  transition: opacity 500ms ease;
-}
-.theme-mono .schwerpunkt-card:hover .card-head__flaeche {
-  opacity: 0.7;
-}
-.theme-mono .card-head::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--color-surface), transparent 70%);
-  pointer-events: none;
-}
-
-/* Hero-Fläche: eine Kugel rechts neben dem Satz, radial ausmaskiert.
-   Feste Quadratform statt „volle Höhe der Sektion" — sonst wächst sie
-   mit der Textmenge mit und liegt irgendwann hinter der Überschrift. */
-/* --- Flächen im Seitenkopf der Unterseiten -------------------- */
-/* Drei Anordnungen, damit nicht jede Unterseite gleich aussieht. Alle drei
-   halten sich von den Textspalten fern — ein Raster unter einer Zeile
-   bleibt ein Raster unter einer Zeile, egal wie schwach.
-   tools/wcag-manual.mjs prüft das auf jeder Seite in zwei Breiten. */
-.theme-mono .section--hero,
-.theme-mono .hero {
-  position: relative;
-  overflow: hidden;
-}
-.theme-mono .section--hero > .container {
-  position: relative;
-  z-index: 1;
-}
-.theme-mono .hero-flaeche {
-  position: absolute;
-  pointer-events: none;
-}
-
-/* Neben dem Satz. Fällt weg, sobald keine zweite Spalte mehr da ist. */
-.theme-mono .hero-flaeche--rechts {
-  top: 3rem;
-  right: 0;
-  width: min(30vw, 380px);
-  aspect-ratio: 1;
-  opacity: 0.5;
-  mask-image: radial-gradient(70% 70% at 50% 50%, black 44%, transparent 86%);
-}
-@media (max-width: 1023px) {
-  .theme-mono .hero-flaeche--rechts {
-    display: none;
-  }
-}
-
-/* Streifen über der Rubrik. */
-.theme-mono .hero-flaeche--band {
-  inset: 0 0 auto 0;
-  height: 6rem;
-  opacity: 0.42;
-  mask-image: linear-gradient(to bottom, black 35%, transparent),
-              linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-  mask-composite: intersect;
-}
-/* Der Streifen steht im Polster, also wächst das Polster um seine
-   Höhe: der weite Takt plus eine Rinne. */
-.theme-mono .section--hero:has(.hero-flaeche--band) {
-  padding-top: calc(var(--raum-abschnitt-weit) + var(--rinne-4));
-}
-
-/* Sockel unter den Knöpfen. */
-.theme-mono .hero-flaeche--sockel {
-  inset: auto 0 0 0;
-  height: 7rem;
-  opacity: 0.4;
-  mask-image: linear-gradient(to top, black 30%, transparent),
-              linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-  mask-composite: intersect;
-}
-/* Dasselbe unten, eine Rinne mehr, weil der Sockel höher ist als der
-   Streifen. */
-.theme-mono .section--hero:has(.hero-flaeche--sockel) {
-  padding-bottom: calc(var(--raum-abschnitt-weit) + var(--rinne-5));
-}
-
-/* --- Die Kugel im Kopf der Startseite ------------------------ */
-.theme-mono .hero__flaeche {
-  /* Die Kugel hängt über die rechte Fensterkante hinaus: Ein Drittel liegt
-     draußen, zwei Drittel stehen im Bild. Der Anschnitt macht sie größer,
-     ohne dass sie den Satz bedrängt — und er nimmt ihr das Briefmarkenhafte
-     einer freistehenden Grafik.
-
-     Die Breite wächst mit dem Fenster, aber nicht beliebig: Sichtbar wird
-     `100vw - 2/3 · Breite`, und dieser Punkt muss rechts vom Satz bleiben.
-     Der Satz endet bei Containerrand + 680 px. Aus beidem folgt der
-     Faktor 1,4 und die Obergrenze — bei 1024 px bleibt die Kugel 340 px
-     schmal, bei 1440 px sind es 820 px.
-     tools/wcag-manual.mjs prüft in zwei Breiten nach, dass kein Text
-     darüber liegt. */
-  --kugel: clamp(340px, calc((100vw - 760px) * 1.4), 820px);
-
-  position: absolute;
-  /* Vom oberen Rand aus gesetzt, nicht mittig: Mittig hinge die Position
-     an der Höhe des Hero, und die ändert sich, wenn die Webfonts
-     einspringen — die Kugel rutschte und kostete CLS. */
-  top: 4rem;
-  right: calc(var(--kugel) / -3);
-  bottom: auto;
-  left: auto;
-  width: var(--kugel);
-  aspect-ratio: 1;
-  height: auto;
-  opacity: 0.55;
-  pointer-events: none;
-  mask-image: radial-gradient(70% 70% at 50% 50%, black 46%, transparent 88%);
-}
-@media (max-width: 1023px) {
-  /* Unter der Zweispaltigkeit gibt es keine Spalte mehr, in der die Kugel
-     stehen könnte — sie läge hinter der Überschrift. Auch schwach
-     abgedunkelt bleibt ein 1-Bit-Raster unter einer Zeile ein Raster unter
-     einer Zeile; tools/wcag-manual.mjs meldet die Überlappung bei 390 px.
-     Auf dem Telefon trägt die Bildsprache also über die Trennerbänder, die
-     Kartenköpfe und den Footer — dort steht kein Text darüber. */
-  .theme-mono .hero__flaeche {
-    display: none;
-  }
-}
-
-/* Footer-Fläche nur als Streifen an der Oberkante, über dem kein Text
-   steht. Ein 1-Bit-Raster unter einer Zeile zerstört die Lesbarkeit auch
-   bei rechnerisch gutem Kontrast — und axe-core sieht es nicht, weil es
-   die CSS-Farbe liest, nicht das Canvas. tools/wcag-manual.mjs prüft die
-   Überlappung. */
-.theme-mono .footer__flaeche {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 7rem;
-  opacity: 0.5;
-  pointer-events: none;
-  mask-image: linear-gradient(to bottom, black 30%, transparent);
-}
-/* Platz für den Streifen, sonst beginnt der Footer-Inhalt mittendrin.
-   Doppelte Klasse, weil die scoped Regel in Footer.astro dieselbe
-   Spezifität hat. */
-.theme-mono.theme-mono .site-footer__inner {
-  padding-top: 9.5rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .theme-mono .card-head__flaeche {
-    transition: none;
-  }
-}
-
-/* --- Verankerung der Flächen -------------------------------- */
-/* .hero und .schwerpunkt-card sind im Grundzustand statisch; die
-   absolut gesetzten Flächen brauchen einen Bezugsrahmen, sonst
-   hängen sie am Viewport. */
-.theme-mono .hero {
-  position: relative;
-}
-.theme-mono .hero__inner {
-  position: relative;
-  z-index: 1;
-}
-
-.theme-mono .schwerpunkt-card {
-  position: relative;
-  overflow: hidden;
-}
-/* Das Kopfbild läuft über die Kartenpolsterung hinaus bis an den Rand. */
-.theme-mono .card-head {
-  margin: -2rem -2rem 0.5rem;
+/* Die Fußzeile trägt die Werte der blauen Fläche, eine Stufe dunkler,
+   damit sie sich vom Abschluss-Abschnitt darüber absetzt. Doppelte
+   Klasse, weil die scoped Regel in Footer.astro dieselbe Spezifität hat. */
+.theme-mono.theme-mono .site-footer {
+  background: #0F2A4A;
+  color: var(--color-text);
 }
 
 /* --- Reichweite gegen Komponenten-Styles -------------------- */
@@ -448,7 +245,7 @@
    `.theme-mono h2` (0,1,1). Die doppelt notierte Klasse hebt die Regel
    auf (0,2,1) — wirkt wie !important, bleibt aber überschreibbar. */
 .theme-mono.theme-mono :is(h1, h2, h3, h4, h5, h6) {
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .theme-mono.theme-mono .cta-section__title {
@@ -461,9 +258,9 @@
 .theme-mono.theme-mono .footer-heading {
   font-family: var(--font-mono);
   font-size: var(--dk-schrift-klein);
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: var(--dk-tracking-mono);
+  text-transform: none;
   color: var(--color-text-muted);
 }
 
@@ -488,31 +285,29 @@
    Abgeschrieben liefe der zweite Satz auseinander. */
 .theme-mono .section--hell,
 .theme-mono .auf-hell {
-  --color-bg:            #f3f3f3;
-  --color-surface:       #ffffff;
-  --color-surface-alt:   #eaeaea;
-  --color-border:        #dcdcdc;
-  --color-border-strong: #8a8a8a;
-  --color-text:          #101010;
-  --color-text-muted:    #565656;
-  --color-text-faint:    #565656;
-  --color-decor:         #b4b4b4;
+  --color-bg:            #F1EADF;
+  --color-surface:       #FFFFFF;
+  --color-surface-alt:   #FBF8F3;
+  --color-border:        #8A8478;
+  --color-border-strong: #5F5A50;
+  --color-text:          #1B1B1F;
+  --color-text-muted:    #55534E;
+  --color-text-faint:    #55534E;
+  --color-decor:         #8A8478;
   --color-accent:        #1C60AD;
   --color-primary-light: #1C60AD;
 
-  /* Dieselben Werte auch unter den -on-light-Namen: Mehrere Regeln
-     greifen direkt darauf zu, etwa .schwerpunkte-section__heading. */
-  --color-bg-light:            #f3f3f3;
-  --color-surface-light:       #ffffff;
-  --color-surface-alt-light:   #eaeaea;
-  --color-border-light:        #dcdcdc;
-  --color-border-strong-light: #8a8a8a;
-  --color-text-on-light:       #101010;
-  --color-text-muted-on-light: #565656;
-  --color-text-faint-on-light: #565656;
+  --color-bg-light:            #F1EADF;
+  --color-surface-light:       #FFFFFF;
+  --color-surface-alt-light:   #FBF8F3;
+  --color-border-light:        #8A8478;
+  --color-border-strong-light: #5F5A50;
+  --color-text-on-light:       #1B1B1F;
+  --color-text-muted-on-light: #55534E;
+  --color-text-faint-on-light: #55534E;
   --color-primary-on-light:    #1C60AD;
   --color-focus-on-light:      #1C60AD;
-  --dk-color-decor-on-light:   #b4b4b4;
+  --dk-color-decor-on-light:   #8A8478;
 }
 
 /* Die Flaeche nur fuer den Abschnitt: `.auf-hell` bringt seinen eigenen
@@ -610,7 +405,7 @@
   font-family: var(--dk-font-mono);
   font-size: var(--dk-schrift-klein);
   letter-spacing: var(--dk-tracking-mono, 0.18em);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 
@@ -631,23 +426,24 @@
    Rahmen als weiße Deckschicht: Ein aufgehellter Blauton erreicht
    gegen den Grund nur 1,7–2,0:1.
    ============================================================ */
-.theme-mono .section--blau {
-  --color-bg:            #1C60AD;
-  --color-surface:       #1a5798;
-  --color-surface-alt:   #17508c;
-  --color-border:        rgb(255 255 255 / 0.22);
-  --color-border-strong: rgb(255 255 255 / 0.45);
+.theme-mono .section--blau,
+.theme-mono .site-footer {
+  --color-bg:            #14365F;
+  --color-surface:       #1A4271;
+  --color-surface-alt:   #1F4B7F;
+  --color-border:        rgb(255 255 255 / 0.45);
+  --color-border-strong: rgb(255 255 255 / 0.7);
   --color-text:          #ffffff;
-  --color-text-muted:    #cfe0f2;
-  --color-text-faint:    #cfe0f2;
+  --color-text-muted:    #C9D6E8;
+  --color-text-faint:    #C9D6E8;
   --color-decor:         rgb(255 255 255 / 0.32);
   --color-accent:        #ffffff;
   --color-primary-light: #ffffff;
 
-  --color-bg-light:            #1C60AD;
-  --color-surface-light:       #1a5798;
+  --color-bg-light:            #14365F;
+  --color-surface-light:       #1A4271;
   --color-text-on-light:       #ffffff;
-  --color-text-muted-on-light: #cfe0f2;
+  --color-text-muted-on-light: #C9D6E8;
   --color-primary-on-light:    #ffffff;
   --color-focus-on-light:      #ffffff;
   --dk-color-decor-on-light:   rgb(255 255 255 / 0.32);
@@ -693,7 +489,7 @@
 .theme-mono .section--blau .btn--primary {
   background: #ffffff;
   border-color: #ffffff;
-  color: #14477f;
+  color: #14365F;
 }
 .theme-mono .section--blau .btn--primary:hover,
 .theme-mono .section--blau .btn--primary:focus-visible {
@@ -783,7 +579,7 @@
   font-family: var(--dk-font-mono);
   font-size: var(--dk-schrift-klein);
   letter-spacing: var(--dk-tracking-mono, 0.18em);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 
@@ -948,14 +744,14 @@
   list-style: none;
   font-family: var(--font-mono, monospace);
   font-size: var(--dk-schrift-klein);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-text-muted);
 }
 .theme-mono .team__aufklapp::-webkit-details-marker { display: none; }
 
 /* Die Sperrung sitzt am Wort, nicht an der Zeile: Am Aufklapper
    haengt auch der Pfeil, und der soll nicht mitgesperrt werden. */
-.theme-mono .team__wort { letter-spacing: 0.06em; }
+.theme-mono .team__wort { letter-spacing: 0; }
 .theme-mono .team__aufklapp:hover { color: var(--color-text); }
 
 .theme-mono .team__pfeil { flex: 0 0 auto; transition: transform 160ms ease; }

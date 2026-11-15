@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 /**
- * Misst jede gerasterte Fläche gegen ihren Grund: Opazitäten der ganzen
- * Elternkette, gemischt über den ersten undurchsichtigen Grund darunter,
- * gegen die Schwelle aus WCAG 1.4.11 (3 : 1). Auch Schmuckflächen müssen
- * sie erreichen — eine Fläche, die man nicht sieht, ist keine Gestaltung.
+ * Misst jede umrandete Fläche gegen ihren Grund: Karten, Kästen,
+ * Eingabefelder. Ihre Kante muss sich mit mindestens 3 : 1 abheben, die
+ * Schwelle aus WCAG 1.4.11. Auch Schmuckflächen müssen sie erreichen —
+ * eine Fläche, die man nicht sieht, ist keine Gestaltung.
+ *
+ * Die Kante ist entweder der Rahmen oder die Fläche selbst: Ein blauer
+ * Knopf braucht keinen sichtbaren Rahmen, seine Füllung hebt ihn ab.
+ * Durchscheinende Rahmen werden über den Grund gemischt, denn gesehen wird
+ * die Mischung, nicht die Farbangabe im CSS.
  *
  *   node tools/check-kontrast.mjs
  */
@@ -13,160 +18,112 @@ import { starteServer } from './lib/server.mjs';
 
 const DIST = 'dist';
 const SCHWELLE = 3.0;
+const BREITEN = [1440, 390];
 
-/** sRGB-Kanal → lineare Leuchtdichte. */
 function kanal(v) {
   const x = v / 255;
   return x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
 }
 const leuchtdichte = ([r, g, b]) => 0.2126 * kanal(r) + 0.7152 * kanal(g) + 0.0722 * kanal(b);
-
 function kontrast(a, b) {
   const [hell, dunkel] = [leuchtdichte(a), leuchtdichte(b)].sort((x, y) => y - x);
   return (hell + 0.05) / (dunkel + 0.05);
 }
-
-const zahlen = (s) => (s.match(/\d+(?:\.\d+)?/g) ?? []).slice(0, 3).map(Number);
+const mische = ([r, g, b, a], grund) => [r, g, b].map((v, i) => Math.round(a * v + (1 - a) * grund[i]));
 
 const { server, port } = await starteServer(DIST);
 const browser = await chromium.launch();
 const seiten = readdirSync(DIST).filter((f) => f.endsWith('.html'));
 
-const befunde = [];
-const gemessen = [];
+const befunde = new Map();
+let anzahl = 0;
+let kleinste = null;
 
-for (const datei of seiten) {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.goto(`http://127.0.0.1:${port}/${datei}`);
+for (const breite of BREITEN) {
+  const ctx = await browser.newContext({ viewport: { width: breite, height: 900 } });
+  for (const datei of seiten) {
+    const page = await ctx.newPage();
+    await page.goto(`http://127.0.0.1:${port}/${datei}`);
+    const knopf = page.locator('#cc-main button[data-role="necessary"]').first();
+    if (await knopf.count()) { await knopf.click(); await page.waitForTimeout(150); }
 
-  // Der Einwilligungsdialog liegt über der Seite und hält das Rastern auf.
-  const knopf = page.locator('#cc-main button[data-role="all"], #cc-main .cm__btn').first();
-  if (await knopf.count()) { await knopf.click(); await page.waitForTimeout(200); }
-
-  // Die Flächen rastern erst, wenn sie im Blickfeld waren.
-  await page.evaluate(async () => {
-    await new Promise((fertig) => {
-      let y = 0;
-      const t = setInterval(() => {
-        window.scrollTo(0, y); y += 700;
-        if (y > document.body.scrollHeight) { clearInterval(t); fertig(); }
-      }, 30);
-    });
-  });
-  // Auf jede Fläche warten statt auf eine feste Zeit: Unter Last meldete
-  // eine feste Wartezeit leere Leinwände als Befund.
-  await page.waitForFunction(() => {
-    const alle = [...document.querySelectorAll('canvas[data-dither]')];
-    if (!alle.length) return true;
-    return alle.every((c) => {
-      const r = c.getBoundingClientRect();
-      if (r.width < 2 || r.height < 2) return true;        // unsichtbar, zählt nicht
-      if (!c.width || !c.height) return false;
-      try {
-        const d = c.getContext('2d', { willReadFrequently: true })
-                   .getImageData(0, 0, c.width, c.height).data;
-        for (let i = 3; i < d.length; i += 4) if (d[i] >= 8) return true;
-        return false;
-      } catch (e) { return true; }
-    });
-  }, null, { timeout: 15000 }).catch(() => { /* Bericht erfolgt unten */ });
-
-  const flaechen = await page.evaluate(() => {
-    const aus = [];
-    for (const c of document.querySelectorAll('canvas[data-dither]')) {
-      // Opazität der ganzen Kette: Ein Elternteil mit 0.4 dimmt mit.
-      let deckung = 1;
-      let el = c;
-      while (el && el !== document.documentElement) {
-        const o = parseFloat(getComputedStyle(el).opacity);
-        if (o < 1) deckung *= o;
-        el = el.parentElement;
-      }
-      // Der Grund ist der erste Vorfahre, der wirklich etwas malt.
-      let grund = 'rgb(255, 255, 255)';
-      el = c.parentElement;
-      while (el) {
-        const bg = getComputedStyle(el).backgroundColor;
-        if (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) { grund = bg; break; }
-        el = el.parentElement;
-      }
-      // Die gezeichneten Pixel, nicht die berechnete `color`: Geprüft wird,
-      // was auf der Leinwand steht, nicht die Absicht im CSS.
-      let gezeichnet = null;
-      try {
-        const ctx = c.getContext('2d', { willReadFrequently: true });
-        const bild = ctx.getImageData(0, 0, c.width, c.height).data;
-        const zaehler = new Map();
-        for (let i = 0; i < bild.length; i += 4) {
-          if (bild[i + 3] < 8) continue;               // durchsichtig zählt nicht
-          const k = `${bild[i]},${bild[i + 1]},${bild[i + 2]},${bild[i + 3]}`;
-          zaehler.set(k, (zaehler.get(k) ?? 0) + 1);
+    const kaesten = await page.evaluate(() => {
+      const farbe = (s) => {
+        const m = s.match(/rgba?\(([^)]+)\)/);
+        if (!m) return null;
+        const t = m[1].split(/[ ,/]+/).filter(Boolean).map(Number);
+        return [t[0], t[1], t[2], t.length > 3 ? t[3] : 1];
+      };
+      const sichtbar = (el) => {
+        for (let e = el; e; e = e.parentElement) {
+          const cs = getComputedStyle(e);
+          if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return false;
+          if (e.hidden) return false;
         }
-        let beste = null, meiste = 0;
-        for (const [k, n] of zaehler) if (n > meiste) { meiste = n; beste = k; }
-        if (beste) {
-          const [r0, g0, b0, a0] = beste.split(',').map(Number);
-          gezeichnet = { rgb: [r0, g0, b0], alpha: a0 / 255, anteil: meiste / (c.width * c.height) };
+        return true;
+      };
+      /* Der Grund ist der erste Vorfahre, der wirklich etwas malt. */
+      const grundVon = (el) => {
+        for (let e = el.parentElement; e; e = e.parentElement) {
+          const f = farbe(getComputedStyle(e).backgroundColor);
+          if (f && f[3] > 0.99) return f;
         }
-      } catch (e) { /* Leinwand nicht lesbar */ }
+        return [255, 255, 255, 1];
+      };
+      const name = (el) => {
+        const k = String(el.className || '').trim().split(/\s+/).filter((c) => !c.startsWith('astro-'))[0];
+        return el.tagName.toLowerCase() + (k ? '.' + k : '');
+      };
+      const aus = [];
+      for (const el of document.querySelectorAll('body *')) {
+        if (el.closest('#cc-main')) continue;
+        const cs = getComputedStyle(el);
+        const seiten = ['Top', 'Right', 'Bottom', 'Left'];
+        const umrandet = seiten.every((s) =>
+          parseFloat(cs[`border${s}Width`]) >= 1 && cs[`border${s}Style`] !== 'none');
+        if (!umrandet) continue;
+        const r = el.getBoundingClientRect();
+        if (r.width < 12 || r.height < 12) continue;
+        if (!sichtbar(el)) continue;
+        const rahmen = farbe(cs.borderLeftColor);
+        const flaeche = farbe(cs.backgroundColor);
+        if (!rahmen) continue;
+        aus.push({ name: name(el), rahmen, flaeche, grund: grundVon(el) });
+      }
+      return aus;
+    });
 
-      const r = c.getBoundingClientRect();
-      aus.push({
-        klasse: String(c.className).trim().split(/\s+/).filter((x) => x !== 'dither').join('.')
-                || String(c.parentElement?.className ?? '').trim().split(/\s+/)[0] || '(nur .dither)',
-        gezeichnet,
-        grund,
-        deckung: Number(deckung.toFixed(3)),
-        sichtbar: r.width >= 2 && r.height >= 2,
-      });
+    for (const k of kaesten) {
+      const grund = k.grund.slice(0, 3);
+      const kante = k.rahmen[3] > 0 ? kontrast(mische(k.rahmen, grund), grund) : 0;
+      const fuellung = k.flaeche && k.flaeche[3] > 0 ? kontrast(mische(k.flaeche, grund), grund) : 0;
+      const wert = Math.max(kante, fuellung);
+      anzahl++;
+      if (!kleinste || wert < kleinste.wert) kleinste = { wert, name: k.name, seite: datei };
+      if (wert < SCHWELLE) {
+        const schluessel = `${k.name} auf rgb(${grund})`;
+        const eintrag = befunde.get(schluessel) ?? { wert, seiten: new Set() };
+        eintrag.seiten.add(`${datei}@${breite}`);
+        befunde.set(schluessel, eintrag);
+      }
     }
-    return aus;
-  });
-
-  for (const f of flaechen) {
-    if (!f.sichtbar) continue;
-    if (!f.gezeichnet) {
-      befunde.push(`${datei} — .${f.klasse}: nichts gezeichnet (Leinwand leer oder nicht lesbar)`);
-      continue;
-    }
-    const grund = zahlen(f.grund);
-    if (grund.length < 3) continue;
-    // Die Punktfarbe mischt sich zweimal über den Grund: einmal mit der
-    // Deckkraft der Pixel selbst, dann mit der Opazität der Elternkette.
-    const gesamt = f.deckung * f.gezeichnet.alpha;
-    const gemischt = f.gezeichnet.rgb.map((v, i) => Math.round(gesamt * v + (1 - gesamt) * grund[i]));
-    const wert = kontrast(gemischt, grund);
-    gemessen.push({ seite: datei, ...f, gemischt, wert });
-    if (wert < SCHWELLE) {
-      befunde.push(
-        `${datei} — .${f.klasse}: ${wert.toFixed(2)} : 1` +
-        `  (gezeichnet rgb(${f.gezeichnet.rgb}) → rgb(${gemischt}) auf ${f.grund}, Deckung ${f.deckung})`
-      );
-    }
+    await page.close();
   }
-  await page.close();
+  await ctx.close();
 }
 
 await browser.close();
 server.close();
 
-if (befunde.length) {
-  console.error(`\n✗ check-kontrast: ${befunde.length} Fläche(n) unter ${SCHWELLE} : 1\n`);
-  for (const b of befunde) console.error('  ' + b);
-  console.error(
-    '\n  Die Punktfarbe kommt aus `currentColor`. Liegt eine Fläche zu' +
-    '\n  blass, stimmt entweder die Textfarbe des Abschnitts nicht oder' +
-    '\n  die Opazität ist zu niedrig für diesen Grund. Eine Fläche, die' +
-    '\n  man nicht sieht, ist keine Gestaltung.\n'
-  );
+if (befunde.size) {
+  console.error(`\n✗ check-kontrast: ${befunde.size} Fläche(n) mit Kante unter ${SCHWELLE} : 1\n`);
+  for (const [k, v] of befunde) {
+    const liste = [...v.seiten];
+    console.error(`  ${k}: ${v.wert.toFixed(2)} : 1  (${liste.slice(0, 3).join(', ')}${liste.length > 3 ? ` und ${liste.length - 3} weitere` : ''})`);
+  }
+  console.error('\n  Rahmen oder Fläche müssen sich vom Grund abheben. Eine Fläche,\n  die man nicht sieht, ist keine Gestaltung.\n');
   process.exit(1);
 }
 
-const kleinste = gemessen.reduce((a, b) => (a.wert < b.wert ? a : b));
-console.log(
-  `✓ Kontrast-Prüfung: ${gemessen.length} gerasterte Flächen auf ${seiten.length} Seiten, ` +
-  `alle ≥ ${SCHWELLE} : 1`
-);
-console.log(
-  `  schwächste: .${kleinste.klasse} auf ${kleinste.seite} mit ${kleinste.wert.toFixed(2)} : 1`
-);
+console.log(`✓ Kontrast-Prüfung: ${anzahl} umrandete Flächen auf ${seiten.length} Seiten in ${BREITEN.length} Breiten, alle ≥ ${SCHWELLE} : 1`);
+if (kleinste) console.log(`  schwächste: ${kleinste.name} auf ${kleinste.seite} mit ${kleinste.wert.toFixed(2)} : 1`);

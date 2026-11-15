@@ -58,7 +58,7 @@ export const siteConfig = {
   tagline:     'design & kommunikation',
   founder:     'Daniel Kontelis',
   url:         SITE_URL,
-  description: 'Agentur aus Köln für barrierefreie WordPress-Websites nach BFSG, Website-Leasing, SEO/GEO und Online-Marketing. Kurze Wege, Antwort in 24 Stunden.',
+  description: 'Agentur aus Köln, die Betriebe mit 10 bis 50 Mitarbeitern sichtbar macht: Website und Website-Leasing, SEO/GEO, Online-Marketing und Social Recruiting.',
   ogImage:     'images/og-image-website.png',
   foundingYear: 2005,
   contact: {
@@ -110,13 +110,13 @@ export interface PageEntry {
 
 export const pages: PageEntry[] = [
   { slug: '',      label: 'Startseite',  priority: 1.0, changefreq: 'weekly',
-    summary: 'Überblick über alle Leistungen: Website-Leasing, barrierefreie WordPress-Entwicklung, SEO/GEO, Online-Marketing.' },
+    summary: 'Die agentur dk macht Betriebe mit 10 bis 50 Mitarbeitern sichtbar: Website, SEO/GEO und Online-Marketing aus Köln. Erster Schritt: der kostenfreie Sichtbarkeits-Check.' },
 
-  { slug: 'beratung', label: 'Kostenfreies Erstgespräch', priority: 0.95, changefreq: 'monthly',
-    summary: 'Kostenfreies, unverbindliches Erstgespräch: in fünf Klicks das Anliegen schildern, danach Termin wählen oder Rückruf anfordern.' },
+  { slug: 'beratung', label: 'Sichtbarkeits-Check', priority: 0.95, changefreq: 'monthly',
+    summary: 'Sichtbarkeits-Check, 30 Minuten, kostenfrei: in fünf Klicks das Anliegen schildern, danach Termin wählen oder Rückruf anfordern.' },
 
   { slug: 'leistungen', label: 'Leistungen', priority: 0.9, changefreq: 'monthly',
-    summary: 'Alle Leistungen im Überblick mit Einstieg in die jeweiligen Detailseiten.' },
+    summary: 'Alle Leistungen in drei Feldern: gefunden werden, neue Menschen erreichen, entlastet werden.' },
 
   { slug: 'bfsg-wordpress-website-agentur', label: 'BFSG & Barrierefreiheit',
     priority: 0.9, changefreq: 'monthly', parent: 'leistungen',

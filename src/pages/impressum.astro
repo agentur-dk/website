@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -17,7 +16,6 @@ const base = import.meta.env.BASE_URL;
   <Header />
   <main id="main-content" tabindex="-1">
 
-    <DitherBand field="mesh" label="Impressum" cell={4} />
 
     <div class="page-header container">
       <nav aria-label="Breadcrumb" class="breadcrumb">

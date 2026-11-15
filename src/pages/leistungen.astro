@@ -1,30 +1,61 @@
 ---
+/**
+ * Die Leistungen in drei Feldern statt acht gleichrangiger Angebote. Wer
+ * hier ankommt, kennt seine Lage, nicht unsere Begriffe: Deshalb beginnt
+ * jede Leistung mit dem Satz, den ein Kunde selbst sagen würde.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CtaSection from '../components/CtaSection.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
-import Icon from '../components/ui/Icon.astro';
-import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
-import { leistungen } from '../data/leistungen';
+import { leistungen, type Feld } from '../data/leistungen';
 
 const base = import.meta.env.BASE_URL;
+
+/* Die Ausgangslage je Leistung, in den Worten eines Kunden. */
+const lage: Record<string, string> = {
+  'website-leasing.html':                '„Wir brauchen eine gute Website, aber nicht die Einmalkosten.“',
+  'wordpress-entwicklung.html':          '„Unsere Website ist alt, langsam oder schwer zu pflegen.“',
+  'seo-geo.html':                        '„Wir werden bei Google und in KI-Antworten nicht gefunden.“',
+  'bfsg-wordpress-website-agentur.html': '„Wir sind unsicher, ob uns das BFSG betrifft.“',
+  'corporate-design.html':               '„Unser Auftritt wirkt uneinheitlich und beliebig.“',
+  'online-marketing.html':               '„Wir geben Geld für Werbung aus und wissen nicht, was zurückkommt.“',
+  'social-recruiting.html':              '„Wir finden keine Mitarbeiter mehr.“',
+  'ki-services.html':                    '„Anrufe bleiben liegen, Routinearbeit frisst Zeit.“',
+};
+
+const felder: { id: Feld; nr: string; titel: string; text: string }[] = [
+  {
+    id: 'auftritt',
+    nr: 'Feld 1 · In Ihrer Zielgruppe',
+    titel: 'Gefunden werden',
+    text: 'Wer nach Ihrer Leistung sucht, soll bei Ihnen landen und verstehen, warum er bleiben sollte. Dafür muss alles zusammenpassen: Website, Google-Eintrag, Erscheinungsbild und die Inhalte, die Suchmaschinen und KI-Assistenten lesen.',
+  },
+  {
+    id: 'reichweite',
+    nr: 'Feld 2 · In einer neuen Zielgruppe',
+    titel: 'Neue Menschen erreichen',
+    text: 'Wer Sie nicht kennt, sucht auch nicht nach Ihnen. Diese Menschen erreichen Sie dort, wo sie ohnehin sind: mit Anzeigen, Social Media und Kampagnen, ob Sie Kunden suchen oder Mitarbeiter.',
+  },
+  {
+    id: 'entlastung',
+    nr: 'Feld 3 · Im Betrieb',
+    titel: 'Entlastet werden',
+    text: 'Mehr Sichtbarkeit bringt mehr Anfragen. Damit die nicht liegen bleiben, übernehmen KI-Assistenten Routinearbeit: Sie gehen ans Telefon, vergeben Termine und beantworten wiederkehrende Fragen.',
+  },
+];
 ---
 
 <BaseLayout
   slug="leistungen"
-  title="Leistungen – Web, BFSG, SEO & Marketing | agentur dk"
-  description="Website-Leasing, barrierefreie WordPress-Entwicklung, SEO/GEO, Online-Marketing, Social Recruiting, Corporate Design und KI-Services aus Köln."
+  title="Leistungen: Website, SEO, Marketing, KI | agentur dk Köln"
+  description="Die Leistungen der agentur dk aus Köln in drei Feldern: gefunden werden, neue Menschen erreichen, entlastet werden. Von Website bis KI-Assistent."
   mono
 >
-
   <Header />
 
   <main id="main-content">
-
-    <DitherBand field="orbit" label="Leistungen" cell={3} />
-
     <div class="page-header container">
       <nav aria-label="Breadcrumb" class="breadcrumb">
         <ol class="breadcrumb__list">
@@ -32,173 +63,140 @@ const base = import.meta.env.BASE_URL;
           <li><span aria-current="page">Leistungen</span></li>
         </ol>
       </nav>
-      <h1 class="page-header__title">Leistungen für Website, Sichtbarkeit und Marke</h1>
-      <p class="page-header__lead">Von BFSG-barrierefreien WordPress-Websites über SEO &amp; GEO bis zu KI-Services: Alle Leistungen der agentur dk im Überblick.</p>
+      <h1 class="page-header__title">Drei Felder, ein Ziel: Sie werden gesehen.</h1>
+      <p class="page-header__lead">
+        Alles, was wir tun, zahlt auf Ihre Sichtbarkeit ein. Welche Felder Sie
+        brauchen und in welcher Reihenfolge, klären wir im Sichtbarkeits-Check.
+      </p>
+      <nav class="feld-sprung" aria-label="Felder auf dieser Seite">
+        {felder.map((f) => <a href={`#${f.id}`}>{f.titel}</a>)}
+      </nav>
     </div>
 
-    <section class="schwerpunkte-section section" aria-labelledby="schwerpunkte-heading-l">
-      <div class="container">
-        <p class="schwerpunkte-section__eyebrow">Was wir tun</p>
-        <h2 class="schwerpunkte-section__heading" id="schwerpunkte-heading-l">Digitale Lösungen mit Schwerpunkt</h2>
-        <p class="schwerpunkte-section__lead">Neben unserem vollständigen Leistungsspektrum haben wir zwei Kernbereiche, in denen wir besonders tiefes Know-how und nachgewiesene Ergebnisse vorweisen können.</p>
-        <div class="schwerpunkte-grid">
-          <article class="schwerpunkt-card" data-reveal>
-            <div class="schwerpunkt-card__icon" aria-hidden="true">
-              <Icon name="briefcase-business" size={48} strokeWidth={1.5} />
-            </div>
-            <h3 class="schwerpunkt-card__title">Website-Leasing &amp; digitale Sichtbarkeit</h3>
-            <p class="schwerpunkt-card__text">Monatliche Flatrate statt hoher Einmalkosten: Konzeption, Design, Umsetzung, Wartung und laufende Optimierung aus einer Hand – planbar und langfristig sicher.</p>
-            <a href={`${base}website-leasing.html`} class="btn btn--outline schwerpunkt-card__link">Mehr zum Website-Leasing</a>
-          </article>
-          <article class="schwerpunkt-card" data-reveal>
-            <div class="schwerpunkt-card__icon" aria-hidden="true">
-              <Icon name="accessibility" size={48} strokeWidth={1.5} />
-            </div>
-            <h3 class="schwerpunkt-card__title">BFSG &amp; digitale Barrierefreiheit</h3>
-            <p class="schwerpunkt-card__text">Seit Juni 2025 gilt das BFSG. Wir machen Ihre Website barrierearm nach EN 301 549 / WCAG 2.2 AA – rechtssicher und im echten Code, ohne Overlay-Plugins.</p>
-            <a href={`${base}bfsg-wordpress-website-agentur.html#bfsg-check`} class="btn btn--outline schwerpunkt-card__link">BFSG-Check starten</a>
-          </article>
+    {felder.map((f, i) => (
+      <section id={f.id} class:list={['section', i % 2 === 0 && 'section--hell']} aria-labelledby={`${f.id}-heading`}>
+        <div class="container">
+          <p class="section-label">{f.nr}</p>
+          <h2 id={`${f.id}-heading`} class="section-title">{f.titel}</h2>
+          <p class="section-lead feld__text">{f.text}</p>
+          <ul class="leistungskarten" role="list">
+            {leistungen.filter((l) => l.feld === f.id).map((l) => (
+              <li class="leistungskarte">
+                <p class="leistungskarte__lage">{lage[l.datei]}</p>
+                <h3 class="leistungskarte__titel">
+                  <a href={`${base}${l.datei}`}>{l.titel}</a>
+                </h3>
+                <p class="leistungskarte__text">{l.text}</p>
+                <span class="leistungskarte__mehr" aria-hidden="true">Mehr erfahren →</span>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-    </section>
-
-    <section class="section section--hell" aria-labelledby="orientation-heading">
-      <div class="container">
-        <h2 class="section-title" id="orientation-heading">Welche Leistung passt zu Ihrer Situation?</h2>
-        <p class="orientation__lead">
-          Die meisten Anfragen lassen sich einer von sieben Ausgangslagen zuordnen.
-          Wenn Sie sich in einer davon wiederfinden, führt der Link direkt zur passenden Seite.
-        </p>
-        <dl class="orientation__list">
-          <div class="orientation__row">
-            <dt class="orientation__case">„Wir sind unsicher, ob uns das BFSG betrifft."</dt>
-            <dd class="orientation__answer">
-              Der kostenlose Selbstcheck klärt in vier Fragen, ob Ihr Angebot unter das
-              Barrierefreiheitsstärkungsgesetz fällt.
-              <a href={`${base}bfsg-wordpress-website-agentur.html#bfsg-check`} class="text-link">Zum BFSG-Check</a>
-            </dd>
-          </div>
-          <div class="orientation__row">
-            <dt class="orientation__case">„Unsere Website ist alt, langsam oder schwer zu pflegen."</dt>
-            <dd class="orientation__answer">
-              Relaunch auf WordPress mit sauberem Code, Core-Web-Vitals-Optimierung und einer
-              Redaktion, die Ihr Team ohne technisches Vorwissen bedient.
-              <a href={`${base}wordpress-entwicklung.html`} class="text-link">Zur WordPress-Entwicklung</a>
-            </dd>
-          </div>
-          <div class="orientation__row">
-            <dt class="orientation__case">„Wir brauchen eine gute Website, aber nicht die Einmalkosten."</dt>
-            <dd class="orientation__answer">
-              Website-Leasing verteilt die Investition auf eine feste Monatsrate — Wartung,
-              Hosting und Support auf Wunsch inklusive.
-              <a href={`${base}website-leasing.html`} class="text-link">Zum Website-Leasing</a>
-            </dd>
-          </div>
-          <div class="orientation__row">
-            <dt class="orientation__case">„Wir werden bei Google und in KI-Antworten nicht gefunden."</dt>
-            <dd class="orientation__answer">
-              Technisches SEO für klassische Suche, GEO für ChatGPT, Claude, Gemini und
-              Perplexity — inklusive strukturierter Daten und llms.txt.
-              <a href={`${base}seo-geo.html`} class="text-link">Zu SEO &amp; GEO</a>
-            </dd>
-          </div>
-          <div class="orientation__row">
-            <dt class="orientation__case">„Wir geben Budget für Werbung aus, ohne zu wissen, was zurückkommt."</dt>
-            <dd class="orientation__answer">
-              Kampagnen auf Google, Meta und LinkedIn mit Messung entlang des ROAS statt
-              entlang von Reichweitenzahlen.
-              <a href={`${base}online-marketing.html`} class="text-link">Zum Online-Marketing</a>
-            </dd>
-          </div>
-          <div class="orientation__row">
-            <dt class="orientation__case">„Wir finden keine Mitarbeitenden mehr."</dt>
-            <dd class="orientation__answer">
-              Social Recruiting spricht Fachkräfte dort an, wo sie sind — statt auf
-              Bewerbungen auf ausgeschriebene Stellen zu warten.
-              <a href={`${base}social-recruiting.html`} class="text-link">Zum Social Recruiting</a>
-            </dd>
-          </div>
-          <div class="orientation__row">
-            <dt class="orientation__case">„Unser Auftritt wirkt uneinheitlich und beliebig."</dt>
-            <dd class="orientation__answer">
-              Logo, Farbwelt, Typografie und Anwendungsregeln in einem Manual, das über alle
-              Kanäle hinweg trägt.
-              <a href={`${base}corporate-design.html`} class="text-link">Zum Corporate Design</a>
-            </dd>
-          </div>
-          <div class="orientation__row">
-            <dt class="orientation__case">„Anrufe bleiben liegen, Routineaufgaben fressen Zeit."</dt>
-            <dd class="orientation__answer">
-              KI-Telefon-Agenten nehmen rund um die Uhr an und buchen Termine; KI-gestützte
-              Textarbeit entlastet die Redaktion.
-              <a href={`${base}ki-services.html`} class="text-link">Zu den KI-Services</a>
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-
-    <DitherBand field="dunes" label="Alle Leistungen" cell={4} />
-
-    <section class="services section" aria-labelledby="alle-leistungen-heading">
-      <div class="container">
-        <h2 class="section-title" id="alle-leistungen-heading">Alle Leistungen im Überblick</h2>
-        <Leistungsverzeichnis eintraege={leistungen.map((l) => ({ ...l, href: `${base}${l.datei}` }))} />
-      </div>
-    </section>
+      </section>
+    ))}
 
     <FaqAccordion slug="leistungen" />
 
     <CtaSection
-      title="Bereit, Ihr Projekt zu starten?"
-      text="Kostenloses Erstgespräch, unverbindlich. Wir melden uns innerhalb von 24 Stunden."
-      buttonLabel="Projekt anfragen"
-      buttonHref={`${base}#contact`}
+      label="Sichtbarkeits-Check · 30 Minuten · kostenfrei"
+      title="Nicht sicher, wo Sie anfangen sollen?"
+      text="Dafür ist der Sichtbarkeits-Check da. Wir sehen uns vorher an, wie man Sie findet, und sagen Ihnen, welches Feld zuerst dran ist."
+      buttonLabel="Sichtbarkeits-Check vereinbaren"
+      buttonHref={`${base}beratung.html`}
     />
-
   </main>
 
   <Footer mono />
 </BaseLayout>
 
-  <style>
-    /* Als <dl>, weil es Begriff und Erläuterung sind: Screenreader kündigen
-       die Paare als Liste an, und Parser lesen die Zuordnung verlässlich. */
-    .orientation__lead {
-      max-width: 62ch;
-      margin: 0 auto var(--spacing-10);
-      color: var(--color-text-muted);
-      line-height: 1.7;
-      text-align: center;
-    }
-    .orientation__list {
-      max-width: var(--container-narrow, 720px);
-      margin-inline: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .orientation__row {
-      display: grid;
-      gap: var(--rinne-1) var(--rinne-5);
-      padding-block: 1.25rem;
-      border-top: 1px solid var(--color-border);
-    }
-    .orientation__row:last-child { border-bottom: 1px solid var(--color-border); }
-    .orientation__case {
-      font-family: var(--font-display);
-      font-weight: 700;
-      color: var(--color-text);
-      line-height: 1.4;
-    }
-    .orientation__answer {
-      margin: 0;
-      color: var(--color-text-muted);
-      line-height: 1.7;
-    }
-    .orientation__answer .text-link { white-space: nowrap; }
+<style>
+  .feld-sprung {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--rinne-2);
+    margin-top: var(--rinne-5);
+  }
+  .feld-sprung a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: var(--dk-schrift-karte);
+    text-decoration: none;
+  }
+  .feld-sprung a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
 
-    @media (min-width: 48rem) {
-      .orientation__row { grid-template-columns: 15rem 1fr; align-items: start; }
-    }
-  </style>
+  .feld__text {
+    max-width: var(--dk-measure-lead);
+  }
+
+  .leistungskarten {
+    list-style: none;
+    margin: var(--rinne-6) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: var(--rinne-4);
+  }
+  /* Die ganze Karte ist klickbar, der Link bleibt aber die Überschrift:
+     So liest ein Screenreader einen Linktext statt eines ganzen Absatzes. */
+  .leistungskarte {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--rinne-2);
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .leistungskarte:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: 0 8px 24px rgb(27 27 31 / 0.08);
+  }
+  .leistungskarte:focus-within {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .leistungskarte__lage {
+    margin: 0;
+    font-size: var(--dk-schrift-karte);
+    color: var(--color-text-muted);
+  }
+  .leistungskarte__titel {
+    margin: 0;
+  }
+  .leistungskarte__titel a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .leistungskarte__titel a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .leistungskarte__titel a:focus-visible {
+    outline: none;
+  }
+  .leistungskarte__text {
+    margin: 0;
+    font-size: var(--dk-schrift-karte);
+    line-height: var(--dk-leading-body);
+    color: var(--color-text-muted);
+  }
+  .leistungskarte__mehr {
+    margin-top: auto;
+    padding-top: var(--rinne-2);
+    font-weight: 700;
+    font-size: var(--dk-schrift-karte);
+    color: var(--color-accent);
+  }
+</style>

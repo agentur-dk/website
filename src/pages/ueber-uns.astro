@@ -1,7 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DitherBand from '../components/DitherBand.astro';
-import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StatsStrip from '../components/StatsStrip.astro';
@@ -33,7 +31,6 @@ const base = import.meta.env.BASE_URL;
   <main id="main-content">
 
     <section class="section section--hero" aria-labelledby="ueber-hero-heading">
-      <div class="hero-flaeche hero-flaeche--sockel" aria-hidden="true"><Dither field="fade" cell={4} fps={16} /></div>
       <div class="container">
         <span class="section__label">Über uns</span>
         <h1 id="ueber-hero-heading" class="section__headline">
@@ -43,13 +40,12 @@ const base = import.meta.env.BASE_URL;
           agentur dk steht für design & kommunikation – und genau das machen wir: Websites, Branding, Marketing und technische Umsetzung aus einer Hand. Kurze Wege, direkt, verbindlich.
         </p>
         <div class="ueber-hero__actions">
-          <a href={`${base}#contact`} class="btn btn--primary btn--lg">Gespräch vereinbaren</a>
+          <a href={`${base}beratung.html`} class="btn btn--primary btn--lg">Sichtbarkeits-Check vereinbaren</a>
           <a href={`${base}leistungen.html`} class="btn btn--outline btn--lg">Unsere Leistungen</a>
         </div>
       </div>
     </section>
 
-    <DitherBand field="drift" label="Wer wir sind" cell={4} />
 
     <section class="section section--dark" aria-labelledby="wer-wir-sind-heading" data-reveal>
       <div class="container">
@@ -294,10 +290,11 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <CtaSection
-      title="Lassen Sie uns zusammenarbeiten."
-      text="Kostenloses Erstgespräch, ohne Umwege. Wir hören zu, bevor wir anbieten."
-      buttonLabel="Jetzt anfragen"
-      buttonHref={`${base}#contact`}
+      label="Sichtbarkeits-Check · 30 Minuten · kostenfrei"
+      title="Lernen Sie uns kennen."
+      text="Eine halbe Stunde, in der wir uns Ihren Auftritt ansehen und Ihnen sagen, was Sie als Erstes ändern sollten. Kostenfrei und ohne Verpflichtung."
+      buttonLabel="Sichtbarkeits-Check vereinbaren"
+      buttonHref={`${base}beratung.html`}
     />
 
 
@@ -373,8 +370,8 @@ const base = import.meta.env.BASE_URL;
   .ueber-visual-block__sub {
     font-size: var(--dk-schrift-klein);
     color: var(--color-text-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: none;
+    letter-spacing: 0;
     text-align: center;
     line-height: 1.3;
   }

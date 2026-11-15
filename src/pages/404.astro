@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -18,7 +17,6 @@ const base = import.meta.env.BASE_URL;
 
   <main id="main-content">
 
-    <DitherBand field="orbit" label="Fehler 404" cell={4} />
     <div class="error-page">
       <div class="error-page__inner">
         <p class="error-page__code" aria-label="Fehler 404">404</p>
@@ -35,7 +33,7 @@ const base = import.meta.env.BASE_URL;
         <ul class="error-page__links" role="list">
           <li><a href={`${base}projekte.html`}>Referenzen &amp; Projekte</a></li>
           <li><a href={`${base}barrierefreiheit.html`}>Barrierefreiheit</a></li>
-          <li><a href={`${base}#contact`}>Kontakt</a></li>
+          <li><a href={`${base}beratung.html`}>Sichtbarkeits-Check</a></li>
           <li><a href={`${base}impressum.html`}>Impressum</a></li>
           <li><a href={`${base}datenschutz.html`}>Datenschutz</a></li>
         </ul>

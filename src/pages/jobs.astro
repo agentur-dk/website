@@ -19,8 +19,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import DitherBand from '../components/DitherBand.astro';
-import Dither from '../components/ui/Dither.astro';
 import Icon from '../components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import bueroDom from '../assets/buero/koelner-dom-suedstadt.jpg';
@@ -106,7 +104,6 @@ const fragen = [
     </nav>
 
     <section class="section section--hero" aria-labelledby="hero-heading">
-      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="mesh" cell={3} fps={12} /></div>
       <div class="container">
         <p class="section__label">Jobs · Köln</p>
         <h1 id="hero-heading" class="section__headline">Fünf Leute. Keine Abteilungen. Ganze Projekte.</h1>
@@ -122,7 +119,6 @@ const fragen = [
       </div>
     </section>
 
-    <DitherBand field="drift" label="Arbeiten bei agentur dk" cell={4} />
 
     <section id="stellen" class="section section--hell" aria-labelledby="stellen-heading">
       <div class="container">
@@ -352,7 +348,7 @@ const fragen = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-text-muted);
   }
   .jobs__blickwert {
@@ -427,7 +423,7 @@ const fragen = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-text-muted);
   }
 
@@ -449,7 +445,7 @@ const fragen = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-text);
   }
   .marke__nachtrag code {

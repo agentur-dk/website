@@ -17,32 +17,24 @@ export const faqs: Record<string, FaqSet> = {
     heading: 'Häufige Fragen',
     items: [
       {
-        question: 'Was ist Website-Leasing und für wen lohnt es sich?',
-        answer:   'Beim Website-Leasing erhalten Sie eine professionell entwickelte WordPress-Website gegen eine feste monatliche Rate — ohne hohe Einmalinvestition. Das Modell eignet sich besonders für Unternehmen, die schnell einen hochwertigen Webauftritt benötigen, aber keine große Anfangsinvestition tätigen möchten. Wartung und Hosting sind auf Wunsch inklusive.',
+        question: 'Was passiert beim Sichtbarkeits-Check?',
+        answer:   'Sie nennen uns vorab Ihre Website oder Ihr Unternehmen. Wir sehen uns an, wie man Sie heute findet: bei Google, in Google Maps, in KI-Assistenten wie ChatGPT und auf Ihrer eigenen Seite. Im Gespräch, 30 Minuten am Telefon oder bei uns im Büro am Sachsenring, bekommen Sie mindestens zwei Dinge, die Sie sofort ändern können. Der Check ist kostenfrei und verpflichtet zu nichts.',
       },
       {
-        question: 'Was kostet eine professionelle WordPress-Website?',
-        answer:   'Je nach Umfang und bestehendem System beginnen WordPress-Projekte bei ca. 2.500 €. Alternativ bieten wir Website-Leasing ab einer monatlichen Rate an — ohne Einmalkosten. Für größere Relaunches mit Design, Entwicklung und BFSG-Konformitätserklärung kalkulieren wir individuell. Wir erstellen Ihnen ein transparentes Festpreisangebot.',
+        question: 'Für wen arbeiten Sie?',
+        answer:   'Vor allem für Betriebe mit 10 bis 50 Mitarbeitern: Praxen, Kanzleien, Verwaltungen und Dienstleister, die gute Arbeit machen und trotzdem zu selten gefunden werden. Unser Büro ist in Köln, gearbeitet wird deutschlandweit.',
       },
       {
-        question: 'Wie lange dauert ein WordPress-Relaunch?',
-        answer:   'Typische Projekte dauern 4–8 Wochen – abhängig von Seitenanzahl, Funktionsumfang und der Verfügbarkeit von Inhalten. Dank flacher Hierarchien und direkter Kommunikation halten wir Zeitpläne zuverlässig ein.',
+        question: 'Was kostet eine professionelle Website?',
+        answer:   'Je nach Umfang und bestehendem System beginnen WordPress-Projekte bei ca. 2.500 €. Alternativ bieten wir Website-Leasing mit einer monatlichen Rate an, ohne Einmalkosten. Größere Relaunches kalkulieren wir individuell. Sie bekommen ein transparentes Festpreisangebot, bevor etwas gebaut wird.',
       },
       {
-        question: 'Bieten Sie auch laufende Betreuung an?',
-        answer:   'Ja, wir bieten flexible Wartungs- und Support-Pakete an: von monatlichen Updates und Sicherheits-Patches bis hin zu laufendem SEO und Content-Pflege. So bleibt Ihre Website dauerhaft performant, sicher und BFSG-konform.',
+        question: 'Was ist Website-Leasing?',
+        answer:   'Beim Website-Leasing erhalten Sie eine professionell entwickelte Website gegen eine feste monatliche Rate statt einer hohen Einmalinvestition. Wartung und Hosting sind auf Wunsch inklusive. Das Modell passt für Unternehmen, die schnell einen guten Auftritt brauchen und die Kosten planbar halten wollen.',
       },
       {
         question: 'Was ist GEO (Generative Engine Optimization)?',
-        answer:   'GEO bezeichnet die Optimierung von Inhalten für KI-Systeme wie ChatGPT, Google Gemini oder Perplexity, damit Ihr Unternehmen in KI-generierten Antworten sichtbar wird. Dies ergänzt klassisches SEO und sichert Ihnen Reichweite im Zeitalter der generativen Suche.',
-      },
-      {
-        question: 'Was ist das BFSG und gilt es für uns?',
-        answer:   'Das BFSG (Barrierefreiheitsstärkungsgesetz) verpflichtet ab dem 28. Juni 2025 Anbieter privater Websites und digitaler Produkte zur Barrierefreiheit gemäß EN 301 549. Es gilt für Unternehmen mit mehr als 10 Mitarbeitenden oder einem Jahresumsatz über 2 Mio. €, die Verbrauchern digitale Dienstleistungen anbieten. Wir prüfen kostenlos, ob Ihre Website betroffen ist.',
-      },
-      {
-        question: 'Können Sie auch bestehende Websites prüfen?',
-        answer:   'Ja, wir führen Accessibility-Audits durch und prüfen Ihre bestehende Website auf BFSG-Konformität, technische SEO-Fehler und Conversion-Potenziale. Sie erhalten einen priorisierten Maßnahmenplan mit konkreten Handlungsempfehlungen.',
+        answer:   'GEO bezeichnet die Optimierung von Inhalten für KI-Systeme wie ChatGPT, Google Gemini oder Perplexity, damit Ihr Unternehmen in deren Antworten genannt wird. Es ergänzt klassisches SEO: Immer mehr Menschen fragen eine KI, bevor sie suchen.',
       },
     ],
   },

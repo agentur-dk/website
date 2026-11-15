@@ -4,8 +4,11 @@
  * Eine Komponente für alle drei, damit ein Fall überall gleich aussieht und
  * gleich lautet — vorher pflegte jede Seite ihre eigene Fassung.
  */
-import Dither from './ui/Dither.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import type { Referenz } from '../data/referenzen';
+
+const bildschirme = import.meta.glob<{ default: ImageMetadata }>('../assets/referenzen/*.jpg', { eager: true });
 
 interface Props {
   readonly r: Referenz;
@@ -17,12 +20,21 @@ const { r, als = 'article' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const extern = r.link?.startsWith('https://') ?? false;
 const Element = als;
+const bild = r.bildschirm ? bildschirme[`../assets/referenzen/${r.bildschirm}.jpg`]?.default : undefined;
 ---
 
 <Element class="case-card" data-reveal data-tags={r.themen.join(' ')}>
-  <div class="case-card__visual case-card__visual--dither" aria-hidden="true">
-    <Dither field={r.feld} cell={3} />
-  </div>
+  {bild ? (
+    <div class="case-card__visual">
+      <Image src={bild} alt={`Startseite von ${r.kunde}`} widths={[400, 640, 800]}
+             sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+             class="case-card__bild" loading="lazy" />
+    </div>
+  ) : (
+    <div class="case-card__visual case-card__visual--tag" aria-hidden="true">
+      <span>{r.tag}</span>
+    </div>
+  )}
   <div class="case-card__body">
     <span class="case-card__tag">{r.einordnung}</span>
     <h3 class="case-card__title">{r.titel}</h3>

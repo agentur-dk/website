@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -28,7 +27,6 @@ const base = import.meta.env.BASE_URL;
   <Header />
 
   <main id="main-content">
-    <DitherBand field="pulse" label="Angekommen" cell={4} />
 
     <div class="error-page">
       <div class="error-page__inner">

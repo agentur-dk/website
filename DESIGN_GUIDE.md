@@ -1,7 +1,7 @@
 # 🎨 Designguide – agentur dk Website (dk-dk.de)
 
 > **Zweck:** Dieser Guide ist die verbindliche Referenz für ALLE neuen Seiten und Weiterentwicklungen der agentur-dk-Website. Beim Bauen neuer Seiten: Guide lesen und umsetzen.
-> **Stand:** 16.10.2026 · Eigenständiges Designsystem der agentur dk
+> **Stand:** 15.11.2026 · Eigenständiges Designsystem der agentur dk
 >
 > Alle Abschnitte beschreiben den gebauten Stand. Maßgeblich bei einem
 > Widerspruch ist der Code: Farben in `src/styles/mono.css`, Schriftleiter
@@ -9,31 +9,38 @@
 
 ---
 
-## 1. Farbpalette — monochrom, ein Akzent
+## 1. Positionierung und Farbpalette
 
-Schwarz, Grau, Weiß und **ein** Blau. Hierarchie entsteht aus Grad,
-Helligkeit und Laufweite, nicht aus Farbe (Herleitung:
-`docs/superpowers/specs/2026-08-30-mummentum-analyse.md`).
+**Seit 15.11.2026.** Die Seite sagt eine Sache: *Wir machen Ihr
+Unternehmen sichtbar*, in der eigenen Zielgruppe und in einer neuen.
+Zielgruppe sind Betriebe mit 10 bis 50 Mitarbeitern, das einzige Angebot
+ist der **Sichtbarkeits-Check** (30 Minuten, kostenfrei,
+`beratung.html`). Jeder Hauptknopf heißt „Sichtbarkeits-Check
+vereinbaren“, daneben steht die Telefonnummer.
 
-| Rolle | Dunkel (Grundzustand) | Hell (`.section--hell`) |
-|---|---|---|
-| Grund | `#101010` | `#f3f3f3` |
-| Fläche, Karte | `#0b0b0b` | `#ffffff` |
-| Fläche abgesetzt | `#141414` | `#eaeaea` |
-| Linie | `#212121` | `#dcdcdc` |
-| tragende Kante | `#3a3a3a` | `#8a8a8a` |
-| Text | `#f3f3f3` | `#101010` |
-| Text gedämpft | `#9c9c9c` | `#565656` |
-| Akzent als Text | `#5090d0` | `#1C60AD` |
+Die Farben sind hell und warm statt schwarz: Papier als Grund, Sand für
+abgesetzte Abschnitte, dk-Blau als einziger Akzent, Nachtblau für
+Abschluss und Fußzeile.
 
-Das Blau `#1C60AD` ist zugleich Knopf- und Abschlussfläche
-(`.section--blau`). Der Akzent wechselt auf hellem Grund, weil `#5090d0`
-auf `#f3f3f3` nur 3,03 : 1 erreicht.
+| Rolle | Papier (Grundzustand) | Sand (`.section--hell`) | Nachtblau (`.section--blau`, Fußzeile) |
+|---|---|---|---|
+| Grund | `#FBF8F3` | `#F1EADF` | `#14365F` (Fußzeile `#0F2A4A`) |
+| Fläche, Karte | `#FFFFFF` | `#FFFFFF` | `#1A4271` |
+| Linie, Kartenrahmen | `#8A8478` | `#8A8478` | Weiß 45 % |
+| tragende Kante | `#5F5A50` | `#5F5A50` | Weiß 70 % |
+| Text | `#1B1B1F` | `#1B1B1F` | `#FFFFFF` |
+| Text gedämpft | `#55534E` | `#55534E` | `#C9D6E8` |
+| Akzent als Text, Knopf | `#1C60AD` | `#1C60AD` | Weiß |
 
-**Keine weitere Akzentfarbe.** Grün und Rot für Ja/Nein, farbige
-Initialenkästen und ähnliche Einzelfarben sind am 16.10.2026 entfernt
-worden. Einzige benannte Ausnahme: die Sprachnachricht auf der
-Startseite bildet eine WhatsApp-Blase nach und trägt deren Farben.
+Kontraste: Text 16,2 : 1, gedämpft 7,3 : 1 (Sand 6,4), Akzent 6,0 : 1
+(Sand 5,3), Linie 3,5 : 1 (Sand 3,1). Knopf-Hover `#164E8E`.
+
+**Keine weitere Akzentfarbe.** Einzige benannte Ausnahme: die
+Sprachnachricht bildet eine WhatsApp-Blase nach und trägt deren Farben.
+
+**Keine Punktraster, keine Monospace-Etiketten, keine Versalien.** Die
+gerasterten Flächen der Fassung vom 16.10.2026 sind entfernt; Bilder sind
+echte Fotos und echte Bildschirmfotos.
 
 ## 2. Typografie — eine Leiter, keine Ausnahmen
 
@@ -49,12 +56,12 @@ wurde es an den Überschriften: `h1` maß 81,6 / 62,4 / 56 px je nach Seite,
 
 | Einsatz | Schrift | Gewicht |
 |---|---|---|
-| Überschriften, Kennzahlen | **Space Grotesk** | 400 (die monochrome Bildsprache setzt keine fetten Überschriften) |
+| Überschriften, Kennzahlen | **Manrope** | 700 |
 | Fließtext, Bedienelemente | **Manrope** | 400 / 500 / 600 / 700 |
-| Etiketten, Nummern | System-Monospace | 400 |
+| Etiketten über Überschriften | **Manrope** | 700, in Akzentblau, normale Schreibweise |
 
-Lokal gehostet in `public/fonts/`, kein CDN, `font-display: swap`,
-vorgeladen werden Space Grotesk 400 und Manrope 400.
+Eine Familie für alles. Lokal gehostet in `public/fonts/`, kein CDN,
+`font-display: optional`, vorgeladen werden Manrope 700 und 400.
 
 ### Die Leiter
 
@@ -195,16 +202,11 @@ und folgt damit dem Abschnitt, auf dem es liegt: auf Dunkel hell, auf Hell
 dunkel. Der Kontrast wird im CSS entschieden, wo man sieht, worauf die
 Fläche liegt.
 
-`npm run check:kontrast` misst es nach: jede Seite, jede Fläche, die
-Opazität der ganzen Elternkette, gemischt über den ersten undurchsichtigen
-Grund darunter. Untergrenze 3 : 1.
-
-> Der erste Entwurf dieser Prüfung las `getComputedStyle().color` und
-> rechnete aus, was herauskommen *sollte*. Zur Gegenprobe wurde die alte
-> Fassung wiederhergestellt — die Prüfung meldete weiter „alles in
-> Ordnung". Sie maß die Absicht, nicht das Ergebnis. Jetzt zählt sie die
-> Pixel, die wirklich auf der Leinwand stehen, und die Gegenprobe meldet
-> die drei Flächen mit 1,04 : 1.
+`npm run check:kontrast` misst seit dem 15.11.2026 jede **umrandete
+Fläche** (Karten, Kästen, Felder, Knöpfe) in zwei Breiten: Ihr Rahmen,
+über den Grund gemischt, oder ihre Füllung muss sich mit mindestens
+3 : 1 abheben. Beim ersten Lauf meldete sie 20 Arten von Karten mit
+1,24 bis 1,48 : 1; seither tragen Kartenrahmen `#8A8478`.
 
 ### Was das hält: `npm run check:typo`
 
@@ -229,23 +231,25 @@ Hürde, die vorher fehlte.
 ### Knöpfe
 - `btn--primary` / `btn--accent`: Fläche `#1C60AD`, weiße Schrift, mindestens 44 px hoch
 - `btn--outline` / `btn--secondary`: ohne Fläche, mit Rahmen
-- **Eckig.** Bedienelemente tragen `--radius-md`; `--radius-full` ist nur
-  für Kreise (Porträt, Punkt) da, nicht für Knöpfe oder Filter
+- Leicht gerundet (`--radius-md`, 6 px); `--radius-full` nur für Kreise
+  (Porträt, Punkt)
 - Fokus: `outline: 3px solid var(--color-focus)` mit Abstand
 
-### Verzeichnis statt Kartenraster
-Leistungen stehen als **Verzeichnis** (`Leistungsverzeichnis.astro`): eine
-Zeile je Eintrag, Titel links, Erklärung daneben, mit Link die ganze Zeile
-als Klickfläche. Die Liste der Leistungen liegt in `src/data/leistungen.ts`
-und speist Startseite und Leistungsübersicht. Sechs gleich aussehende
-Karten nebeneinander sind das Muster, das abgelöst wurde.
+### Leistungen in drei Feldern
+`src/data/leistungen.ts` ordnet jede Leistung einem Feld zu: `auftritt`
+(gefunden werden), `reichweite` (neue Menschen erreichen), `entlastung`
+(KI im Betrieb). `leistungen.astro` zeigt je Feld Karten, die mit dem
+Satz eines Kunden beginnen. Die Leistungsseiten bleiben als Landeseiten,
+stehen aber nicht mehr im Menü.
 
 ### Referenzen
 Eine Quelle: `src/data/referenzen.ts`, angezeigt über `ReferenzKarte.astro`
 auf Startseite (`startseite`), Projekte (alle, filterbar nach `themen`) und
-Über uns (`ueberUns`). **Nur echte Kunden mit Namen**, jede mit Freigabe
-und Datum; keine anonymisierten Fälle, Zahlen nur mit Nachweis. Die
-Bildfläche ist ein Dither-Raster, keine Initialen, kein Screenshot.
+Über uns. **Nur echte Kunden mit Namen**, jede mit Freigabe und Datum;
+Zahlen nur mit Nachweis. Die Bildfläche ist ein **Bildschirmfoto der
+Kundenseite** (`bildschirm`, Datei in `src/assets/referenzen/`), sonst
+eine ruhige Fläche mit der Branche. Nur Aufnahmen ohne erkennbare
+Personen: Das Repository ist öffentlich.
 
 ### Ablauf
 `process-list`: vier nummerierte Schritte. Die Überschrift ist je Seite
@@ -261,10 +265,10 @@ auf jeder Leistungsseite.
 - Spamschutz: Honigtopf und Zeitschranke, kein reCAPTCHA (IP-Übertragung)
 
 ## 5. Fußzeile und Abschluss
-- Fußzeile dunkel (`#0b0b0b`) mit gerasterter Fläche als Streifen an der
-  Oberkante, über dem kein Text steht; kein Farbverlauf mehr
+- Fußzeile Nachtblau `#0F2A4A`, eine Stufe dunkler als der Abschluss
 - Abschluss je Seite **einmal**: `CtaSection.astro` auf der blauen Fläche
-  oder das Anfrageformular. Nach dem Abschluss folgt nur die Fußzeile
+  oder das Anfrageformular, immer mit dem Sichtbarkeits-Check. Nach dem
+  Abschluss folgt nur die Fußzeile
 
 ## 6. Einwilligung
 CookieConsent (`vanilla-cookieconsent`) über `src/lib/einwilligung-basis.ts`,
@@ -273,13 +277,13 @@ Kategorien `necessary`, `analytics`, `einbettungen`. Fremde Einbettungen
 `CLAUDE.md`, Abschnitt *Einwilligung*.
 
 ## 7. Navigation
-- **Hauptnavigation:** Start · Leistungen (Aufklappmenü mit allen
-  Leistungsseiten) · Referenzen · Marken · Jobs · Über uns · „Erstgespräch"
-- Aktuelle Seite: `aria-current="page"` am zutreffenden Link. Auf einer
-  Leistungsseite trägt es der Unterpunkt; „Leistungen" ist dort nur
-  sichtbar als Bereich markiert (`nav-link--bereich`)
+- **Hauptnavigation:** Leistungen · Referenzen · Über uns · „Sichtbarkeits-Check“,
+  davor die Telefonnummer (unter 1024 px nur als Symbol)
+- Marken und Jobs stehen in der Fußzeile; „Referenzen“ bzw. „Über uns“
+  sind auf diesen Seiten als Bereich markiert (`nav-link--bereich`),
+  ebenso „Leistungen“ auf jeder Leistungsseite
 - **Fußzeile:** vier Spalten (Agentur, Leistungen, Unternehmen, Kontakt),
-  dazu Impressum, Datenschutz, Barrierefreiheit und „Cookie-Einstellungen"
+  dazu Impressum, Datenschutz, Barrierefreiheit und „Cookie-Einstellungen“
 
 ## 8. Barrierefreiheit (Pflicht)
 - Kontraste ≥4,5:1 (Text) bzw. ≥3:1 (UI), siehe Farbtabelle

@@ -110,7 +110,7 @@ ${faqBlock}
 - E-Mail: ${contact.email}
 - Telefon: ${contact.phoneDisplay}
 - Bürozeiten: ${contact.hours}
-- Erstgespräch: kostenlos und unverbindlich
+- Sichtbarkeits-Check: 30 Minuten, kostenfrei und unverbindlich
 `;
 
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

@@ -5,12 +5,11 @@
    ============================================================ */
 :root {
   /* Font-Familien */
-  --dk-font-display: 'Space Grotesk', 'Space Grotesk Fallback', 'Manrope', sans-serif;
-  --dk-font-body:    'Manrope', 'Manrope Fallback', 'Space Grotesk', sans-serif;
-  /* System-Monospace statt Webfont: Für die wenigen Zeichen in Mono
-     lohnt keine eigene Schriftdatei. */
-  --dk-font-mono:    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
-                     'Liberation Mono', 'Courier New', monospace;
+  --dk-font-display: 'Manrope', 'Manrope Fallback', sans-serif;
+  --dk-font-body:    'Manrope', 'Manrope Fallback', sans-serif;
+  /* Etiketten stehen in der Grundschrift; der Name bleibt, weil viele
+     Bauteile darauf zugreifen. */
+  --dk-font-mono:    var(--dk-font-body);
 }
 
 /* ============================================================
@@ -67,13 +66,13 @@
    Analyse: docs/superpowers/specs/2026-08-30-mummentum-analyse.md
    ============================================================ */
 :root {
-  --dk-tracking-hero:     -0.04em;   /* 83 px */
-  --dk-tracking-titel-1:  -0.035em;  /* 57 px */
-  --dk-tracking-titel-2:  -0.03em;   /* 40 px */
-  --dk-tracking-titel-3:  -0.02em;   /* 28 px */
+  --dk-tracking-hero:     -0.03em;   /* 83 px */
+  --dk-tracking-titel-1:  -0.025em;  /* 57 px */
+  --dk-tracking-titel-2:  -0.02em;   /* 40 px */
+  --dk-tracking-titel-3:  -0.015em;   /* 28 px */
   --dk-tracking-vorspann: -0.015em;  /* 23 px */
   --dk-tracking-text:      0;        /* 19 px und darunter */
-  --dk-tracking-mono:      0.18em;   /* 13 px Versalien */
+  --dk-tracking-mono:      0.01em;   /* 13 px Etikett */
 
   /* Die alten Namen bleiben als Weiterleitung, siehe oben. */
   --dk-tracking-display: var(--dk-tracking-hero);
@@ -83,7 +82,7 @@
   --dk-tracking-md:      var(--dk-tracking-vorspann);
   --dk-tracking-base:    var(--dk-tracking-text);
 
-  --dk-leading-display: 1.02;
+  --dk-leading-display: 1.08;
   --dk-leading-title:   1.08;
   --dk-leading-tight:   1.25;
   --dk-leading-body:    1.65;

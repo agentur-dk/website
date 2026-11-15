@@ -13,8 +13,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import DitherBand from '../components/DitherBand.astro';
-import Dither from '../components/ui/Dither.astro';
 import LeadForm from '../components/LeadForm.astro';
 import Icon from '../components/ui/Icon.astro';
 
@@ -124,7 +122,6 @@ const dbgChronik = [
     </nav>
 
     <section class="section section--hero" aria-labelledby="hero-heading">
-      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="drift" cell={3} fps={12} /></div>
       <div class="container">
         <p class="section__label">Eigene Marken</p>
         <h1 id="hero-heading" class="section__headline">Zwei Marken, elf Jahre, kein Auftraggeber</h1>
@@ -167,7 +164,6 @@ const dbgChronik = [
       </div>
     </section>
 
-    <DitherBand field="drift" label="Markenaufbau im eigenen Haus" cell={4} />
 
     <section class="section section--hell" aria-labelledby="warum-heading">
       <div class="container">
@@ -369,7 +365,6 @@ const dbgChronik = [
       </div>
     </section>
 
-    <DitherBand field="pulse" label="aposocial" cell={4} />
 
     {/* ══════════════════ aposocial ══════════════════ */}
     <section id="aposocial" class="section section--hell" aria-labelledby="apo-heading">
@@ -517,7 +512,7 @@ const dbgChronik = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-accent);
   }
   .chronik__text {
@@ -546,7 +541,7 @@ const dbgChronik = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-text);
   }
   .marke__nachtrag code {
@@ -605,7 +600,7 @@ const dbgChronik = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-text-muted);
   }
   .markenkarte__strich {
@@ -679,7 +674,7 @@ const dbgChronik = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-accent);
     white-space: nowrap;
   }
@@ -693,7 +688,7 @@ const dbgChronik = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-text-muted);
   }
   .leiste__legendeneintrag { display: inline-flex; align-items: center; gap: var(--rinne-1); }
@@ -794,7 +789,7 @@ const dbgChronik = [
     font-family: var(--font-mono);
     font-size: var(--dk-schrift-klein);
     letter-spacing: var(--dk-tracking-mono);
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--color-accent);
     margin-bottom: var(--rinne-1);
   }

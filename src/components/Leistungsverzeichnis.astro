@@ -57,12 +57,12 @@ const { eintraege, mitMarke = false } = Astro.props;
   .leistungsindex__link:focus-visible{outline:none}
   .leistungsindex__link:focus-visible::after{outline:3px solid var(--color-focus);outline-offset:2px}
   .leistungsindex__zeile:hover .leistungsindex__link{text-decoration:underline;text-underline-offset:.2em}
-  .leistungsindex__neu{display:inline-block;margin-left:var(--rinne-2);padding:.1em .5em;border:1px solid currentColor;font-size:var(--dk-schrift-klein);letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
+  .leistungsindex__neu{display:inline-block;margin-left:var(--rinne-2);padding:.1em .5em;border:1px solid currentColor;font-size:var(--dk-schrift-klein);letter-spacing:.06em;text-transform: none;vertical-align:middle}
   .leistungsindex__text{margin:0;color:var(--color-text-muted);font-size:var(--dk-schrift-karte);max-width:60ch;grid-column:1}
   @media (min-width:900px){ .leistungsindex__text{grid-column:2} }
   .leistungsindex__pfeil{grid-column:-2;grid-row:1;align-self:center;color:var(--color-text);transition:transform .2s ease}
   .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:translateX(4px)}
-  .leistungsindex__marke{margin:0;grid-column:1/-1;font-size:var(--dk-schrift-klein);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .leistungsindex__marke{margin:0;grid-column:1/-1;font-size:var(--dk-schrift-klein);font-weight:700;letter-spacing:.06em;text-transform: none}
   @media (prefers-reduced-motion:reduce){
     .leistungsindex__pfeil{transition:none}
     .leistungsindex__zeile:hover .leistungsindex__pfeil{transform:none}

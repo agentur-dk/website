@@ -54,6 +54,11 @@ export interface Referenz {
    * unverwechselbar, anders als ein gekürztes Schlagwort.
    */
   feld: 'pulse' | 'drift' | 'fade' | 'brain';
+  /**
+   * Bildschirmfoto der Startseite in src/assets/referenzen/<name>.jpg.
+   * Nur Aufnahmen ohne erkennbare Personen: Das Repository ist öffentlich.
+   */
+  bildschirm?: string;
   /** Eigene Marke der Agentur, kein Kundenauftrag. */
   eigen?: boolean;
   /** Steht auf der Startseite: kleinere Betriebe als Spiegel für Besucher. */
@@ -126,6 +131,7 @@ export const referenzen: Referenz[] = [
     themen: ['WordPress'],
     startseite: true,
     feld: 'drift',
+    bildschirm: 'bnm-immobilien',
     freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
   {
@@ -143,6 +149,7 @@ export const referenzen: Referenz[] = [
     themen: ['WordPress', 'Corporate-Design'],
     startseite: true,
     feld: 'pulse',
+    bildschirm: 'einfach-physio',
     freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
   {
@@ -158,7 +165,6 @@ export const referenzen: Referenz[] = [
     link: 'https://koelner-physio-kollektiv.de',
     tag: 'Website-Leasing',
     themen: ['WordPress'],
-    startseite: true,
     feld: 'fade',
     freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
@@ -175,6 +181,8 @@ export const referenzen: Referenz[] = [
     tag: 'Kanzlei',
     themen: ['WordPress', 'Corporate-Design'],
     feld: 'brain',
+    startseite: true,
+    bildschirm: 'staboulidou-kuhlemann',
     freigegeben: true, // Freigabe von Daniel Kontelis, 21.09.2026
   },
   {
@@ -228,6 +236,7 @@ export const referenzen: Referenz[] = [
     themen: ['Online-Marketing'],
     feld: 'pulse',
     eigen: true,
+    bildschirm: 'aposocial',
     freigegeben: true, // Text freigegeben von Daniel Kontelis, 16.10.2026
   },
 ];

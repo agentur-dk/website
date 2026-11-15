@@ -15,39 +15,39 @@ const W = 1200, H = 630;
 const font = (f) =>
   `data:font/woff2;base64,${readFileSync(`public/fonts/${f}.woff2`).toString('base64')}`;
 
+const portraet = `data:image/jpeg;base64,${readFileSync('src/assets/team/daniel-kontelis.jpg').toString('base64')}`;
+
 const html = `<!doctype html><meta charset="utf-8"><style>
-  @font-face{font-family:SG;src:url('${font('space-grotesk-v3-latin-700')}') format('woff2');font-weight:700}
   @font-face{font-family:MR;src:url('${font('manrope-v20-latin-500')}') format('woff2');font-weight:500}
   @font-face{font-family:MR;src:url('${font('manrope-v20-latin-700')}') format('woff2');font-weight:700}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{width:${W}px;height:${H}px;background:#121212;color:#e8e8e8;
+  body{width:${W}px;height:${H}px;background:#FBF8F3;color:#1B1B1F;
        font-family:MR,sans-serif;position:relative;overflow:hidden}
-  .glow{position:absolute;inset:auto -180px -320px auto;width:820px;height:820px;border-radius:50%;
-        background:radial-gradient(circle,rgba(28,96,173,.55) 0%,rgba(28,96,173,0) 68%)}
-  .frame{position:absolute;inset:0;padding:64px 72px;display:flex;flex-direction:column;justify-content:space-between}
+  .frame{position:absolute;inset:0;padding:60px 72px;display:grid;
+         grid-template-columns:1fr 330px;gap:56px;align-items:center}
+  .text{display:flex;flex-direction:column;height:100%;justify-content:space-between}
   .brand{display:flex;flex-direction:column;line-height:1.15}
-  .brand b{font-family:SG;font-size:34px;font-weight:700;letter-spacing:-.02em;color:#fff}
-  .brand span{font-size:15px;color:#a8a8a8;letter-spacing:.02em}
-  h1{font-family:SG;font-size:66px;font-weight:700;line-height:1.08;letter-spacing:-.025em;
-     color:#fff;max-width:15ch}
-  h1 mark{background:#1C60AD;color:#fff;padding:0 .12em;border-radius:4px}
-  .meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .tag{font-size:17px;font-weight:500;color:#d4d4d4;border:1px solid #333;
-       border-radius:999px;padding:9px 18px}
-  .url{margin-left:auto;font-size:19px;font-weight:700;color:#5090d0}
-  .rule{position:absolute;left:0;right:0;bottom:0;height:6px;
-        background:linear-gradient(to right,#1C60AD,#474078,#412848)}
+  .brand b{font-size:30px;font-weight:700;letter-spacing:-.02em}
+  .brand span{font-size:16px;font-weight:500;color:#55534E}
+  .label{font-size:20px;font-weight:700;color:#1C60AD;margin-bottom:14px}
+  h1{font-size:68px;font-weight:700;line-height:1.06;letter-spacing:-.03em;max-width:12ch}
+  .angebot{display:flex;align-items:center;gap:16px}
+  .knopf{background:#1C60AD;color:#fff;font-size:20px;font-weight:700;padding:14px 24px;border-radius:6px}
+  .url{font-size:20px;font-weight:700;color:#1B1B1F}
+  img{width:330px;height:330px;object-fit:cover;border-radius:16px;display:block}
+  .bild span{display:block;margin-top:12px;font-size:17px;font-weight:500;color:#55534E}
+  .rule{position:absolute;left:0;right:0;bottom:0;height:8px;background:#14365F}
 </style>
-<div class="glow"></div>
 <div class="frame">
-  <div class="brand"><b>agentur dk</b><span>design &amp; kommunikation · Köln</span></div>
-  <h1>Barrierefreie Websites, die <mark>gefunden</mark> werden.</h1>
-  <div class="meta">
-    <span class="tag">BFSG &amp; WCAG 2.2 AA</span>
-    <span class="tag">WordPress</span>
-    <span class="tag">SEO &amp; GEO</span>
-    <span class="url">dk-dk.de</span>
+  <div class="text">
+    <div class="brand"><b>agentur dk</b><span>design &amp; kommunikation · Köln</span></div>
+    <div>
+      <p class="label">Für Betriebe mit 10 bis 50 Mitarbeitern</p>
+      <h1>Wir machen Ihr Unternehmen sichtbar.</h1>
+    </div>
+    <div class="angebot"><span class="knopf">Sichtbarkeits-Check, kostenfrei</span><span class="url">dk-dk.de</span></div>
   </div>
+  <div class="bild"><img src="${portraet}" alt=""><span>Daniel Kontelis, Ihr Ansprechpartner</span></div>
 </div>
 <div class="rule"></div>`;
 

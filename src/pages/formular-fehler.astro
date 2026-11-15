@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DitherBand from '../components/DitherBand.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { siteConfig } from '../config/site.config';
@@ -30,7 +29,6 @@ const base = import.meta.env.BASE_URL;
   <Header />
 
   <main id="main-content">
-    <DitherBand field="scan" label="Nicht angekommen" cell={4} />
 
     <div class="error-page">
       <div class="error-page__inner">
@@ -43,7 +41,7 @@ const base = import.meta.env.BASE_URL;
           der beiden direkten Wege.
         </p>
         <div class="error-page__actions">
-          <a href={`${base}#contact`} class="btn btn--accent btn--lg">Zurück zum Formular</a>
+          <a href={`${base}beratung.html`} class="btn btn--accent btn--lg">Zum Anfrageformular</a>
           <a href={`mailto:${siteConfig.contact.email}`} class="btn btn--outline btn--lg">
             E-Mail schreiben
           </a>

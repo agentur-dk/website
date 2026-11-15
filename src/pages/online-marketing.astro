@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RelatedServices from '../components/RelatedServices.astro';
-import DitherBand from '../components/DitherBand.astro';
-import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Leistungsverzeichnis from '../components/Leistungsverzeichnis.astro';
@@ -42,7 +40,6 @@ const base = import.meta.env.BASE_URL;
 
     <!-- SECTION: Hero -->
     <section class="section section--hero" aria-labelledby="hero-heading">
-      <div class="hero-flaeche hero-flaeche--rechts" aria-hidden="true"><Dither field="weave" cell={3} fps={16} /></div>
       <div class="container">
         <p class="section__label">Online-Marketing</p>
         <h1 id="hero-heading" class="section__headline">Marketing, das sich rechnet</h1>
@@ -55,7 +52,6 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Problem / Benefits -->
-    <DitherBand field="pulse" label="Reichweite" cell={4} />
 
     <section class="section section--dark" aria-labelledby="om-problem">
       <div class="container">
@@ -135,7 +131,6 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- SECTION: Weitere Leistungen -->
-    <DitherBand field="scan" label="Weiter im Thema" cell={4} />
     <RelatedServices
       slugs={['social-recruiting', 'seo-geo', 'corporate-design', 'ki-services']}
     />

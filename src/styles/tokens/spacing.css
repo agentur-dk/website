@@ -18,10 +18,10 @@
   --dk-spacing-24: 6rem;      /* 96px */
   --dk-spacing-32: 8rem;      /* 128px */
 
-  /* Border Radius — immer eckig, kein rounded-full bei UI-Elementen */
+  /* Border Radius — leicht gerundet, kein rounded-full bei Bedienelementen */
   --dk-radius-none: 0;
   --dk-radius-sm:   2px;
-  --dk-radius-md:   4px;
+  --dk-radius-md:   6px;
   --dk-radius-full: 9999px;  /* nur für Kreise (Porträt, Punkt); Bedienelemente bleiben eckig */
 
   /* Schatten */

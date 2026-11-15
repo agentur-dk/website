@@ -1,6 +1,6 @@
 ---
 /**
- * Der Weg ins Erstgespräch.
+ * Der Weg in den Sichtbarkeits-Check.
  *
  * Diese Seite hat genau eine Aufgabe: aus Interesse ein Gespräch
  * machen. Deshalb steht hier keine Leistungsliste, keine Preistabelle
@@ -15,7 +15,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BeratungFunnel from '../components/BeratungFunnel.astro';
-import Dither from '../components/ui/Dither.astro';
 import { siteConfig } from '../config/site.config';
 
 const base = import.meta.env.BASE_URL;
@@ -48,8 +47,8 @@ const erwartung = [
 
 <BaseLayout
   slug="beratung"
-  title="Kostenfreies Erstgespräch – Digitalagentur Köln | agentur dk"
-  description="Kostenfreies Erstgespräch mit der agentur dk aus Köln. In fünf Klicks Ihr Anliegen schildern, danach Termin wählen oder Rückruf anfordern."
+  title="Sichtbarkeits-Check, 30 Minuten kostenfrei | agentur dk"
+  description="Sichtbarkeits-Check der agentur dk aus Köln: 30 Minuten, kostenfrei. Sie erfahren, wo Kunden verloren gehen und was Sie als Erstes ändern sollten."
   mono
 >
   <Header />
@@ -59,28 +58,26 @@ const erwartung = [
       <div class="container">
         <ol class="breadcrumb__list">
           <li><a href={`${base}`}>Start</a></li>
-          <li aria-current="page">Erstgespräch</li>
+          <li aria-current="page">Sichtbarkeits-Check</li>
         </ol>
       </div>
     </nav>
 
     <!-- ── Hero ────────────────────────────────────────────────── -->
     <section class="ber-hero section" aria-labelledby="ber-hero-headline">
-      <div class="hero__flaeche" aria-hidden="true">
-        <Dither field="brain" cell={4} fps={12} />
-      </div>
       <div class="container ber-hero__inner">
-        <p class="section-label">Kostenfreies Erstgespräch</p>
+        <p class="section-label">Sichtbarkeits-Check · 30 Minuten · kostenfrei</p>
         <h1 id="ber-hero-headline" class="ber-hero__headline">
-          Reden wir über Ihr Vorhaben.
+          Wie sichtbar ist Ihr Unternehmen?
         </h1>
         <p class="ber-hero__subline">
-          Eine halbe Stunde, in der Sie erzählen und wir zuhören. Danach wissen Sie,
-          was Ihr Vorhaben ungefähr bedeutet — an Aufwand, an Zeit und an Geld.
-          Ob Sie es mit uns machen, entscheiden Sie später.
+          Eine halbe Stunde am Telefon oder bei uns im Büro. Wir sehen uns vorher an,
+          wie man Sie heute findet, und sagen Ihnen danach, wo Kunden verloren gehen
+          und was Sie als Erstes ändern sollten. Ob Sie es mit uns machen, entscheiden
+          Sie später.
         </p>
         <p class="ber-hero__anker">
-          <a class="btn btn--primary" href="#funnel">In fünf Klicks anfragen</a>
+          <a class="btn btn--primary" href="#funnel">Sichtbarkeits-Check vereinbaren</a>
           <a class="btn btn--ghost" href={`tel:${siteConfig.contact.phone}`}>
             Oder anrufen: 0221 986 55 229
           </a>
@@ -108,7 +105,7 @@ const erwartung = [
     </section>
 
     <!-- ── Der Funnel ──────────────────────────────────────────── -->
-    <BeratungFunnel page="Erstgespräch" />
+    <BeratungFunnel page="Sichtbarkeits-Check" />
 
     <!-- ── Direkter Kontakt ────────────────────────────────────── -->
     <section class="section section--blau" aria-labelledby="ber-direkt-heading">

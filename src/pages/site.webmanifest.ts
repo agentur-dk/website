@@ -23,9 +23,9 @@ export const GET: APIRoute = () =>
         /* Kein `standalone`: Die Seite ist eine Website, keine App-Attrappe.
            Wer sie anheftet, soll sie im Browser bekommen, mit Adresszeile. */
         display: 'browser',
-        background_color: '#121212',
+        background_color: '#FBF8F3',
         /* Muss mit `theme-color` im BaseLayout übereinstimmen. */
-        theme_color: '#121212',
+        theme_color: '#FBF8F3',
         icons: [
           {
             src: `${BASE_PATH}favicon.svg`,

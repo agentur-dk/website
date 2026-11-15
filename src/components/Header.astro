@@ -1,13 +1,12 @@
 ---
-import { leistungenNav } from '../config/site.config';
+import { leistungenNav, siteConfig } from '../config/site.config';
 import Icon from './ui/Icon.astro';
 
 const base        = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
 const aufSeite = (slug: string) => currentPath.endsWith(`/${slug}.html`);
 /* Auf einer Leistungsseite ist „Leistungen" der Bereich, nicht die Seite:
-   `aria-current="page"` trägt dort der Unterpunkt, der Elternpunkt wird
-   nur sichtbar markiert. */
+   Der Menüpunkt wird nur sichtbar markiert, `aria-current` stünde falsch. */
 const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
 ---
 
@@ -20,6 +19,12 @@ const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
       <span class="site-logo__name">agentur dk</span>
       <span class="site-logo__tagline">design & kommunikation</span>
       <span class="u-sr-only">— zur Startseite</span>
+    </a>
+
+    <a href={`tel:${siteConfig.contact.phone}`} class="site-header__telefon"
+       aria-label={`Anrufen: ${siteConfig.contact.phoneDisplay}`}>
+      <Icon name="phone" size={18} />
+      <span class="site-header__nummer">{siteConfig.contact.phoneDisplay}</span>
     </a>
 
     <button
@@ -37,74 +42,27 @@ const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
       <ul role="list" class="nav-list">
         <li>
           <a
-            href={`${base}`}
-            aria-current={currentPath === `${base}` || currentPath === `${base}index.html` ? 'page' : undefined}
-            class="nav-link"
-          >Start</a>
-        </li>
-
-        <li class="nav-item--dropdown">
-          <a
             href={`${base}leistungen.html`}
-            id="leistungen-btn"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-controls="leistungen-dropdown"
             aria-current={aufSeite('leistungen') ? 'page' : undefined}
-            class:list={['nav-link nav-link--dropdown', imLeistungsbereich && 'nav-link--bereich']}
-          >
-            Leistungen
-            <Icon name="chevron-down" size={14} class="nav-chevron" />
-          </a>
-          <ul
-            id="leistungen-dropdown"
-            role="list"
-            aria-label="Leistungen"
-            hidden
-            class="nav-dropdown"
-          >
-            {leistungenNav.map((l) => (
-              <li>
-                <a href={`${base}${l.href}.html`} class="nav-dropdown__link" aria-current={aufSeite(l.href) ? 'page' : undefined}>{l.label}</a>
-              </li>
-            ))}
-          </ul>
+            class:list={['nav-link', imLeistungsbereich && 'nav-link--bereich']}
+          >Leistungen</a>
         </li>
-
         <li>
           <a
             href={`${base}projekte.html`}
-            aria-current={currentPath.includes('projekte') ? 'page' : undefined}
-            class="nav-link"
+            aria-current={aufSeite('projekte') ? 'page' : undefined}
+            class:list={['nav-link', aufSeite('marken') && 'nav-link--bereich']}
           >Referenzen</a>
         </li>
-
-        <li>
-          <a
-            href={`${base}marken.html`}
-            aria-current={currentPath.includes('marken') ? 'page' : undefined}
-            class="nav-link"
-          >Marken</a>
-        </li>
-
-        <li>
-          <a
-            href={`${base}jobs.html`}
-            aria-current={currentPath.includes('jobs') ? 'page' : undefined}
-            class="nav-link"
-          >Jobs</a>
-        </li>
-
         <li>
           <a
             href={`${base}ueber-uns.html`}
-            aria-current={currentPath.includes('ueber-uns') ? 'page' : undefined}
-            class="nav-link"
+            aria-current={aufSeite('ueber-uns') ? 'page' : undefined}
+            class:list={['nav-link', aufSeite('jobs') && 'nav-link--bereich']}
           >Über uns</a>
         </li>
-
         <li>
-          <a href={`${base}beratung.html`} class="nav-cta">Erstgespräch</a>
+          <a href={`${base}beratung.html`} class="nav-cta" aria-current={aufSeite('beratung') ? 'page' : undefined}>Sichtbarkeits-Check</a>
         </li>
       </ul>
     </nav>
@@ -191,59 +149,6 @@ const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
     background-color: var(--color-surface-alt);
   }
 
-  .nav-link--dropdown {
-    display: flex;
-    align-items: center;
-    gap: var(--rinne-1);
-    cursor: pointer;
-  }
-
-  /* Das <svg> kommt aus Icon.astro und trägt Astros Scope-Attribut nicht;
-     der Selektor muss die Komponentengrenze deshalb überschreiten. */
-  :global(.nav-chevron) {
-    flex-shrink: 0;
-  }
-
-  .nav-item--dropdown {
-    position: relative;
-  }
-
-  .nav-dropdown {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: 0;
-    min-width: 220px;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-    list-style: none;
-    margin: 0;
-    padding: 0.5rem 0;
-    z-index: 100;
-  }
-
-  .nav-dropdown__link {
-    display: block;
-    padding: 0.5rem 1rem;
-    color: var(--color-text-muted);
-    text-decoration: none;
-    font-size: var(--dk-schrift-klein);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-  }
-
-  .nav-dropdown__link:hover,
-  .nav-dropdown__link[aria-current="page"] {
-    color: var(--color-text);
-    background-color: var(--color-surface-alt);
-  }
-
-  /* Nicht nur an der Fläche: Der Unterschied zum Hover-Zustand ist sonst
-     nur eine Helligkeitsstufe. */
-  .nav-dropdown__link[aria-current="page"] {
-    box-shadow: inset 3px 0 0 var(--color-primary);
-  }
-
   .nav-cta {
     display: inline-flex;
     align-items: center;
@@ -259,8 +164,34 @@ const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
     transition: background-color var(--transition-fast);
   }
 
-  .nav-cta:hover {
+  .nav-cta:hover,
+  .nav-cta[aria-current="page"] {
     background-color: var(--color-primary-hover);
+  }
+
+  .site-header__telefon {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rinne-1);
+    min-height: 44px;
+    padding-inline: 0.5rem;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: var(--dk-schrift-karte);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .site-header__telefon:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 1023px) {
+    .site-header__nummer {
+      display: none;
+    }
   }
 
   @media (max-width: 768px) {
@@ -290,20 +221,6 @@ const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
       gap: var(--rinne-1);
     }
 
-    .nav-item--dropdown {
-      position: static;
-    }
-
-    .nav-dropdown {
-      position: static;
-      box-shadow: none;
-      border: none;
-      border-left: 2px solid var(--color-border);
-      border-radius: 0;
-      padding: 0.25rem 0 0.25rem 1rem;
-      margin-top: 0.25rem;
-    }
-
     .nav-cta {
       justify-content: center;
       margin-top: 0.5rem;
@@ -314,8 +231,6 @@ const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
 <script>
   const toggle = document.getElementById('nav-toggle');
   const menu = document.getElementById('nav-menu');
-  const leistungenBtn = document.getElementById('leistungen-btn');
-  const leistungenDropdown = document.getElementById('leistungen-dropdown');
 
   toggle?.addEventListener('click', () => {
     const expanded = toggle.getAttribute('aria-expanded') === 'true';
@@ -323,25 +238,4 @@ const imLeistungsbereich = leistungenNav.some((l) => aufSeite(l.href));
     if (menu) menu.classList.toggle('is-open', !expanded);
   });
 
-  leistungenBtn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    const expanded = leistungenBtn.getAttribute('aria-expanded') === 'true';
-    leistungenBtn.setAttribute('aria-expanded', String(!expanded));
-    if (leistungenDropdown) leistungenDropdown.hidden = expanded;
-  });
-
-  document.addEventListener('click', (e) => {
-    if (leistungenDropdown && leistungenBtn && !leistungenBtn.contains(e.target as Node) && !leistungenDropdown.contains(e.target as Node)) {
-      leistungenDropdown.hidden = true;
-      leistungenBtn.setAttribute('aria-expanded', 'false');
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && leistungenDropdown) {
-      leistungenDropdown.hidden = true;
-      leistungenBtn?.setAttribute('aria-expanded', 'false');
-      leistungenBtn?.focus();
-    }
-  });
 </script>

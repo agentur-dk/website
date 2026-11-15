@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RelatedServices from '../components/RelatedServices.astro';
-import DitherBand from '../components/DitherBand.astro';
-import Dither from '../components/ui/Dither.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
@@ -39,7 +37,6 @@ const base = import.meta.env.BASE_URL;
     </nav>
 
     <section class="section section--hero" aria-labelledby="hero-heading">
-      <div class="hero-flaeche hero-flaeche--sockel" aria-hidden="true"><Dither field="orbit" cell={4} fps={14} /></div>
       <div class="container">
         <p class="section__label">Website-Leasing</p>
         <h1 id="hero-heading" class="section__headline">Ihre professionelle Website – monatlich, planbar, ohne Risiko</h1>
@@ -104,7 +101,6 @@ const base = import.meta.env.BASE_URL;
       </div>
     </div>
 
-    <DitherBand field="drift" label="Das Modell" cell={4} />
 
 
     <section class="section section--dark" aria-labelledby="leasing-angebot">
@@ -169,7 +165,6 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <DitherBand field="mesh" label="Weiter im Thema" cell={4} />
     <RelatedServices
       slugs={['wordpress-entwicklung', 'bfsg-wordpress-website-agentur', 'seo-geo', 'online-marketing']}
     />
