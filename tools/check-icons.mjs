@@ -95,6 +95,15 @@ for (const datei of quellen) {
   }
 
   for (const m of ohneKommentare.matchAll(/<Icon\b[^>]*\bname="([^"]+)"/g)) benutzt.add(m[1]);
+
+  /* Namen in Zuordnungen (`'website-leasing': 'briefcase-business'`) sind
+     auch dann benutzt, wenn gerade keine Seite den Eintrag ausgibt: Der
+     Typ verlangt den Pfad, und ohne ihn bricht `astro check`. */
+  if (!rel.endsWith(VERZEICHNIS)) {
+    for (const { name } of eintraege) {
+      if (ohneKommentare.includes(`'${name}'`)) benutzt.add(name);
+    }
+  }
 }
 
 for (const name of benutzt) {
