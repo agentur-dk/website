@@ -21,9 +21,9 @@ export interface Aufnahme {
   readonly dauerSekunden: number;
   /**
    * Der Wortlaut, wie gesprochen — die Textalternative nach WCAG 1.2.1.
-   *
-   * Nicht geglättet: Die kleinen Unebenheiten gesprochener Sprache sind
-   * der Grund, warum man einer Aufnahme mehr glaubt als einem Werbetext.
+   * Die Aufnahmen sind mit Daniels Stimmklon bei ElevenLabs erzeugt und
+   * darum auf der Seite als KI-Stimme gekennzeichnet (Art. 50 Abs. 4
+   * KI-Verordnung).
    */
   readonly transkript: readonly string[];
 }
@@ -36,34 +36,40 @@ export interface Aufnahme {
  */
 export const LANG: Aufnahme = {
   datei: 'audio/daniel-kontelis-begruessung.mp3',
-  bytes: 653759,
+  bytes: 392463,
   dauerSekunden: 32,
   transkript: [
-    'Hallo, ich bin Daniel Kontelis – Gründer der agentur dk in Köln.',
-    'In den Medien bin ich seit über 20 Jahren. In der Zeit lernt man vor allem eins: Die Erfahrung liegt nicht in der Art der Umsetzung, sondern in der Kommunikation – tiefes Verständnis von Kundenwünschen und Zielgruppen.',
-    'Technisch sind wir auch vorne dabei. Beratung, Planung, Umsetzung — alles aus einer Hand.',
-    'Und wer einmal da ist, bleibt meistens. Fast alle Kunden schon seit vielen Jahren.',
-    'Rufen Sie einfach an – wir laden Sie gerne zu einem unverbindlichen Beratungsgespräch ein.',
+    'Hallo, hier ist Daniel Kontelis von der agentur dk in Köln.',
+    'Ich mache das seit über zwanzig Jahren, und eines hat sich nie geändert: Gute Arbeit fängt mit Zuhören an. Erst wenn wir verstehen, was Ihr Betrieb braucht und wen Sie erreichen wollen, setzen wir etwas um.',
+    'Wir planen, gestalten und bauen alles aus einer Hand, mit einem festen Ansprechpartner. Viele unserer Kunden sind seit Jahren bei uns.',
+    'Wenn Sie wissen möchten, wie sichtbar Ihr Unternehmen heute ist, rufen Sie an, oder vereinbaren Sie den Sichtbarkeits-Check.',
   ],
 };
 
 /**
- * Die kurze Begrüßung — „Über uns", am Knopf neben dem Porträt. Eine eigene
- * Aufnahme, keine Kürzung der langen (8,3 gegen 32,8 Sekunden, die
- * Lautstärkeprofile korrelieren nicht), und braucht darum ihr eigenes
- * Transkript.
+ * Die kurze Begrüßung — „Über uns", am Knopf neben dem Porträt. Sie nennt
+ * die Beschriftung des Knopfes direkt darunter, „Termin vereinbaren".
  */
 export const KURZ: Aufnahme = {
   datei: 'audio/daniel-kontelis-begruessung-kurz.mp3',
-  bytes: 155279,
+  bytes: 99369,
   dauerSekunden: 8,
-  /*
-   * Ein Atemzug, deshalb ein Absatz. Die Anführungszeichen um „Termin
-   * vereinbaren" machen sichtbar, was die Stimme betont: die Beschriftung
-   * des Knopfes direkt darunter.
-   */
   transkript: [
-    'Danke, dass Sie sich über uns informieren. Wir freuen uns, Sie kennenzulernen. Ein Klick auf „Termin vereinbaren“ und wir hören uns in den kommenden Tagen.',
+    'Danke, dass Sie sich die Zeit nehmen. Wenn Sie uns kennenlernen möchten: Ein Klick auf „Termin vereinbaren“, und wir sprechen uns in den nächsten Tagen.',
+  ],
+};
+
+/**
+ * Die Einladung zum Sichtbarkeits-Check — Startseite, am Porträt im Kopf.
+ * Sie sagt dasselbe wie der Hinweis unter dem Knopf daneben, damit Stimme
+ * und Text einander nicht widersprechen.
+ */
+export const CHECK: Aufnahme = {
+  datei: 'audio/daniel-kontelis-sichtbarkeits-check.mp3',
+  bytes: 148898,
+  dauerSekunden: 12,
+  transkript: [
+    'Hallo, ich bin Daniel Kontelis. Im Sichtbarkeits-Check sehen wir uns gemeinsam an, wie man Ihr Unternehmen heute findet. Sie gehen mit mindestens zwei Dingen heraus, die Sie sofort ändern können. Dreißig Minuten, kostenfrei.',
   ],
 };
 
@@ -74,4 +80,4 @@ export const KURZ: Aufnahme = {
  * eine Pause als schmaler Strich sichtbar bleibt. Bei einer neuen Aufnahme
  * neu erzeugen; der Test hält das fest.
  */
-export const WELLENFORM = [100, 94, 73, 86, 81, 82, 64, 83, 83, 86, 75, 79, 63, 82, 66, 94, 75, 67, 95, 68, 89, 85, 95, 91, 54] as const;
+export const WELLENFORM = [87, 86, 89, 84, 78, 84, 87, 94, 88, 89, 85, 83, 85, 79, 79, 71, 80, 88, 83, 89, 92, 91, 100, 84, 60] as const;

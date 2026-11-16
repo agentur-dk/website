@@ -6,11 +6,12 @@
  */
 import { describe, it, expect } from 'vitest';
 import { statSync, existsSync } from 'node:fs';
-import { LANG, KURZ, WELLENFORM, type Aufnahme } from '../data/sprachnachricht';
+import { LANG, KURZ, CHECK, WELLENFORM, type Aufnahme } from '../data/sprachnachricht';
 
 const AUFNAHMEN: ReadonlyArray<readonly [string, Aufnahme]> = [
   ['LANG', LANG],
   ['KURZ', KURZ],
+  ['CHECK', CHECK],
 ];
 
 describe('Sprachnachrichten', () => {

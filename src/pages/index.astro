@@ -15,7 +15,7 @@ import ReferenzKarte from '../components/ReferenzKarte.astro';
 import Sprachnachricht from '../components/Sprachnachricht.astro';
 import Icon from '../components/ui/Icon.astro';
 import { faqs } from '../data/faq';
-import { LANG } from '../data/sprachnachricht';
+import { LANG, CHECK } from '../data/sprachnachricht';
 import { siteConfig } from '../config/site.config';
 import { sichtbareReferenzen, zeigtUnfreigegebenes } from '../data/referenzen';
 import portraet from '../assets/team/daniel-kontelis.jpg';
@@ -105,14 +105,30 @@ const schritte = [
           </p>
         </div>
 
-        <figure class="start-kopf__person">
-          <Image src={portraet} alt="Daniel Kontelis"
-                 widths={[320, 480, 640]} sizes="(min-width: 1024px) 400px, 70vw"
-                 class="start-kopf__bild" loading="eager" fetchpriority="high" />
+        <figure class="start-kopf__person" data-sprachnachricht>
+          <span class="start-kopf__rahmen">
+            <Image src={portraet} alt="Daniel Kontelis"
+                   widths={[320, 480, 640]} sizes="(min-width: 1024px) 400px, 70vw"
+                   class="start-kopf__bild" loading="eager" fetchpriority="high" />
+            <button type="button" class="start-play" data-sn-knopf
+                    aria-label={`Sprachnachricht von Daniel Kontelis abspielen, ${CHECK.dauerSekunden} Sekunden, KI-Stimme`}>
+              <Icon name="play" size={20} class="start-play__ikon start-play__ikon--play" />
+              <Icon name="pause" size={20} class="start-play__ikon start-play__ikon--pause" />
+              <span aria-hidden="true">Anhören · 0:{String(CHECK.dauerSekunden).padStart(2, '0')}</span>
+            </button>
+          </span>
+          <audio data-sn-audio preload="none" src={`${base}${CHECK.datei}`}></audio>
           <figcaption>
             <strong>Daniel Kontelis</strong>
             <span>Ihr Ansprechpartner für den Sichtbarkeits-Check</span>
           </figcaption>
+          {/* Art. 50 Abs. 4 KI-Verordnung: Die Stimme ist geklont und muss als
+              KI-erzeugt erkennbar sein. Der Hinweis sitzt am Aufklapper, weil
+              dort auch der Wortlaut steht (WCAG 1.2.1). */}
+          <details class="start-kopf__transkript">
+            <summary>Transkript der Sprachnachricht <span class="u-nowrap">(KI-Stimme)</span></summary>
+            {CHECK.transkript.map((absatz) => <p>{absatz}</p>)}
+          </details>
         </figure>
       </div>
     </section>
@@ -346,6 +362,25 @@ const schritte = [
     margin: 0;
     justify-self: center;
     width: min(100%, 400px);
+  }
+  .start-kopf__rahmen {
+    position: relative;
+    display: block;
+  }
+  .start-kopf__transkript {
+    margin-top: var(--rinne-2);
+    font-size: var(--dk-schrift-karte);
+    color: var(--color-text-muted);
+  }
+  .start-kopf__transkript summary {
+    cursor: pointer;
+    min-height: 24px;
+  }
+  .u-nowrap { white-space: nowrap; }
+  .start-kopf__transkript p {
+    margin: var(--rinne-2) 0 0;
+    color: var(--color-text);
+    line-height: var(--dk-leading-body);
   }
   .start-kopf__bild {
     display: block;

@@ -75,10 +75,11 @@ export function verdrahte(): void {
       }
     };
 
+    /* Die Beschriftung aus dem Markup kennt Dauer und Kennzeichnung;
+       nach dem Anhalten kehrt sie zurück. */
+    const ruhe = knopf.getAttribute('aria-label') ?? 'Sprachnachricht von Daniel Kontelis abspielen';
     const zeige = (laeuft: boolean): void => {
-      knopf.setAttribute('aria-label', laeuft
-        ? 'Sprachnachricht von Daniel Kontelis anhalten'
-        : 'Sprachnachricht von Daniel Kontelis abspielen');
+      knopf.setAttribute('aria-label', laeuft ? 'Sprachnachricht von Daniel Kontelis anhalten' : ruhe);
       figur.classList.toggle('sn--laeuft', laeuft);
     };
 
